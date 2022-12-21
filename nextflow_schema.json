@@ -63,6 +63,15 @@
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
                 },
+                "fasta_fai": {
+                    "type": "string",
+                    "format": "file-path",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference",
+                    "description": "Path to FASTA genome index file.",
+                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
+                },
                 "igenomes_base": {
                     "type": "string",
                     "format": "directory-path",
@@ -77,6 +86,14 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
+                }, 
+                "sequence_dict": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "pattern": "^\\S+\\.dict$",
+                    "description": "Genome dictionary file",
+                    "hidden": true
                 }
             }
         },
