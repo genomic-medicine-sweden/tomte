@@ -11,11 +11,17 @@ WorkflowTomte.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
-def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
+def checkPathParamList = [ 
+    params.input,
+    params.multiqc_config, 
+    params.fasta,
+    params.fasta_fai,
+    params.sequence_dict,
+    params.star_index,
+    params.gtf
+]
 
-// Check mandatory parameters
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,15 +41,25 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 */
 
 //
-// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+// SUBWORKFLOW: local
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { CHECK_INPUT        } from '../subworkflows/local/input_check'
+include { PREPARE_REFERENCES } from '../subworkflows/local/prepare_references'
+include { ALLIGNMENT         } from '../subworkflows/local/allignment'
+
+//
+// MODULE: local
+//
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT NF-CORE MODULES/SUBWORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+//
+// SUBWORKFLOW: nf-core/subworkflows
+//
 
 //
 // MODULE: Installed directly from nf-core/modules
@@ -65,19 +81,44 @@ workflow TOMTE {
 
     ch_versions = Channel.empty()
 
-    //
-    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
-    //
-    INPUT_CHECK (
-        ch_input
-    )
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+    // Initialize input channels
+    if (params.input) {
+        ch_input = Channel.fromPath(params.input)
+        CHECK_INPUT (ch_input)
+        ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
+    } else {
+        exit 1, 'Input samplesheet not specified!'
+    }
+
+    // Initialize all file channels including unprocessed vcf, bed and tab files
+    ch_genome_fasta_no_meta           = params.fasta                  ? Channel.fromPath(params.fasta).collect()
+                                                              : ( exit 1, 'Genome fasta not specified!' )
+    ch_genome_fasta_meta              = ch_genome_fasta_no_meta.map { it -> [[id:it[0].simpleName], it] }
+
+    PREPARE_REFERENCES(
+        ch_genome_fasta_no_meta,
+        ch_genome_fasta_meta,
+        params.star_index,
+        params.gtf
+    ).set { ch_references }
+
+    // Gather built indices or get them from the params
+    ch_sequence_dict          = params.sequence_dict          ? Channel.fromPath(params.sequence_dict).collect()
+                                                              : ( ch_references.sequence_dict            ?: Channel.empty() )
+    ch_genome_fai             = params.fasta_fai              ? Channel.fromPath(params.fasta_fai).collect()
+                                                              : ( ch_references.fasta_fai                ?: Channel.empty() )
+   
+    // Alignment
+    ALLIGNMENT(
+        CHECK_INPUT.out.reads
+    ).set {ch_bam}
 
     //
     // MODULE: Run FastQC
     //
+
     FASTQC (
-        INPUT_CHECK.out.reads
+        CHECK_INPUT.out.reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 

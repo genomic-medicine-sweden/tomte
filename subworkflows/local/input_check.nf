@@ -4,20 +4,24 @@
 
 include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
 
-workflow INPUT_CHECK {
+workflow CHECK_INPUT {
     take:
     samplesheet // file: /path/to/samplesheet.csv
 
     main:
-    SAMPLESHEET_CHECK ( samplesheet )
-        .csv
-        .splitCsv ( header:true, sep:',' )
-        .map { create_fastq_channel(it) }
-        .set { reads }
+        SAMPLESHEET_CHECK ( samplesheet )
+            .csv
+            .splitCsv ( header:true, sep:',' )
+            .set { sheet }
+
+        case_info    = sheet.first()
+                            .map { create_case_channel(it) }
+        reads     = sheet.map { create_fastq_channel(it) }
 
     emit:
-    reads                                     // channel: [ val(meta), [ reads ] ]
-    versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
+        case_info                                 // channel: [ case_id ]
+        reads                                     // channel: [ val(meta), [ reads ] ]
+        versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
 }
 
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
@@ -41,4 +45,12 @@ def create_fastq_channel(LinkedHashMap row) {
         fastq_meta = [ meta, [ file(row.fastq_1), file(row.fastq_2) ] ]
     }
     return fastq_meta
+}
+
+// Function to get a list of metadata (e.g. case id) for the case [ meta ]
+def create_case_channel(LinkedHashMap row) {
+    def case_info   = [:]
+    case_info.id    = row.case_id
+
+    return case_info
 }
