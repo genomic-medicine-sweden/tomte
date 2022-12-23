@@ -9,4 +9,4 @@ results/
 testing/
 testing*
 *.pyc
-./bin/gtf2bed
+bin/
