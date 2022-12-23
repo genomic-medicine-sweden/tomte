@@ -132,8 +132,7 @@
                     "enum": ["illumina"]
                 }
             }
-        }
-
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
