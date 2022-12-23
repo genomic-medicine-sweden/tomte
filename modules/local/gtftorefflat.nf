@@ -26,7 +26,7 @@ process GTFTOGENEPRED_REFFLAT {
         $args \\
         $gtf  \\
         ${prefix}.genepred
-    
+
     paste ${prefix}.genepred ${prefix}.genepred | cut -f12,16-25 > ${prefix}.refflat
 
     cat <<-END_VERSIONS > versions.yml
