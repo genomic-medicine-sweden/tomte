@@ -110,7 +110,10 @@ workflow TOMTE {
    
     // Alignment
     ALIGNMENT(
-        CHECK_INPUT.out.reads
+        CHECK_INPUT.out.reads,
+        ch_references.star_index,
+        ch_references.gtf,
+        params.platform
     ).set {ch_bam}
 
     //
