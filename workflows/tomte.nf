@@ -45,7 +45,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 //
 include { CHECK_INPUT        } from '../subworkflows/local/input_check'
 include { PREPARE_REFERENCES } from '../subworkflows/local/prepare_references'
-include { ALLIGNMENT         } from '../subworkflows/local/allignment'
+include { ALIGNMENT          } from '../subworkflows/local/alignment'
 
 //
 // MODULE: local
@@ -109,8 +109,11 @@ workflow TOMTE {
                                                               : ( ch_references.fasta_fai                ?: Channel.empty() )
    
     // Alignment
-    ALLIGNMENT(
-        CHECK_INPUT.out.reads
+    ALIGNMENT(
+        CHECK_INPUT.out.reads,
+        ch_references.star_index,
+        ch_references.gtf,
+        params.platform
     ).set {ch_bam}
 
     //
