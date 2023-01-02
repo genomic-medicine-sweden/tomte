@@ -6,11 +6,12 @@ include { CAT_FASTQ  } from '../../modules/nf-core/cat/fastq/main'
 include { FASTP      } from '../../modules/nf-core/fastp/main'
 include { STAR_ALIGN } from '../../modules/nf-core/star/align/main'
 
-workflow ALLIGNMENT {
+workflow ALIGNMENT {
     take:
         reads
         star_index
         gtf
+        platform
 
     main:
         ch_versions = Channel.empty()
