@@ -1,1 +1,8 @@
 repository_type: pipeline
+lint:
+  files_exist: false
+    - assets/nf-core-tomte_logo_light.png
+    - docs/images/nf-core-tomte_logo_light.png
+    - docs/images/nf-core-tomte_logo_dark.png
+  files_unchanged: false
+    - assets/sendmail_template.txt
