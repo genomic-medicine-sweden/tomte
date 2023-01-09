@@ -11,3 +11,4 @@ lint:
     - .github/PULL_REQUEST_TEMPLATE.md
     - assets/email_template.html
     - assets/email_template.txt
+    - docs/README.md
