@@ -1,12 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/tomte
+    tomte
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/tomte
-
-    Website: https://nf-co.re/tomte
-    Slack  : https://nfcore.slack.com/channels/tomte
+    Github : https://github.com/genomic-medicine-sweden/tomte
 ----------------------------------------------------------------------------------------
 */
 
