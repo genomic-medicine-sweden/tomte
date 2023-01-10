@@ -28,8 +28,8 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
-3. Trim reads [`FASTP`] (https://github.com/OpenGene/fastp)
-4. Align reads to the genome [`STAR`] (https://github.com/alexdobin/STAR)
+3. Trim reads ([`FASTP`](https://github.com/OpenGene/fastp))
+4. Align reads to the genome ([`STAR`](https://github.com/alexdobin/STAR))
 
 ## Quick Start
 
