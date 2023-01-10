@@ -1,6 +1,6 @@
-# nf-core/tomte: Usage
+# tomte: Usage
 
-## :warning: Please read this documentation on the nf-core website: [https://nf-co.re/tomte/usage](https://nf-co.re/tomte/usage)
+## :warning: Please read this documentation on github website: [tomte usage](https://github.com/genomic-medicine-sweden/tomte)
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
