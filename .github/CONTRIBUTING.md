@@ -9,7 +9,7 @@ Please use the pre-filled template to save time.
 However, don't be put off by this template - other more general issues and suggestions are welcome!
 Contributions to the code are even more welcome ;)
 
-> If you need help using or modifying tomte then the best way to ask is on by creating an [issue] (https://github.com/genomic-medicine-sweden/tomte/issues).
+> If you need help using or modifying tomte then the best way to ask is by creating an [issue] (https://github.com/genomic-medicine-sweden/tomte/issues).
 
 ## Contribution workflow
 
