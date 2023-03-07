@@ -8,7 +8,6 @@ def get_rrna_gtf(gtf, oupt):
 
     with open(gtf, "r") as gtf_file:
         for line in gtf_file:
-
             if line.startswith("#"):
                 lines_rrna.append(line)
 
