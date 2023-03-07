@@ -11,9 +11,9 @@ WorkflowTomte.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
-def checkPathParamList = [ 
+def checkPathParamList = [
     params.input,
-    params.multiqc_config, 
+    params.multiqc_config,
     params.fasta,
     params.fasta_fai,
     params.sequence_dict,
@@ -107,7 +107,7 @@ workflow TOMTE {
                                                               : ( ch_references.sequence_dict            ?: Channel.empty() )
     ch_genome_fai             = params.fasta_fai              ? Channel.fromPath(params.fasta_fai).collect()
                                                               : ( ch_references.fasta_fai                ?: Channel.empty() )
-   
+
     // Alignment
     ALIGNMENT(
         CHECK_INPUT.out.reads,
@@ -143,6 +143,9 @@ workflow TOMTE {
     ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.fastp_report.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.star_log_final.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.ch_gene_counts.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),

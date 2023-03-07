@@ -125,6 +125,22 @@
                 }
             }
         },
+        "trimming_options": {
+            "title": "Trimming options",
+            "type": "object",
+            "description": "Options related to trimming of fastq files",
+            "default": "",
+            "fa_icon": "fas fa-cut",
+            "properties": {
+                "min_trimmed_length": {
+                    "type": "integer",
+                    "default": 40,
+                    "description": "Discard trimmed reads shorter than this",
+                    "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp.  ",
+                    "fa_icon": "fas fa-less-than"
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -318,6 +334,9 @@
         },
         {
             "$ref": "#/definitions/reference_genome_options"
+        },
+        {
+            "$ref": "#/definitions/trimming_options"
         },
         {
             "$ref": "#/definitions/institutional_config_options"
