@@ -15,7 +15,7 @@ workflow ALIGNMENT {
 
     main:
         ch_versions = Channel.empty()
-        
+
         CAT_FASTQ(reads)
         ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first())
 
@@ -27,5 +27,9 @@ workflow ALIGNMENT {
 
     emit:
         ch_merged_reads = CAT_FASTQ.out.reads
+        fastp_report = FASTP.out.json
         ch_bam = STAR_ALIGN.out.bam
+        ch_gene_counts = STAR_ALIGN.out.tab
+        star_log_final = STAR_ALIGN.out.log_final
+        versions = ch_versions
 }
