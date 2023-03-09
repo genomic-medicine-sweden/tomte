@@ -90,17 +90,12 @@ workflow TOMTE {
         exit 1, 'Input samplesheet not specified!'
     }
 
-    // Initialize all file channels including unprocessed vcf, bed and tab files
-    ch_genome_fasta_no_meta           = params.fasta                  ? Channel.fromPath(params.fasta).collect()
-                                                              : ( exit 1, 'Genome fasta not specified!' )
-    ch_genome_fasta_meta              = ch_genome_fasta_no_meta.map { it -> [[id:it[0].simpleName], it] }
-
     PREPARE_REFERENCES(
-        ch_genome_fasta_no_meta,
-        ch_genome_fasta_meta,
+        params.fasta,
         params.star_index,
         params.gtf
     ).set { ch_references }
+    ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
 
     // Gather built indices or get them from the params
     ch_sequence_dict          = params.sequence_dict          ? Channel.fromPath(params.sequence_dict).collect()
@@ -115,6 +110,7 @@ workflow TOMTE {
         ch_references.gtf,
         params.platform
     ).set {ch_bam}
+    ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
 
     //
     // MODULE: Run FastQC

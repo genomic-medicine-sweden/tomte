@@ -60,7 +60,7 @@
                     "mimetype": "text/plain",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
-                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
+                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a STAR index available this will be generated for you automatically. Combine with `--save_reference` to save STAR index for future runs.",
                     "fa_icon": "far fa-file-code"
                 },
                 "fasta_fai": {
@@ -121,9 +121,11 @@
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory or tar.gz archive for pre-built STAR index."
+                    "description": "Path to directory or tar.gz archive for pre-built STAR index.",
+                    "help_text": "Path to directory or tar.gz archive with pre-built STAR index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option \"--save_reference\"."
                 }
-            }
+            },
+            "required": ["fasta", "gtf"]
         },
         "trimming_options": {
             "title": "Trimming options",
@@ -138,6 +140,23 @@
                     "description": "Discard trimmed reads shorter than this",
                     "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp.  ",
                     "fa_icon": "fas fa-less-than"
+                }
+            }
+        },
+        "alignment_options": {
+            "title": "Alignment options",
+            "type": "object",
+            "description": "Options related to alignment",
+            "default": "",
+            "fa_icon": "fas fa-align-justify",
+            "properties": {
+                "star_two_pass_mode": {
+                    "type": "string",
+                    "default": "Basic",
+                    "description": "Set two pass mode for STAR",
+                    "help_text": "Two pass mode for alignment with STAR. Default is 'Basic' but 'None' can be used to speed up alignment ",
+                    "enum": ["Basic", "None"],
+                    "fa_icon": "fas fa-tachometer-alt"
                 }
             }
         },
@@ -337,6 +356,9 @@
         },
         {
             "$ref": "#/definitions/trimming_options"
+        },
+        {
+            "$ref": "#/definitions/alignment_options"
         },
         {
             "$ref": "#/definitions/institutional_config_options"
