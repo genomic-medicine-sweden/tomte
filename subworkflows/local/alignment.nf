@@ -27,9 +27,9 @@ workflow ALIGNMENT {
 
     emit:
         ch_merged_reads = CAT_FASTQ.out.reads
-        fastp_report = FASTP.out.json
-        ch_bam = STAR_ALIGN.out.bam
-        ch_gene_counts = STAR_ALIGN.out.tab
-        star_log_final = STAR_ALIGN.out.log_final
-        versions = ch_versions
+        fastp_report    = FASTP.out.json
+        ch_bam          = STAR_ALIGN.out.bam
+        ch_gene_counts  = STAR_ALIGN.out.tab
+        star_log_final  = STAR_ALIGN.out.log_final
+        versions        = ch_versions
 }
