@@ -30,6 +30,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 3. Trim reads ([`FASTP`](https://github.com/OpenGene/fastp))
 4. Align reads to the genome ([`STAR`](https://github.com/alexdobin/STAR))
+5. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
 
 ## Quick Start
 
