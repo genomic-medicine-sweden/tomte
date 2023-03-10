@@ -130,9 +130,7 @@ class RowChecker:
     def _validate_strand(self, row):
         """Assert that strandedness entry follows valid entries"""
         if not any(row[self._strand_col] == strandedness for strandedness in self.VALID_STRANDEDNESS):
-            raise AssertionError(
-                f"Strandedness must be one of: {', '.join(self.VALID_STRANDEDNESS)}"
-            )
+            raise AssertionError(f"Strandedness must be one of: {', '.join(self.VALID_STRANDEDNESS)}")
 
     def _validate_fastq_format(self, filename):
         """Assert that a given filename has one of the expected FASTQ extensions."""
