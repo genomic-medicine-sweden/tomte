@@ -46,6 +46,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 include { CHECK_INPUT        } from '../subworkflows/local/input_check'
 include { PREPARE_REFERENCES } from '../subworkflows/local/prepare_references'
 include { ALIGNMENT          } from '../subworkflows/local/alignment'
+include { BAM_QC             } from '../subworkflows/local/bam_qc'
 
 //
 // MODULE: local
@@ -102,16 +103,6 @@ workflow TOMTE {
                                                               : ( ch_references.sequence_dict            ?: Channel.empty() )
     ch_genome_fai             = params.fasta_fai              ? Channel.fromPath(params.fasta_fai).collect()
                                                               : ( ch_references.fasta_fai                ?: Channel.empty() )
-
-    // Alignment
-    ALIGNMENT(
-        CHECK_INPUT.out.reads,
-        ch_references.star_index,
-        ch_references.gtf,
-        params.platform
-    ).set {ch_bam}
-    ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
-
     //
     // MODULE: Run FastQC
     //
@@ -120,6 +111,25 @@ workflow TOMTE {
         CHECK_INPUT.out.reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+
+
+    // Alignment
+    ALIGNMENT(
+        CHECK_INPUT.out.reads,
+        ch_references.star_index,
+        ch_references.gtf,
+        params.platform
+    ).set {ch_alignment}
+    ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
+
+    // BAM QC
+    BAM_QC(
+        ch_alignment.bam,
+        ch_references.fasta_no_meta,
+        ch_references.refflat,
+        ch_references.interval_list
+    )
+    ch_versions = ch_versions.mix(BAM_QC.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
@@ -141,7 +151,8 @@ workflow TOMTE {
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.fastp_report.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.star_log_final.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.ch_gene_counts.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.gene_counts.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(BAM_QC.out.metrics.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),

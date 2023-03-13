@@ -2,9 +2,10 @@
 // Allignment
 //
 
-include { CAT_FASTQ  } from '../../modules/nf-core/cat/fastq/main'
-include { FASTP      } from '../../modules/nf-core/fastp/main'
-include { STAR_ALIGN } from '../../modules/nf-core/star/align/main'
+include { CAT_FASTQ      } from '../../modules/nf-core/cat/fastq/main'
+include { FASTP          } from '../../modules/nf-core/fastp/main'
+include { STAR_ALIGN     } from '../../modules/nf-core/star/align/main'
+include { SAMTOOLS_INDEX } from '../../modules/nf-core/samtools/index/main'
 
 workflow ALIGNMENT {
     take:
@@ -25,11 +26,15 @@ workflow ALIGNMENT {
         STAR_ALIGN(FASTP.out.reads, star_index, gtf, false, 'illumina', false)
         ch_versions = ch_versions.mix(STAR_ALIGN.out.versions.first())
 
+        SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
+        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
+
     emit:
-        ch_merged_reads = CAT_FASTQ.out.reads
-        fastp_report    = FASTP.out.json
-        ch_bam          = STAR_ALIGN.out.bam
-        ch_gene_counts  = STAR_ALIGN.out.tab
-        star_log_final  = STAR_ALIGN.out.log_final
-        versions        = ch_versions
+        merged_reads   = CAT_FASTQ.out.reads
+        fastp_report   = FASTP.out.json
+        bam            = STAR_ALIGN.out.bam
+        bam_bai        = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
+        gene_counts    = STAR_ALIGN.out.tab
+        star_log_final = STAR_ALIGN.out.log_final
+        versions       = ch_versions
 }
