@@ -43,10 +43,11 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 //
 // SUBWORKFLOW: local
 //
-include { CHECK_INPUT        } from '../subworkflows/local/input_check'
-include { PREPARE_REFERENCES } from '../subworkflows/local/prepare_references'
-include { ALIGNMENT          } from '../subworkflows/local/alignment'
-include { BAM_QC             } from '../subworkflows/local/bam_qc'
+include { CHECK_INPUT         } from '../subworkflows/local/input_check'
+include { PREPARE_REFERENCES  } from '../subworkflows/local/prepare_references'
+include { ALIGNMENT           } from '../subworkflows/local/alignment'
+include { BAM_QC              } from '../subworkflows/local/bam_qc'
+include { ANALYSE_TRANSCRIPTS } from '../subworkflows/local/analyse_transcripts'
 
 //
 // MODULE: local
@@ -131,6 +132,14 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(BAM_QC.out.versions)
 
+    // Analyse transcripts
+    ANALYSE_TRANSCRIPTS(
+        ch_alignment.bam,
+        ch_references.gtf,
+        ch_references.fasta_fai_meta,
+    )
+    ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
+
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
@@ -153,6 +162,7 @@ workflow TOMTE {
     ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.star_log_final.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.gene_counts.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_QC.out.metrics.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ANALYSE_TRANSCRIPTS.out.stats_gtf.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),

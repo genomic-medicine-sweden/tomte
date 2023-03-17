@@ -66,14 +66,15 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(BEDTOINTERVALLIST.out.versions)
 
     emit:
-        fasta_meta    = ch_fasta_meta
-        fasta_no_meta = ch_fasta_no_meta
-        fasta_fai     = SAMTOOLS_FAIDX_GENOME.out.fai.map{ meta, fai -> [fai] }.collect()
-        sequence_dict = BUILD_DICT.out.dict.collect()
-        gtf           = ch_gtf
-        star_index    = ch_star_index
-        refflat       = GTF_TO_REFFLAT.out.refflat.collect()
-        rrna_bed      = GET_RRNA_TRANSCRIPTS.out.bed.collect()
-        interval_list = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
-        versions      = ch_versions
+        fasta_meta     = ch_fasta_meta
+        fasta_no_meta  = ch_fasta_no_meta
+        fasta_fai      = SAMTOOLS_FAIDX_GENOME.out.fai.map{ meta, fai -> [fai] }.collect()
+        fasta_fai_meta = ch_fasta_meta.join(SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        sequence_dict  = BUILD_DICT.out.dict.collect()
+        gtf            = ch_gtf
+        star_index     = ch_star_index
+        refflat        = GTF_TO_REFFLAT.out.refflat.collect()
+        rrna_bed       = GET_RRNA_TRANSCRIPTS.out.bed.collect()
+        interval_list  = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
+        versions       = ch_versions
 }
