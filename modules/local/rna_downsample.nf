@@ -8,7 +8,7 @@ process RNA_DOWNSAMPLE {
         'quay.io/biocontainers/samtools:1.16.1--h6899075_1' }"
 
     input:
-    tuple val(meta), path(bam) 
+    tuple val(meta), path(bam)
     path(downsample_bed)
 
     output:
@@ -25,7 +25,7 @@ process RNA_DOWNSAMPLE {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def seed_frac       = (args.contains('-s')) ? '' : '-s 0.001'
     def num_reads       = (args.contains('-num_reads')) ? '' : '80000000'
-    
+
     """
     samtools view -@ $task.cpus -b -U non_select.bam -L ${downsample_bed} ${bam} | samtools view $seed_frac -@ $task.cpus -b -o select.bam
     samtools index non_select.bam
