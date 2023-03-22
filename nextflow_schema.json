@@ -123,6 +123,12 @@
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory or tar.gz archive for pre-built STAR index.",
                     "help_text": "Path to directory or tar.gz archive with pre-built STAR index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option \"--save_reference\"."
+                },
+                "downsample_bed": {
+                    "type": "string",
+                    "default": "None",
+                    "format": "file-path",
+                    "fa_icon": "far fa-file-code"
                 }
             },
             "required": ["fasta", "gtf"]
