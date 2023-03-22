@@ -12,10 +12,10 @@ process RNA_DOWNSAMPLE {
     path(downsample_bed)
 
     output:
-    tuple val(meta), path("*_downsmapled.bam")                                 , emit: bam
-    tuple val(meta), path("*_downsmapled.bam.bai")                             , emit: bai
-    tuple val(meta), path("*_downsmapled.bam"), path("*_downsmapled.bam.bai")  , emit: bam_bai
-    path  "versions.yml"                                                       , emit: versions
+    tuple val(meta), path("*_downsmapled.bam")                                , emit: bam
+    tuple val(meta), path("*_downsmapled.bam.bai")                            , emit: bai
+    tuple val(meta), path("*_downsmapled.bam"), path("*_downsmapled.bam.bai") , emit: bam_bai
+    path  "versions.yml"                                                      , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
