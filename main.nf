@@ -20,6 +20,7 @@ params.fasta_fai                      = WorkflowMain.getGenomeAttribute(params, 
 params.gtf                            = WorkflowMain.getGenomeAttribute(params, 'gtf')
 params.sequence_dict                  = WorkflowMain.getGenomeAttribute(params, 'sequence_dict')
 params.star_index                     = WorkflowMain.getGenomeAttribute(params, 'star_index')
+params.downsample_bed                 = WorkflowMain.getGenomeAttribute(params, 'downsample_bed')
 
 
 /*
