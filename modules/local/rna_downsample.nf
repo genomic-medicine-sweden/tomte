@@ -27,36 +27,17 @@ process RNA_DOWNSAMPLE {
     def num_reads       = (args.contains('-num_reads')) ? '' : '80000000'
 
     """
-    if [[ \$mode == *"subsample_region"* ]]; then
-        samtools view -@ $task.cpus -b -U non_select.bam -L ${downsample_bed} ${bam} | samtools view $seed_frac -@ $task.cpus -b -o select.bam
-        if [[ \$mode == *"downsample"* ]]; then
-            samtools index non_select.bam
-            fraction=\$(samtools idxstats non_select.bam | cut -f3 | awk -v ct="$num_reads" 'BEGIN {total=0} {total += \$1} END {print ct/total}')
-            percent=\$(samtools idxstats non_select.bam | cut -f3 | awk -v ct="$num_reads"00 'BEGIN {total=0} {total += \$1} END {print ct/total}')
-            percent=\$(echo \$percent | cut -d. -f1)
-
-            if (( \$(echo "\$percent < 100") )); then
-                samtools merge -u non_select.bam select.bam -o /dev/stdout | samtools view -@ $task.cpus -b -s \$fraction -o ${prefix}_downsmapled.bam
-            else
-                samtools merge -u non_select.bam select.bam -o ${prefix}_downsmapled.bam
-            fi
-        fi
+    samtools view -@ $task.cpus -b -U non_select.bam -L ${downsample_bed} ${bam} | samtools view $seed_frac -@ $task.cpus -b -o select.bam
+    samtools index non_select.bam
+    fraction=\$(samtools idxstats non_select.bam | cut -f3 | awk -v ct="$num_reads" 'BEGIN {total=0} {total += \$1} END {print ct/total}')
+    percent=\$(samtools idxstats non_select.bam | cut -f3 | awk -v ct="$num_reads"00 'BEGIN {total=0} {total += \$1} END {print ct/total}')
+    percent=\$(echo \$percent | cut -d. -f1)
+    if (( \$(echo "\$percent < 100") ))
+    then
+        samtools merge -u non_select.bam select.bam -o /dev/stdout | samtools view -@ $task.cpus -b -s \$fraction -o ${prefix}_downsmapled.bam
     else
-        if [[ \$mode == *"downsample"* ]]; then
-            fraction=\$(samtools idxstats ${bam} | cut -f3 | awk -v ct="$num_reads" 'BEGIN {total=0} {total += \$1} END {print ct/total}')
-            percent=\$(samtools idxstats ${bam} | cut -f3 | awk -v ct="$num_reads"00 'BEGIN {total=0} {total += \$1} END {print ct/total}')
-            percent=\$(echo \$percent | cut -d. -f1)
-            
-            if (( \$(echo "\$percent < 100") )); then
-                samtools view -@ $task.cpus -b ${bam} -s \$fraction -o ${prefix}_downsmapled.bam
-            else
-                mv ${bam} ${prefix}_downsmapled.bam
-            fi
-        else
-            mv ${bam} ${prefix}_downsmapled.bam
-        fi
+        samtools merge -u non_select.bam select.bam -o ${prefix}_downsmapled.bam
     fi
-    
     samtools index ${prefix}_downsmapled.bam
 
     
