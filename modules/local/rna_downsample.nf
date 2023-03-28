@@ -9,7 +9,7 @@ process RNA_DOWNSAMPLE {
 
     input:
     tuple val(meta), path(bam)
-    path(downsample_bed)
+    path downsample_bed
 
     output:
     tuple val(meta), path("*_downsmapled.bam")                                , emit: bam
