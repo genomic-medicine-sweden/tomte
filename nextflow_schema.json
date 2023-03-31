@@ -160,6 +160,31 @@
                 }
             }
         },
+        "variant_calling": {
+            "title": "Variant calling",
+            "type": "object",
+            "description": "Options related to variant calling",
+            "default": "",
+            "fa_icon": "fas fa-filter",
+            "properties": {
+                "variant_caller": {
+                    "type": "string",
+                    "default": "bcftools",
+                    "fa_icon": "fab fa-algolia",
+                    "description": "Program to use for variant calling",
+                    "enum": ["bcftools", "gatk"],
+                    "help_text": "The pipeline can use either bcftools mpileup/call or GATK haplotypecaller for calling SNV/INDELS on the RNAseq data."
+                },
+                "bcftools_caller_mode": {
+                    "type": "string",
+                    "fa_icon": "fab fa-algolia",
+                    "default": "multiallelic",
+                    "description": "Run bcftools call in either consensus or multiallelic mode",
+                    "enum": ["consensus", "multiallelic"],
+                    "help_text": "Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied."
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -359,6 +384,9 @@
         },
         {
             "$ref": "#/definitions/alignment_options"
+        },
+        {
+            "$ref": "#/definitions/variant_calling"
         },
         {
             "$ref": "#/definitions/institutional_config_options"

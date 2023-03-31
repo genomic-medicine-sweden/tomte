@@ -1,0 +1,14 @@
+Changes in module 'nf-core/bcftools/mpileup'
+--- modules/nf-core/bcftools/mpileup/main.nf
++++ modules/nf-core/bcftools/mpileup/main.nf
+@@ -40,7 +40,7 @@
+         $bam \\
+         $intervals \\
+         $mpileup \\
+-        | bcftools call --output-type v $args2 \\
++        | bcftools call --output-type u $args2 \\
+         | bcftools reheader --samples sample_name.list \\
+         | bcftools view --output-file ${prefix}.vcf.gz --output-type z $args3
+ 
+
+************************************************************

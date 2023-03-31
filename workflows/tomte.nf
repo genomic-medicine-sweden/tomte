@@ -48,6 +48,7 @@ include { PREPARE_REFERENCES  } from '../subworkflows/local/prepare_references'
 include { ALIGNMENT           } from '../subworkflows/local/alignment'
 include { BAM_QC              } from '../subworkflows/local/bam_qc'
 include { ANALYSE_TRANSCRIPTS } from '../subworkflows/local/analyse_transcripts'
+include { CALL_VARIANTS       } from '../subworkflows/local/call_variants'
 
 //
 // MODULE: local
@@ -140,6 +141,16 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
 
+    // Call variants
+    CALL_VARIANTS(
+        ch_alignment.bam_bai,
+        ch_references.fasta_no_meta,
+        ch_references.fasta_fai,
+        ch_references.sequence_dict,
+        params.variant_caller
+    )
+    ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
+
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
@@ -163,6 +174,7 @@ workflow TOMTE {
     ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.gene_counts.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_QC.out.metrics.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ANALYSE_TRANSCRIPTS.out.stats_gtf.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),
