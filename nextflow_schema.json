@@ -158,21 +158,36 @@
                     "enum": ["Basic", "None"],
                     "fa_icon": "fas fa-tachometer-alt"
                 },
+                "subsample_region_switch": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Do you want to subsample the region subsample_bed to the fraction given in seed_frac?",
+                    "fa_icon": "fas fa-toggle-off"
+                },
+                "downsample_switch": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Do you want to downsample the number of reads to num_reads?",
+                    "fa_icon": "fas fa-toggle-off"
+                },
                 "subsample_bed": {
                     "type": "string",
                     "default": "None",
                     "format": "file-path",
-                    "fa_icon": "far fa-file-code"
+                    "fa_icon": "far fa-file-code",
+                    "description": "Bed with regions to subsample"
                 },
                 "seed_frac": {
                     "type": "number",
                     "default": 0.001,
-                    "description": "-s INT.FRAC is equivalent to --subsample-seed INT --subsample 0.FRAC in samtools view"
+                    "description": "-s INT.FRAC is equivalent to --subsample-seed INT --subsample 0.FRAC in samtools view",
+                    "fa_icon": "fas fa-percent"
                 },
                 "num_reads": {
                     "type": "integer",
                     "default": 80000000,
-                    "description": "Number of reads to downsample RNAseq sample to"
+                    "description": "Number of reads to downsample RNAseq sample to",
+                    "fa_icon": "fas fa-list-ol"
                 }
             }
         },

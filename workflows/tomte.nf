@@ -126,7 +126,9 @@ workflow TOMTE {
         params.platform,
         params.subsample_bed,
         params.seed_frac,
-        params.num_reads
+        params.num_reads,
+        params.subsample_region_switch,
+        params.downsample_switch
     ).set {ch_alignment}
     ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
 

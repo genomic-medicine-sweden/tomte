@@ -18,6 +18,8 @@ workflow ALIGNMENT {
         subsample_bed
         seed_frac
         num_reads
+        subsample_region_switch
+        downsample_switch
 
     main:
         ch_versions = Channel.empty()
@@ -34,19 +36,35 @@ workflow ALIGNMENT {
         SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
-        RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam, subsample_bed, seed_frac)
-        ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
+        ch_bam_bai = Channel.empty()
+        ch_bam_bai_out = Channel.empty()
 
-        RNA_DOWNSAMPLE( RNA_SUBSAMPLE_REGION.out.bam_bai, num_reads)
-        ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
+        if (subsample_region_switch) {
+            RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam, subsample_bed, seed_frac)
+            ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
+            ch_bam_bai = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
+            if (!downsample_switch) {
+                ch_bam_bai_out = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
+            }
+        } else {
+            ch_bam_bai = ch_bam_bai.mix(STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai))
+             if (!downsample_switch) {
+                ch_bam_bai_out = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
+            }
+        }
+
+        if (downsample_switch) {
+            RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
+            ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
+            ch_bam_bai_out = ch_bam_bai.mix(RNA_DOWNSAMPLE.out.bam_bai)
+        }
 
     emit:
         merged_reads   = CAT_FASTQ.out.reads
         fastp_report   = FASTP.out.json
         bam            = STAR_ALIGN.out.bam
         bam_bai        = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
-        bam_ds         = RNA_SUBSAMPLE_REGION.out.bam
-        bam_ds_bai     = RNA_SUBSAMPLE_REGION.out.bam_bai
+        bam_ds_bai     = ch_bam_bai_out
         gene_counts    = STAR_ALIGN.out.tab
         star_log_final = STAR_ALIGN.out.log_final
         versions       = ch_versions
