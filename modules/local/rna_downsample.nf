@@ -8,7 +8,7 @@ process RNA_DOWNSAMPLE {
         'quay.io/biocontainers/samtools:1.16.1--h6899075_1' }"
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), path(bam), path(bai)
     val num_reads
 
     output:
