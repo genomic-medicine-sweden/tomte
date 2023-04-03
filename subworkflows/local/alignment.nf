@@ -5,8 +5,9 @@
 include { CAT_FASTQ            } from '../../modules/nf-core/cat/fastq/main'
 include { FASTP                } from '../../modules/nf-core/fastp/main'
 include { STAR_ALIGN           } from '../../modules/nf-core/star/align/main'
+include { SAMTOOLS_INDEX } from '../../modules/nf-core/samtools/index/main'
 include { RNA_DOWNSAMPLE       } from '../../modules/local/rna_downsample'
-include { RNA_SUBSAMPLE_REGION } from '../../modules/local/rna_downsample'
+include { RNA_SUBSAMPLE_REGION } from '../../modules/local/rna_subsample_region.nf'
 
 workflow ALIGNMENT {
     take:
@@ -14,7 +15,9 @@ workflow ALIGNMENT {
         star_index
         gtf
         platform
-        downsample_bed
+        subsample_bed
+        seed_frac
+        num_reads
 
     main:
         ch_versions = Channel.empty()
@@ -28,15 +31,20 @@ workflow ALIGNMENT {
         STAR_ALIGN(FASTP.out.reads, star_index, gtf, false, 'illumina', false)
         ch_versions = ch_versions.mix(STAR_ALIGN.out.versions.first())
 
-        RNA_DOWNSAMPLE( STAR_ALIGN.out.bam, downsample_bed )
-        ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
+        SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
+        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
-        RNA_SUBSAMPLE_REGION( RNA_DOWNSAMPLE.out.bam_bai )
+        RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam, subsample_bed, seed_frac)
         ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
+
+        RNA_DOWNSAMPLE( RNA_SUBSAMPLE_REGION.out.bam_bai, num_reads)
+        ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
 
     emit:
         merged_reads   = CAT_FASTQ.out.reads
         fastp_report   = FASTP.out.json
+        bam            = STAR_ALIGN.out.bam
+        bam_bai        = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
         bam_ds         = RNA_SUBSAMPLE_REGION.out.bam
         bam_ds_bai     = RNA_SUBSAMPLE_REGION.out.bam_bai
         gene_counts    = STAR_ALIGN.out.tab

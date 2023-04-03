@@ -23,11 +23,10 @@ process RNA_DOWNSAMPLE {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def num_reads       = (args.contains('-num_reads')) ? '' : '80000000'
 
     """
     fraction=\$(samtools idxstats ${bam} | cut -f3 | awk -v ct="${num_reads}" 'BEGIN {total=0} {total += \$1} END {print ct/total}')
-    percent=\$(samtools idxstats ${bam} | cut -f3 | awk -v ct="$num_reads"00 'BEGIN {total=0} {total += \$1} END {print ct/total}')
+    percent=\$(samtools idxstats ${bam} | cut -f3 | awk -v ct="${num_reads}"00 'BEGIN {total=0} {total += \$1} END {print ct/total}')
     percent=\$(echo \$percent | cut -d. -f1)
     if (( \$(echo "\$percent < 100") ))
     then
@@ -46,8 +45,8 @@ process RNA_DOWNSAMPLE {
     stub:
     def prefix = task.ext.prefix    ?: "${meta.id}"
     """
-    touch ${prefix}.bam
-    touch ${prefix}.bam.bai
+    touch ${prefix}_downsmapled.bam
+    touch ${prefix}_downsmapled.bam.bai
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

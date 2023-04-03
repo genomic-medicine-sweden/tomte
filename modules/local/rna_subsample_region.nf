@@ -10,6 +10,7 @@ process RNA_SUBSAMPLE_REGION {
     input:
     tuple val(meta), path(bam)
     path subsample_bed
+    val seed_frac
 
     output:
     tuple val(meta), path("*_subsamp.bam")                            , emit: bam
@@ -23,10 +24,9 @@ process RNA_SUBSAMPLE_REGION {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def seed_frac       = (args.contains('-s')) ? '' : '-s 0.001'
 
     """
-    samtools view -@ $task.cpus -b -U non_select.bam -L ${subsample_bed} ${bam} | samtools view $seed_frac -@ $task.cpus -b -o select.bam
+    samtools view -@ $task.cpus -b -U non_select.bam -L ${subsample_bed} ${bam} | samtools view -s ${seed_frac} -@ $task.cpus -b -o select.bam
     samtools merge -u non_select.bam select.bam -o ${prefix}_subsamp.bam
     samtools index ${prefix}_subsamp.bam
     
@@ -39,8 +39,8 @@ process RNA_SUBSAMPLE_REGION {
     stub:
     def prefix = task.ext.prefix    ?: "${meta.id}"
     """
-    touch ${prefix}.bam
-    touch ${prefix}.bam.bai
+    touch ${prefix}_subsamp.bam
+    touch ${prefix}_subsamp.bam.bai
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
