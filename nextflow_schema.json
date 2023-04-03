@@ -123,12 +123,6 @@
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory or tar.gz archive for pre-built STAR index.",
                     "help_text": "Path to directory or tar.gz archive with pre-built STAR index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option \"--save_reference\"."
-                },
-                "downsample_bed": {
-                    "type": "string",
-                    "default": "None",
-                    "format": "file-path",
-                    "fa_icon": "far fa-file-code"
                 }
             },
             "required": ["fasta", "gtf"]
@@ -163,6 +157,22 @@
                     "help_text": "Two pass mode for alignment with STAR. Default is 'Basic' but 'None' can be used to speed up alignment ",
                     "enum": ["Basic", "None"],
                     "fa_icon": "fas fa-tachometer-alt"
+                },
+                "subsample_bed": {
+                    "type": "string",
+                    "default": "None",
+                    "format": "file-path",
+                    "fa_icon": "far fa-file-code"
+                },
+                "seed_frac": {
+                    "type": "number",
+                    "default": 0.001,
+                    "description": "-s INT.FRAC is equivalent to --subsample-seed INT --subsample 0.FRAC in samtools view"
+                },
+                "num_reads": {
+                    "type": "integer",
+                    "default": 80000000,
+                    "description": "Number of reads to downsample RNAseq sample to"
                 }
             }
         },

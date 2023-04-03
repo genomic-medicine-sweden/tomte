@@ -35,7 +35,7 @@ process RNA_DOWNSAMPLE {
         mv ${bam} ${prefix}_downsmapled.bam
     fi
     samtools index ${prefix}_downsmapled.bam
-    
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')

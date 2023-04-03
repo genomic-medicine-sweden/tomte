@@ -29,7 +29,7 @@ process RNA_SUBSAMPLE_REGION {
     samtools view -@ $task.cpus -b -U non_select.bam -L ${subsample_bed} ${bam} | samtools view -s ${seed_frac} -@ $task.cpus -b -o select.bam
     samtools merge -u non_select.bam select.bam -o ${prefix}_subsamp.bam
     samtools index ${prefix}_subsamp.bam
-    
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
