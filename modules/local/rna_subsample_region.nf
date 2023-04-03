@@ -1,4 +1,4 @@
-process RNA_DOWNSAMPLE {
+process RNA_SUBSAMPLE_REGION {
     tag "$meta.id"
     label 'process_low'
 
@@ -12,10 +12,10 @@ process RNA_DOWNSAMPLE {
     path subsample_bed
 
     output:
-    tuple val(meta), path("*_subsamp.bam")                                , emit: bam
-    tuple val(meta), path("*_subsamp.bam.bai")                            , emit: bai
+    tuple val(meta), path("*_subsamp.bam")                            , emit: bam
+    tuple val(meta), path("*_subsamp.bam.bai")                        , emit: bai
     tuple val(meta), path("*_subsamp.bam"), path("*_subsamp.bam.bai") , emit: bam_bai
-    path  "versions.yml"                                                      , emit: versions
+    path  "versions.yml"                                              , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

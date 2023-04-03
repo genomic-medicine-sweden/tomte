@@ -9,6 +9,7 @@ process RNA_DOWNSAMPLE {
 
     input:
     tuple val(meta), path(bam)
+    val num_reads
 
     output:
     tuple val(meta), path("*_downsmapled.bam")                                , emit: bam
@@ -25,7 +26,7 @@ process RNA_DOWNSAMPLE {
     def num_reads       = (args.contains('-num_reads')) ? '' : '80000000'
 
     """
-    fraction=\$(samtools idxstats ${bam} | cut -f3 | awk -v ct="$num_reads" 'BEGIN {total=0} {total += \$1} END {print ct/total}')
+    fraction=\$(samtools idxstats ${bam} | cut -f3 | awk -v ct="${num_reads}" 'BEGIN {total=0} {total += \$1} END {print ct/total}')
     percent=\$(samtools idxstats ${bam} | cut -f3 | awk -v ct="$num_reads"00 'BEGIN {total=0} {total += \$1} END {print ct/total}')
     percent=\$(echo \$percent | cut -d. -f1)
     if (( \$(echo "\$percent < 100") ))
