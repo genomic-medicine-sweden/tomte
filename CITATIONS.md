@@ -14,6 +14,10 @@
 
   > Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. GigaScience. 2021;10(2):giab008. doi:10.1093/gigascience/giab008
 
+- [SAMtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722)
+
+  > Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. GigaScience. 2021;10(2):giab008. doi:10.1093/gigascience/giab008
+ 
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 
 - [GATK](https://genome.cshlp.org/content/20/9/1297)
