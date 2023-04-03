@@ -18,7 +18,8 @@ def checkPathParamList = [
     params.fasta_fai,
     params.sequence_dict,
     params.star_index,
-    params.gtf
+    params.gtf,
+    params.subsample_bed
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -104,6 +105,8 @@ workflow TOMTE {
                                                               : ( ch_references.sequence_dict            ?: Channel.empty() )
     ch_genome_fai             = params.fasta_fai              ? Channel.fromPath(params.fasta_fai).collect()
                                                               : ( ch_references.fasta_fai                ?: Channel.empty() )
+    ch_subsample_bed         = params.subsample_bed           ? Channel.fromPath(params.subsample_bed).collect()
+                                                              : Channel.empty()
     //
     // MODULE: Run FastQC
     //
@@ -119,7 +122,10 @@ workflow TOMTE {
         CHECK_INPUT.out.reads,
         ch_references.star_index,
         ch_references.gtf,
-        params.platform
+        params.platform,
+        params.subsample_bed,
+        params.seed_frac,
+        params.num_reads
     ).set {ch_alignment}
     ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
 
