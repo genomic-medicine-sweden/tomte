@@ -3,7 +3,7 @@
 //
 
 // Modules
-include { BCFTOOLS_MPILEUP } from '../../modules/nf-core/bcftools/mpileup/main'
+include { BCFTOOLS_MPILEUP   } from '../../modules/nf-core/bcftools/mpileup/main'
 
 // Subworkflows
 include { CALL_VARIANTS_GATK } from './call_variants_gatk.nf'
@@ -60,8 +60,9 @@ workflow CALL_VARIANTS {
         }
 
     emit:
-        vcf      = ch_vcf      // channel: [ val(meta), path(vcf) ]
-        tbi      = ch_tbi      // channel: [ val(meta), path(tbi) ]
-        stats    = ch_stats    // channel: [ val(meta), path(stats) ]
-        versions = ch_versions // channel: [ path(versions.yml) ]
+        vcf      = ch_vcf              // channel: [ val(meta), path(vcf) ]
+        tbi      = ch_tbi              // channel: [ val(meta), path(vcf), path(tbi) ]
+        vcf_tbi  = ch_vcf.join(ch_tbi) // channel: [ val(meta), path(tbi) ]
+        stats    = ch_stats            // channel: [ val(meta), path(stats) ]
+        versions = ch_versions         // channel: [ path(versions.yml) ]
 }
