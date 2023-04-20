@@ -162,7 +162,12 @@ workflow TOMTE {
 
 
     ALLELE_SPECIFIC_CALLING(
-        CALL_VARIANTS.out.vcf_tbi
+        CALL_VARIANTS.out.vcf_tbi,
+        ch_alignment.bam_bai,
+        ch_references.fasta_no_meta,
+        ch_references.fasta_fai,
+        ch_references.sequence_dict,
+        ch_references.interval_list
     )
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
