@@ -51,6 +51,7 @@ include { BAM_QC                  } from '../subworkflows/local/bam_qc'
 include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts'
 include { CALL_VARIANTS           } from '../subworkflows/local/call_variants'
 include { ALLELE_SPECIFIC_CALLING } from '../subworkflows/local/allele_specific_calling'
+include { ANNOTATE_SNV            } from '../subworkflows/local/annotate_snv'
 
 //
 // MODULE: local
@@ -169,6 +170,17 @@ workflow TOMTE {
         ch_references.sequence_dict,
         ch_references.interval_list
     )
+    ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
+
+    ANNOTATE_SNV (
+        CALL_VARIANTS.out.vcf,
+        val_vep_genome,
+        val_vep_cache_version,
+        ch_vep_cache,
+        ch_references.fasta_no_meta,
+    )
+    ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
+
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
