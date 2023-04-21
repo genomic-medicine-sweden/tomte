@@ -45,7 +45,7 @@ workflow ALLELE_SPECIFIC_CALLING {
         ch_versions = ch_versions.mix(GATK4_ASEREADCOUNTER.out.versions.first())
 
         BOOTSTRAPANN(
-            BCFTOOLS_VIEW.out.vcf.join(BCFTOOLS_INDEX.out.tbi),
+            vcf_tbi,
             GATK4_ASEREADCOUNTER.out.csv
         )
         ch_versions = ch_versions.mix(BOOTSTRAPANN.out.versions.first())
