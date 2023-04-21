@@ -5,6 +5,7 @@
 include { BCFTOOLS_VIEW        } from '../../modules/nf-core/bcftools/view/main' 
 include { BCFTOOLS_INDEX       } from '../../modules/nf-core/bcftools/index/main'
 include { GATK4_ASEREADCOUNTER } from '../../modules/nf-core/gatk4/asereadcounter/main'
+include { BOOTSTRAPANN         } from '../../modules/local/bootstrapann'
 
 
 workflow ALLELE_SPECIFIC_CALLING {
@@ -43,7 +44,14 @@ workflow ALLELE_SPECIFIC_CALLING {
         )
         ch_versions = ch_versions.mix(GATK4_ASEREADCOUNTER.out.versions.first())
 
+        BOOTSTRAPANN(
+            vcf_tbi,
+            GATK4_ASEREADCOUNTER.out.csv
+        )
+        ch_versions = ch_versions.mix(BOOTSTRAPANN.out.versions.first())
+
+
     emit:
-        csv  = GATK4_ASEREADCOUNTER.out.csv
+        vcf  = BOOTSTRAPANN.out.vcf
         versions = ch_versions // channel: [ path(versions.yml) ]
 }
