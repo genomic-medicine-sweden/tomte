@@ -44,12 +44,13 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 //
 // SUBWORKFLOW: local
 //
-include { CHECK_INPUT         } from '../subworkflows/local/input_check'
-include { PREPARE_REFERENCES  } from '../subworkflows/local/prepare_references'
-include { ALIGNMENT           } from '../subworkflows/local/alignment'
-include { BAM_QC              } from '../subworkflows/local/bam_qc'
-include { ANALYSE_TRANSCRIPTS } from '../subworkflows/local/analyse_transcripts'
-include { CALL_VARIANTS       } from '../subworkflows/local/call_variants'
+include { CHECK_INPUT             } from '../subworkflows/local/input_check'
+include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_references'
+include { ALIGNMENT               } from '../subworkflows/local/alignment'
+include { BAM_QC                  } from '../subworkflows/local/bam_qc'
+include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts'
+include { CALL_VARIANTS           } from '../subworkflows/local/call_variants'
+include { ALLELE_SPECIFIC_CALLING } from '../subworkflows/local/allele_specific_calling'
 
 //
 // MODULE: local
@@ -158,6 +159,16 @@ workflow TOMTE {
         params.variant_caller
     )
     ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
+
+
+    ALLELE_SPECIFIC_CALLING(
+        CALL_VARIANTS.out.vcf_tbi,
+        ch_alignment.bam_bai,
+        ch_references.fasta_no_meta,
+        ch_references.fasta_fai,
+        ch_references.sequence_dict,
+        ch_references.interval_list
+    )
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
