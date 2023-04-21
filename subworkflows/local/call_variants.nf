@@ -61,8 +61,8 @@ workflow CALL_VARIANTS {
 
     emit:
         vcf      = ch_vcf              // channel: [ val(meta), path(vcf) ]
-        tbi      = ch_tbi              // channel: [ val(meta), path(vcf), path(tbi) ]
-        vcf_tbi  = ch_vcf.join(ch_tbi) // channel: [ val(meta), path(tbi) ]
+        tbi      = ch_tbi              // channel: [ val(meta), path(tbi) ]
+        vcf_tbi  = ch_vcf.join(ch_tbi) // channel: [ val(meta), path(vcf), path(tbi) ]
         stats    = ch_stats            // channel: [ val(meta), path(stats) ]
         versions = ch_versions         // channel: [ path(versions.yml) ]
 }
