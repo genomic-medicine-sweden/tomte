@@ -1,18 +1,19 @@
 process BOOTSTRAPANN {
-    tag '$meta.id'
+    tag "$meta.id"
     label 'process_low'
 
-    conda "conda-forge::python=2.7"
+    conda "bioconda::pydamage=0.70"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/python:2.7' :
-        'quay.io/biocontainers/python:2.7' }"
+        'https://depot.galaxyproject.org/singularity/pydamage:0.70--pyhdfd78af_0' :
+        'quay.io/biocontainers/pydamage:0.70--pyhdfd78af_0' }"
 
     input:
     tuple val(meta), path(vcf), path(tbi)
     tuple val(meta), path(csv)
 
     output:
-    tuple val(meta), path("*.vcf")
+    tuple val(meta), path("*.vcf"), emit: vcf
+    path "versions.yml"           , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
