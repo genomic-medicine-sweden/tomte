@@ -184,7 +184,7 @@ workflow TOMTE {
     ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
 
     ANNOTATE_SNV (
-        CALL_VARIANTS.out.vcf,
+        ALLELE_SPECIFIC_CALLING.out.vcf,
         params.genome,
         params.vep_cache_version,
         ch_vep_cache,
