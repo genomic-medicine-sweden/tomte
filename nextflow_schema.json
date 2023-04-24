@@ -123,6 +123,26 @@
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory or tar.gz archive for pre-built STAR index.",
                     "help_text": "Path to directory or tar.gz archive with pre-built STAR index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option \"--save_reference\"."
+                },
+                "vep_cache": {
+                    "type": "string",
+                    "description": "Path to vep's cache directory.",
+                    "help_text": "If no directory path is passed, vcf files will not be annotated by vep.",
+                    "fa_icon": "fas fa-folder-open"
+                },
+                "vep_cache_version": {
+                    "type": "integer",
+                    "default": "107",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "fa_icon": "fas fa-book",
+                    "enum": [107]
+                },
+                "vep_filters": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "File containing HGNC_IDs of interest on separate lines.",
+                    "hidden": true
                 }
             },
             "required": ["fasta", "gtf"]

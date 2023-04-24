@@ -19,7 +19,9 @@ def checkPathParamList = [
     params.sequence_dict,
     params.star_index,
     params.gtf,
-    params.subsample_bed
+    params.subsample_bed,
+    params.vep_filters,
+    params.vep_cache
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -96,20 +98,29 @@ workflow TOMTE {
         exit 1, 'Input samplesheet not specified!'
     }
 
+    ch_vep_cache_unprocessed = params.vep_cache                 ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
+                                                                : Channel.value([[],[]])
+    ch_vep_filters           = params.vep_filters               ? Channel.fromPath(params.vep_filters).collect()
+                                                                : Channel.value([])
+
     PREPARE_REFERENCES(
         params.fasta,
         params.star_index,
-        params.gtf
+        params.gtf,
+        ch_vep_cache_unprocessed
     ).set { ch_references }
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
 
     // Gather built indices or get them from the params
-    ch_sequence_dict          = params.sequence_dict          ? Channel.fromPath(params.sequence_dict).collect()
+    ch_sequence_dict         = params.sequence_dict           ? Channel.fromPath(params.sequence_dict).collect()
                                                               : ( ch_references.sequence_dict            ?: Channel.empty() )
-    ch_genome_fai             = params.fasta_fai              ? Channel.fromPath(params.fasta_fai).collect()
+    ch_genome_fai            = params.fasta_fai               ? Channel.fromPath(params.fasta_fai).collect()
                                                               : ( ch_references.fasta_fai                ?: Channel.empty() )
     ch_subsample_bed         = params.subsample_bed           ? Channel.fromPath(params.subsample_bed).collect()
                                                               : Channel.empty()
+    ch_vep_cache             = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
+                                                                : ( params.vep_cache  ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
+
     //
     // MODULE: Run FastQC
     //
@@ -174,8 +185,8 @@ workflow TOMTE {
 
     ANNOTATE_SNV (
         CALL_VARIANTS.out.vcf,
-        val_vep_genome,
-        val_vep_cache_version,
+        params.genome,
+        params.vep_cache_version,
         ch_vep_cache,
         ch_references.fasta_no_meta,
     )

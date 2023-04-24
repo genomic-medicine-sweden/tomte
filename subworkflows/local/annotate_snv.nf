@@ -19,7 +19,7 @@ workflow ANNOTATE_SNV {
 
         // Annotate with VEP
         ENSEMBLVEP(
-            vcf_tbi,
+            vcf,
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,
