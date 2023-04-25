@@ -11,13 +11,15 @@ include { GUNZIP as GUNZIP_GTF                         } from '../../modules/nf-
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME      } from '../../modules/nf-core/samtools/faidx/main'
 include { STAR_GENOMEGENERATE as BUILD_STAR_GENOME     } from '../../modules/nf-core/star/genomegenerate/main'
 include { UNTAR as UNTAR_STAR_INDEX                    } from '../../modules/nf-core/untar/main'
+include { UNTAR as UNTAR_VEP_CACHE                     } from '../../modules/nf-core/untar/main'
+
 
 workflow PREPARE_REFERENCES {
     take:
         fasta
         star_index
         gtf
-
+        ch_vep_cache
 
     main:
         ch_versions = Channel.empty()
@@ -65,6 +67,9 @@ workflow PREPARE_REFERENCES {
         BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map {it -> [ [id:it.name], it ]}, ch_dict )
         ch_versions = ch_versions.mix(BEDTOINTERVALLIST.out.versions)
 
+        UNTAR_VEP_CACHE (ch_vep_cache)
+        ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
+
     emit:
         fasta_meta     = ch_fasta_meta
         fasta_no_meta  = ch_fasta_no_meta
@@ -76,5 +81,6 @@ workflow PREPARE_REFERENCES {
         refflat        = GTF_TO_REFFLAT.out.refflat.collect()
         rrna_bed       = GET_RRNA_TRANSCRIPTS.out.bed.collect()
         interval_list  = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
+        vep_resources  = UNTAR_VEP_CACHE.out.untar.map{meta, files -> [files]}.collect()     // channel: [ path(cache) ]
         versions       = ch_versions
 }
