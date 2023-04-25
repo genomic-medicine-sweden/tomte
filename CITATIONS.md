@@ -18,6 +18,9 @@
 
   > Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. GigaScience. 2021;10(2):giab008. doi:10.1093/gigascience/giab008
 
+- [EnsemblVEP](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4)
+  > McLaren W, Gil L, Hunt SE, et al. The Ensembl Variant Effect Predictor. Genome Biol. 2016;17(1):122. doi:10.1186/s13059-016-0974-4
+
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 
 - [GATK](https://genome.cshlp.org/content/20/9/1297)
