@@ -67,5 +67,6 @@ workflow ALIGNMENT {
         bam_ds_bai     = ch_bam_bai_out
         gene_counts    = STAR_ALIGN.out.tab
         star_log_final = STAR_ALIGN.out.log_final
+        star_sj        = STAR_ALIGN.out.junction
         versions       = ch_versions
 }
