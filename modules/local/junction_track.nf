@@ -30,9 +30,9 @@ process JUNCTION_TRACK {
     """
 
     stub:
+    def prefix = task.ext.prefix    ?: "${meta.id}"
     """
-    touch rrna.gtf
-    touch rrna.bed
+    touch ${prefix}_junction.bed
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
