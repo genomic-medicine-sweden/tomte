@@ -8,10 +8,10 @@ process JUNCTION_TRACK {
         'quay.io/biocontainers/python:3.8.3' }"
 
     input:
-    path(sj)
+    tuple val(meta), path(sj)
 
     output:
-    path('*.bed')    , emit: bed
+    tuple val(meta), path('*.bed')    , emit: bed
     path "versions.yml" , emit: versions
 
     when:
