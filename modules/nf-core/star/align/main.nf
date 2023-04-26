@@ -88,8 +88,14 @@ process STAR_ALIGN {
     touch ${prefix}.tab
     touch ${prefix}.Chimeric.out.junction
     touch ${prefix}.out.sam
-    touch ${prefix}.wig
-    touch ${prefix}.bedGraph
+    touch ${prefix}.Unique.str1.out.wig
+    touch ${prefix}.Unique.str2.out.wig
+    touch ${prefix}.Multiple.str1.out.wig
+    touch ${prefix}.Multiple.str2.out.wig
+    touch ${prefix}.Unique.str1.out.bg
+    touch ${prefix}.Unique.str2.out.bg
+    touch ${prefix}.Multiple.str1.out.bg
+    touch ${prefix}.Multiple.str2.out.bg
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

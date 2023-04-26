@@ -14,16 +14,20 @@ workflow IGV_TRACKS {
     main:
         ch_versions = Channel.empty()
 
+        ch_wig= wig
+            .map{ meta, wigs ->
+            return[meta, wigs[1]] }
+
         UCSC_WIGTOBIGWIG(
-            wig,
+            ch_wig,
             path_sizes
         )
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
 
         sj=gene_counts
-            .map{meta, tab ->
+            .map{ meta, tab ->
             return[meta, tab[1]] }
-        sj.view()
+
         JUNCTION_TRACK(
             sj
         )
