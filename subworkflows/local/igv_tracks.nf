@@ -8,7 +8,7 @@ include { UCSC_WIGTOBIGWIG } from '../../modules/nf-core/ucsc/wigtobigwig/main'
 workflow IGV_TRACKS {
     take:
         wig
-        path_sizes
+        chrom_sizes
         spl_junc
 
     main:
