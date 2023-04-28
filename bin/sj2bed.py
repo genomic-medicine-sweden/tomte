@@ -6,7 +6,7 @@ import argparse
 def sj2bed(sj, output):
     motifs = {0: "non-canonical", 1: "GT/AG", 2: "CT/AC", 3: "GC/AG", 4: "CT/GC", 5: "AT/AC", 6: "GT/AT"}
     strands = {0: ".", 1: "+", 2: "-"}
-    with open(sj) as file:
+    with open(sj) as input_file:
         res = open(output, "w+")
         for line in file:
             elem = line.split("\t")
