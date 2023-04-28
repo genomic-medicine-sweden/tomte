@@ -24,7 +24,7 @@ workflow IGV_TRACKS {
         )
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
 
-        sj=gene_counts
+        sj = gene_counts
             .map{ meta, tab ->
             return[meta, tab[1]] }
 
