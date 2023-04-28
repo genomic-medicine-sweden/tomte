@@ -12,8 +12,9 @@
                     },
                     "bcftools/mpileup": {
                         "branch": "master",
-                        "git_sha": "682f789f93070bd047868300dd018faf3d434e7c",
-                        "installed_by": ["modules"]
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/bcftools/mpileup/bcftools-mpileup.diff"
                     },
                     "bcftools/stats": {
                         "branch": "master",
