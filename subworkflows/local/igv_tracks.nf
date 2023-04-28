@@ -20,7 +20,7 @@ workflow IGV_TRACKS {
 
         UCSC_WIGTOBIGWIG(
             ch_wig,
-            path_sizes
+            chrom_sizes
         )
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
 
