@@ -16,7 +16,7 @@ def sj2bed(sj, output):
                 bed_line = convert_line_to_bed(elem, motifs, strands)
                 res.write(bed_line)
     res.close()
-    file.close()
+    input_file.close()
 
 
 def convert_line_to_bed(elem, motifs, strands):

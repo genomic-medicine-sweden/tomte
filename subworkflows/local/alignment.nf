@@ -68,6 +68,5 @@ workflow ALIGNMENT {
         gene_counts    = STAR_ALIGN.out.tab
         star_log_final = STAR_ALIGN.out.log_final
         star_wig       = STAR_ALIGN.out.wig
-//        star_wig       = STAR_ALIGN.out.wig_mult_str1
         versions       = ch_versions
 }
