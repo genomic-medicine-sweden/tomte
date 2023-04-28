@@ -14,6 +14,7 @@ workflow IGV_TRACKS {
     main:
         ch_versions = Channel.empty()
 
+        // Selecting the Signal.UniqueMultiple.str1.out.wig file
         ch_wig = wig
             .map{ meta, wigs ->
             return[meta, wigs[1]] }
