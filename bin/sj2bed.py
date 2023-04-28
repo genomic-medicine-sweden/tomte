@@ -8,7 +8,7 @@ def sj2bed(sj, output):
     strands = {0: ".", 1: "+", 2: "-"}
     with open(sj) as input_file:
         res = open(output, "w+")
-        for line in file:
+        for line in input_file:
             elem = line.split("\t")
             if elem[6] == 0:
                 continue
