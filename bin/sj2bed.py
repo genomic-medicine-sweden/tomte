@@ -33,7 +33,7 @@ def sj2bed(sj, output):
                 )
                 res.write(new_line)
     res.close()
-    file.close()
+    input_file.close()
 
 
 if __name__ == "__main__":
