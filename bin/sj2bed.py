@@ -4,6 +4,7 @@ import argparse
 
 
 def sj2bed(sj, output):
+    """Generate bed junction file with SJ.out.tab."""
     motifs = {0: "non-canonical", 1: "GT/AG", 2: "CT/AC", 3: "GC/AG", 4: "CT/GC", 5: "AT/AC", 6: "GT/AT"}
     strands = {0: ".", 1: "+", 2: "-"}
     with open(sj) as input_file:
@@ -20,6 +21,7 @@ def sj2bed(sj, output):
 
 
 def convert_line_to_bed(elem, motifs, strands):
+    """Generates bed line with input SJ.out.tab after running sj2bed"""
     new_line = str(elem[0]) + "\t" + str(int(elem[1]) - 1) + "\t" + str(elem[2]) + "\t"
     my_names = [
         "motif=" + str(motifs[int(elem[4])]),
