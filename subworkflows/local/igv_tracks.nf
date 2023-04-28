@@ -14,7 +14,7 @@ workflow IGV_TRACKS {
     main:
         ch_versions = Channel.empty()
 
-        ch_wig= wig
+        ch_wig = wig
             .map{ meta, wigs ->
             return[meta, wigs[1]] }
 
