@@ -13,27 +13,32 @@ def sj2bed(sj, output):
             if elem[6] == 0:
                 continue
             else:
-                new_line = str(elem[0]) + "\t" + str(int(elem[1]) - 1) + "\t" + str(elem[2]) + "\t"
-                my_names = [
-                    "motif=" + str(motifs[int(elem[4])]),
-                    "uniquely_mapped=" + str(elem[6]),
-                    "multi_mapped=" + str(elem[7]),
-                    "maximum_spliced_alignment_overhang=" + str(elem[8]),
-                    "annotated_junction=" + str(bool(elem[5])),
-                ]
-                new_line = (
-                    new_line
-                    + "\t"
-                    + ";".join(my_names).replace("\n", "")
-                    + "\t"
-                    + str(elem[6])
-                    + "\t"
-                    + str(strands[int(elem[3])])
-                    + "\n"
-                )
-                res.write(new_line)
+                bed_line = convert_line_to_bed(elem, motifs, strands)
+                res.write(bed_line)
     res.close()
     file.close()
+
+
+def convert_line_to_bed(elem, motifs, strands):
+    new_line = str(elem[0]) + "\t" + str(int(elem[1]) - 1) + "\t" + str(elem[2]) + "\t"
+    my_names = [
+        "motif=" + str(motifs[int(elem[4])]),
+        "uniquely_mapped=" + str(elem[6]),
+        "multi_mapped=" + str(elem[7]),
+        "maximum_spliced_alignment_overhang=" + str(elem[8]),
+        "annotated_junction=" + str(bool(elem[5])),
+    ]
+    new_line = (
+        new_line
+        + "\t"
+        + ";".join(my_names).replace("\n", "")
+        + "\t"
+        + str(elem[6])
+        + "\t"
+        + str(strands[int(elem[3])])
+        + "\n"
+    )
+    return new_line
 
 
 if __name__ == "__main__":
