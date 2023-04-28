@@ -9,7 +9,7 @@ workflow IGV_TRACKS {
     take:
         wig
         path_sizes
-        gene_counts
+        spl_junc
 
     main:
         ch_versions = Channel.empty()
@@ -24,12 +24,8 @@ workflow IGV_TRACKS {
         )
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
 
-        sj = gene_counts
-            .map{ meta, tab ->
-            return[meta, tab[1]] }
-
         JUNCTION_TRACK(
-            sj
+            spl_junc
         )
         ch_versions = ch_versions.mix(JUNCTION_TRACK.out.versions.first())
 

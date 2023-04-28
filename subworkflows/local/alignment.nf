@@ -65,7 +65,8 @@ workflow ALIGNMENT {
         bam            = STAR_ALIGN.out.bam
         bam_bai        = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
         bam_ds_bai     = ch_bam_bai_out
-        gene_counts    = STAR_ALIGN.out.tab
+        gene_counts    = STAR_ALIGN.out.read_per_gene_tab
+        spl_junc       = STAR_ALIGN.out.spl_junc_tab
         star_log_final = STAR_ALIGN.out.log_final
         star_wig       = STAR_ALIGN.out.wig
         versions       = ch_versions

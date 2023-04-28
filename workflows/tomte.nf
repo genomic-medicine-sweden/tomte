@@ -197,7 +197,7 @@ workflow TOMTE {
     IGV_TRACKS(
         ch_alignment.star_wig,
         ch_chrom_sizes,
-        ch_alignment.gene_counts
+        ch_alignment.spl_junc
     )
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
