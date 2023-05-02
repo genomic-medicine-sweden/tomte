@@ -108,7 +108,7 @@
                     },
                     "star/align": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "140d5a0d014138524e21dea80588817ddfc5dcf4",
                         "installed_by": ["modules"]
                     },
                     "star/genomegenerate": {
@@ -121,9 +121,19 @@
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
                     },
+                    "tabix/bgziptabix": {
+                        "branch": "master",
+                        "git_sha": "da53f7da4ff34b920bb3f186d151184bd440e3b5",
+                        "installed_by": ["modules"]
+                    },
                     "tabix/tabix": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
+                    "ucsc/wigtobigwig": {
+                        "branch": "master",
+                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
                         "installed_by": ["modules"]
                     },
                     "untar": {
@@ -132,6 +142,9 @@
                         "installed_by": ["modules"]
                     }
                 }
+            },
+            "subworkflows": {
+                "nf-core": {}
             }
         }
     }

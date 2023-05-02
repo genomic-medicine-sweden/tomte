@@ -54,6 +54,7 @@ include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcri
 include { CALL_VARIANTS           } from '../subworkflows/local/call_variants'
 include { ALLELE_SPECIFIC_CALLING } from '../subworkflows/local/allele_specific_calling'
 include { ANNOTATE_SNV            } from '../subworkflows/local/annotate_snv'
+include { IGV_TRACKS              } from '../subworkflows/local/igv_tracks'
 
 //
 // MODULE: local
@@ -112,6 +113,7 @@ workflow TOMTE {
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
 
     // Gather built indices or get them from the params
+    ch_chrom_sizes           = ch_references.chrom_sizes
     ch_sequence_dict         = params.sequence_dict           ? Channel.fromPath(params.sequence_dict).collect()
                                                               : ( ch_references.sequence_dict            ?: Channel.empty() )
     ch_genome_fai            = params.fasta_fai               ? Channel.fromPath(params.fasta_fai).collect()
@@ -192,6 +194,11 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
 
+    IGV_TRACKS(
+        ch_alignment.star_wig,
+        ch_chrom_sizes,
+        ch_alignment.spl_junc
+    )
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')

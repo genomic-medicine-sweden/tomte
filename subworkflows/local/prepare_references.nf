@@ -6,6 +6,7 @@ include { GATK4_BEDTOINTERVALLIST as BEDTOINTERVALLIST } from '../../modules/nf-
 include { GATK4_CREATESEQUENCEDICTIONARY as BUILD_DICT } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GET_RRNA_TRANSCRIPTS                         } from '../../modules/local/get_rrna_transcripts'
 include { GTFTOGENEPRED_REFFLAT as GTF_TO_REFFLAT      } from '../../modules/local/gtftorefflat'
+include { GET_CHROM_SIZES                              } from '../../modules/local/get_chrom_sizes'
 include { GUNZIP as GUNZIP_FASTA                       } from '../../modules/nf-core/gunzip/main'
 include { GUNZIP as GUNZIP_GTF                         } from '../../modules/nf-core/gunzip/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME      } from '../../modules/nf-core/samtools/faidx/main'
@@ -45,6 +46,10 @@ workflow PREPARE_REFERENCES {
         ch_gtf  = GUNZIP_GTF.out.gunzip ? GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }.collect() : Channel.fromPath(gtf)
         ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
 
+        // Get chrom sizes
+        GET_CHROM_SIZES( SAMTOOLS_FAIDX_GENOME.out.fai )
+        ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
+
         // Setting up STAR index channel
         ch_star_index = star_index ? Channel.fromPath(star_index).collect() : Channel.empty()
         if ( !star_index ) {
@@ -71,6 +76,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
 
     emit:
+        chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                                 // channel: [ path(sizes) ]
         fasta_meta     = ch_fasta_meta
         fasta_no_meta  = ch_fasta_no_meta
         fasta_fai      = SAMTOOLS_FAIDX_GENOME.out.fai.map{ meta, fai -> [fai] }.collect()
