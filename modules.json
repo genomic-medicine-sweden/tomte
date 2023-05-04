@@ -28,7 +28,7 @@
                     },
                     "cat/fastq": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "38b16706fa3a9d4ee2bf46fa5805e7397e275cdd",
                         "installed_by": ["modules"]
                     },
                     "custom/dumpsoftwareversions": {
@@ -53,7 +53,7 @@
                     },
                     "gatk4/bedtointervallist": {
                         "branch": "master",
-                        "git_sha": "f2d63bd5b68925f98f572eed70993d205cc694b7",
+                        "git_sha": "643756685546fa61f5c8fba439af746c090b9180",
                         "installed_by": ["modules"]
                     },
                     "gatk4/createsequencedictionary": {
@@ -83,12 +83,12 @@
                     },
                     "gunzip": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "38b16706fa3a9d4ee2bf46fa5805e7397e275cdd",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "ee80d14721e76e2e079103b8dcd5d57129e584ba",
+                        "git_sha": "f2d63bd5b68925f98f572eed70993d205cc694b7",
                         "installed_by": ["modules"]
                     },
                     "picard/collectrnaseqmetrics": {
@@ -138,7 +138,7 @@
                     },
                     "untar": {
                         "branch": "master",
-                        "git_sha": "cc1f997fab6d8fde5dc0e6e2a310814df5b53ce7",
+                        "git_sha": "38b16706fa3a9d4ee2bf46fa5805e7397e275cdd",
                         "installed_by": ["modules"]
                     }
                 }
