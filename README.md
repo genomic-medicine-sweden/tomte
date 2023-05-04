@@ -1,4 +1,4 @@
-# ![nf-core/tomte](docs/images/nf-core-tomte_logo_light.png#gh-light-mode-only) ![nf-core/tomte](docs/images/nf-core-tomte_logo_dark.png#gh-dark-mode-only)
+# ![tomte](docs/images/tomte_logo_light.png#gh-light-mode-only) ![tomte](docs/images/tomte_logo_dark.png#gh-dark-mode-only)
 
 [![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/tomte/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
@@ -12,13 +12,11 @@
 
 ## Introduction
 
-**nf-core/tomte** is a bioinformatics pipeline that ...
+**tomte** is a bioinformatics best-practice analysis pipeline for Pipeline to analyse RNAseq from raredisease patients.
 
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
+The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
+
+## Pipeline summary
 
 <!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
      workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
@@ -26,6 +24,9 @@
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+3. Trim reads ([`FASTP`](https://github.com/OpenGene/fastp))
+4. Align reads to the genome ([`STAR`](https://github.com/alexdobin/STAR))
+5. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
 
 ## Usage
 
@@ -34,28 +35,23 @@
 > to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline)
 > with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
-
 First, prepare a samplesheet with your input data that looks as follows:
 
 `samplesheet.csv`:
 
 ```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+case,sample,fastq_1,fastq_2,strandedness
+case_id,sample_id,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,reverse
 ```
 
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
+Each row represents a pair of fastq files (paired end).
 
 -->
 
 Now, you can run the pipeline using:
 
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
-
 ```bash
-nextflow run nf-core/tomte \
+nextflow run genomic-medicine-sweden/tomte \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
@@ -66,17 +62,16 @@ nextflow run nf-core/tomte \
 > provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
 > see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
 
-For more details, please refer to the [usage documentation](https://nf-co.re/tomte/usage) and the [parameter documentation](https://nf-co.re/tomte/parameters).
+For more details, please refer to the [usage documentation](https://github.com/genomic-medicine-sweden/tomte/blob/master/docs/usage.md) and the [parameter documentation](https://github.com/genomic-medicine-sweden/tomte/blob/master/docs/parameters.md).
 
 ## Pipeline output
 
-To see the the results of a test run with a full size dataset refer to the [results](https://nf-co.re/tomte/results) tab on the nf-core website pipeline page.
 For more details about the output files and reports, please refer to the
-[output documentation](https://nf-co.re/tomte/output).
+[output documentation](https://github.com/genomic-medicine-sweden/tomte/blob/master/docs/output.md).
 
 ## Credits
 
-nf-core/tomte was originally written by Clinical Genomics Stockholm.
+tomte was originally written by Clinical Genomics Stockholm.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
@@ -86,7 +81,7 @@ We thank the following people for their extensive assistance in the development 
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
-For further information or help, don't hesitate to get in touch on the [Slack `#tomte` channel](https://nfcore.slack.com/channels/tomte) (you can join with [this invite](https://nf-co.re/join/slack)).
+For further information or help, don't hesitate to get in touch by opening an [issue](https://github.com/genomic-medicine-sweden/tomte/issues).
 
 ## Citations
 

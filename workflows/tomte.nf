@@ -11,11 +11,20 @@ WorkflowTomte.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
-def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
+def checkPathParamList = [
+    params.input,
+    params.multiqc_config,
+    params.fasta,
+    params.fasta_fai,
+    params.sequence_dict,
+    params.star_index,
+    params.gtf,
+    params.subsample_bed,
+    params.vep_filters,
+    params.vep_cache
+]
 
-// Check mandatory parameters
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,15 +44,31 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 */
 
 //
-// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+// SUBWORKFLOW: local
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { CHECK_INPUT             } from '../subworkflows/local/input_check'
+include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_references'
+include { ALIGNMENT               } from '../subworkflows/local/alignment'
+include { BAM_QC                  } from '../subworkflows/local/bam_qc'
+include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts'
+include { CALL_VARIANTS           } from '../subworkflows/local/call_variants'
+include { ALLELE_SPECIFIC_CALLING } from '../subworkflows/local/allele_specific_calling'
+include { ANNOTATE_SNV            } from '../subworkflows/local/annotate_snv'
+include { IGV_TRACKS              } from '../subworkflows/local/igv_tracks'
+
+//
+// MODULE: local
+//
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT NF-CORE MODULES/SUBWORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+//
+// SUBWORKFLOW: nf-core/subworkflows
+//
 
 //
 // MODULE: Installed directly from nf-core/modules
@@ -65,21 +90,115 @@ workflow TOMTE {
 
     ch_versions = Channel.empty()
 
-    //
-    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
-    //
-    INPUT_CHECK (
-        ch_input
-    )
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+    // Initialize input channels
+    if (params.input) {
+        ch_input = Channel.fromPath(params.input)
+        CHECK_INPUT (ch_input)
+        ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
+    } else {
+        exit 1, 'Input samplesheet not specified!'
+    }
+
+    ch_vep_cache_unprocessed = params.vep_cache                 ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
+                                                                : Channel.value([[],[]])
+    ch_vep_filters           = params.vep_filters               ? Channel.fromPath(params.vep_filters).collect()
+                                                                : Channel.value([])
+
+    PREPARE_REFERENCES(
+        params.fasta,
+        params.star_index,
+        params.gtf,
+        ch_vep_cache_unprocessed
+    ).set { ch_references }
+    ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
+
+    // Gather built indices or get them from the params
+    ch_chrom_sizes           = ch_references.chrom_sizes
+    ch_sequence_dict         = params.sequence_dict           ? Channel.fromPath(params.sequence_dict).collect()
+                                                              : ( ch_references.sequence_dict            ?: Channel.empty() )
+    ch_genome_fai            = params.fasta_fai               ? Channel.fromPath(params.fasta_fai).collect()
+                                                              : ( ch_references.fasta_fai                ?: Channel.empty() )
+    ch_subsample_bed         = params.subsample_bed           ? Channel.fromPath(params.subsample_bed).collect()
+                                                              : Channel.empty()
+    ch_vep_cache             = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
+                                                                : ( params.vep_cache  ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
 
     //
     // MODULE: Run FastQC
     //
+
     FASTQC (
-        INPUT_CHECK.out.reads
+        CHECK_INPUT.out.reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+
+
+    // Alignment
+    ALIGNMENT(
+        CHECK_INPUT.out.reads,
+        ch_references.star_index,
+        ch_references.gtf,
+        params.platform,
+        params.subsample_bed,
+        params.seed_frac,
+        params.num_reads,
+        params.subsample_region_switch,
+        params.downsample_switch
+    ).set {ch_alignment}
+    ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
+
+    // BAM QC
+    BAM_QC(
+        ch_alignment.bam,
+        ch_references.fasta_no_meta,
+        ch_references.refflat,
+        ch_references.interval_list
+    )
+    ch_versions = ch_versions.mix(BAM_QC.out.versions)
+
+    // Analyse transcripts
+    ANALYSE_TRANSCRIPTS(
+        ch_alignment.bam,
+        ch_references.gtf,
+        ch_references.fasta_fai_meta,
+    )
+    ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
+
+    // Call variants
+    CALL_VARIANTS(
+        ch_alignment.bam_bai,
+        ch_references.fasta_no_meta,
+        ch_references.fasta_fai,
+        ch_references.sequence_dict,
+        params.variant_caller
+    )
+    ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
+
+
+    ALLELE_SPECIFIC_CALLING(
+        CALL_VARIANTS.out.vcf_tbi,
+        ch_alignment.bam_bai,
+        ch_references.fasta_no_meta,
+        ch_references.fasta_fai,
+        ch_references.sequence_dict,
+        ch_references.interval_list
+    )
+    ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
+
+    ANNOTATE_SNV (
+        ALLELE_SPECIFIC_CALLING.out.vcf,
+        params.genome,
+        params.vep_cache_version,
+        ch_vep_cache,
+        ch_references.fasta_no_meta,
+    )
+    ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
+
+    IGV_TRACKS(
+        ch_alignment.star_wig,
+        ch_chrom_sizes,
+        ch_alignment.spl_junc
+    )
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
@@ -99,6 +218,13 @@ workflow TOMTE {
     ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.fastp_report.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.star_log_final.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.gene_counts.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(BAM_QC.out.metrics.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ANALYSE_TRANSCRIPTS.out.stats_gtf.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),

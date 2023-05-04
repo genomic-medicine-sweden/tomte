@@ -29,18 +29,27 @@ class RowChecker:
         ".fastq.gz",
     )
 
+    VALID_STRANDEDNESS = (
+        "unstranded",
+        "forward",
+        "reverse",
+    )
+
     def __init__(
         self,
+        case_col="case",
         sample_col="sample",
         first_col="fastq_1",
         second_col="fastq_2",
         single_col="single_end",
+        strand_col="strandedness",
         **kwargs,
     ):
         """
         Initialize the row checker with the expected column names.
 
         Args:
+            case_col (str): The name of the column that contains the case name.
             sample_col (str): The name of the column that contains the sample name
                 (default "sample").
             first_col (str): The name of the column that contains the first (or only)
@@ -50,13 +59,17 @@ class RowChecker:
             single_col (str): The name of the new column that will be inserted and
                 records whether the sample contains single- or paired-end sequencing
                 reads (default "single_end").
+            strand_col (str): The name of the column that contains the strandedness
+                 of the reads.
 
         """
         super().__init__(**kwargs)
+        self._case_col = case_col
         self._sample_col = sample_col
         self._first_col = first_col
         self._second_col = second_col
         self._single_col = single_col
+        self._strand_col = strand_col
         self._seen = set()
         self.modified = []
 
@@ -69,12 +82,21 @@ class RowChecker:
                 (values).
 
         """
+        self._validate_case(row)
         self._validate_sample(row)
         self._validate_first(row)
         self._validate_second(row)
         self._validate_pair(row)
+        self._validate_strand(row)
         self._seen.add((row[self._sample_col], row[self._first_col]))
         self.modified.append(row)
+
+    def _validate_case(self, row):
+        """Assert that a case name exist sand convert spaces to underscores."""
+        if len(row[self._case_col]) <= 0:
+            raise AssertionError("Case input is required.")
+        # Sanitize case name slightly.
+        row[self._case_col] = row[self._case_col].replace(" ", "_")
 
     def _validate_sample(self, row):
         """Assert that the sample name exists and convert spaces to underscores."""
@@ -104,6 +126,11 @@ class RowChecker:
                 raise AssertionError("FASTQ pairs must have the same file extensions.")
         else:
             row[self._single_col] = True
+
+    def _validate_strand(self, row):
+        """Assert that strandedness entry follows valid entries"""
+        if not any(row[self._strand_col] == strandedness for strandedness in self.VALID_STRANDEDNESS):
+            raise AssertionError(f"Strandedness must be one of: {', '.join(self.VALID_STRANDEDNESS)}")
 
     def _validate_fastq_format(self, filename):
         """Assert that a given filename has one of the expected FASTQ extensions."""
@@ -179,16 +206,16 @@ def check_samplesheet(file_in, file_out):
         This function checks that the samplesheet follows the following structure,
         see also the `viral recon samplesheet`_::
 
-            sample,fastq_1,fastq_2
-            SAMPLE_PE,SAMPLE_PE_RUN1_1.fastq.gz,SAMPLE_PE_RUN1_2.fastq.gz
-            SAMPLE_PE,SAMPLE_PE_RUN2_1.fastq.gz,SAMPLE_PE_RUN2_2.fastq.gz
+            case,sample,fastq_1,fastq_2,strandedness
+            CASE_1,SAMPLE_PE,SAMPLE_PE_RUN1_1.fastq.gz,SAMPLE_PE_RUN1_2.fastq.gz,reverse
+            CASE_1,SAMPLE_PE,SAMPLE_PE_RUN2_1.fastq.gz,SAMPLE_PE_RUN2_2.fastq.gz,reverse
             SAMPLE_SE,SAMPLE_SE_RUN1_1.fastq.gz,
 
     .. _viral recon samplesheet:
         https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv
 
     """
-    required_columns = {"sample", "fastq_1", "fastq_2"}
+    required_columns = {"case", "sample", "fastq_1", "fastq_2", "strandedness"}
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
     with file_in.open(newline="") as in_handle:
         reader = csv.DictReader(in_handle, dialect=sniff_format(in_handle))

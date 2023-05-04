@@ -10,10 +10,38 @@
 
 ## Pipeline tools
 
+- [BCFtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722)
+
+  > Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. GigaScience. 2021;10(2):giab008. doi:10.1093/gigascience/giab008
+
+- [UCSC tools] (https://academic.oup.com/bioinformatics/article/26/17/2204/199001)
+
+  > Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. BigWig and BigBed: enabling browsing of large distributed datasets. Bioinformatics. 2010 Sep 1;26(17):2204-7. doi: 10.1093/bioinformatics/btq351
+
+- [SAMtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722)
+
+  > Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. GigaScience. 2021;10(2):giab008. doi:10.1093/gigascience/giab008
+
+- [EnsemblVEP](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4)
+
+  > McLaren W, Gil L, Hunt SE, et al. The Ensembl Variant Effect Predictor. Genome Biol. 2016;17(1):122. doi:10.1186/s13059-016-0974-4
+
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 
+- [GATK](https://genome.cshlp.org/content/20/9/1297)
+
+  > McKenna A, Hanna M, Banks E, et al. The Genome Analysis Toolkit: A MapReduce framework for analyzing next-generation DNA sequencing data. Genome Res. 2010;20(9):1297-1303. doi:10.1101/gr.107524.110
+
+- [GffCompare](https://ccb.jhu.edu/software/stringtie/gffcompare.shtml)
+
+  > Pertea G and Pertea M. GFF Utilities: GffRead and GffCompare [version 1; peer review: 3 approved]. F1000Research 2020, 9:304 (https://doi.org/10.12688/f1000research.23297.1)
+
 - [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
+
   > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
+
+- [StringTie](http://ccb.jhu.edu/software/stringtie/)
+  > Pertea M, Pertea GM, Antonescu CM, Chang TC, Mendell JT, Salzberg SL. StringTie enables improved reconstruction of a transcriptome from RNA-seq reads. Nat Biotechnol. 2015 Mar;33(3):290-5. doi: 10.1038/nbt.3122. Epub 2015 Feb 18. PMID: 25690850; PMCID: PMC4643835.
 
 ## Software packaging/containerisation tools
 
