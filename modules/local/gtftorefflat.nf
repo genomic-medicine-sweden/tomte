@@ -5,7 +5,7 @@ process GTFTOGENEPRED_REFFLAT {
     conda "bioconda::ucsc-gtftogenepred=377"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/ucsc-gtftogenepred:377--ha8a8165_5':
-        'quay.io/biocontainers/ucsc-gtftogenepred:377--ha8a8165_5' }"
+        'biocontainers/ucsc-gtftogenepred:377--ha8a8165_5' }"
 
     input:
     path(gtf)
