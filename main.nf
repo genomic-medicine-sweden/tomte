@@ -4,7 +4,6 @@
     nf-core/tomte
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/nf-core/tomte
-
     Website: https://nf-co.re/tomte
     Slack  : https://nfcore.slack.com/channels/tomte
 ----------------------------------------------------------------------------------------
