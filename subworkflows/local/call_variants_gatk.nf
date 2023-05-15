@@ -3,11 +3,11 @@
 //
 
 // Modules
-include { GATK4_HAPLOTYPECALLER } from '../../modules/nf-core/gatk4/haplotypecaller/main'
-include { GATK4_SPLITNCIGARREADS } from '../../modules/nf-core/gatk4/splitncigarreads/main'
+include { GATK4_HAPLOTYPECALLER   } from '../../modules/nf-core/gatk4/haplotypecaller/main'
+include { GATK4_SPLITNCIGARREADS  } from '../../modules/nf-core/gatk4/splitncigarreads/main'
 include { GATK4_VARIANTFILTRATION } from '../../modules/nf-core/gatk4/variantfiltration/main'
-include { SAMTOOLS_INDEX } from '../../modules/nf-core/samtools/index/main'
-include { BCFTOOLS_STATS } from '../../modules/nf-core/bcftools/stats/main'
+include { SAMTOOLS_INDEX          } from '../../modules/nf-core/samtools/index/main'
+include { BCFTOOLS_STATS          } from '../../modules/nf-core/bcftools/stats/main'
 
 workflow CALL_VARIANTS_GATK {
     take:
