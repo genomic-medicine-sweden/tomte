@@ -63,7 +63,7 @@ workflow ALIGNMENT {
             ch_bam_bai_out = ch_bam_bai.mix(RNA_DOWNSAMPLE.out.bam_bai)
         }
 
-        SALMON_QUANT( FASTP.out.reads, salmon_index, gtf, transcript_fasta, false, '')
+        SALMON_QUANT( FASTP.out.reads, salmon_index, gtf, transcript_fasta, false, 'A')
         ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
 
     emit:
