@@ -18,6 +18,8 @@ def checkPathParamList = [
     params.fasta_fai,
     params.sequence_dict,
     params.star_index,
+    params.salmon_index,
+    params.transcript_fasta,
     params.gtf,
     params.subsample_bed,
     params.vep_filters,
@@ -108,7 +110,9 @@ workflow TOMTE {
         params.fasta,
         params.star_index,
         params.gtf,
-        ch_vep_cache_unprocessed
+        ch_vep_cache_unprocessed,
+        params.transcript_fasta,
+        params.salmon_index
     ).set { ch_references }
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
 
@@ -143,7 +147,9 @@ workflow TOMTE {
         params.seed_frac,
         params.num_reads,
         params.subsample_region_switch,
-        params.downsample_switch
+        params.downsample_switch,
+        ch_references.salmon_index,
+        ch_references.transcript_fasta
     ).set {ch_alignment}
     ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
 

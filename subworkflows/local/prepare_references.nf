@@ -13,7 +13,8 @@ include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME      } from '../../modules/nf-
 include { STAR_GENOMEGENERATE as BUILD_STAR_GENOME     } from '../../modules/nf-core/star/genomegenerate/main'
 include { UNTAR as UNTAR_STAR_INDEX                    } from '../../modules/nf-core/untar/main'
 include { UNTAR as UNTAR_VEP_CACHE                     } from '../../modules/nf-core/untar/main'
-
+include { SALMON_INDEX as SALMON_INDEX                 } from '../../modules/nf-core/salmon/index/main'
+include { GUNZIP as GUNZIP_TRFASTA                     } from '../../modules/nf-core/gunzip/main'
 
 workflow PREPARE_REFERENCES {
     take:
@@ -21,6 +22,8 @@ workflow PREPARE_REFERENCES {
         star_index
         gtf
         ch_vep_cache
+        transcript_fasta
+        salmon_index
 
     main:
         ch_versions = Channel.empty()
@@ -75,18 +78,42 @@ workflow PREPARE_REFERENCES {
         UNTAR_VEP_CACHE (ch_vep_cache)
         ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
 
+        // Setting up Salmon index
+        ch_transcript_fasta = transcript_fasta ? Channel.fromPath( transcript_fasta ).collect() : Channel.empty()
+        if (transcript_fasta) {
+            if ( transcript_fasta.endsWith(".gz") ) {
+                ch_transcript_fasta_meta=Channel.fromPath(transcript_fasta).map{ it -> [ [id:it.simpleName], it ] }.collect()
+                ch_transcript_fasta_meta= GUNZIP_TRFASTA(ch_transcript_fasta_meta).gunzip
+                ch_transcript_fasta =  ch_transcript_fasta_meta.map{ meta, fasta -> [ fasta ] }
+                }
+        }
+
+        ch_salmon_index = salmon_index ? Channel.fromPath( salmon_index ).collect() : Channel.empty()
+        if ( !salmon_index ) {
+            if (!transcript_fasta) {
+                // We would need to add gffread here but the module needs to be changed a lot, it can be done later
+            } 
+            ch_salmon_index = SALMON_INDEX(ch_fasta_no_meta,ch_transcript_fasta).index
+            ch_versions = ch_versions.mix(SALMON_INDEX.out.versions)
+        }  else if( star_index && star_index.endsWith(".gz") ) {
+            ch_salmon_index_meta=Channel.fromPath(ch_salmon_index ).map{ it -> [ [id:it.simpleName], it ] }.collect()
+            ch_salmon_index = UNTAR_SALMON_INDEX( ch_salmon_index.map { it -> [[:], it] } ).untar.map { it[1] }
+        }
+
     emit:
-        chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                                 // channel: [ path(sizes) ]
-        fasta_meta     = ch_fasta_meta
-        fasta_no_meta  = ch_fasta_no_meta
-        fasta_fai      = SAMTOOLS_FAIDX_GENOME.out.fai.map{ meta, fai -> [fai] }.collect()
-        fasta_fai_meta = ch_fasta_meta.join(SAMTOOLS_FAIDX_GENOME.out.fai).collect()
-        sequence_dict  = BUILD_DICT.out.dict.collect()
-        gtf            = ch_gtf
-        star_index     = ch_star_index
-        refflat        = GTF_TO_REFFLAT.out.refflat.collect()
-        rrna_bed       = GET_RRNA_TRANSCRIPTS.out.bed.collect()
-        interval_list  = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
-        vep_resources  = UNTAR_VEP_CACHE.out.untar.map{meta, files -> [files]}.collect()     // channel: [ path(cache) ]
-        versions       = ch_versions
+        chrom_sizes      = GET_CHROM_SIZES.out.sizes.collect()                                 // channel: [ path(sizes) ]
+        fasta_meta       = ch_fasta_meta
+        fasta_no_meta    = ch_fasta_no_meta
+        fasta_fai        = SAMTOOLS_FAIDX_GENOME.out.fai.map{ meta, fai -> [fai] }.collect()
+        fasta_fai_meta   = ch_fasta_meta.join(SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        sequence_dict    = BUILD_DICT.out.dict.collect()
+        gtf              = ch_gtf
+        star_index       = ch_star_index
+        salmon_index     = ch_salmon_index
+        transcript_fasta = ch_transcript_fasta
+        refflat          = GTF_TO_REFFLAT.out.refflat.collect()
+        rrna_bed         = GET_RRNA_TRANSCRIPTS.out.bed.collect()
+        interval_list    = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
+        vep_resources    = UNTAR_VEP_CACHE.out.untar.map{meta, files -> [files]}.collect()     // channel: [ path(cache) ]
+        versions         = ch_versions
 }

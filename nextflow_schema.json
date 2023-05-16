@@ -124,6 +124,22 @@
                     "description": "Path to directory or tar.gz archive for pre-built STAR index.",
                     "help_text": "Path to directory or tar.gz archive with pre-built STAR index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option \"--save_reference\"."
                 },
+                "salmon_index": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-bezier-curve",
+                    "description": "Path to directory or tar.gz archive for pre-built Salmon index.",
+                    "help_text": "Path to directory or tar.gz archive with pre-built Salmon index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option \"--save_reference\"."
+                },
+                "transcript_fasta": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "description": "Path to transcript FASTA file.",
+                    "help_text": "If no path is passed, it will be generated for you automatically. Combine with `--save_reference` to save for future runs.",
+                    "fa_icon": "far fa-file-code"
+                },
                 "vep_cache": {
                     "type": "string",
                     "description": "Path to vep's cache directory.",
@@ -132,7 +148,7 @@
                 },
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": "107",
+                    "default": 107,
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
                     "enum": [107]
