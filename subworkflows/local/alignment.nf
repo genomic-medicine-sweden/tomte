@@ -76,7 +76,7 @@ workflow ALIGNMENT {
         spl_junc       = STAR_ALIGN.out.spl_junc_tab
         star_log_final = STAR_ALIGN.out.log_final
         star_wig       = STAR_ALIGN.out.wig
-        salmon_res     = SALMON_QUANT.out.results
+        salmon_result     = SALMON_QUANT.out.results
         salmon_info    = SALMON_QUANT.out.json_info
         versions       = ch_versions
 }
