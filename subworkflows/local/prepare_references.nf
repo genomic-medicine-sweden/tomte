@@ -87,10 +87,10 @@ workflow PREPARE_REFERENCES {
         }
 
         ch_salmon_index = salmon_index ? Channel.fromPath( salmon_index ).collect() : Channel.empty()
-        if ( !salmon_index ) {
-            if (!transcript_fasta) {
+        if (!transcript_fasta) {
                 // We would need to add gffread here but the module needs to be changed a lot, it can be done later
             } 
+        if ( !salmon_index ) {
             ch_salmon_index = SALMON_INDEX(ch_fasta_no_meta, ch_transcript_fasta).index
             ch_versions = ch_versions.mix(SALMON_INDEX.out.versions)
         }  else if( salmon_index && salmon_index.endsWith(".gz") ) {
