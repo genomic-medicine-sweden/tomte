@@ -80,12 +80,10 @@ workflow PREPARE_REFERENCES {
 
         // Setting up Salmon index
         ch_transcript_fasta = transcript_fasta ? Channel.fromPath( transcript_fasta ).collect() : Channel.empty()
-        if (transcript_fasta) {
-            if ( transcript_fasta.endsWith(".gz") ) {
-                ch_transcript_fasta_meta=Channel.fromPath(transcript_fasta).map{ it -> [ [id:it.simpleName], it ] }.collect()
-                ch_transcript_fasta_meta= GUNZIP_TRFASTA(ch_transcript_fasta_meta).gunzip
-                ch_transcript_fasta =  ch_transcript_fasta_meta.map{ meta, fasta -> [ fasta ] }
-                }
+        if (transcript_fasta && transcript_fasta.endsWith(".gz") ) {
+            ch_transcript_fasta_meta=Channel.fromPath(transcript_fasta).map{ it -> [ [id:it.simpleName], it ] }.collect()
+            ch_transcript_fasta_meta= GUNZIP_TRFASTA(ch_transcript_fasta_meta).gunzip
+            ch_transcript_fasta =  ch_transcript_fasta_meta.map{ meta, fasta -> [ fasta ] }
         }
 
         ch_salmon_index = salmon_index ? Channel.fromPath( salmon_index ).collect() : Channel.empty()
@@ -93,9 +91,9 @@ workflow PREPARE_REFERENCES {
             if (!transcript_fasta) {
                 // We would need to add gffread here but the module needs to be changed a lot, it can be done later
             } 
-            ch_salmon_index = SALMON_INDEX(ch_fasta_no_meta,ch_transcript_fasta).index
+            ch_salmon_index = SALMON_INDEX(ch_fasta_no_meta, ch_transcript_fasta).index
             ch_versions = ch_versions.mix(SALMON_INDEX.out.versions)
-        }  else if( star_index && star_index.endsWith(".gz") ) {
+        }  else if( salmon_index && salmon_index.endsWith(".gz") ) {
             ch_salmon_index = UNTAR_SALMON_INDEX( ch_salmon_index.map { it -> [[:], it] } ).untar.map { it[1] }
         }
 
