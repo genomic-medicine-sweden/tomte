@@ -81,8 +81,8 @@ workflow PREPARE_REFERENCES {
         // Setting up Salmon index
         ch_transcript_fasta = transcript_fasta ? Channel.fromPath( transcript_fasta ).collect() : Channel.empty()
         if (transcript_fasta && transcript_fasta.endsWith(".gz") ) {
-            ch_transcript_fasta_meta=Channel.fromPath(transcript_fasta).map{ it -> [ [id:it.simpleName], it ] }.collect()
-            ch_transcript_fasta_meta= GUNZIP_TRFASTA(ch_transcript_fasta_meta).gunzip
+            ch_transcript_fasta_meta = Channel.fromPath(transcript_fasta).map{ it -> [ [id:it.simpleName], it ] }.collect()
+            ch_transcript_fasta_meta = GUNZIP_TRFASTA(ch_transcript_fasta_meta).gunzip
             ch_transcript_fasta =  ch_transcript_fasta_meta.map{ meta, fasta -> [ fasta ] }
         }
 
