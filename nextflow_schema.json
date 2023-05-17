@@ -137,7 +137,7 @@
                     "mimetype": "text/plain",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to transcript FASTA file.",
-                    "help_text": "If no path is passed, it will be generated for you automatically. Combine with `--save_reference` to save for future runs.",
+                    "help_text": "This parameter is required to built salmon_index, it is not required if salmon_index is provided.",
                     "fa_icon": "far fa-file-code"
                 },
                 "vep_cache": {
