@@ -8,6 +8,8 @@ include { STAR_ALIGN           } from '../../modules/nf-core/star/align/main'
 include { SAMTOOLS_INDEX       } from '../../modules/nf-core/samtools/index/main'
 include { RNA_DOWNSAMPLE       } from '../../modules/local/rna_downsample'
 include { RNA_SUBSAMPLE_REGION } from '../../modules/local/rna_subsample_region.nf'
+include { SALMON_QUANT         } from '../../modules/nf-core/salmon/quant/main'
+
 
 workflow ALIGNMENT {
     take:
@@ -20,6 +22,7 @@ workflow ALIGNMENT {
         num_reads
         subsample_region_switch
         downsample_switch
+        salmon_index
 
     main:
         ch_versions = Channel.empty()
@@ -59,6 +62,9 @@ workflow ALIGNMENT {
             ch_bam_bai_out = ch_bam_bai.mix(RNA_DOWNSAMPLE.out.bam_bai)
         }
 
+        SALMON_QUANT( FASTP.out.reads, salmon_index, gtf, [], false, 'A')
+        ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
+
     emit:
         merged_reads   = CAT_FASTQ.out.reads
         fastp_report   = FASTP.out.json
@@ -69,5 +75,7 @@ workflow ALIGNMENT {
         spl_junc       = STAR_ALIGN.out.spl_junc_tab
         star_log_final = STAR_ALIGN.out.log_final
         star_wig       = STAR_ALIGN.out.wig
+        salmon_result  = SALMON_QUANT.out.results
+        salmon_info    = SALMON_QUANT.out.json_info
         versions       = ch_versions
 }

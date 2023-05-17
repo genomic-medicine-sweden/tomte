@@ -18,6 +18,8 @@ def checkPathParamList = [
     params.fasta_fai,
     params.sequence_dict,
     params.star_index,
+    params.salmon_index,
+    params.transcript_fasta,
     params.gtf,
     params.subsample_bed,
     params.vep_filters,
@@ -108,7 +110,9 @@ workflow TOMTE {
         params.fasta,
         params.star_index,
         params.gtf,
-        ch_vep_cache_unprocessed
+        ch_vep_cache_unprocessed,
+        params.transcript_fasta,
+        params.salmon_index
     ).set { ch_references }
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
 
@@ -143,7 +147,8 @@ workflow TOMTE {
         params.seed_frac,
         params.num_reads,
         params.subsample_region_switch,
-        params.downsample_switch
+        params.downsample_switch,
+        ch_references.salmon_index
     ).set {ch_alignment}
     ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
 
@@ -221,6 +226,7 @@ workflow TOMTE {
     ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.fastp_report.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.star_log_final.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.gene_counts.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGNMENT.out.salmon_info.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(BAM_QC.out.metrics.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ANALYSE_TRANSCRIPTS.out.stats_gtf.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
