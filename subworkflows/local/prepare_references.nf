@@ -96,7 +96,6 @@ workflow PREPARE_REFERENCES {
             ch_salmon_index = SALMON_INDEX(ch_fasta_no_meta,ch_transcript_fasta).index
             ch_versions = ch_versions.mix(SALMON_INDEX.out.versions)
         }  else if( star_index && star_index.endsWith(".gz") ) {
-            ch_salmon_index_meta=Channel.fromPath(ch_salmon_index ).map{ it -> [ [id:it.simpleName], it ] }.collect()
             ch_salmon_index = UNTAR_SALMON_INDEX( ch_salmon_index.map { it -> [[:], it] } ).untar.map { it[1] }
         }
 
