@@ -27,7 +27,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 3. Trim reads ([`FASTP`](https://github.com/OpenGene/fastp))
 4. Align reads to the genome ([`STAR`](https://github.com/alexdobin/STAR))
 5. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
-6. Salmon ([`Salmon`](https://salmon.readthedocs.io/en/latest/))
+6. Transcript quantification ([`Salmon`](https://salmon.readthedocs.io/en/latest/))
 
 ## Usage
 
