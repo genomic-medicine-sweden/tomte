@@ -23,6 +23,7 @@ workflow ALIGNMENT {
         subsample_region_switch
         downsample_switch
         salmon_index
+        ch_genome_fasta
 
     main:
         ch_versions = Channel.empty()
