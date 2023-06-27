@@ -9,7 +9,7 @@ include { SAMTOOLS_INDEX       } from '../../modules/nf-core/samtools/index/main
 include { RNA_DOWNSAMPLE       } from '../../modules/local/rna_downsample'
 include { RNA_SUBSAMPLE_REGION } from '../../modules/local/rna_subsample_region.nf'
 include { SALMON_QUANT         } from '../../modules/nf-core/salmon/quant/main'
-
+include { SAMTOOLS_VIEW        } from '../../modules/nf-core/samtools/view/main'
 
 workflow ALIGNMENT {
     take:
@@ -23,28 +23,24 @@ workflow ALIGNMENT {
         subsample_region_switch
         downsample_switch
         salmon_index
+        ch_genome_fasta
 
     main:
         ch_versions = Channel.empty()
 
         CAT_FASTQ(reads)
-        ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first())
 
         FASTP(CAT_FASTQ.out.reads,[],false,false)
-        ch_versions = ch_versions.mix(FASTP.out.versions.first())
 
         STAR_ALIGN(FASTP.out.reads, star_index, gtf, false, 'illumina', false)
-        ch_versions = ch_versions.mix(STAR_ALIGN.out.versions.first())
 
         SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
         ch_bam_bai = Channel.empty()
         ch_bam_bai_out = Channel.empty()
 
         if (subsample_region_switch) {
             RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam, subsample_bed, seed_frac)
-            ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
             ch_bam_bai = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
             if (!downsample_switch) {
                 ch_bam_bai_out = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
@@ -56,20 +52,29 @@ workflow ALIGNMENT {
             }
         }
 
+        SAMTOOLS_VIEW( STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai), ch_genome_fasta, [] )
+
         if (downsample_switch) {
             RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
-            ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
             ch_bam_bai_out = ch_bam_bai.mix(RNA_DOWNSAMPLE.out.bam_bai)
         }
 
         SALMON_QUANT( FASTP.out.reads, salmon_index, gtf, [], false, 'A')
+
+        ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first())
+        ch_versions = ch_versions.mix(FASTP.out.versions.first())
+        ch_versions = ch_versions.mix(STAR_ALIGN.out.versions.first())
+        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
+        ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
+        ch_versions = ch_versions.mix(SAMTOOLS_VIEW.out.versions.first())
+        ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
         ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
 
     emit:
         merged_reads   = CAT_FASTQ.out.reads
         fastp_report   = FASTP.out.json
         bam            = STAR_ALIGN.out.bam
-        bam_bai        = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
+        bam_bai        = ch_bam_bai
         bam_ds_bai     = ch_bam_bai_out
         gene_counts    = STAR_ALIGN.out.read_per_gene_tab
         spl_junc       = STAR_ALIGN.out.spl_junc_tab
