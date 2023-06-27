@@ -52,7 +52,7 @@ workflow ALIGNMENT {
             }
         }
 
-        SAMTOOLS_VIEW( ch_bam_bai, ch_genome_fasta, [] )
+        SAMTOOLS_VIEW( STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai), ch_genome_fasta, [] )
 
         if (downsample_switch) {
             RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
