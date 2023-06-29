@@ -78,7 +78,7 @@
                     },
                     "gffcompare": {
                         "branch": "master",
-                        "git_sha": "4e350192af91386857ea2902151e17b924b63e01",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
                     "gunzip": {
@@ -93,7 +93,7 @@
                     },
                     "picard/collectrnaseqmetrics": {
                         "branch": "master",
-                        "git_sha": "2f88b26e9804b99e98f7cd08e74c3f88288a3358",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
                     "salmon/index": {
@@ -133,7 +133,7 @@
                     },
                     "stringtie/stringtie": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
                     "tabix/bgziptabix": {
