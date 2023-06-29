@@ -19,7 +19,7 @@ include { GUNZIP as GUNZIP_TRFASTA                     } from '../../modules/nf-
 workflow PREPARE_REFERENCES {
     take:
         fasta_no_meta         //      file: /path/to/genome.fasta
-        fai_no_meta           //      file: /path/to/genome.fasta.fai
+        fai
         star_index
         gtf
         ch_vep_cache
@@ -40,13 +40,16 @@ workflow PREPARE_REFERENCES {
         ch_fasta_no_meta =  ch_fasta.map{ meta, fasta -> [ fasta ] }
 
         // If no genome indices, create it
-        if (!fai_no_meta) {
-            SAMTOOLS_FAIDX_GENOME(ch_fasta,[[],[]])
-            ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
-            ch_fai=SAMTOOLS_FAIDX_GENOME.out.fai
-        } else {
-            ch_fai = Channel.fromPath(fasta_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
-        }
+        SAMTOOLS_FAIDX_GENOME(ch_fasta,[[],[]])
+        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
+        ch_fai = Channel.empty().mix(fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        //if (!fai_no_meta) {
+        //    SAMTOOLS_FAIDX_GENOME(ch_fasta,[[],[]])
+        //    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
+        //    ch_fai=SAMTOOLS_FAIDX_GENOME.out.fai
+        //} else {
+        //    ch_fai = Channel.fromPath(fai_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
+        //}
 
         BUILD_DICT(ch_fasta)
         ch_dict = BUILD_DICT.out.dict.collect()
@@ -109,7 +112,8 @@ workflow PREPARE_REFERENCES {
         chrom_sizes      = GET_CHROM_SIZES.out.sizes.collect()                                 // channel: [ path(sizes) ]
         fasta_meta       = ch_fasta
         fasta_no_meta    = ch_fasta_no_meta
-        fasta_fai        = ch_fai.map{ meta, fai -> [fai] }.collect()
+        fai              = ch_fai
+        fai_no_meta      = ch_fai.map{ meta, fai -> [fai] }.collect()
         fasta_fai_meta   = ch_fasta.join(ch_fai).collect()
         sequence_dict    = BUILD_DICT.out.dict.collect()
         gtf              = ch_gtf

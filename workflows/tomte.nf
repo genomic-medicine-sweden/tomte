@@ -105,7 +105,7 @@ workflow TOMTE {
                                                                 : Channel.value([[],[]])
     ch_vep_filters           = params.vep_filters               ? Channel.fromPath(params.vep_filters).collect()
                                                                 : Channel.value([])
-    fai                      = params.fai                       ? Channel.fromPath(params.fai).collect()
+    fai                      = params.fai                       ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                 : Channel.empty()
 
     PREPARE_REFERENCES(
@@ -177,7 +177,7 @@ workflow TOMTE {
     CALL_VARIANTS(
         ch_alignment.bam_bai,
         ch_references.fasta_no_meta,
-        ch_references.fasta_fai,
+        ch_references.fai_no_meta,
         ch_references.sequence_dict,
         params.variant_caller
     )
@@ -188,7 +188,7 @@ workflow TOMTE {
         CALL_VARIANTS.out.vcf_tbi,
         ch_alignment.bam_bai,
         ch_references.fasta_no_meta,
-        ch_references.fasta_fai,
+        ch_references.fai_no_meta,
         ch_references.sequence_dict,
         ch_references.interval_list
     )

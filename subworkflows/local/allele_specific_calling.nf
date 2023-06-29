@@ -34,12 +34,13 @@ workflow ALLELE_SPECIFIC_CALLING {
         )
         ch_versions = ch_versions.mix(BCFTOOLS_INDEX.out.versions.first())
         
+        dict_no_meta = dict.map{ meta, it -> [it] }.collect()
         GATK4_ASEREADCOUNTER(
             bam_bai,
             BCFTOOLS_VIEW.out.vcf.join(BCFTOOLS_INDEX.out.tbi), 
             fasta,
             fai,
-            dict,
+            dict_no_meta,
             intervals
         )
         ch_versions = ch_versions.mix(GATK4_ASEREADCOUNTER.out.versions.first())
