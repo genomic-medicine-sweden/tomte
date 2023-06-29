@@ -18,7 +18,8 @@ include { GUNZIP as GUNZIP_TRFASTA                     } from '../../modules/nf-
 
 workflow PREPARE_REFERENCES {
     take:
-        fasta
+        fasta_no_meta
+        fai_no_meta
         star_index
         gtf
         ch_vep_cache
@@ -29,16 +30,21 @@ workflow PREPARE_REFERENCES {
         ch_versions = Channel.empty()
 
         // Prepare fasta file
-        ch_fasta_meta = Channel.fromPath(fasta).map{ it -> [ [id:it.simpleName], it ] }.collect()
-        if ( fasta.endsWith(".gz") ) {
-            ch_fasta_meta = GUNZIP_FASTA(ch_fasta_meta).gunzip
+        ch_fasta = Channel.fromPath(fasta_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
+        if ( fasta_no_meta.endsWith(".gz") ) {
+            ch_fasta = GUNZIP_FASTA(ch_fasta).gunzip
             ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
         }
-        ch_fasta_no_meta =  ch_fasta_meta.map{ meta, fasta -> [ fasta ] }
+        ch_fasta_no_meta =  ch_fasta.map{ meta, fasta -> [ fasta ] }
 
-        // Genome indices
-        SAMTOOLS_FAIDX_GENOME(ch_fasta_meta)
-        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
+        // If no genome indices, create it
+        if (!fai_no_meta) {
+            SAMTOOLS_FAIDX_GENOME(ch_fasta,[[],[]])
+            ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
+            ch_fai=SAMTOOLS_FAIDX_GENOME.out.fai
+        } else {
+            ch_fai = Channel.fromPath(fasta_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
+        }
 
         BUILD_DICT(ch_fasta_no_meta)
         ch_dict = BUILD_DICT.out.dict.collect()
@@ -50,7 +56,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
 
         // Get chrom sizes
-        GET_CHROM_SIZES( SAMTOOLS_FAIDX_GENOME.out.fai )
+        GET_CHROM_SIZES( ch_fai )
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
 
         // Setting up STAR index channel
@@ -99,10 +105,10 @@ workflow PREPARE_REFERENCES {
 
     emit:
         chrom_sizes      = GET_CHROM_SIZES.out.sizes.collect()                                 // channel: [ path(sizes) ]
-        fasta_meta       = ch_fasta_meta
+        fasta_meta       = ch_fasta
         fasta_no_meta    = ch_fasta_no_meta
-        fasta_fai        = SAMTOOLS_FAIDX_GENOME.out.fai.map{ meta, fai -> [fai] }.collect()
-        fasta_fai_meta   = ch_fasta_meta.join(SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        fasta_fai        = ch_fai.map{ meta, fai -> [fai] }.collect()
+        fasta_fai_meta   = ch_fasta.join(ch_fai).collect()
         sequence_dict    = BUILD_DICT.out.dict.collect()
         gtf              = ch_gtf
         star_index       = ch_star_index

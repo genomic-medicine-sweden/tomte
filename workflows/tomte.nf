@@ -15,7 +15,7 @@ def checkPathParamList = [
     params.input,
     params.multiqc_config,
     params.fasta,
-    params.fasta_fai,
+    params.fai,
     params.sequence_dict,
     params.star_index,
     params.salmon_index,
@@ -105,9 +105,12 @@ workflow TOMTE {
                                                                 : Channel.value([[],[]])
     ch_vep_filters           = params.vep_filters               ? Channel.fromPath(params.vep_filters).collect()
                                                                 : Channel.value([])
+    fai                      = params.fai                       ? Channel.fromPath(params.fai).collect()
+                                                                : Channel.empty()
 
     PREPARE_REFERENCES(
         params.fasta,
+        fai,
         params.star_index,
         params.gtf,
         ch_vep_cache_unprocessed,
@@ -120,8 +123,8 @@ workflow TOMTE {
     ch_chrom_sizes           = ch_references.chrom_sizes
     ch_sequence_dict         = params.sequence_dict           ? Channel.fromPath(params.sequence_dict).collect()
                                                               : ( ch_references.sequence_dict            ?: Channel.empty() )
-    ch_genome_fai            = params.fasta_fai               ? Channel.fromPath(params.fasta_fai).collect()
-                                                              : ( ch_references.fasta_fai                ?: Channel.empty() )
+    //ch_genome_fai            = params.fai                     ? Channel.fromPath(params.fai).collect()
+    //                                                          : ( ch_references.fai                ?: Channel.empty() )
     ch_subsample_bed         = params.subsample_bed           ? Channel.fromPath(params.subsample_bed).collect()
                                                               : Channel.empty()
     ch_vep_cache             = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
