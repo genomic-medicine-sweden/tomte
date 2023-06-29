@@ -18,8 +18,8 @@ include { GUNZIP as GUNZIP_TRFASTA                     } from '../../modules/nf-
 
 workflow PREPARE_REFERENCES {
     take:
-        fasta_no_meta
-        fai_no_meta
+        fasta_no_meta         //      file: /path/to/genome.fasta
+        fai_no_meta           //      file: /path/to/genome.fasta.fai
         star_index
         gtf
         ch_vep_cache
@@ -30,10 +30,12 @@ workflow PREPARE_REFERENCES {
         ch_versions = Channel.empty()
 
         // Prepare fasta file
-        ch_fasta = Channel.fromPath(fasta_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
         if ( fasta_no_meta.endsWith(".gz") ) {
-            ch_fasta = GUNZIP_FASTA(ch_fasta).gunzip
+            ch_gunz = Channel.fromPath(fasta_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
+            ch_fasta = GUNZIP_FASTA(ch_gunz).gunzip
             ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
+        } else {
+            ch_fasta = Channel.fromPath(fasta_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
         }
         ch_fasta_no_meta =  ch_fasta.map{ meta, fasta -> [ fasta ] }
 
