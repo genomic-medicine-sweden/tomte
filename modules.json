@@ -123,7 +123,7 @@
                     },
                     "star/align": {
                         "branch": "master",
-                        "git_sha": "140d5a0d014138524e21dea80588817ddfc5dcf4",
+                        "git_sha": "57d75dbac06812c59798a48585032f6e50bb1914",
                         "installed_by": ["modules"]
                     },
                     "star/genomegenerate": {
