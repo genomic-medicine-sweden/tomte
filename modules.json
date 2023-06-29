@@ -48,7 +48,7 @@
                     },
                     "gatk4/asereadcounter": {
                         "branch": "master",
-                        "git_sha": "883121d7582071c7c5f59181b7608840bb09c04f",
+                        "git_sha": "541811d779026c5d395925895fa5ed35e7216cc0",
                         "installed_by": ["modules"]
                     },
                     "gatk4/bedtointervallist": {
@@ -68,12 +68,12 @@
                     },
                     "gatk4/splitncigarreads": {
                         "branch": "master",
-                        "git_sha": "a252064ec62dc690a59760f7be482d37a02ecd99",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
                     "gatk4/variantfiltration": {
                         "branch": "master",
-                        "git_sha": "643756685546fa61f5c8fba439af746c090b9180",
+                        "git_sha": "2df2a11d5b12f2a73bca74f103691bc35d83c5fd",
                         "installed_by": ["modules"]
                     },
                     "gffcompare": {
@@ -138,12 +138,12 @@
                     },
                     "tabix/bgziptabix": {
                         "branch": "master",
-                        "git_sha": "da53f7da4ff34b920bb3f186d151184bd440e3b5",
+                        "git_sha": "591b71642820933dcb3c954c934b397bd00d8e5e",
                         "installed_by": ["modules"]
                     },
                     "tabix/tabix": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
                     "ucsc/wigtobigwig": {
