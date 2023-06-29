@@ -153,7 +153,7 @@
                     },
                     "untar": {
                         "branch": "master",
-                        "git_sha": "38b16706fa3a9d4ee2bf46fa5805e7397e275cdd",
+                        "git_sha": "5c460c5a4736974abde2843294f35307ee2b0e5e",
                         "installed_by": ["modules"]
                     }
                 }
