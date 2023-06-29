@@ -46,7 +46,7 @@ workflow PREPARE_REFERENCES {
             ch_fai = Channel.fromPath(fasta_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
         }
 
-        BUILD_DICT(ch_fasta_no_meta)
+        BUILD_DICT(ch_fasta)
         ch_dict = BUILD_DICT.out.dict.collect()
         ch_versions = ch_versions.mix(BUILD_DICT.out.versions)
 
