@@ -30,7 +30,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = Channel.empty()
 
         GUNZIP_FASTA(fasta)
-        ch_fasta = GUNZIP_FASTA.out.gunzip ? GUNZIP_FASTA.out.gunzip.collect(): fasta
+        ch_fasta = GUNZIP_FASTA.out.gunzip ? GUNZIP_FASTA.out.gunzip.collect() : fasta
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
 
         // If no genome indices, create it
@@ -51,17 +51,11 @@ workflow PREPARE_REFERENCES {
         GET_CHROM_SIZES( ch_fai )
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
 
-        // Setting up STAR index channel
-        ch_star_index = star_index ? Channel.fromPath(star_index).collect() : Channel.empty()
         ch_fasta_no_meta =  ch_fasta.map{ meta, fasta -> [ fasta ] }
-        if ( !star_index ) {
-            ch_star_index = BUILD_STAR_GENOME (ch_fasta_no_meta, ch_gtf).index
-            ch_versions = ch_versions.mix(BUILD_STAR_GENOME.out.versions)
-        }
-        else if( star_index && star_index.endsWith(".gz") ) {
-            ch_star_index = UNTAR_STAR_INDEX( ch_star_index.map { it -> [[:], it] } ).untar.map { it[1] }
-            ch_versions = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
-        }
+        BUILD_STAR_GENOME (ch_fasta_no_meta, ch_gtf)
+        UNTAR_STAR_INDEX( star_index.map { it -> [[:], it] } )
+        ch_star_index = UNTAR_STAR_INDEX.out.untar ? UNTAR_STAR_INDEX.out.untar.map {meta, it -> [it] }.collect()
+                                                    : ( star_index ? star_index : BUILD_STAR_GENOME.out.index)
 
         // Convert gtf to refflat for picard
         GTF_TO_REFFLAT(ch_gtf)
