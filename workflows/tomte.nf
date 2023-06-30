@@ -110,6 +110,8 @@ workflow TOMTE {
                                                                 : Channel.empty()
     star_index              = params.star_index                 ? Channel.fromPath(params.star_index)
                                                                 : Channel.empty()
+    transcript_fasta        = params.transcript_fasta           ? Channel.fromPath(params.transcript_fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                : Channel.empty()
 
     PREPARE_REFERENCES(
         fasta,
@@ -117,7 +119,7 @@ workflow TOMTE {
         star_index,
         params.gtf,
         ch_vep_cache_unprocessed,
-        params.transcript_fasta,
+        transcript_fasta,
         params.salmon_index
     ).set { ch_references }
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)

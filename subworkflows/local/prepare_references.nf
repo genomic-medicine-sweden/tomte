@@ -44,7 +44,7 @@ workflow PREPARE_REFERENCES {
 
         gtf_meta=channel.of(gtf).map{it -> [[id:it[0]], it]}.collect()
         GUNZIP_GTF(gtf_meta)
-        ch_gtf  = GUNZIP_GTF.out.gunzip ? GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }.collect() : Channel.fromPath(gtf)
+        ch_gtf_no_meta  = GUNZIP_GTF.out.gunzip ? GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }.collect() : Channel.fromPath(gtf)
         ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
 
         // Get chrom sizes
@@ -52,17 +52,17 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
 
         ch_fasta_no_meta =  ch_fasta.map{ meta, fasta -> [ fasta ] }
-        BUILD_STAR_GENOME (ch_fasta_no_meta, ch_gtf)
+        BUILD_STAR_GENOME (ch_fasta_no_meta, ch_gtf_no_meta)
         UNTAR_STAR_INDEX( star_index.map { it -> [[:], it] } )
         ch_star_index = UNTAR_STAR_INDEX.out.untar ? UNTAR_STAR_INDEX.out.untar.map {meta, it -> [it] }.collect()
                                                     : ( star_index ? star_index : BUILD_STAR_GENOME.out.index)
 
         // Convert gtf to refflat for picard
-        GTF_TO_REFFLAT(ch_gtf)
+        GTF_TO_REFFLAT(ch_gtf_no_meta)
         ch_versions = ch_versions.mix(GTF_TO_REFFLAT.out.versions)
 
         // Get rRNA transcripts and convert to interval_list format
-        GET_RRNA_TRANSCRIPTS(ch_gtf)
+        GET_RRNA_TRANSCRIPTS(ch_gtf_no_meta)
         ch_versions = ch_versions.mix(GET_RRNA_TRANSCRIPTS.out.versions)
 
         BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map {it -> [ [id:it.name], it ]}, ch_dict )
@@ -72,19 +72,16 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
 
         // Setting up Salmon index
-        ch_transcript_fasta = transcript_fasta ? Channel.fromPath( transcript_fasta ).collect() : Channel.empty()
-        if (transcript_fasta && transcript_fasta.endsWith(".gz") ) {
-            ch_transcript_fasta_meta = Channel.fromPath(transcript_fasta).map{ it -> [ [id:it.simpleName], it ] }.collect()
-            ch_transcript_fasta_meta = GUNZIP_TRFASTA(ch_transcript_fasta_meta).gunzip
-            ch_transcript_fasta =  ch_transcript_fasta_meta.map{ meta, fasta -> [ fasta ] }
-        }
+        GUNZIP_TRFASTA(transcript_fasta)
+        ch_transcript_fasta = GUNZIP_TRFASTA.out.gunzip ? GUNZIP_TRFASTA.out.gunzip : transcript_fasta
+        ch_transcript_fasta_no_meta = ch_transcript_fasta.map{ meta, fasta -> [ fasta ] }
 
         ch_salmon_index = salmon_index ? Channel.fromPath( salmon_index ).collect() : Channel.empty()
         if (!transcript_fasta) {
                 // We would need to add gffread here but the module needs to be changed a lot, it can be done later
             } 
         if ( !salmon_index ) {
-            ch_salmon_index = SALMON_INDEX(ch_fasta_no_meta, ch_transcript_fasta).index
+            ch_salmon_index = SALMON_INDEX(ch_fasta_no_meta, ch_transcript_fasta_no_meta).index
             ch_versions = ch_versions.mix(SALMON_INDEX.out.versions)
         }  else if( salmon_index && salmon_index.endsWith(".gz") ) {
             ch_salmon_index = UNTAR_SALMON_INDEX( ch_salmon_index.map { it -> [[:], it] } ).untar.map { it[1] }
@@ -98,10 +95,10 @@ workflow PREPARE_REFERENCES {
         fai_no_meta      = ch_fai.map{ meta, fai -> [fai] }.collect()
         fasta_fai_meta   = ch_fasta.join(ch_fai).collect()
         sequence_dict    = BUILD_DICT.out.dict.collect()
-        gtf              = ch_gtf
+        gtf              = ch_gtf_no_meta
         star_index       = ch_star_index
         salmon_index     = ch_salmon_index
-        transcript_fasta = ch_transcript_fasta
+        transcript_fasta = ch_transcript_fasta_no_meta
         refflat          = GTF_TO_REFFLAT.out.refflat.collect()
         rrna_bed         = GET_RRNA_TRANSCRIPTS.out.bed.collect()
         interval_list    = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
