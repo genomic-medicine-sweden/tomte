@@ -101,6 +101,7 @@ workflow TOMTE {
         exit 1, 'Input samplesheet not specified!'
     }
 
+    fasta                    = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
     ch_vep_cache_unprocessed = params.vep_cache                 ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
                                                                 : Channel.value([[],[]])
     ch_vep_filters           = params.vep_filters               ? Channel.fromPath(params.vep_filters).collect()
@@ -109,7 +110,7 @@ workflow TOMTE {
                                                                 : Channel.empty()
 
     PREPARE_REFERENCES(
-        params.fasta,
+        fasta,
         fai,
         params.star_index,
         params.gtf,

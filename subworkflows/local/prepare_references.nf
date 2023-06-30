@@ -18,7 +18,7 @@ include { GUNZIP as GUNZIP_TRFASTA                     } from '../../modules/nf-
 
 workflow PREPARE_REFERENCES {
     take:
-        fasta_no_meta         //      file: /path/to/genome.fasta
+        fasta
         fai
         star_index
         gtf
@@ -29,27 +29,14 @@ workflow PREPARE_REFERENCES {
     main:
         ch_versions = Channel.empty()
 
-        // Prepare fasta file
-        if ( fasta_no_meta.endsWith(".gz") ) {
-            ch_gunz = Channel.fromPath(fasta_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
-            ch_fasta = GUNZIP_FASTA(ch_gunz).gunzip
-            ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
-        } else {
-            ch_fasta = Channel.fromPath(fasta_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
-        }
-        ch_fasta_no_meta =  ch_fasta.map{ meta, fasta -> [ fasta ] }
+        GUNZIP_FASTA(fasta)
+        ch_fasta = GUNZIP_FASTA.out.gunzip ? GUNZIP_FASTA.out.gunzip.collect(): fasta
+        ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
 
         // If no genome indices, create it
         SAMTOOLS_FAIDX_GENOME(ch_fasta,[[],[]])
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
         ch_fai = Channel.empty().mix(fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
-        //if (!fai_no_meta) {
-        //    SAMTOOLS_FAIDX_GENOME(ch_fasta,[[],[]])
-        //    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
-        //    ch_fai=SAMTOOLS_FAIDX_GENOME.out.fai
-        //} else {
-        //    ch_fai = Channel.fromPath(fai_no_meta).map{ it -> [ [id:it.simpleName], it ] }.collect()
-        //}
 
         BUILD_DICT(ch_fasta)
         ch_dict = BUILD_DICT.out.dict.collect()
@@ -66,6 +53,7 @@ workflow PREPARE_REFERENCES {
 
         // Setting up STAR index channel
         ch_star_index = star_index ? Channel.fromPath(star_index).collect() : Channel.empty()
+        ch_fasta_no_meta =  ch_fasta.map{ meta, fasta -> [ fasta ] }
         if ( !star_index ) {
             ch_star_index = BUILD_STAR_GENOME (ch_fasta_no_meta, ch_gtf).index
             ch_versions = ch_versions.mix(BUILD_STAR_GENOME.out.versions)
