@@ -9,13 +9,13 @@ include { GTFTOGENEPRED_REFFLAT as GTF_TO_REFFLAT      } from '../../modules/loc
 include { GET_CHROM_SIZES                              } from '../../modules/local/get_chrom_sizes'
 include { GUNZIP as GUNZIP_FASTA                       } from '../../modules/nf-core/gunzip/main'
 include { GUNZIP as GUNZIP_GTF                         } from '../../modules/nf-core/gunzip/main'
+include { GUNZIP as GUNZIP_TRFASTA                     } from '../../modules/nf-core/gunzip/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME      } from '../../modules/nf-core/samtools/faidx/main'
 include { STAR_GENOMEGENERATE as BUILD_STAR_GENOME     } from '../../modules/nf-core/star/genomegenerate/main'
 include { UNTAR as UNTAR_STAR_INDEX                    } from '../../modules/nf-core/untar/main'
 include { UNTAR as UNTAR_SALMON_INDEX                  } from '../../modules/nf-core/untar/main'
 include { UNTAR as UNTAR_VEP_CACHE                     } from '../../modules/nf-core/untar/main'
 include { SALMON_INDEX as SALMON_INDEX                 } from '../../modules/nf-core/salmon/index/main'
-include { GUNZIP as GUNZIP_TRFASTA                     } from '../../modules/nf-core/gunzip/main'
 
 workflow PREPARE_REFERENCES {
     take:
@@ -32,25 +32,20 @@ workflow PREPARE_REFERENCES {
 
         GUNZIP_FASTA(fasta)
         ch_fasta = GUNZIP_FASTA.out.gunzip ? GUNZIP_FASTA.out.gunzip.collect() : fasta
-        ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
 
         // If no genome indices, create it
         SAMTOOLS_FAIDX_GENOME(ch_fasta,[[],[]])
-        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
         ch_fai = Channel.empty().mix(fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
 
         BUILD_DICT(ch_fasta)
         ch_dict = BUILD_DICT.out.dict.collect()
-        ch_versions = ch_versions.mix(BUILD_DICT.out.versions)
 
         gtf_meta=channel.of(gtf).map{it -> [[id:it[0]], it]}.collect()
         GUNZIP_GTF(gtf_meta)
         ch_gtf_no_meta  = GUNZIP_GTF.out.gunzip ? GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }.collect() : Channel.fromPath(gtf)
-        ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
 
         // Get chrom sizes
         GET_CHROM_SIZES( ch_fai )
-        ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
 
         ch_fasta_no_meta =  ch_fasta.map{ meta, fasta -> [ fasta ] }
 
@@ -62,17 +57,13 @@ workflow PREPARE_REFERENCES {
         
         // Convert gtf to refflat for picard
         GTF_TO_REFFLAT(ch_gtf_no_meta)
-        ch_versions = ch_versions.mix(GTF_TO_REFFLAT.out.versions)
 
         // Get rRNA transcripts and convert to interval_list format
         GET_RRNA_TRANSCRIPTS(ch_gtf_no_meta)
-        ch_versions = ch_versions.mix(GET_RRNA_TRANSCRIPTS.out.versions)
-
+       
         BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map {it -> [ [id:it.name], it ]}, ch_dict )
-        ch_versions = ch_versions.mix(BEDTOINTERVALLIST.out.versions)
 
         UNTAR_VEP_CACHE (ch_vep_cache)
-        ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
 
         // Setting up Salmon index
         //if (!transcript_fasta) {
@@ -89,6 +80,17 @@ workflow PREPARE_REFERENCES {
 
         ch_salmon_index = (!salmon_index) ? SALMON_INDEX.out.index.collect() : 
                                             (salmon_index.endsWith(".gz") ? UNTAR_SALMON_INDEX.out.untar.map { it[1] }.collect() : salmon_index)
+        
+        ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
+        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
+        ch_versions = ch_versions.mix(BUILD_DICT.out.versions)
+        ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
+        ch_versions = ch_versions.mix(BUILD_STAR_GENOME.out.versions)
+        ch_versions = ch_versions.mix(GTF_TO_REFFLAT.out.versions)
+        ch_versions = ch_versions.mix(GET_RRNA_TRANSCRIPTS.out.versions)
+        ch_versions = ch_versions.mix(BEDTOINTERVALLIST.out.versions)
+        ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
+        ch_versions = ch_versions.mix(SALMON_INDEX.out.versions)
 
     emit:
         chrom_sizes      = GET_CHROM_SIZES.out.sizes.collect()                                 // channel: [ path(sizes) ]
