@@ -12,6 +12,7 @@ include { GUNZIP as GUNZIP_GTF                         } from '../../modules/nf-
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME      } from '../../modules/nf-core/samtools/faidx/main'
 include { STAR_GENOMEGENERATE as BUILD_STAR_GENOME     } from '../../modules/nf-core/star/genomegenerate/main'
 include { UNTAR as UNTAR_STAR_INDEX                    } from '../../modules/nf-core/untar/main'
+include { UNTAR as UNTAR_SALMON_INDEX                  } from '../../modules/nf-core/untar/main'
 include { UNTAR as UNTAR_VEP_CACHE                     } from '../../modules/nf-core/untar/main'
 include { SALMON_INDEX as SALMON_INDEX                 } from '../../modules/nf-core/salmon/index/main'
 include { GUNZIP as GUNZIP_TRFASTA                     } from '../../modules/nf-core/gunzip/main'
@@ -52,11 +53,13 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
 
         ch_fasta_no_meta =  ch_fasta.map{ meta, fasta -> [ fasta ] }
-        BUILD_STAR_GENOME (ch_fasta_no_meta, ch_gtf_no_meta)
-        UNTAR_STAR_INDEX( star_index.map { it -> [[:], it] } )
-        ch_star_index = UNTAR_STAR_INDEX.out.untar ? UNTAR_STAR_INDEX.out.untar.map {meta, it -> [it] }.collect()
-                                                    : ( star_index ? star_index : BUILD_STAR_GENOME.out.index)
 
+        ch_star = star_index ? Channel.fromPath(star_index).collect() : Channel.empty()
+        BUILD_STAR_GENOME (ch_fasta_no_meta, ch_gtf_no_meta)
+        UNTAR_STAR_INDEX( ch_star.map { it -> [[:], it] } )
+        ch_star_index = (!star_index) ?  BUILD_STAR_GENOME.out.index.collect() : 
+                                        (star_index.endsWith(".gz") ? UNTAR_STAR_INDEX.out.untar.map { it[1] }.collect() : star_index)
+        
         // Convert gtf to refflat for picard
         GTF_TO_REFFLAT(ch_gtf_no_meta)
         ch_versions = ch_versions.mix(GTF_TO_REFFLAT.out.versions)
@@ -72,20 +75,20 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
 
         // Setting up Salmon index
-        GUNZIP_TRFASTA(transcript_fasta)
-        ch_transcript_fasta = GUNZIP_TRFASTA.out.gunzip ? GUNZIP_TRFASTA.out.gunzip : transcript_fasta
-        ch_transcript_fasta_no_meta = ch_transcript_fasta.map{ meta, fasta -> [ fasta ] }
-
-        ch_salmon_index = salmon_index ? Channel.fromPath( salmon_index ).collect() : Channel.empty()
-        if (!transcript_fasta) {
+        //if (!transcript_fasta) {
                 // We would need to add gffread here but the module needs to be changed a lot, it can be done later
-            } 
-        if ( !salmon_index ) {
-            ch_salmon_index = SALMON_INDEX(ch_fasta_no_meta, ch_transcript_fasta_no_meta).index
-            ch_versions = ch_versions.mix(SALMON_INDEX.out.versions)
-        }  else if( salmon_index && salmon_index.endsWith(".gz") ) {
-            ch_salmon_index = UNTAR_SALMON_INDEX( ch_salmon_index.map { it -> [[:], it] } ).untar.map { it[1] }
-        }
+        //} 
+
+        GUNZIP_TRFASTA(transcript_fasta)
+        transcript_fasta_no_meta = GUNZIP_TRFASTA.out.gunzip ? GUNZIP_TRFASTA.out.gunzip.map{ meta, fasta -> [ fasta ] } 
+                                                                : transcript_fasta.map{ meta, fasta -> [ fasta ] }
+        
+        ch_salmon = salmon_index ? Channel.fromPath(salmon_index).collect() : Channel.empty()
+        UNTAR_SALMON_INDEX( ch_salmon.map { it -> [[:], it] } )
+        SALMON_INDEX(ch_fasta_no_meta, transcript_fasta_no_meta)
+
+        ch_salmon_index = (!salmon_index) ? SALMON_INDEX.out.index.collect() : 
+                                            (salmon_index.endsWith(".gz") ? UNTAR_SALMON_INDEX.out.untar.map { it[1] }.collect() : salmon_index)
 
     emit:
         chrom_sizes      = GET_CHROM_SIZES.out.sizes.collect()                                 // channel: [ path(sizes) ]
@@ -98,7 +101,6 @@ workflow PREPARE_REFERENCES {
         gtf              = ch_gtf_no_meta
         star_index       = ch_star_index
         salmon_index     = ch_salmon_index
-        transcript_fasta = ch_transcript_fasta_no_meta
         refflat          = GTF_TO_REFFLAT.out.refflat.collect()
         rrna_bed         = GET_RRNA_TRANSCRIPTS.out.bed.collect()
         interval_list    = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
