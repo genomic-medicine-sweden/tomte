@@ -7,6 +7,7 @@ include { GATK4_CREATESEQUENCEDICTIONARY as BUILD_DICT } from '../../modules/nf-
 include { GET_RRNA_TRANSCRIPTS                         } from '../../modules/local/get_rrna_transcripts'
 include { GTFTOGENEPRED_REFFLAT as GTF_TO_REFFLAT      } from '../../modules/local/gtftorefflat'
 include { GET_CHROM_SIZES                              } from '../../modules/local/get_chrom_sizes'
+include { GFFREAD                                      } from '../../modules/local/gffread'
 include { GUNZIP as GUNZIP_FASTA                       } from '../../modules/nf-core/gunzip/main'
 include { GUNZIP as GUNZIP_GTF                         } from '../../modules/nf-core/gunzip/main'
 include { GUNZIP as GUNZIP_TRFASTA                     } from '../../modules/nf-core/gunzip/main'
@@ -64,16 +65,15 @@ workflow PREPARE_REFERENCES {
         BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map {it -> [ [id:it.name], it ]}, ch_dict )
 
         UNTAR_VEP_CACHE (ch_vep_cache)
+        
+        // Preparing transcript fasta
+        ch_tr_fasta = transcript_fasta ? Channel.fromPath(transcript_fasta).map {it -> [[id:it[0].simpleName], it]}.collect() : Channel.empty()
+        GFFREAD(gtf_meta,ch_fasta)
+        GUNZIP_TRFASTA(ch_tr_fasta)
+        transcript_fasta_no_meta = (!transcript_fasta) ? GFFREAD.out.tr_fasta : 
+                                   (transcript_fasta.endsWith(".gz") ? GUNZIP_TRFASTA.out.gunzip.map{ meta, fasta -> [ fasta ] } : ch_tr_fasta.map{ meta, fasta -> [ fasta ] })
 
         // Setting up Salmon index
-        //if (!transcript_fasta) {
-                // We would need to add gffread here but the module needs to be changed a lot, it can be done later
-        //} 
-
-        GUNZIP_TRFASTA(transcript_fasta)
-        transcript_fasta_no_meta = GUNZIP_TRFASTA.out.gunzip ? GUNZIP_TRFASTA.out.gunzip.map{ meta, fasta -> [ fasta ] } 
-                                                                : transcript_fasta.map{ meta, fasta -> [ fasta ] }
-        
         ch_salmon = salmon_index ? Channel.fromPath(salmon_index).collect() : Channel.empty()
         UNTAR_SALMON_INDEX( ch_salmon.map { it -> [[:], it] } )
         SALMON_INDEX(ch_fasta_no_meta, transcript_fasta_no_meta)
@@ -89,6 +89,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GTF_TO_REFFLAT.out.versions)
         ch_versions = ch_versions.mix(GET_RRNA_TRANSCRIPTS.out.versions)
         ch_versions = ch_versions.mix(BEDTOINTERVALLIST.out.versions)
+        ch_versions = ch_versions.mix(GFFREAD.out.versions)
         ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
         ch_versions = ch_versions.mix(SALMON_INDEX.out.versions)
 
