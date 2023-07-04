@@ -108,13 +108,9 @@ workflow TOMTE {
                                                                 : Channel.value([])
     fai                      = params.fai                       ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                 : Channel.empty()
-    //star_index              = params.star_index                 ? Channel.fromPath(params.star_index).collect()
-    //                                                            : Channel.empty()
     transcript_fasta        = params.transcript_fasta           ? Channel.fromPath(params.transcript_fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                 : Channel.empty()
-    //salmon_index            = params.salmon_index               ? Channel.fromPath( params.salmon_index ).collect() 
-    //                                                            : Channel.empty()
-
+    
     PREPARE_REFERENCES(
         fasta,
         fai,
