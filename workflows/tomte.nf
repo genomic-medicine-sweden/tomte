@@ -126,8 +126,6 @@ workflow TOMTE {
     ch_chrom_sizes           = ch_references.chrom_sizes
     ch_sequence_dict         = params.sequence_dict           ? Channel.fromPath(params.sequence_dict).collect()
                                                               : ( ch_references.sequence_dict            ?: Channel.empty() )
-    //ch_genome_fai            = params.fai                     ? Channel.fromPath(params.fai).collect()
-    //                                                          : ( ch_references.fai                ?: Channel.empty() )
     ch_subsample_bed         = params.subsample_bed           ? Channel.fromPath(params.subsample_bed).collect()
                                                               : Channel.empty()
     ch_vep_cache             = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
