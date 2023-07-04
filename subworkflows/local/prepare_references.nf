@@ -67,8 +67,9 @@ workflow PREPARE_REFERENCES {
         UNTAR_VEP_CACHE (ch_vep_cache)
         
         // Preparing transcript fasta
+        ch_fasta_fai = ch_fasta.join(ch_fai).collect()
         ch_tr_fasta = transcript_fasta ? Channel.fromPath(transcript_fasta).map {it -> [[id:it[0].simpleName], it]}.collect() : Channel.empty()
-        GFFREAD(gtf_meta,ch_fasta)
+        GFFREAD(ch_gtf_no_meta.map{it -> [[id:it[0].simpleName], it]},ch_fasta_fai)
         GUNZIP_TRFASTA(ch_tr_fasta)
         transcript_fasta_no_meta = (!transcript_fasta) ? GFFREAD.out.tr_fasta : 
                                    (transcript_fasta.endsWith(".gz") ? GUNZIP_TRFASTA.out.gunzip.map{ meta, fasta -> [ fasta ] } : ch_tr_fasta.map{ meta, fasta -> [ fasta ] })

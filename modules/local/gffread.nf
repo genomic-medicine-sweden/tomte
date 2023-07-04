@@ -9,11 +9,11 @@ process GFFREAD {
 
     input:
     tuple val(meta), path(gff)
-    tuple val(meta), path(fasta)
+    tuple val(meta2), path(fasta), path(fai)
 
     output:
-    path "*.gtf"        , emit: gtf,        optional: true
-    path "*.fa"         , emit: tr_fasta,   optional: true
+    path "*${prefix}.gtf"        , emit: gtf,        optional: true
+    path "*${prefix}.fa"         , emit: tr_fasta,   optional: true
     path "versions.yml" , emit: versions
 
     when:
@@ -22,8 +22,9 @@ process GFFREAD {
     script:
     def args   = task.ext.args   ?: ''
     def genome = fasta ? "-g ${fasta}" : ''
-    def prefix = task.ext.prefix ?: gff.getSimpleName()
+    def prefix = task.ext.prefix ?: "${meta.id}_gffread"
     def outp   = args.contains("-w ") ? "" : "-o ${prefix}.gtf"
+
     """
     gffread \\
         $gff \\
@@ -37,7 +38,7 @@ process GFFREAD {
     """
 
     stub:
-    def prefix = task.ext.prefix ?: gff.getSimpleName()
+    def prefix = task.ext.prefix ?: "${meta.id}_gffread"
     """
     touch ${prefix}.gtf
     touch ${prefix}.fa
