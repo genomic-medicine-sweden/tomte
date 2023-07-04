@@ -15,7 +15,7 @@ def checkPathParamList = [
     params.input,
     params.multiqc_config,
     params.fasta,
-    params.fasta_fai,
+    params.fai,
     params.sequence_dict,
     params.star_index,
     params.salmon_index,
@@ -101,17 +101,23 @@ workflow TOMTE {
         exit 1, 'Input samplesheet not specified!'
     }
 
+    fasta                    = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
     ch_vep_cache_unprocessed = params.vep_cache                 ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
                                                                 : Channel.value([[],[]])
     ch_vep_filters           = params.vep_filters               ? Channel.fromPath(params.vep_filters).collect()
                                                                 : Channel.value([])
-
+    fai                      = params.fai                       ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                : Channel.empty()
+    transcript_fasta        = params.transcript_fasta           ? Channel.fromPath(params.transcript_fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                : Channel.empty()
+    
     PREPARE_REFERENCES(
-        params.fasta,
+        fasta,
+        fai,
         params.star_index,
         params.gtf,
         ch_vep_cache_unprocessed,
-        params.transcript_fasta,
+        transcript_fasta,
         params.salmon_index
     ).set { ch_references }
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
@@ -120,8 +126,6 @@ workflow TOMTE {
     ch_chrom_sizes           = ch_references.chrom_sizes
     ch_sequence_dict         = params.sequence_dict           ? Channel.fromPath(params.sequence_dict).collect()
                                                               : ( ch_references.sequence_dict            ?: Channel.empty() )
-    ch_genome_fai            = params.fasta_fai               ? Channel.fromPath(params.fasta_fai).collect()
-                                                              : ( ch_references.fasta_fai                ?: Channel.empty() )
     ch_subsample_bed         = params.subsample_bed           ? Channel.fromPath(params.subsample_bed).collect()
                                                               : Channel.empty()
     ch_vep_cache             = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
@@ -174,7 +178,7 @@ workflow TOMTE {
     CALL_VARIANTS(
         ch_alignment.bam_bai,
         ch_references.fasta_no_meta,
-        ch_references.fasta_fai,
+        ch_references.fai_no_meta,
         ch_references.sequence_dict,
         params.variant_caller
     )
@@ -185,7 +189,7 @@ workflow TOMTE {
         CALL_VARIANTS.out.vcf_tbi,
         ch_alignment.bam_bai,
         ch_references.fasta_no_meta,
-        ch_references.fasta_fai,
+        ch_references.fai_no_meta,
         ch_references.sequence_dict,
         ch_references.interval_list
     )
