@@ -14,7 +14,7 @@ translator = {
 }
 
 
-def get_non_std_genes(gtf: str) -> set[str]:
+def get_non_std_genes(gtf: Path) -> set[str]:
     """Create list of genes not belonging to chr1-21 or chrM"""
 
     std_chrs = [
