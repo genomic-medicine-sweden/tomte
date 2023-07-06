@@ -45,12 +45,12 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_versions = ch_versions.mix(GFFCOMPARE.out.versions.first())
 
     emit:
-        transcript_gtf        = STRINGTIE_STRINGTIE.out.transcript_gtf // channel: [ val(meta), [ path(transctript_gtf)] ]
-        abundance             = STRINGTIE_STRINGTIE.out.abundance      // channel: [ val(meta), [ path(abundance) ] ]
-        coverage_gtf          = STRINGTIE_STRINGTIE.out.coverage_gtf   // channel: [ val(meta), [ path(coverage_gtf) ] ]
-        annotated_gtf         = GFFCOMPARE.out.annotated_gtf           // channel: [ val(meta), [ path(annotated_gtf) ] ]
-        stats_gtf             = GFFCOMPARE.out.stats                   // channel: [ val(meta), [ path(stats) ] ]
-        versions              = ch_versions                            // channel: [ path(versions.yml) ]
-        processed_gene_counts = GENERATE_COUNTS_DROP.out.processed_gene_counts
-        annotation_drop       = GENERATE_ANNOTATION_DROP.out.sample_annotation_drop
+        transcript_gtf        = STRINGTIE_STRINGTIE.out.transcript_gtf              // channel: [ val(meta), [ path(transctript_gtf)] ]
+        abundance             = STRINGTIE_STRINGTIE.out.abundance                   // channel: [ val(meta), [ path(abundance) ] ]
+        coverage_gtf          = STRINGTIE_STRINGTIE.out.coverage_gtf                // channel: [ val(meta), [ path(coverage_gtf) ] ]
+        annotated_gtf         = GFFCOMPARE.out.annotated_gtf                        // channel: [ val(meta), [ path(annotated_gtf) ] ]
+        stats_gtf             = GFFCOMPARE.out.stats                                // channel: [ val(meta), [ path(stats) ] ]
+        processed_gene_counts = GENERATE_COUNTS_DROP.out.processed_gene_counts      // channel: [ path(tsv) ]
+        annotation_drop       = GENERATE_ANNOTATION_DROP.out.sample_annotation_drop // channel: [ path(tsv) ]
+        versions              = ch_versions                                         // channel: [ path(versions.yml) ]
 }
