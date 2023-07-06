@@ -26,11 +26,11 @@ process GENERATE_COUNTS_DROP {
     def input_samples = samples ? "${samples.id}" : ""
     """
     $baseDir/bin/generate_gene_counts.py \\
-		--star ${counts} \\
-		--sample $input_samples \\
-		$strandedness \\
+        --star ${counts} \\
+        --sample $input_samples \\
+        $strandedness \\
         $ref_counts \\
-		--output processed_geneCounts.tsv \\
+        --output processed_geneCounts.tsv \\
         --gtf $gtf \\
 
     cat <<-END_VERSIONS > versions.yml
