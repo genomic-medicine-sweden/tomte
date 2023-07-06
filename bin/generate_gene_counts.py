@@ -50,7 +50,6 @@ def get_non_std_genes(gtf: str) -> set[str]:
 
     with open(gtf, "r") as gtf_file:
         for line in gtf_file:
-
             if line.startswith("#"):
                 continue
 
@@ -116,28 +115,18 @@ if __name__ == "__main__":
         formatter_class=argparse.MetavarTypeHelpFormatter,
         description="""Generate collated gene counts from each STAR output.""",
     )
-    parser.add_argument(
-        "--star", type=str, nargs="+", help="*ReadsPerGene.out.tab from STAR", required=True
-    )
-    parser.add_argument(
-        "--sample", type=str, nargs="+", help="corresponding sample name", required=True
-    )
+    parser.add_argument("--star", type=str, nargs="+", help="*ReadsPerGene.out.tab from STAR", required=True)
+    parser.add_argument("--sample", type=str, nargs="+", help="corresponding sample name", required=True)
     parser.add_argument("--strandedness", type=str, help="strandedness of RNA")
     parser.add_argument("--output", type=str, help="output tsv file name", required=True)
-    parser.add_argument(
-        "--gtf", type=str, help="Transcript annotation file in gtf format", required=True
-    )
+    parser.add_argument("--gtf", type=str, help="Transcript annotation file in gtf format", required=True)
     parser.add_argument("--ref_count_file", type=str, help="Optional reference count set")
 
     args = parser.parse_args()
     master_dict = {}
     for index, sample_id in enumerate(args.sample):
         sample_id = re.sub(r"[\[\],]", "", sample_id)
-        master_dict.update(
-            read_star_gene_cnts(
-                sample=sample_id, star=args.star[index], strandedness=args.strandedness
-            )
-        )
+        master_dict.update(read_star_gene_cnts(sample=sample_id, star=args.star[index], strandedness=args.strandedness))
 
     genes_to_exclude = get_non_std_genes(args.gtf)
     transform_to_table(master_dict, args.output, genes_to_exclude, args.ref_count_file)
