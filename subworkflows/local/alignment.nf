@@ -33,6 +33,8 @@ workflow ALIGNMENT {
         FASTP(CAT_FASTQ.out.reads,[],false,false)
 
         STAR_ALIGN(FASTP.out.reads, star_index, gtf, false, 'illumina', false)
+        STAR_ALIGN.out.read_per_gene_tab.collect{ meta, cnt_file -> meta }.set{ ch_sample_collect }
+        STAR_ALIGN.out.read_per_gene_tab.collect{ meta, cnt_file -> cnt_file }.set{ ch_cnts_collect }
 
         SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
 
@@ -78,6 +80,8 @@ workflow ALIGNMENT {
         bam_ds_bai     = ch_bam_bai_out
         gene_counts    = STAR_ALIGN.out.read_per_gene_tab
         spl_junc       = STAR_ALIGN.out.spl_junc_tab
+        star_samp_col  = ch_sample_collect
+        star_cnts_col  = ch_cnts_collect
         star_log_final = STAR_ALIGN.out.log_final
         star_wig       = STAR_ALIGN.out.wig
         salmon_result  = SALMON_QUANT.out.results

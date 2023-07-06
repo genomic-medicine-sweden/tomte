@@ -71,7 +71,7 @@ def read_star_gene_cnts(sample: str, star: Path, strandedness: str) -> dict:
         for line in in_tab:
             if not line.startswith("N_"):
                 gene_id = line.split()[0]
-                strand = translator[strandedness]
+                strand = translator[strandedness.lower()]
                 counts = line.split()[strand]
                 gene_ids[gene_id] = int(counts)
     gene_ids = OrderedDict(sorted(gene_ids.items()))
