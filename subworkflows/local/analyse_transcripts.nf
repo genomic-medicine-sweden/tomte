@@ -2,9 +2,10 @@
 // ANALYSE TRANSCRITPS
 //
 
- include { STRINGTIE_STRINGTIE  } from '../../modules/nf-core/stringtie/stringtie/main'
- include { GFFCOMPARE           } from '../../modules/nf-core/gffcompare/main'
- include { GENERATE_COUNTS_DROP } from '../../modules/local/generate_gene_counts4drop'
+ include { STRINGTIE_STRINGTIE      } from '../../modules/nf-core/stringtie/stringtie/main'
+ include { GFFCOMPARE               } from '../../modules/nf-core/gffcompare/main'
+ include { GENERATE_COUNTS_DROP     } from '../../modules/local/generate_gene_counts4drop'
+ include { GENERATE_ANNOTATION_DROP } from '../../modules/local/generate_sample_annot'
  //include { GENERATE_SA4DROP    } from '../../modules/local/generate_sa4drop'
 
 workflow ANALYSE_TRANSCRIPTS {
@@ -29,6 +30,9 @@ workflow ANALYSE_TRANSCRIPTS {
         // Count file
         GENERATE_COUNTS_DROP(star_cnts_col, star_samp_col,ch_gtf,reference_count_file)
         ch_versions = ch_versions.mix(GENERATE_COUNTS_DROP.out.versions)
+        // Annotation file
+        GENERATE_ANNOTATION_DROP(GENERATE_COUNTS_DROP.out.processed_gene_counts,ch_gtf,reference_count_file)
+        ch_versions = ch_versions.mix(GENERATE_ANNOTATION_DROP.out.versions)
 
         //GENERATE_SA4DROP()
 
@@ -40,11 +44,12 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_versions = ch_versions.mix(GFFCOMPARE.out.versions.first())
 
     emit:
-        transcript_gtf = STRINGTIE_STRINGTIE.out.transcript_gtf // channel: [ val(meta), [ path(transctript_gtf)] ]
-        abundance      = STRINGTIE_STRINGTIE.out.abundance      // channel: [ val(meta), [ path(abundance) ] ]
-        coverage_gtf   = STRINGTIE_STRINGTIE.out.coverage_gtf   // channel: [ val(meta), [ path(coverage_gtf) ] ]
-        annotated_gtf  = GFFCOMPARE.out.annotated_gtf           // channel: [ val(meta), [ path(annotated_gtf) ] ]
-        stats_gtf      = GFFCOMPARE.out.stats                   // channel: [ val(meta), [ path(stats) ] ]
-        versions       = ch_versions                            // channel: [ path(versions.yml) ]
+        transcript_gtf        = STRINGTIE_STRINGTIE.out.transcript_gtf // channel: [ val(meta), [ path(transctript_gtf)] ]
+        abundance             = STRINGTIE_STRINGTIE.out.abundance      // channel: [ val(meta), [ path(abundance) ] ]
+        coverage_gtf          = STRINGTIE_STRINGTIE.out.coverage_gtf   // channel: [ val(meta), [ path(coverage_gtf) ] ]
+        annotated_gtf         = GFFCOMPARE.out.annotated_gtf           // channel: [ val(meta), [ path(annotated_gtf) ] ]
+        stats_gtf             = GFFCOMPARE.out.stats                   // channel: [ val(meta), [ path(stats) ] ]
+        versions              = ch_versions                            // channel: [ path(versions.yml) ]
         processed_gene_counts = GENERATE_COUNTS_DROP.out.processed_gene_counts
+        annotation_drop       = GENERATE_ANNOTATION_DROP.out.sample_annotation_drop
 }
