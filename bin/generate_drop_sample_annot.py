@@ -47,9 +47,7 @@ class SampleAnnotation:
                 ref_samples = file_object.readline().split()[1:]
 
             samples += ref_samples
-            sample_cnt_file.update(
-                {ref_sample: os.path.basename(self.ref_cnts_file) for ref_sample in ref_samples}
-            )
+            sample_cnt_file.update({ref_sample: os.path.basename(self.ref_cnts_file) for ref_sample in ref_samples})
 
         return samples, sample_cnt_file
 
