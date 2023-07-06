@@ -178,8 +178,7 @@ workflow TOMTE {
         ch_alignment.bam,
         ch_references.gtf,
         ch_references.fasta_fai_meta,
-        ch_alignment.star_samp_col,
-        ch_alignment.star_cnts_col,
+        ch_alignment.gene_counts,
         ch_reference_count_file
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)

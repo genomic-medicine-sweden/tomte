@@ -10,12 +10,11 @@
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
-        ch_bam            // channel (mandatory): [ val(meta), [ path(bam) ] ]
-        ch_gtf            // channel (mandatory): [ path(gtf) ]
-        ch_fasta_fai_meta // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
-        star_samp_col
-        star_cnts_col
-        reference_count_file
+        ch_bam               // channel (mandatory): [ val(meta), [ path(bam) ] ]
+        ch_gtf               // channel (mandatory): [ path(gtf) ]
+        ch_fasta_fai_meta    // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
+        gene_counts          // channel [val(meta), path(tsv)] 
+        reference_count_file // channel [ path(tsv) ]
 
     main:
         ch_versions = Channel.empty()
@@ -28,7 +27,9 @@ workflow ANALYSE_TRANSCRIPTS {
 
         // DROP
         // Count file
-        GENERATE_COUNTS_DROP(star_cnts_col, star_samp_col, ch_gtf, reference_count_file)
+        star_count = gene_counts.map{ meta, cnt_file -> cnt_file }.collect()
+        star_samp  = gene_counts.map{ meta, cnt_file -> meta }.collect()
+        GENERATE_COUNTS_DROP(star_count, star_samp, ch_gtf, reference_count_file)
         ch_versions = ch_versions.mix(GENERATE_COUNTS_DROP.out.versions)
         // Annotation file
         GENERATE_ANNOTATION_DROP(GENERATE_COUNTS_DROP.out.processed_gene_counts,ch_gtf,reference_count_file)

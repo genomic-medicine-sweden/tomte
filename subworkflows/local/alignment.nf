@@ -33,8 +33,6 @@ workflow ALIGNMENT {
         FASTP(CAT_FASTQ.out.reads,[],false,false)
 
         STAR_ALIGN(FASTP.out.reads, star_index, gtf, false, 'illumina', false)
-        STAR_ALIGN.out.read_per_gene_tab.collect{ meta, cnt_file -> meta }.set{ ch_sample_collect }
-        STAR_ALIGN.out.read_per_gene_tab.collect{ meta, cnt_file -> cnt_file }.set{ ch_cnts_collect }
 
         SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
 
@@ -73,18 +71,16 @@ workflow ALIGNMENT {
         ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
 
     emit:
-        merged_reads   = CAT_FASTQ.out.reads
-        fastp_report   = FASTP.out.json
-        bam            = STAR_ALIGN.out.bam
-        bam_bai        = ch_bam_bai
-        bam_ds_bai     = ch_bam_bai_out
-        gene_counts    = STAR_ALIGN.out.read_per_gene_tab
-        spl_junc       = STAR_ALIGN.out.spl_junc_tab
-        star_samp_col  = ch_sample_collect
-        star_cnts_col  = ch_cnts_collect
-        star_log_final = STAR_ALIGN.out.log_final
-        star_wig       = STAR_ALIGN.out.wig
-        salmon_result  = SALMON_QUANT.out.results
-        salmon_info    = SALMON_QUANT.out.json_info
-        versions       = ch_versions
+        merged_reads    = CAT_FASTQ.out.reads
+        fastp_report    = FASTP.out.json
+        bam             = STAR_ALIGN.out.bam
+        bam_bai         = ch_bam_bai
+        bam_ds_bai      = ch_bam_bai_out
+        gene_counts     = STAR_ALIGN.out.read_per_gene_tab
+        spl_junc        = STAR_ALIGN.out.spl_junc_tab
+        star_log_final  = STAR_ALIGN.out.log_final
+        star_wig        = STAR_ALIGN.out.wig
+        salmon_result   = SALMON_QUANT.out.results
+        salmon_info     = SALMON_QUANT.out.json_info
+        versions        = ch_versions
 }
