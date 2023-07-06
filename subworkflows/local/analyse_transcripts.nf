@@ -28,7 +28,7 @@ workflow ANALYSE_TRANSCRIPTS {
 
         // DROP
         // Count file
-        GENERATE_COUNTS_DROP(star_cnts_col, star_samp_col,ch_gtf,reference_count_file)
+        GENERATE_COUNTS_DROP(star_cnts_col, star_samp_col, ch_gtf, reference_count_file)
         ch_versions = ch_versions.mix(GENERATE_COUNTS_DROP.out.versions)
         // Annotation file
         GENERATE_ANNOTATION_DROP(GENERATE_COUNTS_DROP.out.processed_gene_counts,ch_gtf,reference_count_file)
