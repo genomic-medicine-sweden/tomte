@@ -6,7 +6,6 @@
  include { GFFCOMPARE               } from '../../modules/nf-core/gffcompare/main'
  include { GENERATE_COUNTS_DROP     } from '../../modules/local/generate_gene_counts4drop'
  include { GENERATE_ANNOTATION_DROP } from '../../modules/local/generate_sample_annot'
- //include { GENERATE_SA4DROP    } from '../../modules/local/generate_sa4drop'
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
