@@ -34,8 +34,6 @@ workflow ANALYSE_TRANSCRIPTS {
         GENERATE_ANNOTATION_DROP(GENERATE_COUNTS_DROP.out.processed_gene_counts, ch_gtf, reference_count_file)
         ch_versions = ch_versions.mix(GENERATE_ANNOTATION_DROP.out.versions)
 
-        //GENERATE_SA4DROP()
-
         GFFCOMPARE(
             STRINGTIE_STRINGTIE.out.transcript_gtf,
             ch_fasta_fai_meta,
