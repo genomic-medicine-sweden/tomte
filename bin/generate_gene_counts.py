@@ -63,7 +63,7 @@ def get_non_std_genes(gtf: Path) -> set[str]:
 
 
 def read_star_gene_cnts(sample: str, star: Path, strandedness: str) -> dict:
-    """Read gene count file(s) from STAR output."""
+    """Read gene count file(s) from STAR output to return sample_ids."""
     sample_ids = {}
     gene_ids = {}
     with open(star) as in_tab:
@@ -77,10 +77,8 @@ def read_star_gene_cnts(sample: str, star: Path, strandedness: str) -> dict:
     sample_ids[sample] = gene_ids
     return sample_ids
 
-
-def transform_to_table(gene_ids_dict, outfile, genes_to_exlude, ref_count_file: Path):
-    """Transform in dictionary into tsv friendly."""
-
+def dict_to_counts(gene_ids_dict: dict):
+    """ Transform gene ids dict into count_table"""
     one_sample = next(iter(gene_ids_dict))
     gene_list = list(gene_ids_dict[one_sample].keys())
     genes = {}
@@ -92,6 +90,12 @@ def transform_to_table(gene_ids_dict, outfile, genes_to_exlude, ref_count_file: 
 
     count_table = pd.DataFrame.from_dict(genes, orient="index", columns=gene_ids_dict.keys())
     count_table.index.name = "geneID"
+    return (count_table)
+
+def transform_to_table(gene_ids_dict: dict, outfile: Path, genes_to_exlude: set[str], ref_count_file: Path):
+    """Transform in dictionary into tsv friendly."""
+    
+    count_table = dict_to_counts(gene_ids_dict)
 
     final_table = None
 
