@@ -31,7 +31,7 @@ workflow ANALYSE_TRANSCRIPTS {
         GENERATE_COUNTS_DROP(star_count, star_samp, ch_gtf, reference_count_file)
         ch_versions = ch_versions.mix(GENERATE_COUNTS_DROP.out.versions)
         // Annotation file
-        GENERATE_ANNOTATION_DROP(GENERATE_COUNTS_DROP.out.processed_gene_counts,ch_gtf,reference_count_file)
+        GENERATE_ANNOTATION_DROP(GENERATE_COUNTS_DROP.out.processed_gene_counts, ch_gtf, reference_count_file)
         ch_versions = ch_versions.mix(GENERATE_ANNOTATION_DROP.out.versions)
 
         //GENERATE_SA4DROP()
