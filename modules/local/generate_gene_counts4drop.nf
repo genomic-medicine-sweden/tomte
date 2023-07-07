@@ -35,7 +35,7 @@ process GENERATE_COUNTS_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
+        generate_gene_counts: v1.0
     END_VERSIONS
     """
 
@@ -45,7 +45,7 @@ process GENERATE_COUNTS_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
+        generate_gene_counts: v1.0
     END_VERSIONS
     """
 }

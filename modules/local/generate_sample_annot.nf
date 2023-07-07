@@ -32,7 +32,7 @@ process GENERATE_ANNOTATION_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
+        generate_drop_sample_annot: v1.0
     END_VERSIONS
     """
 
@@ -42,7 +42,7 @@ process GENERATE_ANNOTATION_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
+        generate_drop_sample_annot: v1.0
     END_VERSIONS
     """
 }
