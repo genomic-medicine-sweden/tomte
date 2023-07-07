@@ -77,8 +77,9 @@ def read_star_gene_cnts(sample: str, star: Path, strandedness: str) -> dict:
     sample_ids[sample] = gene_ids
     return sample_ids
 
+
 def dict_to_counts(gene_ids_dict: dict):
-    """ Transform gene ids dict into count_table"""
+    """Transform gene ids dict into count_table"""
     one_sample = next(iter(gene_ids_dict))
     gene_list = list(gene_ids_dict[one_sample].keys())
     genes = {}
@@ -90,11 +91,12 @@ def dict_to_counts(gene_ids_dict: dict):
 
     count_table = pd.DataFrame.from_dict(genes, orient="index", columns=gene_ids_dict.keys())
     count_table.index.name = "geneID"
-    return (count_table)
+    return count_table
+
 
 def transform_to_table(gene_ids_dict: dict, outfile: Path, genes_to_exlude: set[str], ref_count_file: Path):
     """Transform in dictionary into tsv friendly."""
-    
+
     count_table = dict_to_counts(gene_ids_dict)
 
     final_table = None
@@ -130,7 +132,11 @@ if __name__ == "__main__":
     master_dict = {}
     for index, sample_id in enumerate(args.sample):
         sample_id = re.sub(r"[\[\],]", "", sample_id)
-        master_dict.update(read_star_gene_cnts(sample=sample_id, star=args.star[index], strandedness=re.sub(r"[\[\],]", "", args.strandedness[index])))
+        master_dict.update(
+            read_star_gene_cnts(
+                sample=sample_id, star=args.star[index], strandedness=re.sub(r"[\[\],]", "", args.strandedness[index])
+            )
+        )
 
     genes_to_exclude = get_non_std_genes(args.gtf)
     transform_to_table(master_dict, args.output, genes_to_exclude, args.ref_count_file)
