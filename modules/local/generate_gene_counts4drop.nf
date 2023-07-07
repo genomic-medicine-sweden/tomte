@@ -22,7 +22,7 @@ process GENERATE_COUNTS_DROP {
 
     script:
     def ref_counts = reference_count_file ? "--ref_count_file $reference_count_file" : ""
-    def strandedness = samples ? "--strandedness ${samples[0].strandedness}" : ""
+    def strandedness = samples ? "--strandedness ${samples.strandedness}" : ""
     def input_samples = samples ? "${samples.id}" : ""
     """
     $baseDir/bin/generate_gene_counts.py \\

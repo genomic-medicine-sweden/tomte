@@ -70,7 +70,7 @@ def read_star_gene_cnts(sample: str, star: Path, strandedness: str) -> dict:
         for line in in_tab:
             if not line.startswith("N_"):
                 gene_id = line.split()[0]
-                strand = translator[strandedness.lower()]
+                strand = translator[strandedness]
                 counts = line.split()[strand]
                 gene_ids[gene_id] = int(counts)
     gene_ids = OrderedDict(sorted(gene_ids.items()))
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--star", type=str, nargs="+", help="*ReadsPerGene.out.tab from STAR", required=True)
     parser.add_argument("--sample", type=str, nargs="+", help="corresponding sample name", required=True)
-    parser.add_argument("--strandedness", type=str, help="strandedness of RNA")
+    parser.add_argument("--strandedness", type=str, nargs="+", help="strandedness of RNA")
     parser.add_argument("--output", type=str, help="output tsv file name", required=True)
     parser.add_argument("--gtf", type=str, help="Transcript annotation file in gtf format", required=True)
     parser.add_argument("--ref_count_file", type=str, help="Optional reference count set")
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     master_dict = {}
     for index, sample_id in enumerate(args.sample):
         sample_id = re.sub(r"[\[\],]", "", sample_id)
-        master_dict.update(read_star_gene_cnts(sample=sample_id, star=args.star[index], strandedness=args.strandedness))
+        master_dict.update(read_star_gene_cnts(sample=sample_id, star=args.star[index], strandedness=re.sub(r"[\[\],]", "", args.strandedness[index])))
 
     genes_to_exclude = get_non_std_genes(args.gtf)
     transform_to_table(master_dict, args.output, genes_to_exclude, args.ref_count_file)
