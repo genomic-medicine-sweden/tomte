@@ -2,17 +2,17 @@
 // ANALYSE TRANSCRITPS
 //
 
- include { STRINGTIE_STRINGTIE      } from '../../modules/nf-core/stringtie/stringtie/main'
- include { GFFCOMPARE               } from '../../modules/nf-core/gffcompare/main'
- include { GENERATE_COUNTS_DROP     } from '../../modules/local/generate_gene_counts4drop'
- include { GENERATE_ANNOTATION_DROP } from '../../modules/local/generate_sample_annot'
+include { STRINGTIE_STRINGTIE      } from '../../modules/nf-core/stringtie/stringtie/main'
+include { GFFCOMPARE               } from '../../modules/nf-core/gffcompare/main'
+include { GENERATE_COUNTS_DROP     } from '../../modules/local/generate_gene_counts4drop'
+include { GENERATE_ANNOTATION_DROP } from '../../modules/local/generate_sample_annot'
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
         ch_bam               // channel (mandatory): [ val(meta), [ path(bam) ] ]
         ch_gtf               // channel (mandatory): [ path(gtf) ]
         ch_fasta_fai_meta    // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
-        gene_counts          // channel [val(meta), path(tsv)] 
+        gene_counts          // channel [val(meta), path(tsv)]
         reference_count_file // channel [ path(tsv) ]
 
     main:
@@ -28,10 +28,19 @@ workflow ANALYSE_TRANSCRIPTS {
         // Count file
         star_count = gene_counts.map{ meta, cnt_file -> cnt_file }.collect()
         star_samp  = gene_counts.map{ meta, cnt_file -> meta }.collect()
-        GENERATE_COUNTS_DROP(star_count, star_samp, ch_gtf, reference_count_file)
+        GENERATE_COUNTS_DROP(
+            star_count,
+            star_samp,
+            ch_gtf,
+            reference_count_file
+        )
         ch_versions = ch_versions.mix(GENERATE_COUNTS_DROP.out.versions)
         // Annotation file
-        GENERATE_ANNOTATION_DROP(GENERATE_COUNTS_DROP.out.processed_gene_counts, ch_gtf, reference_count_file)
+        GENERATE_ANNOTATION_DROP(
+            GENERATE_COUNTS_DROP.out.processed_gene_counts,
+            ch_gtf,
+            reference_count_file
+        )
         ch_versions = ch_versions.mix(GENERATE_ANNOTATION_DROP.out.versions)
 
         GFFCOMPARE(

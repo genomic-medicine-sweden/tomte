@@ -26,12 +26,10 @@ workflow CALL_VARIANTS_GATK {
             ch_fai,
             ch_dict
         )
-        ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions.first())
 
         SAMTOOLS_INDEX(
             GATK4_SPLITNCIGARREADS.out.bam
         )
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
         ch_split_bam_bai = GATK4_SPLITNCIGARREADS.out.bam.join(SAMTOOLS_INDEX.out.bai)
         GATK4_HAPLOTYPECALLER(
@@ -42,7 +40,6 @@ workflow CALL_VARIANTS_GATK {
             [],
             [],
         )
-        ch_versions = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first())
 
         GATK4_VARIANTFILTRATION(
             GATK4_HAPLOTYPECALLER.out.vcf.join(GATK4_HAPLOTYPECALLER.out.tbi),
@@ -50,7 +47,6 @@ workflow CALL_VARIANTS_GATK {
             [ [:], ch_fai],
             [ [:], ch_dict]
         )
-        ch_versions = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first())
 
         BCFTOOLS_STATS(
             GATK4_HAPLOTYPECALLER.out.vcf.join(GATK4_HAPLOTYPECALLER.out.tbi),
@@ -58,6 +54,11 @@ workflow CALL_VARIANTS_GATK {
             [],
             [],
         )
+
+        ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions.first())
+        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_STATS.out.versions.first())
 
     emit:

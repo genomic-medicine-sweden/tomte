@@ -109,14 +109,14 @@ workflow TOMTE {
     }
 
     fasta                    = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
-    ch_vep_cache_unprocessed = params.vep_cache                 ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
-                                                                : Channel.value([[],[]])
-    ch_vep_filters           = params.vep_filters               ? Channel.fromPath(params.vep_filters).collect()
-                                                                : Channel.value([])
-    fai                      = params.fai                       ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                : Channel.empty()
-    ch_reference_count_file  = params.reference_count_file      ? Channel.fromPath(params.reference_count_file).collect()
-                                                                : Channel.empty()
+    ch_vep_cache_unprocessed = params.vep_cache             ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
+                                                            : Channel.value([[],[]])
+    ch_vep_filters           = params.vep_filters           ? Channel.fromPath(params.vep_filters).collect()
+                                                            : Channel.value([])
+    fai                      = params.fai                   ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                            : Channel.empty()
+    ch_reference_count_file  = params.reference_count_file  ? Channel.fromPath(params.reference_count_file).collect()
+                                                            : Channel.empty()
 
     PREPARE_REFERENCES(
         fasta,
@@ -130,13 +130,13 @@ workflow TOMTE {
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
 
     // Gather built indices or get them from the params
-    ch_chrom_sizes           = ch_references.chrom_sizes
-    ch_sequence_dict         = params.sequence_dict           ? Channel.fromPath(params.sequence_dict).collect()
-                                                              : ( ch_references.sequence_dict            ?: Channel.empty() )
-    ch_subsample_bed         = params.subsample_bed           ? Channel.fromPath(params.subsample_bed).collect()
-                                                              : Channel.empty()
-    ch_vep_cache             = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
-                                                                : ( params.vep_cache  ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
+    ch_chrom_sizes   = ch_references.chrom_sizes
+    ch_sequence_dict = params.sequence_dict ? Channel.fromPath(params.sequence_dict).collect()
+                                            : ( ch_references.sequence_dict ? : Channel.empty() )
+    ch_subsample_bed = params.subsample_bed ? Channel.fromPath(params.subsample_bed).collect()
+                                            : Channel.empty()
+    ch_vep_cache     = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") ) ? ch_references.vep_resources
+                                            : ( params.vep_cache ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
 
     //
     // MODULE: Run FastQC
@@ -153,7 +153,6 @@ workflow TOMTE {
         CHECK_INPUT.out.reads,
         ch_references.star_index,
         ch_references.gtf,
-        params.platform,
         params.subsample_bed,
         params.seed_frac,
         params.num_reads,
