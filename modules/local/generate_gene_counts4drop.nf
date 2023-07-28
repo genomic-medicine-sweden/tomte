@@ -2,10 +2,10 @@ process GENERATE_COUNTS_DROP {
     tag "DROP_counts"
     label 'process_low'
 
-    conda "bioconda::pydamage=0.70"
+    conda "bioconda::drop=1.3.3"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/pydamage:0.70--pyhdfd78af_0' :
-        'biocontainers/pydamage:0.70--pyhdfd78af_0' }"
+        'https://depot.galaxyproject.org/singularity/drop:1.3.3--pyhdfd78af_0' :
+        'biocontainers/drop:1.3.3--pyhdfd78af_0' }"
 
     input:
     path(counts)
