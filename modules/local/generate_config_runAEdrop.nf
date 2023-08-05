@@ -6,7 +6,7 @@ process GENERATE_CONFIG_RUN_AE_DROP {
     //container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
     //    'https://depot.galaxyproject.org/singularity/drop:1.3.3--pyhdfd78af_0' :
     //    'biocontainers/drop:1.3.3--pyhdfd78af_0' }"
-    
+
     //containerOptions {
     //    (workflow.containerEngine == 'singularity') ?
     //        "--writable" :
@@ -37,14 +37,14 @@ process GENERATE_CONFIG_RUN_AE_DROP {
     script:
     """
     TMPDIR=\$PWD
-    
+
     drop init
 
     $baseDir/bin/generate_drop_config.py \\
         --genome_fasta $fasta \\
         --gtf $gtf \\
         --output config.yaml
-    
+
     snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime
 
     cat <<-END_VERSIONS > versions.yml
@@ -58,7 +58,7 @@ process GENERATE_CONFIG_RUN_AE_DROP {
     """
     touch config.yaml
     mkdir output
-    
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         generate_drop_config: v1.0
