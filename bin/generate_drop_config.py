@@ -115,17 +115,18 @@ def read_config():
 
 def update_config(yaml_object, genome, gtf):
     gtf_name = Path(gtf).name
+    gtf_without_ext = Path(gtf).stem
     genome_name = Path(genome).name
 
     yaml_object["genome"] = genome_name
     yaml_object["root"] = "output"
     yaml_object["htmlOutputPath"] = "output/html"
     yaml_object["sampleAnnotation"] = "sample_annotation.tsv"
-    yaml_object["geneAnnotation"][gtf_name] = gtf_name
+    yaml_object["geneAnnotation"][gtf_without_ext] = gtf_name
     yaml_object["geneAnnotation"].pop("gtf", None)
 
     ## Export counts
-    yaml_object["exportCounts"]["geneAnnotations"] = [gtf_name]
+    yaml_object["exportCounts"]["geneAnnotations"] = [gtf_without_ext]
 
     ## Expression module
     yaml_object["aberrantExpression"]["groups"] = ["outrider"]

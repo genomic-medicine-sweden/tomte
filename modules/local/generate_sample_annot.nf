@@ -10,7 +10,6 @@ process GENERATE_ANNOTATION_DROP {
     input:
     path(processed_gene_counts)
     path(gtf)
-    path(reference_count_file)
 
     output:
     path('sample_annotation.tsv'), emit: sample_annotation_drop
@@ -20,14 +19,12 @@ process GENERATE_ANNOTATION_DROP {
     task.ext.when == null || task.ext.when
 
     script:
-    def ref_counts = reference_count_file ? "--ref_count_file $reference_count_file" : ""
     def gtf_name   = gtf ? gtf.getBaseName() : ""
 
     """
     generate_drop_sample_annot.py \\
         --count_file $processed_gene_counts \\
         --gtf $gtf_name \\
-        $ref_counts \\
         --output sample_annotation.tsv
 
     cat <<-END_VERSIONS > versions.yml
