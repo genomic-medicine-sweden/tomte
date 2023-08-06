@@ -15,6 +15,7 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_fasta_fai_meta    // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
         gene_counts          // channel [val(meta), path(tsv)] 
         reference_count_file // channel [ path(tsv) ]
+        drop_annot_file      // channel [ path(tsv) ]
 
     main:
         ch_versions = Channel.empty()
@@ -25,14 +26,15 @@ workflow ANALYSE_TRANSCRIPTS {
         star_samp  = gene_counts.map{ meta, cnt_file -> meta }.collect()
         DROP_COUNTS(star_count, star_samp, ch_gtf, reference_count_file)
 
-        // Annotation file
+        // Generates sample annotation file is it hasn't been provided by user
         DROP_ANNOTATION(DROP_COUNTS.out.processed_gene_counts, ch_gtf)
-       
-        // Config file
+        ch_samp_annot = drop_annot_file.mix(DROP_ANNOTATION.out.sample_annotation_drop)
+
+        // Generates  config file and runs Aberrant expression module
         DROP_CONFIG_RUN_AE(
             ch_fasta_fai_meta, 
             ch_gtf, 
-            DROP_ANNOTATION.out.sample_annotation_drop,
+            ch_samp_annot,
             DROP_COUNTS.out.processed_gene_counts
         )
 
@@ -62,7 +64,7 @@ workflow ANALYSE_TRANSCRIPTS {
         annotated_gtf         = GFFCOMPARE.out.annotated_gtf               // channel: [ val(meta), [ path(annotated_gtf) ] ]
         stats_gtf             = GFFCOMPARE.out.stats                       // channel: [ val(meta), [ path(stats) ] ]
         processed_gene_counts = DROP_COUNTS.out.processed_gene_counts      // channel: [ path(tsv) ]
-        annotation_drop       = DROP_ANNOTATION.out.sample_annotation_drop // channel: [ path(tsv) ]
+        annotation_drop       = ch_samp_annot                              // channel: [ path(tsv) ]
         config_drop           = DROP_CONFIG_RUN_AE.out.config_drop         // channel: [ path(confg_file.yml) ]
         drop_ae_out           = DROP_CONFIG_RUN_AE.out.drop_ae_out
         versions              = ch_versions                                // channel: [ path(versions.yml) ]
