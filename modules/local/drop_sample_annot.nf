@@ -1,4 +1,4 @@
-process GENERATE_ANNOTATION_DROP {
+process DROP_ANNOTATION {
     tag "DROP_annot"
     label 'process_low'
 
@@ -22,14 +22,14 @@ process GENERATE_ANNOTATION_DROP {
     def gtf_name   = gtf ? gtf.getBaseName() : ""
 
     """
-    generate_drop_sample_annot.py \\
+    drop_sample_annot.py \\
         --count_file $processed_gene_counts \\
         --gtf $gtf_name \\
         --output sample_annotation.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_drop_sample_annot: v1.0
+        drop_sample_annot: v1.0
     END_VERSIONS
     """
 
@@ -39,7 +39,7 @@ process GENERATE_ANNOTATION_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_drop_sample_annot: v1.0
+        drop_sample_annot: v1.0
     END_VERSIONS
     """
 }

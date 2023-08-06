@@ -1,5 +1,5 @@
-process GENERATE_CONFIG_RUN_AE_DROP {
-    tag "DROP_AE"
+process DROP_CONFIG_RUN_AE {
+    tag "DROP_CONFIG_RUN_AE"
     label 'process_high'
 
     //conda "bioconda::drop=1.3.3"
@@ -40,7 +40,7 @@ process GENERATE_CONFIG_RUN_AE_DROP {
 
     drop init
 
-    $baseDir/bin/generate_drop_config.py \\
+    $baseDir/bin/drop_config.py \\
         --genome_fasta $fasta \\
         --gtf $gtf \\
         --output config.yaml
@@ -49,7 +49,7 @@ process GENERATE_CONFIG_RUN_AE_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_drop_config: v1.0
+        drop_config: v1.0
         drop: v\$(echo \$(drop --version) |  sed -n 's/drop, version //p')
     END_VERSIONS
     """
@@ -61,7 +61,7 @@ process GENERATE_CONFIG_RUN_AE_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_drop_config: v1.0
+        drop_config: v1.0
         drop: v\$(echo \$(drop --version) |  sed -n 's/drop, version //p')
     END_VERSIONS
     """

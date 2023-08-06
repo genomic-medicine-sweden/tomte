@@ -1,4 +1,4 @@
-process GENERATE_COUNTS_DROP {
+process DROP_COUNTS {
     tag "DROP_counts"
     label 'process_low'
 
@@ -25,7 +25,7 @@ process GENERATE_COUNTS_DROP {
     def strandedness = samples ? "--strandedness ${samples.strandedness}" : ""
     def input_samples = samples ? "${samples.id}" : ""
     """
-    $baseDir/bin/generate_gene_counts.py \\
+    $baseDir/bin/drop_counts.py \\
         --star ${counts} \\
         --sample $input_samples \\
         $strandedness \\
@@ -35,7 +35,7 @@ process GENERATE_COUNTS_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_gene_counts: v1.0
+        drop_counts: v1.0
     END_VERSIONS
     """
 
@@ -45,7 +45,7 @@ process GENERATE_COUNTS_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_gene_counts: v1.0
+        drop_counts: v1.0
     END_VERSIONS
     """
 }
