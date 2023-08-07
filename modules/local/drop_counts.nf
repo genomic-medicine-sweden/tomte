@@ -1,11 +1,11 @@
-process GENERATE_COUNTS_DROP {
+process DROP_COUNTS {
     tag "DROP_counts"
     label 'process_low'
 
-    conda "bioconda::pydamage=0.70"
+    conda "bioconda::drop=1.3.3"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/pydamage:0.70--pyhdfd78af_0' :
-        'biocontainers/pydamage:0.70--pyhdfd78af_0' }"
+        'https://depot.galaxyproject.org/singularity/drop:1.3.3--pyhdfd78af_0' :
+        'biocontainers/drop:1.3.3--pyhdfd78af_0' }"
 
     input:
     path(counts)
@@ -25,7 +25,7 @@ process GENERATE_COUNTS_DROP {
     def strandedness = samples ? "--strandedness ${samples.strandedness}" : ""
     def input_samples = samples ? "${samples.id}" : ""
     """
-    $baseDir/bin/generate_gene_counts.py \\
+    $baseDir/bin/drop_counts.py \\
         --star ${counts} \\
         --sample $input_samples \\
         $strandedness \\
@@ -35,7 +35,7 @@ process GENERATE_COUNTS_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_gene_counts: v1.0
+        drop_counts: v1.0
     END_VERSIONS
     """
 
@@ -45,7 +45,7 @@ process GENERATE_COUNTS_DROP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_gene_counts: v1.0
+        drop_counts: v1.0
     END_VERSIONS
     """
 }

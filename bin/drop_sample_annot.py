@@ -25,9 +25,8 @@ class SampleAnnotation:
         "GENOME",
     ]
 
-    def __init__(self, cnts_file, out_file, gtf_file, ref_cnts_file=False):
+    def __init__(self, cnts_file, out_file, gtf_file):
         """Create SampleAnnotation given the parameters"""
-        self.ref_cnts_file = ref_cnts_file
         self.cnts_file = cnts_file
         self.out_file = out_file
         self.gtf_file = gtf_file
@@ -41,13 +40,6 @@ class SampleAnnotation:
         del samples[0]  # remove GeneID field
 
         sample_cnt_file = {sample: os.path.basename(self.cnts_file) for sample in samples}
-
-        if self.ref_cnts_file:
-            with open(self.ref_cnts_file) as file_object:
-                ref_samples = file_object.readline().split()[1:]
-
-            samples += ref_samples
-            sample_cnt_file.update({ref_sample: os.path.basename(self.ref_cnts_file) for ref_sample in ref_samples})
 
         return samples, sample_cnt_file
 
@@ -82,12 +74,6 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--ref_count_file",
-        type=str,
-        help="A tsv file of gene counts. Used as background",
-    )
-
-    parser.add_argument(
         "--output",
         type=str,
         help="Path to save to",
@@ -103,4 +89,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    SampleAnnotation(args.count_file, args.output, args.gtf, args.ref_count_file).write_table()
+    SampleAnnotation(args.count_file, args.output, args.gtf).write_table()

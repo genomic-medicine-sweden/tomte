@@ -262,6 +262,14 @@
                     "description": "Should DROP Aberrant Expression module be run?",
                     "fa_icon": "fas fa-toggle-off"
                 },
+                "drop_annot_file": {
+                    "type": "string",
+                    "default": "None",
+                    "description": "Path to a tsv file containing sample annotation for DROP. If it is not provided, it will be generated.",
+                    "fa_icon": "fas fa-file",
+                    "format": "file-path",
+                    "mimetype": "tsv"
+                },
                 "reference_count_file": {
                     "type": "string",
                     "default": "None",
