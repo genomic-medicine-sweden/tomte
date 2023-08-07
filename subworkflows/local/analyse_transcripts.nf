@@ -26,7 +26,7 @@ workflow ANALYSE_TRANSCRIPTS {
         star_samp  = gene_counts.map{ meta, cnt_file -> meta }.collect()
         DROP_COUNTS(star_count, star_samp, ch_gtf, reference_count_file)
 
-        // Generates sample annotation file is it hasn't been provided by user
+        // Generates sample annotation file if it hasn't been provided by user
         DROP_ANNOTATION(DROP_COUNTS.out.processed_gene_counts, ch_gtf)
         ch_samp_annot = drop_annot_file.mix(DROP_ANNOTATION.out.sample_annotation_drop)
 
