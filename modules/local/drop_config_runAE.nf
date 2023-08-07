@@ -2,17 +2,6 @@ process DROP_CONFIG_RUN_AE {
     tag "DROP_CONFIG_RUN_AE"
     label 'process_high'
 
-    //conda "bioconda::drop=1.3.3"
-    //container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-    //    'https://depot.galaxyproject.org/singularity/drop:1.3.3--pyhdfd78af_0' :
-    //    'biocontainers/drop:1.3.3--pyhdfd78af_0' }"
-
-    //containerOptions {
-    //    (workflow.containerEngine == 'singularity') ?
-    //        "--writable" :
-    //        "--privileged"
-    //    }
-
     // Exit if running this module with -profile conda / -profile mamba
     if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
         exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
