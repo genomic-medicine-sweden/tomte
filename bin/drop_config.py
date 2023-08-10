@@ -43,7 +43,7 @@ def read_config():
                 - null
         
         aberrantExpression:
-            run: true
+            run: false
             groups:
                 - outrider
             fpkmCutoff: 1
@@ -57,7 +57,7 @@ def read_config():
         aberrantSplicing:
             run: false
             groups:
-                - outrider
+                - fraser
             recount: false
             longRead: false
             keepNonStandardChrs: true
@@ -76,7 +76,7 @@ def read_config():
         mae:
             run: false
             groups:
-                - outrider
+                - mae
             gatkIgnoreHeaderCheck: true
             padjCutoff: .05
             allelicRatioCutoff: 0.8
@@ -129,13 +129,10 @@ def update_config(yaml_object, genome, gtf, drop_module):
     ## Export counts
     if drop_module == "AE":
         yaml_object["aberrantExpression"]["run"] = ["true"]
-        yaml_object["aberrantExpression"]["groups"] = ["outrider"]
     elif drop_module == "AS":
         yaml_object["aberrantSplicing"]["run"] = ["true"]
-        yaml_object["aberrantSplicing"]["groups"] = ["fraser"]
     elif drop_module == "MAE":
         yaml_object["mae"]["run"] = ["true"]
-        yaml_object["mae"]["groups"] = ["mae"]
     return yaml_object
 
 

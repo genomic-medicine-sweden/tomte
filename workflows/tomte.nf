@@ -181,7 +181,7 @@ workflow TOMTE {
 
     // Analyse transcripts
     ANALYSE_TRANSCRIPTS(
-        ch_alignment.bam,
+        ch_alignment.bam_bai,
         ch_references.gtf,
         ch_references.fasta_fai_meta,
         ch_alignment.gene_counts,

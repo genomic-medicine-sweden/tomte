@@ -5,13 +5,13 @@
  include { STRINGTIE_STRINGTIE } from '../../modules/nf-core/stringtie/stringtie/main'
  include { GFFCOMPARE          } from '../../modules/nf-core/gffcompare/main'
  include { DROP_COUNTS         } from '../../modules/local/drop_counts'
- //include { DROP_ANNOTATION     } from '../../modules/local/drop_sample_annot'
  include { DROP_SAMPLE_ANNOT   } from '../../modules/local/drop_sample_annot'
  include { DROP_CONFIG_RUN_AE  } from '../../modules/local/drop_config_runAE'
+ include { DROP_CONFIG_RUN_AS  } from '../../modules/local/drop_config_runAS'
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
-        ch_bam               // channel (mandatory): [ val(meta), [ path(bam) ] ]
+        ch_bam_bai           // channel (mandatory): [ val(meta), [ path(bam) ],[ path(bai) ] ]
         ch_gtf               // channel (mandatory): [ path(gtf) ]
         ch_fasta_fai_meta    // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
         gene_counts          // channel [val(meta), path(tsv)] 
@@ -30,7 +30,7 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_drop_counts = DROP_COUNTS.out.processed_gene_counts.collect()
         
         // Generates sample annotation
-        ch_bam_files = ch_bam.map{ meta, bam -> bam }.collect()
+        ch_bam_files = ch_bam_bai.map{ meta, bam, bai -> bam }.collect()
         DROP_SAMPLE_ANNOT(
             ch_bam_files,
             star_samp,
@@ -48,14 +48,17 @@ workflow ANALYSE_TRANSCRIPTS {
         )
         
         // Generates  config file and runs Aberrant splicing module
-        //DROP_CONFIG_RUN_AS(
-        //    ch_fasta_fai_meta, 
-        //    ch_gtf, 
-        //    DROP_SAMPLE_ANNOT.out.drop_annot,
-        //    ref_splice_folder
-        //)
+        ch_bam_bai_files = ch_bam_bai.collect()
+        DROP_CONFIG_RUN_AS(
+            ch_fasta_fai_meta, 
+            ch_gtf, 
+            DROP_SAMPLE_ANNOT.out.drop_annot,
+            ch_bam_bai_files,
+            ref_splice_folder
+        )
 
         // Stringtie
+        ch_bam = ch_bam_bai.map{ meta, bam, bai -> [meta, [bam]]}
         STRINGTIE_STRINGTIE(
             ch_bam,
             ch_gtf
@@ -71,6 +74,7 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_versions = ch_versions.mix(DROP_COUNTS.out.versions)
         ch_versions = ch_versions.mix(DROP_SAMPLE_ANNOT.out.versions)
         ch_versions = ch_versions.mix(DROP_CONFIG_RUN_AE.out.versions)
+        ch_versions = ch_versions.mix(DROP_CONFIG_RUN_AS.out.versions)
         ch_versions = ch_versions.mix(STRINGTIE_STRINGTIE.out.versions.first())
         ch_versions = ch_versions.mix(GFFCOMPARE.out.versions.first())
 
@@ -82,7 +86,9 @@ workflow ANALYSE_TRANSCRIPTS {
         stats_gtf             = GFFCOMPARE.out.stats                       // channel: [ val(meta), [ path(stats) ] ]
         processed_gene_counts = DROP_COUNTS.out.processed_gene_counts      // channel: [ path(tsv) ]
         annotation_drop       = DROP_SAMPLE_ANNOT.out.drop_annot           // channel: [ path(sample_annotation.tsv) ]
-        config_drop           = DROP_CONFIG_RUN_AE.out.config_drop         // channel: [ path(confg_file.yml) ]
+        config_drop_ae        = DROP_CONFIG_RUN_AE.out.config_drop         // channel: [ path(confg_file.yml) ]
         drop_ae_out           = DROP_CONFIG_RUN_AE.out.drop_ae_out
+        config_drop_as        = DROP_CONFIG_RUN_AS.out.config_drop         // channel: [ path(confg_file.yml) ]
+        drop_as_out           = DROP_CONFIG_RUN_AS.out.drop_ae_out
         versions              = ch_versions                                // channel: [ path(versions.yml) ]
 }

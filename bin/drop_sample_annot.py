@@ -38,27 +38,28 @@ class PtSampleAnnotation:
 
             writer.writeheader()
 
-            for index,id in enumerate(sample):
+            for index, id in enumerate(sample):
                 sa_dict = {}.fromkeys(fieldnames, "NA")
                 sa_dict["RNA_ID"] = re.sub(r"[\[\],]", "", id)
                 sa_dict["DROP_GROUP"] = "outrider,fraser"
                 sa_dict["GENE_COUNTS_FILE"] = count_file
                 sa_dict["GENE_ANNOTATION"] = Path(gtf).stem
                 sa_dict["STRAND"] = re.sub(r"[\[\],]", "", strandedness[index])
-                paired_end_func=lambda x: True if  re.sub(r"[\[\],]", "",x).lower()=="false" else False
+                paired_end_func = lambda x: True if re.sub(r"[\[\],]", "", x).lower() == "false" else False
                 sa_dict["PAIRED_END"] = paired_end_func(single_end[index])
                 sa_dict["RNA_BAM_FILE"] = bam[index]
                 writer.writerow(sa_dict)
 
+
 def final_annot(count_file, ref_annot, out_file):
-    df_pt = pd.read_csv("drop_pt_annot.tsv",sep="\t")
-    df_ref = pd.read_csv(ref_annot,sep="\t")
-    df_ref['GENE_COUNTS_FILE'] = count_file
-    df_pt['COUNT_OVERLAPS'] = df_ref['COUNT_OVERLAPS'].iloc[0]
-    df_pt['COUNT_MODE'] = df_ref['COUNT_MODE'].iloc[0]
-    df_pt['HPO_TERMS'] = df_ref['HPO_TERMS'].iloc[0]
-    df=pd.concat([df_pt, df_ref]).reset_index(drop=True)
-    df.fillna('NA', inplace=True)
+    df_pt = pd.read_csv("drop_pt_annot.tsv", sep="\t")
+    df_ref = pd.read_csv(ref_annot, sep="\t")
+    df_ref["GENE_COUNTS_FILE"] = count_file
+    df_pt["COUNT_OVERLAPS"] = df_ref["COUNT_OVERLAPS"].iloc[0]
+    df_pt["COUNT_MODE"] = df_ref["COUNT_MODE"].iloc[0]
+    df_pt["HPO_TERMS"] = df_ref["HPO_TERMS"].iloc[0]
+    df = pd.concat([df_pt, df_ref]).reset_index(drop=True)
+    df.fillna("NA", inplace=True)
     df.to_csv(out_file, index=False, sep="\t")
 
 
@@ -108,12 +109,9 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--count_file",
-        type=str,
-        help="A tsv file of gene counts for all processed samples.",
-        required=True
+        "--count_file", type=str, help="A tsv file of gene counts for all processed samples.", required=True
     )
-    
+
     parser.add_argument(
         "--ref_annot",
         type=str,
@@ -129,5 +127,7 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    PtSampleAnnotation(args.bam, args.sample, args.strandedness, args.single_end, args.gtf, args.count_file, "drop_pt_annot.tsv")
-    final_annot( args.count_file, args.ref_annot, args.output)
+    PtSampleAnnotation(
+        args.bam, args.sample, args.strandedness, args.single_end, args.gtf, args.count_file, "drop_pt_annot.tsv"
+    )
+    final_annot(args.count_file, args.ref_annot, args.output)
