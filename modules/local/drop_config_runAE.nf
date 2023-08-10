@@ -32,6 +32,7 @@ process DROP_CONFIG_RUN_AE {
     $baseDir/bin/drop_config.py \\
         --genome_fasta $fasta \\
         --gtf $gtf \\
+        --drop_module AE \\
         --output config.yaml
 
     snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime
