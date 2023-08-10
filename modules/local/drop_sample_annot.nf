@@ -25,7 +25,7 @@ process DROP_SAMPLE_ANNOT {
     def strandedness = samples ? "--strandedness ${samples.strandedness}" : ""
     def input_samples = samples ? "${samples.id}" : ""
     def single_end = samples ? "${samples.single_end}" : ""
-    
+
     """
     $baseDir/bin/drop_sample_annot.py \\
         --bam ${bam} \\

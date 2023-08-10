@@ -288,8 +288,7 @@
                     "type": "string",
                     "default": "None",
                     "description": "If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside folder must be tsv.gz",
-                    "fa_icon": "as fa-folder-open",
-                    "format": "file-path"
+                    "fa_icon": "fas fa-folder-open"
                 }
             }
         },
