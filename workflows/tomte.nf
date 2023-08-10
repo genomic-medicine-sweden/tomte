@@ -27,7 +27,8 @@ def checkPathParamList = [
     params.salmon_index,
     params.transcript_fasta,
     params.gtf,
-    params.drop_annot_file,
+    params.reference_annot_file,
+    params.reference_splice_folder,
     params.reference_count_file,
     params.subsample_bed,
     params.vep_filters,
@@ -118,7 +119,9 @@ workflow TOMTE {
                                                                 : Channel.empty()
     ch_reference_count_file  = params.reference_count_file      ? Channel.fromPath(params.reference_count_file).collect()
                                                                 : Channel.empty()
-    ch_drop_annot_filee      = params.drop_annot_file           ? Channel.fromPath(params.drop_annot_file).collect()
+    ch_ref_splice_folder     = params.reference_splice_folder   ? Channel.fromPath(params.reference_splice_folder).collect()
+                                                                : Channel.empty()
+    ch_ref_annot_file       = params.reference_annot_file       ? Channel.fromPath(params.reference_annot_file).collect()
                                                                 : Channel.empty()
 
     PREPARE_REFERENCES(
@@ -183,7 +186,8 @@ workflow TOMTE {
         ch_references.fasta_fai_meta,
         ch_alignment.gene_counts,
         ch_reference_count_file,
-        ch_drop_annot_filee
+        ch_ref_annot_file,
+        ch_ref_splice_folder
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
 
