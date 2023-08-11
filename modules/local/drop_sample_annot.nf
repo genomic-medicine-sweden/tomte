@@ -2,10 +2,12 @@ process DROP_SAMPLE_ANNOT {
     tag "DROP_sample_annot"
     label 'process_low'
 
-    conda "bioconda::drop=1.3.3"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/drop:1.3.3--pyhdfd78af_0' :
-        'biocontainers/drop:1.3.3--pyhdfd78af_0' }"
+   // Exit if running this module with -profile conda / -profile mamba
+    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
+        exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
+    }
+
+    container "docker.io/clinicalgenomics/drop:1.3.3"
 
     input:
     path(bam)
