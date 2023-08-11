@@ -11,13 +11,13 @@
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
-        ch_bam_bai           // channel (mandatory): [ val(meta), [ path(bam) ],[ path(bai) ] ]
-        ch_gtf               // channel (mandatory): [ path(gtf) ]
-        ch_fasta_fai_meta    // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
-        gene_counts          // channel [val(meta), path(tsv)] 
-        reference_count_file // channel [ path(tsv) ]
-        ref_annot_file       // channel [ path(tsv) ]
-        ref_splice_folder    // channel [ path(folder) ]
+        ch_bam_bai                // channel (mandatory): [ val(meta), [ path(bam) ],[ path(bai) ] ]
+        ch_gtf                    // channel (mandatory): [ path(gtf) ]
+        ch_fasta_fai_meta         // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
+        gene_counts               // channel [val(meta), path(tsv)] 
+        ch_ref_drop_count_file    // channel [ path(tsv) ]
+        ch_ref_drop_annot_file    // channel [ path(tsv) ]
+        ch_ref_drop_splice_folder // channel [ path(folder) ]
 
     main:
         ch_versions = Channel.empty()
@@ -26,7 +26,7 @@ workflow ANALYSE_TRANSCRIPTS {
         // Generates count files for samples and merges them with reference count file
         star_count = gene_counts.map{ meta, cnt_file -> cnt_file }.collect()
         star_samp  = gene_counts.map{ meta, cnt_file -> meta }.collect()
-        DROP_COUNTS(star_count, star_samp, ch_gtf, reference_count_file)
+        DROP_COUNTS(star_count, star_samp, ch_gtf, ch_ref_drop_count_file)
         ch_drop_counts = DROP_COUNTS.out.processed_gene_counts.collect()
         
         // Generates sample annotation
@@ -35,9 +35,9 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_bam_files,
             star_samp,
             ch_drop_counts,
-            ref_annot_file,
+            ch_ref_drop_annot_file,
             ch_gtf
-            )
+        )
 
         // Generates  config file and runs Aberrant expression module
         DROP_CONFIG_RUN_AE(
@@ -54,7 +54,7 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_gtf, 
             DROP_SAMPLE_ANNOT.out.drop_annot,
             ch_bam_bai_files,
-            ref_splice_folder
+            ch_ref_drop_splice_folder
         )
 
         // Stringtie
