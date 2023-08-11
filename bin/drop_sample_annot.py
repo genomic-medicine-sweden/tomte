@@ -9,8 +9,8 @@ import os
 import pandas as pd
 
 
-class PtSampleAnnotation:
-    """PtSampleAnnotation class"""
+class SampleAnnotation:
+    """SampleAnnotation class"""
 
     SAMPLE_ANNOTATION_COLUMNS = [
         "RNA_ID",
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    PtSampleAnnotation(
+    SampleAnnotation(
         args.bam, args.sample, args.strandedness, args.single_end, args.gtf, args.count_file, "drop_pt_annot.tsv"
     )
     final_annot(args.count_file, args.ref_annot, args.output)
