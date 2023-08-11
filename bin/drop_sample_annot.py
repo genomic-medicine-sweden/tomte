@@ -52,13 +52,15 @@ class SampleAnnotation:
 
 
 def final_annot(count_file, ref_annot, out_file):
-    df_pt = pd.read_csv("drop_pt_annot.tsv", sep="\t")
+    df_samp = pd.read_csv("drop_pt_annot.tsv", sep="\t")
     df_ref = pd.read_csv(ref_annot, sep="\t")
     df_ref["GENE_COUNTS_FILE"] = count_file
-    df_pt["COUNT_OVERLAPS"] = df_ref["COUNT_OVERLAPS"].iloc[0]
-    df_pt["COUNT_MODE"] = df_ref["COUNT_MODE"].iloc[0]
-    df_pt["HPO_TERMS"] = df_ref["HPO_TERMS"].iloc[0]
-    df = pd.concat([df_pt, df_ref]).reset_index(drop=True)
+    df_samp["COUNT_OVERLAPS"] = df_ref["COUNT_OVERLAPS"].iloc[0]
+    df_samp["COUNT_MODE"] = df_ref["COUNT_MODE"].iloc[0]
+    df_samp["HPO_TERMS"] = df_ref["HPO_TERMS"].iloc[0]
+    for id in df_samp["RNA_ID"]:
+        df_ref = df_ref[df_ref["RNA_ID"].str.contains(id) == False]
+    df = pd.concat([df_samp, df_ref]).reset_index(drop=True)
     df.fillna("NA", inplace=True)
     df.to_csv(out_file, index=False, sep="\t")
 
