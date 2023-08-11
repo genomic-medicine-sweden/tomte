@@ -2,7 +2,7 @@ process DROP_SAMPLE_ANNOT {
     tag "DROP_sample_annot"
     label 'process_low'
 
-   // Exit if running this module with -profile conda / -profile mamba
+    // Exit if running this module with -profile conda / -profile mamba
     if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
         exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
     }
