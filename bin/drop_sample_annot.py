@@ -33,7 +33,6 @@ class SampleAnnotation:
         """Write the Sample Annotation tsv file"""
         with open(out_file, "w") as tsv_file:
             fieldnames = self.SAMPLE_ANNOTATION_COLUMNS
-            # sample_ids, sample_cnt_file = self.parse_header()
             writer = csv.DictWriter(tsv_file, fieldnames=fieldnames, delimiter="\t")
 
             writer.writeheader()
