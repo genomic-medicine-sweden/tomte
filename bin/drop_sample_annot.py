@@ -53,7 +53,7 @@ class SampleAnnotation:
 def final_annot(count_file: Path, ref_annot: Path, out_file: Path):
     """Concatinates the Sample Annotation produced by SampleAnnotation with the one
     provided for the reference samples, checking for duplicate sample IDs"""
-    df_samples = pd.read_csv("drop_pt_annot.tsv", sep="\t")
+    df_samples = pd.read_csv("drop_annotation_given_samples.tsv", sep="\t")
     df_reference = pd.read_csv(ref_annot, sep="\t")
     df_reference["GENE_COUNTS_FILE"] = count_file
     df_samples["COUNT_OVERLAPS"] = df_reference["COUNT_OVERLAPS"].iloc[0]
@@ -131,6 +131,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     SampleAnnotation(
-        args.bam, args.sample, args.strandedness, args.single_end, args.gtf, args.count_file, "drop_pt_annot.tsv"
+        args.bam, args.sample, args.strandedness, args.single_end, args.gtf, args.count_file, "drop_annotation_given_samples.tsv"
     )
     final_annot(args.count_file, args.ref_annot, args.output)
