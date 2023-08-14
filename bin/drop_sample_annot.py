@@ -53,15 +53,15 @@ class SampleAnnotation:
 def final_annot(count_file: Path, ref_annot: Path, out_file: Path):
     """Concatinates the Sample Annotation produced by SampleAnnotation with the one
     provided for the reference samples, checking for duplicate sample IDs"""
-    df_samp = pd.read_csv("drop_pt_annot.tsv", sep="\t")
-    df_ref = pd.read_csv(ref_annot, sep="\t")
-    df_ref["GENE_COUNTS_FILE"] = count_file
-    df_samp["COUNT_OVERLAPS"] = df_ref["COUNT_OVERLAPS"].iloc[0]
-    df_samp["COUNT_MODE"] = df_ref["COUNT_MODE"].iloc[0]
-    df_samp["HPO_TERMS"] = df_ref["HPO_TERMS"].iloc[0]
-    for id in df_samp["RNA_ID"]:
-        df_ref = df_ref[df_ref["RNA_ID"].str.contains(id) == False]
-    df = pd.concat([df_samp, df_ref]).reset_index(drop=True)
+    df_samples = pd.read_csv("drop_pt_annot.tsv", sep="\t")
+    df_reference = pd.read_csv(ref_annot, sep="\t")
+    df_reference["GENE_COUNTS_FILE"] = count_file
+    df_samples["COUNT_OVERLAPS"] = df_reference["COUNT_OVERLAPS"].iloc[0]
+    df_samples["COUNT_MODE"] = df_reference["COUNT_MODE"].iloc[0]
+    df_samples["HPO_TERMS"] = df_reference["HPO_TERMS"].iloc[0]
+    for id in df_samples["RNA_ID"]:
+        df_reference = df_reference[df_reference["RNA_ID"].str.contains(id) == False]
+    df = pd.concat([df_samples, df_reference]).reset_index(drop=True)
     df.fillna("NA", inplace=True)
     df.to_csv(out_file, index=False, sep="\t")
 
