@@ -51,7 +51,9 @@ class SampleAnnotation:
                 writer.writerow(sa_dict)
 
 
-def final_annot(count_file, ref_annot, out_file):
+def final_annot(count_file: Path, ref_annot: Path, out_file: Path):
+    """Concatinates the Sample Annotation produced by SampleAnnotation with the one
+    provided for the reference samples, checking for duplicate sample IDs"""
     df_samp = pd.read_csv("drop_pt_annot.tsv", sep="\t")
     df_ref = pd.read_csv(ref_annot, sep="\t")
     df_ref["GENE_COUNTS_FILE"] = count_file
