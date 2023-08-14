@@ -25,15 +25,15 @@ workflow ANALYSE_TRANSCRIPTS {
         // DROP
         // Generates count files for samples and merges them with reference count file
         star_count = gene_counts.map{ meta, cnt_file -> cnt_file }.collect()
-        star_samp  = gene_counts.map{ meta, cnt_file -> meta }.collect()
-        DROP_COUNTS(star_count, star_samp, ch_gtf, ch_ref_drop_count_file)
+        star_samples  = gene_counts.map{ meta, cnt_file -> meta }.collect()
+        DROP_COUNTS(star_count, star_samples, ch_gtf, ch_ref_drop_count_file)
         ch_drop_counts = DROP_COUNTS.out.processed_gene_counts.collect()
         
         // Generates sample annotation
         ch_bam_files = ch_bam_bai.map{ meta, bam, bai -> bam }.collect()
         DROP_SAMPLE_ANNOT(
             ch_bam_files,
-            star_samp,
+            star_samples,
             ch_drop_counts,
             ch_ref_drop_annot_file,
             ch_gtf
