@@ -1,5 +1,5 @@
-process DROP_CONFIG_RUN_AE {
-    tag "DROP_CONFIG_RUN_AE"
+process DROP_CONFIG_RUN_AS {
+    tag "DROP_CONFIG_RUN_AS"
     label 'process_high'
 
     // Exit if running this module with -profile conda / -profile mamba
@@ -13,7 +13,8 @@ process DROP_CONFIG_RUN_AE {
     tuple val(meta), path(fasta), path(fai)
     path gtf
     path sample_annotation
-    path gene_counts
+    tuple val(meta), path(bam), path(bai)
+    path ref_splice_folder
 
     output:
     path('config.yaml'), emit: config_drop
@@ -32,10 +33,10 @@ process DROP_CONFIG_RUN_AE {
     $baseDir/bin/drop_config.py \\
         --genome_fasta $fasta \\
         --gtf $gtf \\
-        --drop_module AE \\
+        --drop_module AS \\
         --output config.yaml
 
-    snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime
+    snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -27,8 +27,9 @@ def checkPathParamList = [
     params.salmon_index,
     params.transcript_fasta,
     params.gtf,
-    params.drop_annot_file,
-    params.reference_count_file,
+    params.reference_drop_annot_file,
+    params.reference_drop_splice_folder,
+    params.reference_drop_count_file,
     params.subsample_bed,
     params.vep_filters,
     params.vep_cache
@@ -109,17 +110,19 @@ workflow TOMTE {
         exit 1, 'Input samplesheet not specified!'
     }
 
-    fasta                    = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
-    ch_vep_cache_unprocessed = params.vep_cache                 ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
-                                                                : Channel.value([[],[]])
-    ch_vep_filters           = params.vep_filters               ? Channel.fromPath(params.vep_filters).collect()
-                                                                : Channel.value([])
-    fai                      = params.fai                       ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                : Channel.empty()
-    ch_reference_count_file  = params.reference_count_file      ? Channel.fromPath(params.reference_count_file).collect()
-                                                                : Channel.empty()
-    ch_drop_annot_filee      = params.drop_annot_file           ? Channel.fromPath(params.drop_annot_file).collect()
-                                                                : Channel.empty()
+    fasta                     = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
+    ch_vep_cache_unprocessed  = params.vep_cache                    ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
+                                                                    : Channel.value([[],[]])
+    ch_vep_filters            = params.vep_filters                  ? Channel.fromPath(params.vep_filters).collect()
+                                                                    : Channel.value([])
+    fai                       = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                    : Channel.empty()
+    ch_ref_drop_count_file    = params.reference_drop_count_file    ? Channel.fromPath(params.reference_drop_count_file).collect()
+                                                                    : Channel.empty()
+    ch_ref_drop_splice_folder = params.reference_drop_splice_folder ? Channel.fromPath(params.reference_drop_splice_folder).collect()
+                                                                    : Channel.empty()
+    ch_ref_drop_annot_file    = params.reference_drop_annot_file    ? Channel.fromPath(params.reference_drop_annot_file).collect()
+                                                                    : Channel.empty()
 
     PREPARE_REFERENCES(
         fasta,
@@ -178,12 +181,13 @@ workflow TOMTE {
 
     // Analyse transcripts
     ANALYSE_TRANSCRIPTS(
-        ch_alignment.bam,
+        ch_alignment.bam_bai,
         ch_references.gtf,
         ch_references.fasta_fai_meta,
         ch_alignment.gene_counts,
-        ch_reference_count_file,
-        ch_drop_annot_filee
+        ch_ref_drop_count_file,
+        ch_ref_drop_annot_file,
+        ch_ref_drop_splice_folder
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
 

@@ -262,21 +262,33 @@
                     "description": "Should DROP Aberrant Expression module be run?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "drop_annot_file": {
+                "run_drop_as": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should DROP Aberrant Splicing module be run?",
+                    "fa_icon": "fas fa-toggle-off"
+                },
+                "reference_drop_annot_file": {
                     "type": "string",
                     "default": "None",
-                    "description": "Path to a tsv file containing sample annotation for DROP. If it is not provided, it will be generated.",
+                    "description": "Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP.",
                     "fa_icon": "fas fa-file",
                     "format": "file-path",
                     "mimetype": "tsv"
                 },
-                "reference_count_file": {
+                "reference_drop_count_file": {
                     "type": "string",
                     "default": "None",
-                    "description": "If you are running  DROP Aberrant Expression, provide the path to a tsv with counts from at least 50 samples to use as controls",
+                    "description": "If you are running DROP Aberrant Expression, provide the path to a tsv with counts from at least 50 samples to use as controls",
                     "fa_icon": "fas fa-file",
                     "format": "file-path",
                     "mimetype": "tsv"
+                },
+                "reference_drop_splice_folder": {
+                    "type": "string",
+                    "default": "None",
+                    "description": "If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside folder must be tsv.gz",
+                    "fa_icon": "fas fa-folder-open"
                 }
             }
         },
