@@ -24,17 +24,13 @@ process DROP_SAMPLE_ANNOT {
     task.ext.when == null || task.ext.when
 
     script:
-    def strandedness = "${samples.strandedness}"
-    def input_samples = "${samples.id}"
-    def single_end = "${samples.single_end}"
-
     """
     $baseDir/bin/drop_sample_annot.py \\
         --bam ${bam} \\
-        --sample $input_samples \\
-        --strandedness $strandedness \\
-        --single_end $single_end \\
-        --gtf $gtf \\
+        --sample ${samples.id} \\
+        --strandedness ${samples.strandedness} \\
+        --single_end ${samples.single_end} \\
+        --gtf ${gtf} \\
         --count_file ${processed_gene_counts} \\
         --ref_annot ${ref_annot} \\
         --output sample_annotation.tsv
