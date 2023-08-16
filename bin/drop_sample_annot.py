@@ -51,7 +51,7 @@ class SampleAnnotation:
 
 
 def final_annot(count_file: Path, ref_annot: Path, out_file: Path):
-    """Concatinates the Sample Annotation produced by SampleAnnotation with the one
+    """Concatenates the Sample Annotation produced by SampleAnnotation with the one
     provided for the reference samples, checking for duplicate sample IDs"""
     df_samples = pd.read_csv("drop_annotation_given_samples.tsv", sep="\t")
     df_reference = pd.read_csv(ref_annot, sep="\t")
