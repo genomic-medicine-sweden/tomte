@@ -39,12 +39,12 @@ class SampleAnnotation:
 
             for index, id in enumerate(sample):
                 sa_dict = {}.fromkeys(fieldnames, "NA")
-                sa_dict["RNA_ID"] = id.strip("[],")
+                sa_dict["RNA_ID"] = id
                 sa_dict["DROP_GROUP"] = "outrider,fraser"
                 sa_dict["GENE_COUNTS_FILE"] = count_file
                 sa_dict["GENE_ANNOTATION"] = Path(gtf).stem
-                sa_dict["STRAND"] = strandedness[index].strip("[],")
-                paired_end_func = lambda x: True if x.strip("[],").lower() == "false" else False
+                sa_dict["STRAND"] = strandedness[index]
+                paired_end_func = lambda x: True if x.lower() == "false" else False
                 sa_dict["PAIRED_END"] = paired_end_func(single_end[index])
                 sa_dict["RNA_BAM_FILE"] = bam[index]
                 writer.writerow(sa_dict)

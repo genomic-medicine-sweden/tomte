@@ -24,12 +24,15 @@ process DROP_SAMPLE_ANNOT {
     task.ext.when == null || task.ext.when
 
     script:
+    def ids = "${samples.id}".replace("[","").replace("]","").replace(",","")
+    def strandedness = "${samples.strandedness}".replace("[","").replace("]","").replace(",","")
+    def single_end = "${samples.single_end}".replace("[","").replace("]","").replace(",","")    
     """
     $baseDir/bin/drop_sample_annot.py \\
         --bam ${bam} \\
-        --sample ${samples.id} \\
-        --strandedness ${samples.strandedness} \\
-        --single_end ${samples.single_end} \\
+        --sample $ids \\
+        --strandedness $strandedness \\
+        --single_end $single_end \\
         --gtf ${gtf} \\
         --count_file ${processed_gene_counts} \\
         --ref_annot ${ref_annot} \\
