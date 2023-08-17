@@ -102,18 +102,16 @@ def transform_to_table(gene_ids_dict: dict, outfile: Path, genes_to_exlude: set[
     final_table = None
 
     if ref_count_file:
-        ref_table = pd.read_csv(
-            ref_count_file,
-            sep="\t",
-            header=0,
-            index_col=0,
-        )
+        if (ref_count_file.endswith('.gz')):
+            ref_table=pd.read_csv(ref_count_file, compression="gzip", sep="\t",header=0,index_col=0)
+        else:
+            ref_table = pd.read_csv(ref_count_file,sep="\t",header=0,index_col=0)
         final_table = count_table.combine_first(ref_table)
     else:
         final_table = count_table
 
     final_table.drop(genes_to_exclude, inplace=True)
-    final_table.to_csv(outfile, sep="\t", header=True)
+    final_table.to_csv(outfile, compression='gzip', sep="\t", header=True)
 
 
 if __name__ == "__main__":

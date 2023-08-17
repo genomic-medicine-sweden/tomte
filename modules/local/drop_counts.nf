@@ -16,7 +16,7 @@ process DROP_COUNTS {
     path(reference_count_file)
 
     output:
-    path('processed_geneCounts.tsv'), emit: processed_gene_counts
+    path('processed_geneCounts.tsv.gz'), emit: processed_gene_counts
     path "versions.yml"             , emit: versions
 
     when:
@@ -31,7 +31,7 @@ process DROP_COUNTS {
         --sample $ids \\
         --strandedness $strandedness \\
         --ref_count_file ${reference_count_file} \\
-        --output processed_geneCounts.tsv \\
+        --output processed_geneCounts.tsv.gz \\
         --gtf ${gtf} \\
 
     cat <<-END_VERSIONS > versions.yml
@@ -42,7 +42,7 @@ process DROP_COUNTS {
 
     stub:
     """
-    touch processed_geneCounts.tsv
+    touch processed_geneCounts.tsv.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

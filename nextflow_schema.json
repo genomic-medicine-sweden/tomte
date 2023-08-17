@@ -279,7 +279,7 @@
                 "reference_drop_count_file": {
                     "type": "string",
                     "default": "None",
-                    "description": "If you are running DROP Aberrant Expression, provide the path to a tsv with counts from at least 50 samples to use as controls",
+                    "description": "If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to use as controls",
                     "fa_icon": "fas fa-file",
                     "format": "file-path",
                     "mimetype": "tsv"
