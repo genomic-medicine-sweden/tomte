@@ -26,7 +26,7 @@ process DROP_SAMPLE_ANNOT {
     script:
     def ids = "${samples.id}".replace("[","").replace("]","").replace(",","")
     def strandedness = "${samples.strandedness}".replace("[","").replace("]","").replace(",","")
-    def single_end = "${samples.single_end}".replace("[","").replace("]","").replace(",","")    
+    def single_end = "${samples.single_end}".replace("[","").replace("]","").replace(",","")
     """
     $baseDir/bin/drop_sample_annot.py \\
         --bam ${bam} \\

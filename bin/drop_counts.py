@@ -102,16 +102,16 @@ def transform_to_table(gene_ids_dict: dict, outfile: Path, genes_to_exlude: set[
     final_table = None
 
     if ref_count_file:
-        if (ref_count_file.endswith('.gz')):
-            ref_table=pd.read_csv(ref_count_file, compression="gzip", sep="\t",header=0,index_col=0)
+        if ref_count_file.endswith(".gz"):
+            ref_table = pd.read_csv(ref_count_file, compression="gzip", sep="\t", header=0, index_col=0)
         else:
-            ref_table = pd.read_csv(ref_count_file,sep="\t",header=0,index_col=0)
+            ref_table = pd.read_csv(ref_count_file, sep="\t", header=0, index_col=0)
         final_table = count_table.combine_first(ref_table)
     else:
         final_table = count_table
 
     final_table.drop(genes_to_exclude, inplace=True)
-    final_table.to_csv(outfile, compression='gzip', sep="\t", header=True)
+    final_table.to_csv(outfile, compression="gzip", sep="\t", header=True)
 
 
 if __name__ == "__main__":
@@ -130,9 +130,7 @@ if __name__ == "__main__":
     master_dict = {}
     for index, sample_id in enumerate(args.sample):
         master_dict.update(
-            read_star_gene_cnts(
-                sample=sample_id, star=args.star[index], strandedness=args.strandedness[index]
-            )
+            read_star_gene_cnts(sample=sample_id, star=args.star[index], strandedness=args.strandedness[index])
         )
 
     genes_to_exclude = get_non_std_genes(args.gtf)

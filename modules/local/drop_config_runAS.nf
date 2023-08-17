@@ -37,7 +37,7 @@ process DROP_CONFIG_RUN_AS {
         --gtf ${gtf}\\
         --drop_module AS \\
         --genome_assembly $genome_assembly \\
-        --output config.yaml 
+        --output config.yaml
 
     snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime
 

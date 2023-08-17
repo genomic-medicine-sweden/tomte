@@ -165,7 +165,7 @@ if __name__ == "__main__":
         type=str,
         help="Specify output file",
     )
-    
+
     parser.add_argument(
         "--genome_assembly",
         type=str,
@@ -182,6 +182,10 @@ if __name__ == "__main__":
 
     yaml_object = read_config()
     master_config = update_config(
-        yaml_object=yaml_object, genome=args.genome_fasta, gtf=args.gtf, genome_assembly=args.genome_assembly, drop_module=args.drop_module
+        yaml_object=yaml_object,
+        genome=args.genome_fasta,
+        gtf=args.gtf,
+        genome_assembly=args.genome_assembly,
+        drop_module=args.drop_module,
     )
     write_yaml(out_path=args.output, yaml_object=master_config)
