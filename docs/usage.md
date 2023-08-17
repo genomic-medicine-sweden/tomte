@@ -56,7 +56,7 @@ An [example samplesheet](../assets/samplesheet.csv) has been provided with the p
 
 ## Preparing input for DROP
 
-If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference coutns, splice counts and a sample sheet. The sample sheet should contain the following column: (see details here),  you do not need to include the samples you are runnining through the pipeline in the sample sheet.  
+If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference coutns, splice counts and a sample sheet. The sample sheet should contain the columns as those in the [test sample annotation](../test_data/drop_data/sampleAnnotation.tsv), you do not need to include the samples you are runnining through the pipeline in the sample sheet.  
 
 To obtain the gene counts and splice counts you will have to download the counts from one of the [available databases](https://github.com/gagneurlab/drop#datasets) or run drop locally with your own samples. If you choose the second option, you should start by runnig the module(s) you want to export counts for. Afterwards, you need to run the exportCounts module. Make sure that your config has only the modules you want to export and have already run as <run: true> , that only existing groups are mentioned in the config, and that exportCounts excludGroups is null or contains a group of samples you want to exclude. Finally, run:
 
