@@ -22,7 +22,7 @@ def read_config():
             # <annotation_name> : <path to gencode v29 annotation>
             # v37:  /path/to/gencode29.gtf.gz # example
 
-        genomeAssembly: hg19  # either hg19/hs37d5 or hg38/GRCh38
+        genomeAssembly: genome  # either hg19/hs37d5 or hg38/GRCh38
         exportCounts:
             # specify which gene annotations to include and which
             # groups to exclude when exporting counts
@@ -113,7 +113,7 @@ def read_config():
     )
 
 
-def update_config(yaml_object, genome, gtf, drop_module):
+def update_config(yaml_object, genome, gtf, genome_assembly, drop_module):
     gtf_name = Path(gtf).name
     gtf_without_ext = Path(gtf).stem
     genome_name = Path(genome).name
@@ -125,6 +125,7 @@ def update_config(yaml_object, genome, gtf, drop_module):
     yaml_object["geneAnnotation"][gtf_without_ext] = gtf_name
     yaml_object["geneAnnotation"].pop("gtf", None)
     yaml_object["exportCounts"]["geneAnnotations"] = [gtf_without_ext]
+    yaml_object["genomeAssembly"] = genome_assembly
 
     ## Export counts
     if drop_module == "AE":
@@ -164,6 +165,12 @@ if __name__ == "__main__":
         type=str,
         help="Specify output file",
     )
+    
+    parser.add_argument(
+        "--genome_assembly",
+        type=str,
+        help="Specify genome for drop can be either hg19/hs37d5 or hg38/GRCh38",
+    )
 
     parser.add_argument(
         "--drop_module",
@@ -175,6 +182,6 @@ if __name__ == "__main__":
 
     yaml_object = read_config()
     master_config = update_config(
-        yaml_object=yaml_object, genome=args.genome_fasta, gtf=args.gtf, drop_module=args.drop_module
+        yaml_object=yaml_object, genome=args.genome_fasta, gtf=args.gtf, genome_assembly=args.genome_assembly, drop_module=args.drop_module
     )
     write_yaml(out_path=args.output, yaml_object=master_config)

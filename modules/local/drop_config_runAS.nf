@@ -15,6 +15,7 @@ process DROP_CONFIG_RUN_AS {
     path sample_annotation
     tuple val(meta), path(bam), path(bai)
     path ref_splice_folder
+    val(genome)
 
     output:
     path('config.yaml'), emit: config_drop
@@ -25,16 +26,18 @@ process DROP_CONFIG_RUN_AS {
     task.ext.when == null || task.ext.when
 
     script:
+    def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
     """
     TMPDIR=\$PWD
 
     drop init
 
     $baseDir/bin/drop_config.py \\
-        --genome_fasta $fasta \\
-        --gtf $gtf \\
+        --genome_fasta ${fasta} \\
+        --gtf ${gtf}\\
         --drop_module AS \\
-        --output config.yaml
+        --genome_assembly $genome_assembly \\
+        --output config.yaml 
 
     snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime
 
