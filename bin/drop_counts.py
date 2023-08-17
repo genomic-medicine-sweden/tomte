@@ -131,10 +131,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     master_dict = {}
     for index, sample_id in enumerate(args.sample):
-        sample_id = re.sub(r"[\[\],]", "", sample_id)
         master_dict.update(
             read_star_gene_cnts(
-                sample=sample_id, star=args.star[index], strandedness=re.sub(r"[\[\],]", "", args.strandedness[index])
+                sample=sample_id, star=args.star[index], strandedness=args.strandedness[index]
             )
         )
 
