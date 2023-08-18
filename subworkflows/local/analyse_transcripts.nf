@@ -18,6 +18,7 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_ref_drop_count_file    // channel [ path(tsv) ]
         ch_ref_drop_annot_file    // channel [ path(tsv) ]
         ch_ref_drop_splice_folder // channel [ path(folder) ]
+        genome                    // channel [val(genome)]  
 
     main:
         ch_versions = Channel.empty()
@@ -26,7 +27,12 @@ workflow ANALYSE_TRANSCRIPTS {
         // Generates count files for samples and merges them with reference count file
         star_count = gene_counts.map{ meta, cnt_file -> cnt_file }.collect()
         star_samples  = gene_counts.map{ meta, cnt_file -> meta }.collect()
-        DROP_COUNTS(star_count, star_samples, ch_gtf, ch_ref_drop_count_file)
+        DROP_COUNTS(
+            star_count,
+            star_samples,
+            ch_gtf,
+            ch_ref_drop_count_file
+        )
         ch_drop_counts = DROP_COUNTS.out.processed_gene_counts.collect()
         
         // Generates sample annotation
@@ -44,7 +50,8 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_fasta_fai_meta, 
             ch_gtf, 
             DROP_SAMPLE_ANNOT.out.drop_annot,
-            ch_drop_counts
+            ch_drop_counts,
+            genome
         )
         
         // Generates  config file and runs Aberrant splicing module
@@ -54,7 +61,8 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_gtf, 
             DROP_SAMPLE_ANNOT.out.drop_annot,
             ch_bam_bai_files,
-            ch_ref_drop_splice_folder
+            ch_ref_drop_splice_folder,
+            genome
         )
 
         // Stringtie

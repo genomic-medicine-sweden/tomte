@@ -14,6 +14,7 @@ process DROP_CONFIG_RUN_AE {
     path gtf
     path sample_annotation
     path gene_counts
+    val(genome)
 
     output:
     path('config.yaml'), emit: config_drop
@@ -24,15 +25,17 @@ process DROP_CONFIG_RUN_AE {
     task.ext.when == null || task.ext.when
 
     script:
+    def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
     """
     TMPDIR=\$PWD
 
     drop init
 
     $baseDir/bin/drop_config.py \\
-        --genome_fasta $fasta \\
-        --gtf $gtf \\
+        --genome_fasta ${fasta} \\
+        --gtf ${gtf} \\
         --drop_module AE \\
+        --genome_assembly $genome_assembly \\
         --output config.yaml
 
     snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime

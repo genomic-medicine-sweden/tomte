@@ -55,8 +55,9 @@
             "properties": {
                 "genome": {
                     "type": "string",
-                    "description": "Name of iGenomes reference.",
+                    "description": "Name of iGenomes reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive.",
                     "fa_icon": "fas fa-book",
+                    "enum": ["hg19", "GRCh37", "hg38", "GRCh38"],
                     "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
                 },
                 "fasta": {
@@ -279,7 +280,7 @@
                 "reference_drop_count_file": {
                     "type": "string",
                     "default": "None",
-                    "description": "If you are running DROP Aberrant Expression, provide the path to a tsv with counts from at least 50 samples to use as controls",
+                    "description": "If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to use as controls",
                     "fa_icon": "fas fa-file",
                     "format": "file-path",
                     "mimetype": "tsv"

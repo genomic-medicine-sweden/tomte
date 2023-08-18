@@ -2,10 +2,12 @@ process DROP_COUNTS {
     tag "DROP_counts"
     label 'process_low'
 
-    conda "bioconda::drop=1.3.3"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/drop:1.3.3--pyhdfd78af_0' :
-        'biocontainers/drop:1.3.3--pyhdfd78af_0' }"
+    // Exit if running this module with -profile conda / -profile mamba
+    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
+        exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
+    }
+
+    container "docker.io/clinicalgenomics/drop:1.3.3"
 
     input:
     path(counts)
@@ -14,24 +16,23 @@ process DROP_COUNTS {
     path(reference_count_file)
 
     output:
-    path('processed_geneCounts.tsv'), emit: processed_gene_counts
+    path('processed_geneCounts.tsv.gz'), emit: processed_gene_counts
     path "versions.yml"             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def ref_counts = reference_count_file ? "--ref_count_file $reference_count_file" : ""
-    def strandedness = samples ? "--strandedness ${samples.strandedness}" : ""
-    def input_samples = samples ? "${samples.id}" : ""
+    def ids = "${samples.id}".replace("[","").replace("]","").replace(",","")
+    def strandedness = "${samples.strandedness}".replace("[","").replace("]","").replace(",","")
     """
     $baseDir/bin/drop_counts.py \\
         --star ${counts} \\
-        --sample $input_samples \\
-        $strandedness \\
-        $ref_counts \\
-        --output processed_geneCounts.tsv \\
-        --gtf $gtf \\
+        --sample $ids \\
+        --strandedness $strandedness \\
+        --ref_count_file ${reference_count_file} \\
+        --output processed_geneCounts.tsv.gz \\
+        --gtf ${gtf} \\
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -41,7 +42,7 @@ process DROP_COUNTS {
 
     stub:
     """
-    touch processed_geneCounts.tsv
+    touch processed_geneCounts.tsv.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
