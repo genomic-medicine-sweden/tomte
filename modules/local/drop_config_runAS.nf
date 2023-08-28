@@ -13,7 +13,7 @@ process DROP_CONFIG_RUN_AS {
     tuple val(meta), path(fasta), path(fai)
     path gtf
     path sample_annotation
-    tuple val(meta), path(bam), path(bai)
+    tuple path(bam), path(bai)
     path ref_splice_folder
     val(genome)
 

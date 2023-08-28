@@ -36,7 +36,7 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_drop_counts = DROP_COUNTS.out.processed_gene_counts.collect()
         
         // Generates sample annotation
-        ch_bam_files = ch_bam_bai.map{ meta, bam, bai -> bam }.collect()
+        ch_bam_files = ch_bam_bai.collect{it[1]}
         DROP_SAMPLE_ANNOT(
             ch_bam_files,
             star_samples,
@@ -55,7 +55,10 @@ workflow ANALYSE_TRANSCRIPTS {
         )
         
         // Generates  config file and runs Aberrant splicing module
-        ch_bam_bai_files = ch_bam_bai.collect()
+        //ch_bam_bai_files = ch_bam_bai.collect()
+        //ch_bam_f = 
+        ch_bai_files = ch_bam_bai.collect{it[2]}.toList()
+        ch_bam_bai_files=ch_bam_files.toList().combine(ch_bai_files)
         DROP_CONFIG_RUN_AS(
             ch_fasta_fai_meta, 
             ch_gtf, 
