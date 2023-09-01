@@ -269,6 +269,24 @@
                     "description": "Should DROP Aberrant Splicing module be run?",
                     "fa_icon": "fas fa-toggle-off"
                 },
+                "drop_padjcutoff_ae": {
+                    "type": "number",
+                    "default": 0.05,
+                    "description": "Adjusted p-value cut-off for DROP Aberrant Expression module",
+                    "fa_icon": "fas fa-less-than-equal"
+                },
+                "drop_padjcutoff_as": {
+                    "type": "number",
+                    "default": 0.1,
+                    "description": "Adjusted p-value cut-off for DROP Aberrant Splicing module",
+                    "fa_icon": "fas fa-less-than-equal"
+                },
+                "drop_zscorecutoff": {
+                    "type": "number",
+                    "default": 0,
+                    "description": "Z-score cut-off for DROP Aberrant Expression module",
+                    "fa_icon": "fas fa-greater-than-equal"
+                },
                 "reference_drop_annot_file": {
                     "type": "string",
                     "default": "None",

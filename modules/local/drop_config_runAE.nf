@@ -15,6 +15,8 @@ process DROP_CONFIG_RUN_AE {
     path sample_annotation
     path gene_counts
     val(genome)
+    val(drop_padjcutoff_ae)
+    val(drop_zScoreCutoff)
 
     output:
     path('config.yaml'), emit: config_drop
@@ -36,6 +38,8 @@ process DROP_CONFIG_RUN_AE {
         --gtf ${gtf} \\
         --drop_module AE \\
         --genome_assembly $genome_assembly \\
+        --padjcutoff ${drop_padjcutoff_ae} \\
+        --zscorecutoff ${drop_zScoreCutoff} \\
         --output config.yaml
 
     snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime

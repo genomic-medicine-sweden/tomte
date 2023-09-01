@@ -113,7 +113,7 @@ def read_config():
     )
 
 
-def update_config(yaml_object, genome, gtf, genome_assembly, drop_module):
+def update_config(yaml_object, genome, gtf, genome_assembly, padjcutoff, zscorecutoff, drop_module):
     gtf_name = Path(gtf).name
     gtf_without_ext = Path(gtf).stem
     genome_name = Path(genome).name
@@ -130,8 +130,11 @@ def update_config(yaml_object, genome, gtf, genome_assembly, drop_module):
     ## Export counts
     if drop_module == "AE":
         yaml_object["aberrantExpression"]["run"] = ["true"]
+        yaml_object["aberrantExpression"]["padjCutoff"] = padjcutoff
+        yaml_object["aberrantExpression"]["zScoreCutoff"] = zscorecutoff
     elif drop_module == "AS":
         yaml_object["aberrantSplicing"]["run"] = ["true"]
+        yaml_object["aberrantSplicing"]["padjCutoff"] = padjcutoff
     elif drop_module == "MAE":
         yaml_object["mae"]["run"] = ["true"]
     return yaml_object
@@ -173,6 +176,19 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
+        "--padjcutoff",
+        type=float,
+        help="Specify adjusted p-value cut-off",
+    )
+
+    parser.add_argument(
+        "--zscorecutoff",
+        default=0,
+        type=float,
+        help="Specify z-score cut-off, this is an optional value",
+    )
+
+    parser.add_argument(
         "--drop_module",
         type=str,
         help="Specify module to run: AE, AS or MAE",
@@ -186,6 +202,8 @@ if __name__ == "__main__":
         genome=args.genome_fasta,
         gtf=args.gtf,
         genome_assembly=args.genome_assembly,
+        padjcutoff=args.padjcutoff,
+        zscorecutoff=args.zscorecutoff,
         drop_module=args.drop_module,
     )
     write_yaml(out_path=args.output, yaml_object=master_config)

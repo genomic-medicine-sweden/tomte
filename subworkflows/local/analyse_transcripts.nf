@@ -18,7 +18,10 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_ref_drop_count_file    // channel [ path(tsv) ]
         ch_ref_drop_annot_file    // channel [ path(tsv) ]
         ch_ref_drop_splice_folder // channel [ path(folder) ]
-        genome                    // channel [val(genome)]  
+        genome                    // channel [val(genome)]
+        drop_padjcutoff_ae        // channel [val(drop_padjcutoff_ae)]
+        drop_padjcutoff_as        // channel [val(drop_padjcutoff_as)]
+        drop_zscorecutoff         // channel [val(drop_zscorecutoff)]
 
     main:
         ch_versions = Channel.empty()
@@ -51,7 +54,9 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_gtf, 
             DROP_SAMPLE_ANNOT.out.drop_annot,
             ch_drop_counts,
-            genome
+            genome,
+            drop_padjcutoff_ae,
+            drop_zscorecutoff
         )
         
         // Generates  config file and runs Aberrant splicing module
@@ -63,7 +68,8 @@ workflow ANALYSE_TRANSCRIPTS {
             DROP_SAMPLE_ANNOT.out.drop_annot,
             ch_bam_bai_files,
             ch_ref_drop_splice_folder,
-            genome
+            genome,
+            drop_padjcutoff_as
         )
 
         // Stringtie

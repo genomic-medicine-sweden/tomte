@@ -16,6 +16,7 @@ process DROP_CONFIG_RUN_AS {
     tuple path(bam), path(bai)
     path ref_splice_folder
     val(genome)
+    val(drop_padjcutoff_as)
 
     output:
     path('config.yaml'), emit: config_drop
@@ -37,6 +38,7 @@ process DROP_CONFIG_RUN_AS {
         --gtf ${gtf}\\
         --drop_module AS \\
         --genome_assembly $genome_assembly \\
+        --padjcutoff ${drop_padjcutoff_as} \\
         --output config.yaml
 
     snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime

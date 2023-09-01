@@ -188,7 +188,10 @@ workflow TOMTE {
         ch_ref_drop_count_file,
         ch_ref_drop_annot_file,
         ch_ref_drop_splice_folder,
-        params.genome
+        params.genome,
+        params.drop_padjcutoff_ae,
+        params.drop_padjcutoff_as,
+        params.drop_zscorecutoff
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
 
