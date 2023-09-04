@@ -8,20 +8,22 @@
  include { DROP_SAMPLE_ANNOT   } from '../../modules/local/drop_sample_annot'
  include { DROP_CONFIG_RUN_AE  } from '../../modules/local/drop_config_runAE'
  include { DROP_CONFIG_RUN_AS  } from '../../modules/local/drop_config_runAS'
+ include { DROP_FILTER_RESULTS } from '../../modules/local/drop_filter_results'
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
-        ch_bam_bai                // channel (mandatory): [ val(meta), [ path(bam) ],[ path(bai) ] ]
-        ch_gtf                    // channel (mandatory): [ path(gtf) ]
-        ch_fasta_fai_meta         // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
-        gene_counts               // channel [val(meta), path(tsv)] 
-        ch_ref_drop_count_file    // channel [ path(tsv) ]
-        ch_ref_drop_annot_file    // channel [ path(tsv) ]
-        ch_ref_drop_splice_folder // channel [ path(folder) ]
-        genome                    // channel [val(genome)]
-        drop_padjcutoff_ae        // channel [val(drop_padjcutoff_ae)]
-        drop_padjcutoff_as        // channel [val(drop_padjcutoff_as)]
-        drop_zscorecutoff         // channel [val(drop_zscorecutoff)]
+        ch_bam_bai                    // channel (mandatory): [ val(meta), [ path(bam) ],[ path(bai) ] ]
+        ch_gtf                        // channel (mandatory): [ path(gtf) ]
+        ch_fasta_fai_meta             // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
+        gene_counts                   // channel [val(meta), path(tsv)] 
+        ch_ref_drop_count_file        // channel [ path(tsv) ]
+        ch_ref_drop_annot_file        // channel [ path(tsv) ]
+        ch_ref_drop_splice_folder     // channel [ path(folder) ]
+        genome                        // channel [val(genome)]
+        drop_padjcutoff_ae            // channel [val(drop_padjcutoff_ae)]
+        drop_padjcutoff_as            // channel [val(drop_padjcutoff_as)]
+        drop_zscorecutoff             // channel [val(drop_zscorecutoff)]
+        ch_gene_panel_clinical_filter // channel [ path(tsv) ]
 
     main:
         ch_versions = Channel.empty()
@@ -72,6 +74,21 @@ workflow ANALYSE_TRANSCRIPTS {
             drop_padjcutoff_as
         )
 
+        ch_out_drop_ae_rds    = DROP_CONFIG_RUN_AE.out.drop_ae_rds    ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()
+                                                                        : Channel.empty()
+        ch_out_drop_gene_name = DROP_CONFIG_RUN_AE.out.drop_gene_name ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
+                                                                        : Channel.empty()
+        ch_out_drop_as_tsv    = DROP_CONFIG_RUN_AS.out.drop_as_tsv    ? DROP_CONFIG_RUN_AS.out.drop_as_tsv.collect()
+                                                                        : Channel.empty()
+
+        DROP_FILTER_RESULTS(
+            star_samples,
+            ch_gene_panel_clinical_filter,
+            ch_out_drop_ae_rds,
+            ch_out_drop_gene_name,
+            ch_out_drop_as_tsv
+        )
+
         // Stringtie
         ch_bam = ch_bam_bai.map{ meta, bam, bai -> [meta, [bam]]}
         STRINGTIE_STRINGTIE(
@@ -104,6 +121,10 @@ workflow ANALYSE_TRANSCRIPTS {
         config_drop_ae        = DROP_CONFIG_RUN_AE.out.config_drop         // channel: [ path(confg_file.yml) ]
         drop_ae_out           = DROP_CONFIG_RUN_AE.out.drop_ae_out
         config_drop_as        = DROP_CONFIG_RUN_AS.out.config_drop         // channel: [ path(confg_file.yml) ]
-        drop_as_out           = DROP_CONFIG_RUN_AS.out.drop_ae_out
+        drop_as_out           = DROP_CONFIG_RUN_AS.out.drop_as_out
+        drop_filter_ae_res    = DROP_FILTER_RESULTS.out.ae_out_filtered
+        drop_unfilter_ae_res  = DROP_FILTER_RESULTS.out.ae_out_unfiltered
+        drop_filter_as_res    = DROP_FILTER_RESULTS.out.as_out_filtered
+        drop_unfilter_as_res  = DROP_FILTER_RESULTS.out.as_out_unfiltered
         versions              = ch_versions                                // channel: [ path(versions.yml) ]
 }

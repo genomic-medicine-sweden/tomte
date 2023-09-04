@@ -308,6 +308,11 @@
                     "default": "None",
                     "description": "If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside folder must be tsv.gz",
                     "fa_icon": "fas fa-folder-open"
+                },
+                "gene_panel_clinical_filter": {
+                    "type": "string",
+                    "description": "If you are running DROP, tsv file containing genes on which results will be filtered to avoid incidental findings",
+                    "fa_icon": "fas fa-file"
                 }
             }
         },

@@ -21,6 +21,7 @@ params.gtf                            = WorkflowMain.getGenomeAttribute(params, 
 params.reference_drop_count_file      = WorkflowMain.getGenomeAttribute(params, 'reference_drop_count_file')
 params.reference_drop_splice_folder   = WorkflowMain.getGenomeAttribute(params, 'reference_drop_splice_folder')
 params.reference_drop_annot_file      = WorkflowMain.getGenomeAttribute(params, 'reference_drop_annot_file')
+params.gene_panel_clinical_filter     = WorkflowMain.getGenomeAttribute(params, 'gene_panel_clinical_filter')
 params.sequence_dict                  = WorkflowMain.getGenomeAttribute(params, 'sequence_dict')
 params.star_index                     = WorkflowMain.getGenomeAttribute(params, 'star_index')
 params.salmon_index                   = WorkflowMain.getGenomeAttribute(params, 'salmon_index')

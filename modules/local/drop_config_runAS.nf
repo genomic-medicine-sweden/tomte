@@ -19,9 +19,10 @@ process DROP_CONFIG_RUN_AS {
     val(drop_padjcutoff_as)
 
     output:
-    path('config.yaml'), emit: config_drop
-    path('output')     , emit: drop_ae_out
-    path "versions.yml", emit: versions
+    path('config.yaml')             , emit: config_drop
+    path('output')                  , emit: drop_as_out
+    path('FRASER_results_fraser--*'), emit: drop_as_tsv
+    path "versions.yml"             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -43,6 +44,8 @@ process DROP_CONFIG_RUN_AS {
 
     snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime
 
+    cp output/html/AberrantSplicing/FRASER_results_fraser--* .
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         drop_config: v1.0
@@ -53,6 +56,7 @@ process DROP_CONFIG_RUN_AS {
     stub:
     """
     touch config.yaml
+    touch FRASER_results_fraser--.tsv
     mkdir output
 
     cat <<-END_VERSIONS > versions.yml

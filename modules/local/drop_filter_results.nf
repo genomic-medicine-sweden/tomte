@@ -1,0 +1,58 @@
+process DROP_FILTER_RESULTS {
+    tag "DROP_FILTER_RESULTS"
+    label 'process_low'
+
+    // Exit if running this module with -profile conda / -profile mamba
+    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
+        exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
+    }
+
+    container "docker.io/clinicalgenomics/drop:1.3.3"
+
+    input:
+    val(samples)
+    path gene_panel_clinical_filter
+    path out_drop_ae_rds
+    path out_drop_gene_name
+    path out_drop_as_tsv
+
+    output:
+    path('OUTRIDER_provided_sample_top20.tsv')         , optional: true, emit: ae_out_unfiltered
+    path('OUTRIDER_provided_sample_top20_filtered.tsv'), optional: true, emit: ae_out_filtered
+    path('FRASER_provided_sample.tsv')                 , optional: true, emit: as_out_unfiltered
+    path('FRASER_provided_sample_filtered.tsv')        , optional: true, emit: as_out_filtered
+    path "versions.yml"                                , emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
+
+    script:
+    def ids = "${samples.id}".replace("[","").replace("]","").replace(",","")
+
+    """
+    $baseDir/bin/drop_filter_results.py \\
+        --sample $ids \\
+        --gene_panel ${gene_panel_clinical_filter} \\
+        --drop_ae_rds ${out_drop_ae_rds} \\
+        --out_drop_gene_name ${out_drop_gene_name} \\
+        --out_drop_as_tsv ${out_drop_as_tsv}
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        drop_filter_results: v1.0
+    END_VERSIONS
+    """
+
+    stub:
+    """
+    touch OUTRIDER_provided_sample_top20.tsv
+    touch OUTRIDER_provided_sample_top20_filtered.tsv
+    touch FRASER_provided_sample_filtered.tsv
+    touch OUTRIDER_provided_sample_top20.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        drop_filter_results: v1.0
+    END_VERSIONS
+    """
+}

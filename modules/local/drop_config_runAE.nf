@@ -19,9 +19,11 @@ process DROP_CONFIG_RUN_AE {
     val(drop_zScoreCutoff)
 
     output:
-    path('config.yaml'), emit: config_drop
-    path('output')     , emit: drop_ae_out
-    path "versions.yml", emit: versions
+    path('config.yaml')             , emit: config_drop
+    path('output')                  , emit: drop_ae_out
+    path('OUTRIDER_results_all.Rds'), emit: drop_ae_rds
+    path('gene_name_mapping*')      , emit: drop_gene_name
+    path "versions.yml"             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -44,6 +46,9 @@ process DROP_CONFIG_RUN_AE {
 
     snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime
 
+    cp output/processed_results/aberrant_expression/*/outrider/outrider/OUTRIDER_results_all.Rds .
+    cp output/processed_data/preprocess/*/gene_name_mapping_* .
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         drop_config: v1.0
@@ -54,6 +59,8 @@ process DROP_CONFIG_RUN_AE {
     stub:
     """
     touch config.yaml
+    touch OUTRIDER_results_all.Rds
+    touch gene_name_mapping_.tsv
     mkdir output
 
     cat <<-END_VERSIONS > versions.yml
