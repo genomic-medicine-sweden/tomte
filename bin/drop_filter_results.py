@@ -71,7 +71,7 @@ def fraser_results_filter(samples: list, gene_panel: str, out_drop_as_tsv: str):
     Filter results to get only those from the sample(s) provided.
     Two tsvs will be outputed:
         - One filtered to keep gense in the gene panel (if provided).
-        - Another that is unfilterd .
+        - Another that is unfilterd.
     """
     df_results_AS = pd.read_csv(out_drop_as_tsv, sep="\t")
     # Keep only samples provided to tomte
