@@ -12,9 +12,9 @@ process DROP_FILTER_RESULTS {
     input:
     val(samples)
     path gene_panel_clinical_filter
-    path out_drop_ae_rds
-    path out_drop_gene_name
-    path out_drop_as_tsv
+    path out_drop_ae_rds_in
+    path out_drop_gene_name_in
+    path out_drop_as_tsv_in
 
     output:
     path('OUTRIDER_provided_sample_top20.tsv')         , optional: true, emit: ae_out_unfiltered
@@ -28,15 +28,18 @@ process DROP_FILTER_RESULTS {
 
     script:
     def ids = "${samples.id}".replace("[","").replace("]","").replace(",","")
-    def gene_panel_filter = gene_panel_clinical_filter ? "--gene_panel ${gene_panel_clinical_filer}" : ''
+    def gene_panel_filter = gene_panel_clinical_filter ? "--gene_panel ${gene_panel_clinical_filter}" : ''
+    def drop_ae_rds = out_drop_ae_rds_in ? "--drop_ae_rds ${out_drop_ae_rds_in}" : ''
+    def out_drop_gene_name = out_drop_gene_name_in ? "--out_drop_gene_name ${out_drop_gene_name_in}" : ''
+    def out_drop_as_tsv = out_drop_as_tsv_in ? "--out_drop_as_tsv ${out_drop_as_tsv_in}" : ''
 
     """
     $baseDir/bin/drop_filter_results.py \\
-        --sample $ids \\
-        $gene_panel_filer \\
-        --drop_ae_rds ${out_drop_ae_rds} \\
-        --out_drop_gene_name ${out_drop_gene_name} \\
-        --out_drop_as_tsv ${out_drop_as_tsv}
+        --samples $ids \\
+        $gene_panel_filter \\
+        $drop_ae_rds \\
+        $out_drop_gene_name \\
+        $out_drop_as_tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -46,10 +49,10 @@ process DROP_FILTER_RESULTS {
 
     stub:
     """
-    touch OUTRIDER_provided_sample_top20.tsv
-    touch OUTRIDER_provided_sample_top20_filtered.tsv
-    touch FRASER_provided_sample_filtered.tsv
-    touch OUTRIDER_provided_sample_top20.tsv
+    touch OUTRIDER_provided_samples_top_hits.tsv
+    touch OUTRIDER_provided_samples_top_hits_filtered.tsv
+    touch FRASER_provided_samples_top_hits.tsv
+    touch FRASER_provided_samples_top_hits_filtered.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
