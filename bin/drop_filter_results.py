@@ -5,7 +5,7 @@ import pandas as pd
 import pyreadr
 
 
-def FilteringResults(sample, gene_panel, out_drop_ae_rds, out_drop_gene_name, out_drop_as_tsv):
+def FilteringResults(samples: list, gene_panel: str, out_drop_ae_rds: str, out_drop_gene_name: str, out_drop_as_tsv: str):
     # Read gene panel if it has been provided
     if gene_panel != "None":
         df_panel = pd.read_csv(gene_panel, sep="\t", skiprows=26)
