@@ -28,11 +28,12 @@ process DROP_FILTER_RESULTS {
 
     script:
     def ids = "${samples.id}".replace("[","").replace("]","").replace(",","")
+    def gene_panel_filter = gene_panel_clinical_filter ? "--gene_panel ${gene_panel_clinical_filer}" : ''
 
     """
     $baseDir/bin/drop_filter_results.py \\
         --sample $ids \\
-        --gene_panel ${gene_panel_clinical_filter} \\
+        $gene_panel_filer \\
         --drop_ae_rds ${out_drop_ae_rds} \\
         --out_drop_gene_name ${out_drop_gene_name} \\
         --out_drop_as_tsv ${out_drop_as_tsv}

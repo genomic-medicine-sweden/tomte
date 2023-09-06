@@ -8,7 +8,8 @@ import pyreadr
 def FilteringResults(samples: list, gene_panel: str, out_drop_ae_rds: str, out_drop_gene_name: str, out_drop_as_tsv: str):
     # Read gene panel if it has been provided
     if gene_panel != "None":
-        df_panel = pd.read_csv(gene_panel, sep="\t", skiprows=26)
+        gene_panel_header = ['chromosome', 'gene_start', 'gene_stop' 'hgnc_id', 'hgnc_symbol']
+        df_panel = pd.read_csv(gene_panel, sep="\t", names=gene_panel_header, header=None, comment='#')
 
     if out_drop_ae_rds != "None":
         rds_AE = pyreadr.read_r(out_drop_ae_rds)
@@ -18,7 +19,7 @@ def FilteringResults(samples: list, gene_panel: str, out_drop_ae_rds: str, out_d
         # Count how many events are significant per provided sample
         df_family_AE_top20 = pd.DataFrame()
 
-        for id in sample:
+        for id in samples:
             df_id = df_results_family_AE[df_results_family_AE["sampleID"] == id]
             if sum(df_id["padjust"] < 0.05) < 20:
                 df_id = df_id.sort_values(by=["pValue"]).reset_index()

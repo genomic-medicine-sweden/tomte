@@ -47,7 +47,7 @@ process DROP_CONFIG_RUN_AE {
     snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime
 
     cp output/processed_results/aberrant_expression/*/outrider/outrider/OUTRIDER_results_all.Rds .
-    cp output/processed_data/preprocess/*/gene_name_mapping_* .
+    cp output/processed_data/preprocess/*/gene_name_mapping_*.tsv .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

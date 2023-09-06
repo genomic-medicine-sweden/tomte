@@ -44,7 +44,7 @@ process DROP_CONFIG_RUN_AS {
 
     snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime
 
-    cp output/html/AberrantSplicing/FRASER_results_fraser--* .
+    cp output/html/AberrantSplicing/FRASER_results_fraser--*.tsv .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
