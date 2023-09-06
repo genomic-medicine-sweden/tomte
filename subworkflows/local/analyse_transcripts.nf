@@ -119,12 +119,12 @@ workflow ANALYSE_TRANSCRIPTS {
         processed_gene_counts = DROP_COUNTS.out.processed_gene_counts      // channel: [ path(tsv) ]
         annotation_drop       = DROP_SAMPLE_ANNOT.out.drop_annot           // channel: [ path(sample_annotation.tsv) ]
         config_drop_ae        = DROP_CONFIG_RUN_AE.out.config_drop         // channel: [ path(confg_file.yml) ]
-        drop_ae_out           = DROP_CONFIG_RUN_AE.out.drop_ae_out
+        drop_ae_out           = DROP_CONFIG_RUN_AE.out.drop_ae_out         // channel: [ path(drop_output_AE) ]
         config_drop_as        = DROP_CONFIG_RUN_AS.out.config_drop         // channel: [ path(confg_file.yml) ]
-        drop_as_out           = DROP_CONFIG_RUN_AS.out.drop_as_out
-        drop_filter_ae_res    = DROP_FILTER_RESULTS.out.ae_out_filtered
-        drop_unfilter_ae_res  = DROP_FILTER_RESULTS.out.ae_out_unfiltered
-        drop_filter_as_res    = DROP_FILTER_RESULTS.out.as_out_filtered
-        drop_unfilter_as_res  = DROP_FILTER_RESULTS.out.as_out_unfiltered
+        drop_as_out           = DROP_CONFIG_RUN_AS.out.drop_as_out         // channel: [ path(drop_output_AS) ]
+        drop_filter_ae_res    = DROP_FILTER_RESULTS.out.ae_out_filtered    // channel: [ path(drop_AE_filtered.tsv) ]
+        drop_unfilter_ae_res  = DROP_FILTER_RESULTS.out.ae_out_unfiltered  // channel: [ path(drop_AE_unfiltered.tsv) ]
+        drop_filter_as_res    = DROP_FILTER_RESULTS.out.as_out_filtered    // channel: [ path(drop_AS_filtered.tsv) ]
+        drop_unfilter_as_res  = DROP_FILTER_RESULTS.out.as_out_unfiltered  // channel: [ path(drop_AS_unfiltered.tsv) ]
         versions              = ch_versions                                // channel: [ path(versions.yml) ]
 }
