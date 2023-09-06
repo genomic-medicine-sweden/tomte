@@ -5,7 +5,10 @@ from pathlib import Path
 import yaml
 
 
-def read_config():
+def generate_config() -> yaml:
+    """
+    Generates default config file.
+    """
     return yaml.safe_load(
         """
         projectTitle: "DROP: Detection of RNA Outliers Pipeline"
@@ -113,7 +116,19 @@ def read_config():
     )
 
 
-def update_config(yaml_object, genome, gtf, genome_assembly, padjcutoff, zscorecutoff, drop_module):
+def update_config(
+    yaml_object: yaml,
+    genome: str,
+    gtf: str,
+    genome_assembly: str,
+    padjcutoff: float,
+    zscorecutoff: float,
+    drop_module: str,
+) -> yaml:
+    """
+    Updates config file to add correct genome, gtf,
+    adjusted p-value, and Z-score for the module to be run.
+    """
     gtf_name = Path(gtf).name
     gtf_without_ext = Path(gtf).stem
     genome_name = Path(genome).name
@@ -151,52 +166,33 @@ if __name__ == "__main__":
         description="""Generate config file for DROP.""",
     )
 
-    parser.add_argument(
-        "--genome_fasta",
-        type=str,
-        help="Specify genome fasta base name",
-    )
+    parser.add_argument("--genome_fasta", type=str, help="Specify genome fasta base name", required=True)
 
-    parser.add_argument(
-        "--gtf",
-        type=str,
-        help="Specify gtf file name",
-    )
+    parser.add_argument("--gtf", type=str, help="Specify gtf file name", required=True)
 
-    parser.add_argument(
-        "--output",
-        type=str,
-        help="Specify output file",
-    )
+    parser.add_argument("--output", type=str, help="Specify output file", required=True)
 
     parser.add_argument(
         "--genome_assembly",
         type=str,
         help="Specify genome for drop can be either hg19/hs37d5 or hg38/GRCh38",
+        required=True,
     )
 
-    parser.add_argument(
-        "--padjcutoff",
-        type=float,
-        help="Specify adjusted p-value cut-off",
-    )
+    parser.add_argument("--padjcutoff", type=float, help="Specify adjusted p-value cut-off", required=True)
 
     parser.add_argument(
         "--zscorecutoff",
         default=0,
         type=float,
         help="Specify z-score cut-off, this is an optional value",
+        required=False,
     )
 
-    parser.add_argument(
-        "--drop_module",
-        type=str,
-        help="Specify module to run: AE, AS or MAE",
-    )
+    parser.add_argument("--drop_module", type=str, help="Specify module to run: AE, AS or MAE", required=True)
 
     args = parser.parse_args()
-
-    yaml_object = read_config()
+    yaml_object = generate_config()
     master_config = update_config(
         yaml_object=yaml_object,
         genome=args.genome_fasta,

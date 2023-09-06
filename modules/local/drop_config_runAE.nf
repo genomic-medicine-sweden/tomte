@@ -30,6 +30,8 @@ process DROP_CONFIG_RUN_AE {
 
     script:
     def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
+    def zscorecutoff = drop_zScoreCutoff ? "--zscorecutoff ${drop_zScoreCutoff}" : ''
+
     """
     TMPDIR=\$PWD
 
@@ -41,7 +43,7 @@ process DROP_CONFIG_RUN_AE {
         --drop_module AE \\
         --genome_assembly $genome_assembly \\
         --padjcutoff ${drop_padjcutoff_ae} \\
-        --zscorecutoff ${drop_zScoreCutoff} \\
+        $zscorecutoff \\
         --output config.yaml
 
     snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime

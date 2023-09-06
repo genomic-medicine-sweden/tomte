@@ -30,7 +30,7 @@ process DROP_SAMPLE_ANNOT {
     """
     $baseDir/bin/drop_sample_annot.py \\
         --bam ${bam} \\
-        --sample $ids \\
+        --samples $ids \\
         --strandedness $strandedness \\
         --single_end $single_end \\
         --gtf ${gtf} \\

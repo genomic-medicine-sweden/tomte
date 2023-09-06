@@ -8,36 +8,40 @@ import csv
 import os
 import pandas as pd
 
+SAMPLE_ANNOTATION_COLUMNS = [
+    "RNA_ID",
+    "RNA_BAM_FILE",
+    "DNA_VCF_FILE",
+    "DNA_ID",
+    "DROP_GROUP",
+    "PAIRED_END",
+    "COUNT_MODE",
+    "COUNT_OVERLAPS",
+    "SPLICE_COUNTS_DIR",
+    "STRAND",
+    "HPO_TERMS",
+    "GENE_COUNTS_FILE",
+    "GENE_ANNOTATION",
+    "GENOME",
+]
+
 
 class SampleAnnotation:
     """SampleAnnotation class"""
 
-    SAMPLE_ANNOTATION_COLUMNS = [
-        "RNA_ID",
-        "RNA_BAM_FILE",
-        "DNA_VCF_FILE",
-        "DNA_ID",
-        "DROP_GROUP",
-        "PAIRED_END",
-        "COUNT_MODE",
-        "COUNT_OVERLAPS",
-        "SPLICE_COUNTS_DIR",
-        "STRAND",
-        "HPO_TERMS",
-        "GENE_COUNTS_FILE",
-        "GENE_ANNOTATION",
-        "GENOME",
-    ]
+    SAMPLE_ANNOTATION_COLUMNS = SAMPLE_ANNOTATION_COLUMNS
 
-    def __init__(self, bam, sample, strandedness, single_end, gtf, count_file, out_file):
-        """Write the Sample Annotation tsv file"""
+    def __init__(
+        self, bam: str, samples: str, strandedness: str, single_end: str, gtf: str, count_file: str, out_file: str
+    ):
+        """
+        Write the Sample Annotation tsv file.
+        """
         with open(out_file, "w") as tsv_file:
             fieldnames = self.SAMPLE_ANNOTATION_COLUMNS
             writer = csv.DictWriter(tsv_file, fieldnames=fieldnames, delimiter="\t")
-
             writer.writeheader()
-
-            for index, id in enumerate(sample):
+            for index, id in enumerate(samples):
                 sa_dict = {}.fromkeys(fieldnames, "NA")
                 sa_dict["RNA_ID"] = id
                 sa_dict["DROP_GROUP"] = "outrider,fraser"
@@ -50,9 +54,11 @@ class SampleAnnotation:
                 writer.writerow(sa_dict)
 
 
-def final_annot(count_file: Path, ref_annot: Path, out_file: Path):
-    """Concatenates the Sample Annotation produced by SampleAnnotation with the one
-    provided for the reference samples, checking for duplicate sample IDs"""
+def final_annot(count_file: str, ref_annot: str, out_file: str):
+    """
+    Concatenates the Sample Annotation produced by SampleAnnotation with the one
+    provided for the reference samples, checking for duplicate sample IDs
+    """
     df_samples = pd.read_csv("drop_annotation_given_samples.tsv", sep="\t")
     df_reference = pd.read_csv(ref_annot, sep="\t")
     df_reference["GENE_COUNTS_FILE"] = count_file
@@ -81,7 +87,7 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--sample",
+        "--samples",
         type=str,
         nargs="+",
         help="corresponding sample name",
@@ -112,7 +118,10 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--count_file", type=str, help="A tsv file of gene counts for all processed samples.", required=True
+        "--count_file",
+        type=str,
+        help="A tsv file of gene counts for all processed samples.",
+        required=True,
     )
 
     parser.add_argument(
@@ -132,7 +141,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     SampleAnnotation(
         args.bam,
-        args.sample,
+        args.samples,
         args.strandedness,
         args.single_end,
         args.gtf,

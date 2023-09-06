@@ -16,7 +16,6 @@ translator = {
 
 def get_non_std_genes(gtf: Path) -> set[str]:
     """Create list of genes not belonging to chr1-21 or chrM"""
-
     std_chrs = [
         "chr1",
         "chr2",
@@ -44,21 +43,16 @@ def get_non_std_genes(gtf: Path) -> set[str]:
         "chrY",
         "chrM",
     ]
-
     gene_id_regex = re.compile('gene_id "(.+?)"')
     genes_to_exclude = []
-
     with open(gtf, "r") as gtf_file:
         for line in gtf_file:
             if line.startswith("#"):
                 continue
-
             if line.split()[0] in std_chrs:
                 continue
-
             gene_id = re.search(gene_id_regex, line)
             genes_to_exclude.append(gene_id.group(1))
-
     return set(genes_to_exclude)
 
 
@@ -78,29 +72,24 @@ def read_star_gene_cnts(sample: str, star: Path, strandedness: str) -> dict:
     return sample_ids
 
 
-def dict_to_counts(gene_ids_dict: dict):
+def dict_to_counts(gene_ids_dict: dict) -> pd:
     """Transform gene ids dict into count_table"""
     one_sample = next(iter(gene_ids_dict))
     gene_list = list(gene_ids_dict[one_sample].keys())
     genes = {}
-
     for gene in gene_list:
         genes[gene] = []
         for sample in gene_ids_dict:
             genes[gene].append(gene_ids_dict[sample][gene])
-
     count_table = pd.DataFrame.from_dict(genes, orient="index", columns=gene_ids_dict.keys())
     count_table.index.name = "geneID"
     return count_table
 
 
 def transform_to_table(gene_ids_dict: dict, outfile: Path, genes_to_exlude: set[str], ref_count_file: Path):
-    """Transform in dictionary into tsv friendly."""
-
+    """Transform dictionary into tsv friendly."""
     count_table = dict_to_counts(gene_ids_dict)
-
     final_table = None
-
     if ref_count_file:
         if ref_count_file.endswith(".gz"):
             ref_table = pd.read_csv(ref_count_file, compression="gzip", sep="\t", header=0, index_col=0)
@@ -109,7 +98,6 @@ def transform_to_table(gene_ids_dict: dict, outfile: Path, genes_to_exlude: set[
         final_table = count_table.combine_first(ref_table)
     else:
         final_table = count_table
-
     final_table.drop(genes_to_exclude, inplace=True)
     final_table.to_csv(outfile, compression="gzip", sep="\t", header=True)
 
@@ -120,15 +108,20 @@ if __name__ == "__main__":
         description="""Generate collated gene counts from each STAR output.""",
     )
     parser.add_argument("--star", type=str, nargs="+", help="*ReadsPerGene.out.tab from STAR", required=True)
-    parser.add_argument("--sample", type=str, nargs="+", help="corresponding sample name", required=True)
-    parser.add_argument("--strandedness", type=str, nargs="+", help="strandedness of RNA")
+
+    parser.add_argument("--samples", type=str, nargs="+", help="corresponding sample name", required=True)
+
+    parser.add_argument("--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True)
+
     parser.add_argument("--output", type=str, help="output tsv file name", required=True)
+
     parser.add_argument("--gtf", type=str, help="Transcript annotation file in gtf format", required=True)
-    parser.add_argument("--ref_count_file", type=str, help="Optional reference count set")
+
+    parser.add_argument("--ref_count_file", type=str, help="Optional reference count set", required=True)
 
     args = parser.parse_args()
     master_dict = {}
-    for index, sample_id in enumerate(args.sample):
+    for index, sample_id in enumerate(args.samples):
         master_dict.update(
             read_star_gene_cnts(sample=sample_id, star=args.star[index], strandedness=args.strandedness[index])
         )

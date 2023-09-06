@@ -28,7 +28,7 @@ process DROP_COUNTS {
     """
     $baseDir/bin/drop_counts.py \\
         --star ${counts} \\
-        --sample $ids \\
+        --samples $ids \\
         --strandedness $strandedness \\
         --ref_count_file ${reference_count_file} \\
         --output processed_geneCounts.tsv.gz \\
