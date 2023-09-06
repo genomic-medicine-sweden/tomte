@@ -4,6 +4,9 @@ import argparse
 import pandas as pd
 import pyreadr
 
+GENE_PANEL_HEADER = ["chromosome", "gene_start", "gene_stop", "hgnc_id", "hgnc_symbol"]
+GENE_PANEL_COLUMNS_TO_KEEP = ["hgnc_symbol", "hgnc_id"]
+
 
 def get_top_hits(id: str, df_results_family_AE: pd) -> pd:
     """
@@ -32,10 +35,10 @@ def keep_only_hits_in_gene_panel(df_family_top_hits: pd, gene_panel: str, module
     Filter out from results any gene that is not present in the provided gene panel.
     """
     if gene_panel != "None":
-        gene_panel_header = ["chromosome", "gene_start", "gene_stop", "hgnc_id", "hgnc_symbol"]
+        gene_panel_header = GENE_PANEL_HEADER
         df_panel = pd.read_csv(gene_panel, sep="\t", names=gene_panel_header, header=None, comment="#", index_col=False)
         df_clinical = df_family_top_hits.loc[df_family_top_hits["hgncSymbol"].isin(df_panel["hgnc_symbol"])]
-        df_clinical = df_panel[["hgnc_symbol", "hgnc_id"]].merge(
+        df_clinical = df_panel[GENE_PANEL_COLUMNS_TO_KEEP].merge(
             df_family_top_hits, left_on="hgnc_symbol", right_on="hgncSymbol"
         )
         df_clinical = df_clinical.drop(columns=["hgnc_symbol"])
