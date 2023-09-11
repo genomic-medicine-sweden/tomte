@@ -5,8 +5,8 @@ from pathlib import Path
 import yaml
 
 
-def get_config() -> Dict[str, Any]:
-    """Return default config dictionary of ..."""
+def get_config() -> dict:
+    """Return default config dictionary used as input for DROP"""
     return yaml.safe_load(
         """
         projectTitle: "DROP: Detection of RNA Outliers Pipeline"
@@ -115,14 +115,14 @@ def get_config() -> Dict[str, Any]:
 
 
 def update_config(
-    yaml_object: yaml,
+    yaml_object: dict,
     genome: str,
     gtf: str,
     genome_assembly: str,
     padjcutoff: float,
     zscorecutoff: float,
     drop_module: str,
-) -> yaml:
+) -> dict:
     """
     Updates config file to add correct genome, gtf,
     adjusted p-value, and Z-score for the module to be run.
@@ -153,7 +153,7 @@ def update_config(
     return yaml_object
 
 
-def write_yaml(out_path, yaml_object):
+def write_yaml(out_path: str, yaml_object: dict):
     with open(out_path, "w") as outfile:
         yaml.dump(yaml_object, outfile, sort_keys=False)
 
@@ -190,9 +190,8 @@ if __name__ == "__main__":
     parser.add_argument("--drop_module", type=str, help="Specify module to run: AE, AS or MAE", required=True)
 
     args = parser.parse_args()
-    yaml_object = generate_config()
     master_config = update_config(
-        yaml_object=yaml_object,
+        yaml_object=get_config(),
         genome=args.genome_fasta,
         gtf=args.gtf,
         genome_assembly=args.genome_assembly,
