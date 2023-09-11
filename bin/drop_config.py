@@ -5,10 +5,8 @@ from pathlib import Path
 import yaml
 
 
-def generate_config() -> yaml:
-    """
-    Generates default config file.
-    """
+def get_config() -> Dict[str, Any]:
+    """Return default config dictionary of ..."""
     return yaml.safe_load(
         """
         projectTitle: "DROP: Detection of RNA Outliers Pipeline"
