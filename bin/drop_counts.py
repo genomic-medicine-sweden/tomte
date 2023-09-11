@@ -42,7 +42,7 @@ STANDARD_CHROMOSOMES = [
 ]
 
 
-def get_non_std_genes(gtf: Path) -> Set[str]:
+def get_non_std_genes(gtf: Path) -> set[str]:
     """Create list of genes not belonging to chr1-21 or chrM"""
     gene_id_regex = re.compile('gene_id "(.+?)"')
     genes_to_exclude = []
@@ -73,7 +73,7 @@ def read_star_gene_counts(sample: str, star: Path, strandedness: str) -> dict:
     return sample_ids
 
 
-def get_counts_from_dict(gene_ids_dict: dict) -> DataFrame:
+def get_counts_from_dict(gene_ids_dict: dict) -> pd.DataFrame:
     """Transform gene ids dict into count_table"""
     one_sample = next(iter(gene_ids_dict))
     gene_list = list(gene_ids_dict[one_sample].keys())
@@ -87,11 +87,11 @@ def get_counts_from_dict(gene_ids_dict: dict) -> DataFrame:
     return count_table
 
 
-def get_tsv_from_dict(gene_ids_dict: dict, outfile: Path, ref_count_file: Path):
+def get_tsv_from_dict(gene_ids_dict: dict, outfile: str, ref_count_file: str):
     """Transform dictionary into tsv friendly."""
     count_table = get_counts_from_dict(gene_ids_dict)
     if ref_count_file:
-        if ref_count_file.suffix == ".gz":
+        if ref_count_file.endswith(".gz"):
             ref_table = pd.read_csv(ref_count_file, compression="gzip", sep="\t", header=0, index_col=0)
         else:
             ref_table = pd.read_csv(ref_count_file, sep="\t", header=0, index_col=0)
@@ -125,4 +125,4 @@ if __name__ == "__main__":
         )
 
     genes_to_exclude = get_non_std_genes(args.gtf)
-    get_tsv_from_dict(master_dict, args.output, genes_to_exclude, args.ref_count_file)
+    get_tsv_from_dict(master_dict, args.output, args.ref_count_file)
