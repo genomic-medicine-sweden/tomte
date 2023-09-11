@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
-import re
-from collections import OrderedDict
 from pathlib import Path
 import csv
-import os
 import pandas as pd
 
 SAMPLE_ANNOTATION_COLUMNS = [
@@ -27,8 +24,6 @@ SAMPLE_ANNOTATION_COLUMNS = [
 
 
 class SampleAnnotation:
-    """SampleAnnotation class"""
-
     SAMPLE_ANNOTATION_COLUMNS = SAMPLE_ANNOTATION_COLUMNS
 
     def __init__(
