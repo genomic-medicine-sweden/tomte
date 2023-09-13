@@ -43,7 +43,7 @@ process DROP_FILTER_RESULTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_filter_results: v1.0
+        drop_filter_results: \$(\$baseDir/bin/drop_filter_results --version )
     END_VERSIONS
     """
 
@@ -56,7 +56,7 @@ process DROP_FILTER_RESULTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_filter_results: v1.0
+        drop_filter_results: \$(\$baseDir/bin/drop_filter_results --version )
     END_VERSIONS
     """
 }

@@ -40,7 +40,7 @@ process DROP_SAMPLE_ANNOT {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_sample_annot: v1.0
+        drop_sample_annot: \$(\$baseDir/bin/drop_sample_annot --version )
     END_VERSIONS
     """
 
@@ -50,7 +50,7 @@ process DROP_SAMPLE_ANNOT {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_sample_annot: v1.0
+        drop_sample_annot: \$(\$baseDir/bin/drop_sample_annot --version )
     END_VERSIONS
     """
 }

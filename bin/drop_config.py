@@ -4,7 +4,9 @@ import argparse
 import sys
 from pathlib import Path
 import yaml
+from typing import Set, Dict
 
+SCRIPT_VERSION = "v1.0"
 CONFIG_YAML = {
     "projectTitle": "DROP: Detection of RNA Outliers Pipeline",
     "root": None,
@@ -87,7 +89,7 @@ def update_config(
     padjcutoff: float,
     zscorecutoff: float,
     drop_module: str,
-) -> dict:
+) -> Dict:
     """
     Updates config file to add correct genome, gtf,
     adjusted p-value, and Z-score for the module to be run.
@@ -131,15 +133,30 @@ def parse_args(argv=None):
     )
 
     parser.add_argument("--genome_fasta", type=str, help="Specify genome fasta base name", required=True)
-    parser.add_argument("--gtf", type=str, help="Specify gtf file name", required=True)
-    parser.add_argument("--output", type=str, help="Specify output file", required=True)
+    parser.add_argument(
+        "--gtf",
+        type=str,
+        help="Specify gtf file name",
+        required=True,
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        help="Specify output file",
+        required=True,
+    )
     parser.add_argument(
         "--genome_assembly",
         type=str,
         help="Specify genome for drop can be either hg19/hs37d5 or hg38/GRCh38",
         required=True,
     )
-    parser.add_argument("--padjcutoff", type=float, help="Specify adjusted p-value cut-off", required=True)
+    parser.add_argument(
+        "--padjcutoff",
+        type=float,
+        help="Specify adjusted p-value cut-off",
+        required=True,
+    )
     parser.add_argument(
         "--zscorecutoff",
         default=0,
@@ -147,7 +164,17 @@ def parse_args(argv=None):
         help="Specify z-score cut-off, this is an optional value",
         required=False,
     )
-    parser.add_argument("--drop_module", type=str, help="Specify module to run: AE, AS or MAE", required=True)
+    parser.add_argument(
+        "--drop_module",
+        type=str,
+        help="Specify module to run: AE, AS or MAE",
+        required=True,
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=SCRIPT_VERSION,
+    )
     return parser.parse_args(argv)
 
 

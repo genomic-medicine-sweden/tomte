@@ -6,7 +6,9 @@ from collections import OrderedDict
 from pathlib import Path
 import sys
 import pandas as pd
+from typing import Set, Dict
 
+SCRIPT_VERSION = "v1.0"
 TRANSLATOR = {
     "unstranded": 1,
     "forward": 2,
@@ -42,7 +44,7 @@ STANDARD_CHROMOSOMES = [
 ]
 
 
-def get_non_std_genes(gtf: Path) -> set[str]:
+def get_non_std_genes(gtf: Path) -> Set[str]:
     """Create list of genes not belonging to chr1-21 or chrM"""
     gene_id_regex = re.compile('gene_id "(.+?)"')
     genes_to_exclude = []
@@ -57,7 +59,7 @@ def get_non_std_genes(gtf: Path) -> set[str]:
     return set(genes_to_exclude)
 
 
-def read_star_gene_counts(sample: str, star: Path, strandedness: str) -> dict:
+def read_star_gene_counts(sample: str, star: Path, strandedness: str) -> Dict:
     """Read gene count file(s) from STAR output to return sample_ids."""
     sample_ids = {}
     gene_ids = {}
@@ -77,11 +79,7 @@ def get_counts_from_dict(gene_ids_dict: dict) -> pd.DataFrame:
     """Transform gene ids dict into count_table"""
     one_sample = next(iter(gene_ids_dict))
     gene_list = list(gene_ids_dict[one_sample].keys())
-    genes = {}
-    for gene in gene_list:
-        genes[gene] = []
-        for sample in gene_ids_dict:
-            genes[gene].append(gene_ids_dict[sample][gene])
+    genes = {gene: [gene_ids_dict[sample][gene] for sample in gene_ids_dict] for gene in gene_list}
     count_table: pd.DataFrame = pd.DataFrame.from_dict(genes, orient="index", columns=gene_ids_dict.keys())
     count_table.index.name = "geneID"
     return count_table
@@ -112,6 +110,7 @@ def parse_args(argv=None):
     parser.add_argument("--output", type=str, help="output tsv file name", required=True)
     parser.add_argument("--gtf", type=str, help="Transcript annotation file in gtf format", required=True)
     parser.add_argument("--ref_count_file", type=str, help="Optional reference count set", required=True)
+    parser.add_argument("--version", action="version", version=SCRIPT_VERSION)
     return parser.parse_args(argv)
 
 

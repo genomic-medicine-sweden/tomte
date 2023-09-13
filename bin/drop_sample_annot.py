@@ -6,6 +6,7 @@ import csv
 import pandas as pd
 import sys
 
+SCRIPT_VERSION = "v1.0"
 SAMPLE_ANNOTATION_COLUMNS = [
     "RNA_ID",
     "RNA_BAM_FILE",
@@ -85,6 +86,7 @@ def parse_args(argv=None):
     )
     parser.add_argument("--ref_annot", type=str, help="Path to reference annotation tsv", required=True)
     parser.add_argument("--output", type=str, help="Path to save to", required=True)
+    parser.add_argument("--version", action="version", version=SCRIPT_VERSION)
     return parser.parse_args(argv)
 
 

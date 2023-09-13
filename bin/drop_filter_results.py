@@ -5,6 +5,7 @@ import pandas as pd
 import pyreadr
 import sys
 
+SCRIPT_VERSION = "v1.0"
 GENE_PANEL_HEADER = ["chromosome", "gene_start", "gene_stop", "hgnc_id", "hgnc_symbol"]
 GENE_PANEL_COLUMNS_TO_KEEP = ["hgnc_symbol", "hgnc_id"]
 
@@ -128,6 +129,11 @@ def parse_args(argv=None):
         default="None",
         help="Path to tsv output from DROP Aberrant Splicing",
         required=False,
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=SCRIPT_VERSION,
     )
     return parser.parse_args(argv)
 
