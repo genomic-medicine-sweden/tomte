@@ -4,7 +4,7 @@ import argparse
 import re
 from collections import OrderedDict
 from pathlib import Path
-
+import sys
 import pandas as pd
 
 TRANSLATOR = {
@@ -87,7 +87,7 @@ def get_counts_from_dict(gene_ids_dict: dict) -> pd.DataFrame:
     return count_table
 
 
-def get_tsv_from_dict(gene_ids_dict: dict, outfile: str, ref_count_file: str):
+def get_tsv_from_dict(gene_ids_dict: dict, outfile: str, ref_count_file: str, genes_to_exclude: set[str]):
     """Transform dictionary into tsv friendly."""
     count_table = get_counts_from_dict(gene_ids_dict)
     if ref_count_file:
@@ -100,24 +100,23 @@ def get_tsv_from_dict(gene_ids_dict: dict, outfile: str, ref_count_file: str):
     count_table.to_csv(outfile, compression="gzip", sep="\t", header=True)
 
 
-if __name__ == "__main__":
+def parse_args(argv=None):
+    """Define and immediately parse command line arguments."""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.MetavarTypeHelpFormatter,
         description="""Generate collated gene counts from each STAR output.""",
     )
     parser.add_argument("--star", type=str, nargs="+", help="*ReadsPerGene.out.tab from STAR", required=True)
-
     parser.add_argument("--samples", type=str, nargs="+", help="corresponding sample name", required=True)
-
     parser.add_argument("--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True)
-
     parser.add_argument("--output", type=str, help="output tsv file name", required=True)
-
     parser.add_argument("--gtf", type=str, help="Transcript annotation file in gtf format", required=True)
-
     parser.add_argument("--ref_count_file", type=str, help="Optional reference count set", required=True)
+    return parser.parse_args(argv)
 
-    args = parser.parse_args()
+def main(argv=None):
+    """Coordinate argument parsing and program execution."""
+    args = parse_args(argv)
     master_dict = {}
     for index, sample_id in enumerate(args.samples):
         master_dict.update(
@@ -125,4 +124,8 @@ if __name__ == "__main__":
         )
 
     genes_to_exclude = get_non_std_genes(args.gtf)
-    get_tsv_from_dict(master_dict, args.output, args.ref_count_file)
+    get_tsv_from_dict(master_dict, args.output, args.ref_count_file, genes_to_exclude)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
