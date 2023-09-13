@@ -82,7 +82,7 @@ def get_counts_from_dict(gene_ids_dict: dict) -> pd.DataFrame:
         genes[gene] = []
         for sample in gene_ids_dict:
             genes[gene].append(gene_ids_dict[sample][gene])
-    count_table = pd.DataFrame.from_dict(genes, orient="index", columns=gene_ids_dict.keys())
+    count_table: pd.DataFrame = pd.DataFrame.from_dict(genes, orient="index", columns=gene_ids_dict.keys())
     count_table.index.name = "geneID"
     return count_table
 
