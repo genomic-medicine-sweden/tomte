@@ -24,7 +24,9 @@ SAMPLE_ANNOTATION_COLUMNS = [
 ]
 
 
-def get_sample_annotation(bam: str, samples: str, strandedness: str, single_end: str, gtf: str, count_file: str, out_file: str):
+def get_sample_annotation(
+    bam: str, samples: str, strandedness: str, single_end: str, gtf: str, count_file: str, out_file: str
+):
     """Write the Sample Annotation tsv file."""
     with open(out_file, "w") as tsv_file:
         fieldnames = SAMPLE_ANNOTATION_COLUMNS
@@ -41,11 +43,13 @@ def get_sample_annotation(bam: str, samples: str, strandedness: str, single_end:
             sa_dict["RNA_BAM_FILE"] = bam[index]
             writer.writerow(sa_dict)
 
+
 def get_if_paired_end(single_end: str):
     """Logical funciton to determine if a sample is paired end"""
     if single_end.lower() == "false":
         return True
     return False
+
 
 def final_annot(count_file: str, ref_annot: str, out_file: str):
     """
@@ -64,6 +68,7 @@ def final_annot(count_file: str, ref_annot: str, out_file: str):
     df.fillna("NA", inplace=True)
     df.to_csv(out_file, index=False, sep="\t")
 
+
 def parse_args(argv=None):
     """Define and immediately parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -75,16 +80,28 @@ def parse_args(argv=None):
     parser.add_argument("--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True)
     parser.add_argument("--single_end", type=str, nargs="+", help="is the sample paired end?", required=True)
     parser.add_argument("--gtf", type=str, help="Transcript annotation file in gtf format", required=True)
-    parser.add_argument("--count_file", type=str, help="A tsv file of gene counts for all processed samples.", required=True)
+    parser.add_argument(
+        "--count_file", type=str, help="A tsv file of gene counts for all processed samples.", required=True
+    )
     parser.add_argument("--ref_annot", type=str, help="Path to reference annotation tsv", required=True)
     parser.add_argument("--output", type=str, help="Path to save to", required=True)
     return parser.parse_args(argv)
 
+
 def main(argv=None):
     """Coordinate argument parsing and program execution."""
     args = parse_args(argv)
-    get_sample_annotation(args.bam, args.samples, args.strandedness, args.single_end, args.gtf, args.count_file, "drop_annotation_given_samples.tsv")
+    get_sample_annotation(
+        args.bam,
+        args.samples,
+        args.strandedness,
+        args.single_end,
+        args.gtf,
+        args.count_file,
+        "drop_annotation_given_samples.tsv",
+    )
     final_annot(args.count_file, args.ref_annot, args.output)
+
 
 if __name__ == "__main__":
     sys.exit(main())

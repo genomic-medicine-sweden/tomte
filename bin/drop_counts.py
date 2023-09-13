@@ -114,6 +114,7 @@ def parse_args(argv=None):
     parser.add_argument("--ref_count_file", type=str, help="Optional reference count set", required=True)
     return parser.parse_args(argv)
 
+
 def main(argv=None):
     """Coordinate argument parsing and program execution."""
     args = parse_args(argv)
