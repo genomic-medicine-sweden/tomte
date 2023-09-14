@@ -3,7 +3,7 @@
 import argparse
 from pathlib import Path
 import csv
-import pandas as pd
+from pandas import read_csv, DataFrame, concat
 import sys
 
 SCRIPT_VERSION = "v1.0"
@@ -25,7 +25,7 @@ SAMPLE_ANNOTATION_COLUMNS = [
 ]
 
 
-def get_sample_annotation(
+def write_sample_annotation_to_tsv(
     bam: str, samples: str, strandedness: str, single_end: str, gtf: str, count_file: str, out_file: str
 ):
     """Write the Sample Annotation tsv file."""
@@ -40,32 +40,32 @@ def get_sample_annotation(
             sa_dict["GENE_COUNTS_FILE"] = count_file
             sa_dict["GENE_ANNOTATION"] = Path(gtf).stem
             sa_dict["STRAND"] = strandedness[index]
-            sa_dict["PAIRED_END"] = get_if_paired_end(single_end[index])
+            sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
             sa_dict["RNA_BAM_FILE"] = bam[index]
             writer.writerow(sa_dict)
 
 
-def get_if_paired_end(single_end: str):
+def is_paired_end(single_end: str) -> bool:
     """Logical funciton to determine if a sample is paired end"""
     if single_end.lower() == "false":
         return True
     return False
 
 
-def final_annot(count_file: str, ref_annot: str, out_file: str):
+def write_final_annot_to_tsv(count_file: str, ref_annot: str, out_file: str):
     """
     Concatenates the Sample Annotation produced by SampleAnnotation with the one
     provided for the reference samples, checking for duplicate sample IDs
     """
-    df_samples: pd.DataFrame = pd.read_csv("drop_annotation_given_samples.tsv", sep="\t")
-    df_reference: pd.DataFrame = pd.read_csv(ref_annot, sep="\t")
+    df_samples: DataFrame = read_csv("drop_annotation_given_samples.tsv", sep="\t")
+    df_reference: DataFrame = read_csv(ref_annot, sep="\t")
     df_reference["GENE_COUNTS_FILE"] = count_file
     df_samples["COUNT_OVERLAPS"] = df_reference["COUNT_OVERLAPS"].iloc[0]
     df_samples["COUNT_MODE"] = df_reference["COUNT_MODE"].iloc[0]
     df_samples["HPO_TERMS"] = df_reference["HPO_TERMS"].iloc[0]
     for id in df_samples["RNA_ID"]:
         df_reference = df_reference[df_reference["RNA_ID"].str.contains(id) == False]
-    df: pd.DataFrame = pd.concat([df_samples, df_reference]).reset_index(drop=True)
+    df: DataFrame = concat([df_samples, df_reference]).reset_index(drop=True)
     df.fillna("NA", inplace=True)
     df.to_csv(out_file, index=False, sep="\t")
 
@@ -93,17 +93,17 @@ def parse_args(argv=None):
 def main(argv=None):
     """Coordinate argument parsing and program execution."""
     args = parse_args(argv)
-    get_sample_annotation(
-        args.bam,
-        args.samples,
-        args.strandedness,
-        args.single_end,
-        args.gtf,
-        args.count_file,
-        "drop_annotation_given_samples.tsv",
+    write_sample_annotation_to_tsv(
+        bam=args.bam,
+        samples=args.samples,
+        strandedness=args.strandedness,
+        single_end=args.single_end,
+        gtf=args.gtf,
+        count_file=args.count_file,
+        out_file="drop_annotation_given_samples.tsv",
     )
-    final_annot(args.count_file, args.ref_annot, args.output)
+    write_final_annot_to_tsv(count_file=args.count_file, ref_annot=args.ref_annot, out_file=args.output)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
