@@ -5,7 +5,7 @@ import re
 from collections import OrderedDict
 from pathlib import Path
 import sys
-import pandas as pd
+from pandas import read_csv, DataFrame
 from typing import Set, Dict
 
 SCRIPT_VERSION = "v1.0"
@@ -47,7 +47,7 @@ STANDARD_CHROMOSOMES = [
 def get_non_std_genes(gtf: Path) -> Set[str]:
     """Create list of genes not belonging to chr1-21 or chrM"""
     gene_id_regex = re.compile('gene_id "(.+?)"')
-    genes_to_exclude = []
+    genes_to_exclude = set()
     with open(gtf, "r") as gtf_file:
         for line in gtf_file:
             if line.startswith("#"):
@@ -55,8 +55,8 @@ def get_non_std_genes(gtf: Path) -> Set[str]:
             if line.split()[0] in STANDARD_CHROMOSOMES:
                 continue
             gene_id = re.search(gene_id_regex, line)
-            genes_to_exclude.append(gene_id.group(1))
-    return set(genes_to_exclude)
+            genes_to_exclude.add(gene_id.group(1))
+    return genes_to_exclude
 
 
 def read_star_gene_counts(sample: str, star: Path, strandedness: str) -> Dict:
@@ -66,33 +66,34 @@ def read_star_gene_counts(sample: str, star: Path, strandedness: str) -> Dict:
     with open(star) as in_tab:
         for line in in_tab:
             if not line.startswith("N_"):
-                gene_id = line.split()[0]
+                split_line = line.split()
+                gene_id = split_line[0]
                 strand = TRANSLATOR[strandedness]
-                counts = int(line.split()[strand])
+                counts = int(split_line[strand])
                 gene_ids[gene_id] = counts
     gene_ids = OrderedDict(sorted(gene_ids.items()))
     sample_ids[sample] = gene_ids
     return sample_ids
 
 
-def get_counts_from_dict(gene_ids_dict: dict) -> pd.DataFrame:
+def get_counts_from_dict(gene_ids_dict: dict) -> DataFrame:
     """Transform gene ids dict into count_table"""
     one_sample = next(iter(gene_ids_dict))
     gene_list = list(gene_ids_dict[one_sample].keys())
     genes = {gene: [gene_ids_dict[sample][gene] for sample in gene_ids_dict] for gene in gene_list}
-    count_table: pd.DataFrame = pd.DataFrame.from_dict(genes, orient="index", columns=gene_ids_dict.keys())
+    count_table: DataFrame = DataFrame.from_dict(genes, orient="index", columns=gene_ids_dict.keys())
     count_table.index.name = "geneID"
     return count_table
 
 
-def get_tsv_from_dict(gene_ids_dict: dict, outfile: str, ref_count_file: str, genes_to_exclude: set[str]):
+def write_tsv_from_dict(gene_ids_dict: dict, outfile: str, ref_count_file: str, genes_to_exclude: Set[str]) -> None:
     """Transform dictionary into tsv friendly."""
     count_table = get_counts_from_dict(gene_ids_dict)
     if ref_count_file:
         if ref_count_file.endswith(".gz"):
-            ref_table = pd.read_csv(ref_count_file, compression="gzip", sep="\t", header=0, index_col=0)
+            ref_table = read_csv(ref_count_file, compression="gzip", sep="\t", header=0, index_col=0)
         else:
-            ref_table = pd.read_csv(ref_count_file, sep="\t", header=0, index_col=0)
+            ref_table = read_csv(ref_count_file, sep="\t", header=0, index_col=0)
         count_table = count_table.combine_first(ref_table)
     count_table.drop(genes_to_exclude, inplace=True)
     count_table.to_csv(outfile, compression="gzip", sep="\t", header=True)
@@ -123,9 +124,14 @@ def main(argv=None):
             read_star_gene_counts(sample=sample_id, star=args.star[index], strandedness=args.strandedness[index])
         )
 
-    genes_to_exclude = get_non_std_genes(args.gtf)
-    get_tsv_from_dict(master_dict, args.output, args.ref_count_file, genes_to_exclude)
+    genes_to_exclude: Set[str] = get_non_std_genes(gtf=args.gtf)
+    write_tsv_from_dict(
+        gene_ids_dict=master_dict,
+        outfile=args.output,
+        ref_count_file=args.ref_count_file,
+        genes_to_exclude=genes_to_exclude,
+    )
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
