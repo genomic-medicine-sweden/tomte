@@ -82,9 +82,8 @@ CONFIG_YAML = {
 
 
 def update_config(
-    yaml_object: dict,
-    genome: str,
-    gtf: str,
+    genome: Path,
+    gtf: Path,
     genome_assembly: str,
     padjcutoff: float,
     zscorecutoff: float,
@@ -94,30 +93,29 @@ def update_config(
     Updates config file to add correct genome, gtf,
     adjusted p-value, and Z-score for the module to be run.
     """
-    gtf_name = Path(gtf).name
-    gtf_without_ext = Path(gtf).stem
-    genome_name = Path(genome).name
+    gtf_without_ext = gtf.stem
+    genome_name = genome.name
 
-    yaml_object["genome"] = genome_name
-    yaml_object["root"] = "output"
-    yaml_object["htmlOutputPath"] = "output/html"
-    yaml_object["sampleAnnotation"] = "sample_annotation.tsv"
-    yaml_object["geneAnnotation"][gtf_without_ext] = gtf_name
-    yaml_object["geneAnnotation"].pop("gtf", None)
-    yaml_object["exportCounts"]["geneAnnotations"] = [gtf_without_ext]
-    yaml_object["genomeAssembly"] = genome_assembly
+    CONFIG_YAML["genome"] = genome_name
+    CONFIG_YAML["root"] = "output"
+    CONFIG_YAML["htmlOutputPath"] = "output/html"
+    CONFIG_YAML["sampleAnnotation"] = "sample_annotation.tsv"
+    CONFIG_YAML["geneAnnotation"][gtf_without_ext] = str(gtf)
+    CONFIG_YAML["geneAnnotation"].pop("gtf", None)
+    CONFIG_YAML["exportCounts"]["geneAnnotations"] = [gtf_without_ext]
+    CONFIG_YAML["genomeAssembly"] = genome_assembly
 
-    ## Export counts
+    # Export counts
     if drop_module == "AE":
-        yaml_object["aberrantExpression"]["run"] = ["true"]
-        yaml_object["aberrantExpression"]["padjCutoff"] = padjcutoff
-        yaml_object["aberrantExpression"]["zScoreCutoff"] = zscorecutoff
+        CONFIG_YAML["aberrantExpression"]["run"] = ["true"]
+        CONFIG_YAML["aberrantExpression"]["padjCutoff"] = padjcutoff
+        CONFIG_YAML["aberrantExpression"]["zScoreCutoff"] = zscorecutoff
     elif drop_module == "AS":
-        yaml_object["aberrantSplicing"]["run"] = ["true"]
-        yaml_object["aberrantSplicing"]["padjCutoff"] = padjcutoff
+        CONFIG_YAML["aberrantSplicing"]["run"] = ["true"]
+        CONFIG_YAML["aberrantSplicing"]["padjCutoff"] = padjcutoff
     elif drop_module == "MAE":
-        yaml_object["mae"]["run"] = ["true"]
-    return yaml_object
+        CONFIG_YAML["mae"]["run"] = ["true"]
+    return CONFIG_YAML
 
 
 def write_yaml(out_path: str, yaml_object: dict):
@@ -132,10 +130,15 @@ def parse_args(argv=None):
         description="""Generate config file for DROP.""",
     )
 
-    parser.add_argument("--genome_fasta", type=str, help="Specify genome fasta base name", required=True)
+    parser.add_argument(
+        "--genome_fasta",
+        type=Path,
+        help="Specify genome fasta base name",
+        required=True,
+    )
     parser.add_argument(
         "--gtf",
-        type=str,
+        type=Path,
         help="Specify gtf file name",
         required=True,
     )
@@ -148,7 +151,8 @@ def parse_args(argv=None):
     parser.add_argument(
         "--genome_assembly",
         type=str,
-        help="Specify genome for drop can be either hg19/hs37d5 or hg38/GRCh38",
+        help="Specify genome for drop can be either hg19/hs37d5 or hg38/GRCh38.",
+        choices=["hg19", "hs37d5", "hg38", "GRCh38"],
         required=True,
     )
     parser.add_argument(
@@ -178,11 +182,10 @@ def parse_args(argv=None):
     return parser.parse_args(argv)
 
 
-def main(argv=None):
+def main():
     """Coordinate argument parsing and program execution."""
-    args = parse_args(argv)
-    master_config = update_config(
-        yaml_object=CONFIG_YAML,
+    args = parse_args()
+    master_config: Dict[str, Any] = update_config(
         genome=args.genome_fasta,
         gtf=args.gtf,
         genome_assembly=args.genome_assembly,
@@ -194,4 +197,4 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
