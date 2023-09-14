@@ -4,7 +4,6 @@ import argparse
 from pathlib import Path
 import csv
 from pandas import read_csv, DataFrame, concat
-import sys
 
 SCRIPT_VERSION = "v1.0"
 SAMPLE_ANNOTATION_COLUMNS = [
@@ -30,11 +29,10 @@ def write_sample_annotation_to_tsv(
 ):
     """Write the Sample Annotation tsv file."""
     with open(out_file, "w") as tsv_file:
-        fieldnames = SAMPLE_ANNOTATION_COLUMNS
-        writer = csv.DictWriter(tsv_file, fieldnames=fieldnames, delimiter="\t")
+        writer = csv.DictWriter(tsv_file, fieldnames=SAMPLE_ANNOTATION_COLUMNS, delimiter="\t")
         writer.writeheader()
         for index, id in enumerate(samples):
-            sa_dict: dict = {}.fromkeys(fieldnames, "NA")
+            sa_dict: dict = {}.fromkeys(SAMPLE_ANNOTATION_COLUMNS, "NA")
             sa_dict["RNA_ID"] = id
             sa_dict["DROP_GROUP"] = "outrider,fraser"
             sa_dict["GENE_COUNTS_FILE"] = count_file

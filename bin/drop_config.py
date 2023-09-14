@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import argparse
-import sys
 from pathlib import Path
 import yaml
-from typing import Set, Dict
+from typing import Dict, Any
+from copy import deepcopy
 
 SCRIPT_VERSION = "v1.0"
 CONFIG_YAML = {
@@ -95,27 +95,28 @@ def update_config(
     """
     gtf_without_ext = gtf.stem
     genome_name = genome.name
+    config_copy: Dict[str, Any] = deepcopy(CONFIG_YAML)
 
-    CONFIG_YAML["genome"] = genome_name
-    CONFIG_YAML["root"] = "output"
-    CONFIG_YAML["htmlOutputPath"] = "output/html"
-    CONFIG_YAML["sampleAnnotation"] = "sample_annotation.tsv"
-    CONFIG_YAML["geneAnnotation"][gtf_without_ext] = str(gtf)
-    CONFIG_YAML["geneAnnotation"].pop("gtf", None)
-    CONFIG_YAML["exportCounts"]["geneAnnotations"] = [gtf_without_ext]
-    CONFIG_YAML["genomeAssembly"] = genome_assembly
+    config_copy["genome"] = genome_name
+    config_copy["root"] = "output"
+    config_copy["htmlOutputPath"] = "output/html"
+    config_copy["sampleAnnotation"] = "sample_annotation.tsv"
+    config_copy["geneAnnotation"][gtf_without_ext] = str(gtf)
+    config_copy["geneAnnotation"].pop("gtf", None)
+    config_copy["exportCounts"]["geneAnnotations"] = [gtf_without_ext]
+    config_copy["genomeAssembly"] = genome_assembly
 
     # Export counts
     if drop_module == "AE":
-        CONFIG_YAML["aberrantExpression"]["run"] = ["true"]
-        CONFIG_YAML["aberrantExpression"]["padjCutoff"] = padjcutoff
-        CONFIG_YAML["aberrantExpression"]["zScoreCutoff"] = zscorecutoff
+        config_copy["aberrantExpression"]["run"] = ["true"]
+        config_copy["aberrantExpression"]["padjCutoff"] = padjcutoff
+        config_copy["aberrantExpression"]["zScoreCutoff"] = zscorecutoff
     elif drop_module == "AS":
-        CONFIG_YAML["aberrantSplicing"]["run"] = ["true"]
-        CONFIG_YAML["aberrantSplicing"]["padjCutoff"] = padjcutoff
+        config_copy["aberrantSplicing"]["run"] = ["true"]
+        config_copy["aberrantSplicing"]["padjCutoff"] = padjcutoff
     elif drop_module == "MAE":
-        CONFIG_YAML["mae"]["run"] = ["true"]
-    return CONFIG_YAML
+        config_copy["mae"]["run"] = ["true"]
+    return config_copy
 
 
 def write_yaml(out_path: str, yaml_object: dict):

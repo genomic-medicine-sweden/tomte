@@ -4,7 +4,6 @@ import argparse
 import re
 from collections import OrderedDict
 from pathlib import Path
-import sys
 from pandas import read_csv, DataFrame
 from typing import Set, Dict
 

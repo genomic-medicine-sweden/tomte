@@ -3,7 +3,6 @@
 import argparse
 from pandas import DataFrame, read_csv, concat
 import pyreadr
-import sys
 
 SCRIPT_VERSION = "v1.0"
 GENE_PANEL_HEADER = ["chromosome", "gene_start", "gene_stop", "hgnc_id", "hgnc_symbol"]
