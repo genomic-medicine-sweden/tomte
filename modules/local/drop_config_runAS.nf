@@ -13,14 +13,16 @@ process DROP_CONFIG_RUN_AS {
     tuple val(meta), path(fasta), path(fai)
     path gtf
     path sample_annotation
-    tuple val(meta), path(bam), path(bai)
+    tuple path(bam), path(bai)
     path ref_splice_folder
     val(genome)
+    val(drop_padjcutoff_as)
 
     output:
-    path('config.yaml'), emit: config_drop
-    path('output')     , emit: drop_ae_out
-    path "versions.yml", emit: versions
+    path('config.yaml')             , emit: config_drop
+    path('output')                  , emit: drop_as_out
+    path('FRASER_results_fraser--*'), emit: drop_as_tsv
+    path "versions.yml"             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -37,13 +39,16 @@ process DROP_CONFIG_RUN_AS {
         --gtf ${gtf}\\
         --drop_module AS \\
         --genome_assembly $genome_assembly \\
+        --padjcutoff ${drop_padjcutoff_as} \\
         --output config.yaml
 
     snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime
 
+    cp output/html/AberrantSplicing/FRASER_results_fraser--*.tsv .
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_config: v1.0
+        drop_config: \$(\$baseDir/bin/drop_config.py --version )
         drop: v\$(echo \$(drop --version) |  sed -n 's/drop, version //p')
     END_VERSIONS
     """
@@ -51,11 +56,12 @@ process DROP_CONFIG_RUN_AS {
     stub:
     """
     touch config.yaml
+    touch FRASER_results_fraser--.tsv
     mkdir output
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_config: v1.0
+        drop_config: \$(\$baseDir/bin/drop_config.py --version )
         drop: v\$(echo \$(drop --version) |  sed -n 's/drop, version //p')
     END_VERSIONS
     """

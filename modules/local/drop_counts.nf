@@ -28,7 +28,7 @@ process DROP_COUNTS {
     """
     $baseDir/bin/drop_counts.py \\
         --star ${counts} \\
-        --sample $ids \\
+        --samples $ids \\
         --strandedness $strandedness \\
         --ref_count_file ${reference_count_file} \\
         --output processed_geneCounts.tsv.gz \\
@@ -36,7 +36,7 @@ process DROP_COUNTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_counts: v1.0
+        drop_counts: \$(\$baseDir/bin/drop_counts.py --version )
     END_VERSIONS
     """
 
@@ -46,7 +46,7 @@ process DROP_COUNTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_counts: v1.0
+        drop_counts: \$(\$baseDir/bin/drop_counts.py --version )
     END_VERSIONS
     """
 }
