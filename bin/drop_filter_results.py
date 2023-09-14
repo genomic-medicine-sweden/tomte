@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
-import pandas as pd
+from pandas import DataFrame, read_csv, concat
 import pyreadr
 import sys
 
@@ -10,13 +10,13 @@ GENE_PANEL_HEADER = ["chromosome", "gene_start", "gene_stop", "hgnc_id", "hgnc_s
 GENE_PANEL_COLUMNS_TO_KEEP = ["hgnc_symbol", "hgnc_id"]
 
 
-def get_top_hits(sample_id: str, df_results_family_aberrant_expression: pd.DataFrame) -> pd.DataFrame:
+def get_top_hits(sample_id: str, df_results_family_aberrant_expression: DataFrame) -> DataFrame:
     """
     Filter results to get only those with the id provided.
     If there are >= 20 hits it will output all of them.
     If there are less than 20 hits, it will output the 20 with the lowest p-value.
     """
-    df_id: pd.DataFrame = df_results_family_aberrant_expression[
+    df_id: DataFrame = df_results_family_aberrant_expression[
         df_results_family_aberrant_expression["sampleID"] == sample_id
     ]
     if sum(df_id["aberrant"] == "True") >= 20:
@@ -25,22 +25,21 @@ def get_top_hits(sample_id: str, df_results_family_aberrant_expression: pd.DataF
     return df_id[:20]
 
 
-def annotate_with_hgnc(df_family_aberrant_expression_top_hits: pd.DataFrame, out_drop_gene_name: str) -> pd.DataFrame:
+def annotate_with_hgnc(df_family_aberrant_expression_top_hits: DataFrame, out_drop_gene_name: str) -> DataFrame:
     """Annotate results from DROP Aberrant Expression with hgnc ids."""
-    df_genes: pd.DataFrame = pd.read_csv(out_drop_gene_name)
+    df_genes: DataFrame = read_csv(out_drop_gene_name)
     df_genes.rename(columns={"gene_name": "hgncSymbol"}, inplace=True)
     return df_genes.merge(df_family_aberrant_expression_top_hits, left_on="gene_id", right_on="geneID")
 
 
-def filter_by_gene_panel(df_family_top_hits: pd.DataFrame, gene_panel: str, module_name: str) -> pd.DataFrame:
+def filter_by_gene_panel(df_family_top_hits: DataFrame, gene_panel: str, module_name: str) -> DataFrame:
     """Filter out from results any gene that is not present in the provided gene panel."""
     if gene_panel != "None":
-        gene_panel_header = GENE_PANEL_HEADER
-        df_panel: pd.DataFrame = pd.read_csv(
-            gene_panel, sep="\t", names=gene_panel_header, header=None, comment="#", index_col=False
+        df_panel: DataFrame = read_csv(
+            gene_panel, sep="\t", names=GENE_PANEL_HEADER, header=None, comment="#", index_col=False
         )
         df_family_top_hits = df_family_top_hits.loc[df_family_top_hits["hgncSymbol"].isin(df_panel["hgnc_symbol"])]
-        df_clinical: pd.DataFrame = df_panel[GENE_PANEL_COLUMNS_TO_KEEP].merge(
+        df_clinical: DataFrame = df_panel[GENE_PANEL_COLUMNS_TO_KEEP].merge(
             df_family_top_hits, left_on="hgnc_symbol", right_on="hgncSymbol"
         )
         df_clinical = df_clinical.drop(columns=["hgnc_symbol"])
@@ -61,15 +60,15 @@ def filter_outrider_results(
         - Another that is unfilterd.
     """
     rds_aberrant_expression = pyreadr.read_r(out_drop_aberrant_expression_rds)
-    df_results_aberrante_expression: pd.DataFrame = rds_aberrant_expression[None]
+    df_results_aberrante_expression: DataFrame = rds_aberrant_expression[None]
     # Keep only samples provided to tomte
-    df_results_family_aberrant_expression: pd.DataFrame = df_results_aberrante_expression.loc[
+    df_results_family_aberrant_expression: DataFrame = df_results_aberrante_expression.loc[
         df_results_aberrante_expression["sampleID"].isin(samples)
     ]
-    df_family_aberrant_expression_top_hits = pd.DataFrame()
+    df_family_aberrant_expression_top_hits = DataFrame()
     for id in samples:
         df_sample_aberrant_expression_top_hits = get_top_hits(id, df_results_family_aberrant_expression)
-        df_family_aberrant_expression_top_hits = pd.concat(
+        df_family_aberrant_expression_top_hits = concat(
             [df_family_aberrant_expression_top_hits, df_sample_aberrant_expression_top_hits],
             ignore_index=True,
             sort=False,
@@ -88,9 +87,9 @@ def filter_fraser_result(samples: list, gene_panel: str, out_drop_aberrant_splic
         - One filtered to keep gense in the gene panel (if provided).
         - Another that is unfilterd.
     """
-    df_results_aberrant_splicing = pd.read_csv(out_drop_aberrant_splicing_tsv, sep="\t")
+    df_results_aberrant_splicing: DataFrame = read_csv(out_drop_aberrant_splicing_tsv, sep="\t")
     # Keep only samples provided to tomte
-    df_results_family_aberrant_splicing: pd.DataFrame = df_results_aberrant_splicing.loc[
+    df_results_family_aberrant_splicing: DataFrame = df_results_aberrant_splicing.loc[
         df_results_aberrant_splicing["sampleID"].isin(samples)
     ]
     df_results_family_aberrant_splicing.to_csv(
@@ -105,9 +104,19 @@ def parse_args(argv=None):
         formatter_class=argparse.MetavarTypeHelpFormatter,
         description="""Filter DROP results to keep only the patient samples and the genes within the panel if provided""",
     )
-    parser.add_argument("--samples", type=str, nargs="+", help="corresponding samples name", required=True)
     parser.add_argument(
-        "--gene_panel", type=str, default="None", help="Path to gene panel for filtering", required=False
+        "--samples",
+        type=str,
+        nargs="+",
+        help="corresponding samples name",
+        required=True,
+    )
+    parser.add_argument(
+        "--gene_panel",
+        type=str,
+        default="None",
+        help="Path to gene panel for filtering",
+        required=False,
     )
     parser.add_argument(
         "--drop_ae_rds",
@@ -138,12 +147,19 @@ def parse_args(argv=None):
     return parser.parse_args(argv)
 
 
-def main(argv=None):
+def main():
     """Coordinate argument parsing and program execution."""
-    args = parse_args(argv)
-    filter_outrider_results(args.samples, args.gene_panel, args.drop_ae_rds, args.out_drop_gene_name)
-    filter_fraser_result(args.samples, args.gene_panel, args.out_drop_as_tsv)
+    args = parse_args()
+    filter_outrider_results(
+        samples=args.samples,
+        gene_panel=args.gene_panel,
+        out_drop_aberrant_expression_rds=args.drop_ae_rds,
+        out_drop_gene_name=args.out_drop_gene_name,
+    )
+    filter_fraser_result(
+        samples=args.samples, gene_panel=args.gene_panel, out_drop_aberrant_splicing_tsv=args.out_drop_as_tsv
+    )
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

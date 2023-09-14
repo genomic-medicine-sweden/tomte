@@ -90,9 +90,9 @@ def parse_args(argv=None):
     return parser.parse_args(argv)
 
 
-def main(argv=None):
+def main():
     """Coordinate argument parsing and program execution."""
-    args = parse_args(argv)
+    args = parse_args()
     write_sample_annotation_to_tsv(
         bam=args.bam,
         samples=args.samples,

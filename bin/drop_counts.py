@@ -115,9 +115,9 @@ def parse_args(argv=None):
     return parser.parse_args(argv)
 
 
-def main(argv=None):
+def main():
     """Coordinate argument parsing and program execution."""
-    args = parse_args(argv)
+    args = parse_args()
     master_dict = {}
     for index, sample_id in enumerate(args.samples):
         master_dict.update(
