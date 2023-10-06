@@ -26,7 +26,7 @@ SAMPLE_ANNOTATION_COLUMNS = [
 
 
 def write_sample_annotation_to_tsv(
-    bam: str, samples: str, strandedness: str, single_end: str, drop_group_sample:str, out_file: str
+    bam: str, samples: str, strandedness: str, single_end: str, drop_group_sample: str, out_file: str
 ):
     """Write the Sample Annotation tsv file."""
     with open(out_file, "w") as tsv_file:
@@ -59,7 +59,7 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
     df_samples: DataFrame = read_csv("drop_annotation_given_samples.tsv", sep="\t")
     df_reference: DataFrame = read_csv(ref_annot, sep="\t")
     df_reference["GENE_COUNTS_FILE"] = ref_count_file
-    df_reference["SPLICE_COUNTS_DIR"] = df_reference["SPLICE_COUNTS_DIR"].str.rstrip('/')
+    df_reference["SPLICE_COUNTS_DIR"] = df_reference["SPLICE_COUNTS_DIR"].str.rstrip("/")
     df_reference["SPLICE_COUNTS_DIR"] = df_reference["SPLICE_COUNTS_DIR"].apply(os.path.basename)
     df_reference["DROP_GROUP"] = df_reference["DROP_GROUP"].str.replace(" ", "")
     df_samples["COUNT_OVERLAPS"] = df_reference["COUNT_OVERLAPS"].iloc[0]
