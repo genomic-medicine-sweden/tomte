@@ -85,6 +85,7 @@ def update_config(
     genome: Path,
     gtf: Path,
     genome_assembly: str,
+    drop_group_samples: str,
     padjcutoff: float,
     zscorecutoff: float,
     drop_module: str,
@@ -109,10 +110,12 @@ def update_config(
     # Export counts
     if drop_module == "AE":
         config_copy["aberrantExpression"]["run"] = ["true"]
+        config_copy["aberrantExpression"]["groups"] = [drop_group_samples]
         config_copy["aberrantExpression"]["padjCutoff"] = padjcutoff
         config_copy["aberrantExpression"]["zScoreCutoff"] = zscorecutoff
     elif drop_module == "AS":
         config_copy["aberrantSplicing"]["run"] = ["true"]
+        config_copy["aberrantSplicing"]["groups"] = [drop_group_samples]
         config_copy["aberrantSplicing"]["padjCutoff"] = padjcutoff
     elif drop_module == "MAE":
         config_copy["mae"]["run"] = ["true"]
@@ -157,6 +160,12 @@ def parse_args(argv=None):
         required=True,
     )
     parser.add_argument(
+        "--drop_group_samples",
+        type=str,
+        help="Specify drop group to analyse",
+        required=True,
+    )
+    parser.add_argument(
         "--padjcutoff",
         type=float,
         help="Specify adjusted p-value cut-off",
@@ -190,6 +199,7 @@ def main():
         genome=args.genome_fasta,
         gtf=args.gtf,
         genome_assembly=args.genome_assembly,
+        drop_group_samples=args.drop_group_samples,
         padjcutoff=args.padjcutoff,
         zscorecutoff=args.zscorecutoff,
         drop_module=args.drop_module,

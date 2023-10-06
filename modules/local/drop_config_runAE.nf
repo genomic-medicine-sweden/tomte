@@ -13,8 +13,11 @@ process DROP_CONFIG_RUN_AE {
     tuple val(meta), path(fasta), path(fai)
     path gtf
     path sample_annotation
-    path gene_counts
+    tuple path(bam), path(bai)
+    path ref_drop_count_file
+    path ref_splice_folder
     val(genome)
+    val(drop_group_samples_ae)
     val(drop_padjcutoff_ae)
     val(drop_zScoreCutoff)
 
@@ -30,6 +33,7 @@ process DROP_CONFIG_RUN_AE {
 
     script:
     def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
+    def drop_group = "${drop_group_samples_ae}".replace(" ","")
     def zscorecutoff = drop_zScoreCutoff ? "--zscorecutoff ${drop_zScoreCutoff}" : ''
 
     """
@@ -42,6 +46,7 @@ process DROP_CONFIG_RUN_AE {
         --gtf ${gtf} \\
         --drop_module AE \\
         --genome_assembly $genome_assembly \\
+        --drop_group_samples $drop_group \\
         --padjcutoff ${drop_padjcutoff_ae} \\
         $zscorecutoff \\
         --output config.yaml

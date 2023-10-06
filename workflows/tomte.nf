@@ -111,7 +111,7 @@ workflow TOMTE {
         exit 1, 'Input samplesheet not specified!'
     }
 
-    fasta                         = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
+    //fasta                         = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
                                                                         : Channel.value([[],[]])
     ch_vep_filters                = params.vep_filters                  ? Channel.fromPath(params.vep_filters).collect()
@@ -128,7 +128,7 @@ workflow TOMTE {
                                                                         : Channel.empty()
 
     PREPARE_REFERENCES(
-        fasta,
+        params.fasta,
         fai,
         params.star_index,
         params.gtf,
@@ -185,6 +185,7 @@ workflow TOMTE {
     // Analyse transcripts
     ANALYSE_TRANSCRIPTS(
         ch_alignment.bam_bai,
+        ch_alignment.bam_ds_bai,
         ch_references.gtf,
         ch_references.fasta_fai_meta,
         ch_alignment.gene_counts,
@@ -192,6 +193,8 @@ workflow TOMTE {
         ch_ref_drop_annot_file,
         ch_ref_drop_splice_folder,
         params.genome,
+        params.drop_group_samples_ae,
+        params.drop_group_samples_as,
         params.drop_padjcutoff_ae,
         params.drop_padjcutoff_as,
         params.drop_zscorecutoff,

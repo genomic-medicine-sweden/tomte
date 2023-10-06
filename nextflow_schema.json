@@ -269,6 +269,18 @@
                     "description": "Should DROP Aberrant Splicing module be run?",
                     "fa_icon": "fas fa-toggle-off"
                 },
+                "drop_group_samples_ae": {
+                    "type": "string",
+                    "default": "outrider",
+                    "description": "DROP group to run when AE only one allowed. Make sure it matches your reference annotation file.",
+                    "fa_icon": "fas fa-list-ol"
+                },
+                "drop_group_samples_as": {
+                    "type": "string",
+                    "default": "fraser",
+                    "description": "DROP group to run when AS only one allowed. Make sure it matches your reference annotation file.",
+                    "fa_icon": "fas fa-list-ol"
+                },
                 "drop_padjcutoff_ae": {
                     "type": "number",
                     "default": 0.05,
