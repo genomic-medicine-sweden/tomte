@@ -15,7 +15,7 @@ log.info logo + paramsSummaryLog(workflow) + citation
 
 WorkflowTomte.initialise(params, log)
 
-// TODO nf-core: Add all file path parameters for the pipeline to the list below
+// TODO nf-core: change this to use the plugin nf-validation
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input,
@@ -146,6 +146,16 @@ workflow TOMTE {
                                                               : Channel.empty()
     ch_vep_cache             = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
                                                                 : ( params.vep_cache  ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
+    //
+    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
+    //
+    // INPUT_CHECK (
+    //    file(params.input)
+    // )
+    // ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+    // TODO: OPTIONAL, you can use nf-validation plugin to create an input channel from the samplesheet with Channel.fromSamplesheet("input")
+    // See the documentation https://nextflow-io.github.io/nf-validation/samplesheets/fromSamplesheet/
+    // ! There is currently no tooling to help you write a sample sheet schema
 
     //
     // MODULE: Run FastQC
@@ -284,6 +294,7 @@ workflow.onComplete {
     if (params.email || params.email_on_fail) {
         NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report)
     }
+    NfcoreTemplate.dump_parameters(workflow, params)
     NfcoreTemplate.summary(workflow, params, log)
     if (params.hook_url) {
         NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
