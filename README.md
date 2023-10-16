@@ -19,7 +19,9 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 
 ## Pipeline summary
 
-# ![metro_map](docs/images/tomte_pipeline_metromap.eps)
+<p align="center">
+     <img title="tomte workflow" src="docs/images/tomte_pipeline_metromap.png">
+</p>
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
