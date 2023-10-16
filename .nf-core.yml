@@ -4,6 +4,9 @@ lint:
     - assets/nf-core-tomte_logo_light.png
     - docs/images/nf-core-tomte_logo_light.png
     - docs/images/nf-core-tomte_logo_dark.png
+    - docs/images/tomte_logo.eps
+    - docs/images/tomte_pipeline_metromap.eps
+    - docs/images/tomte_pipeline_metromap.png
   files_unchanged: false
     - assets/sendmail_template.txt
     - .github/CONTRIBUTING.md
