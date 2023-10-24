@@ -4,7 +4,6 @@
 
  include { STRINGTIE_STRINGTIE } from '../../modules/nf-core/stringtie/stringtie/main'
  include { GFFCOMPARE          } from '../../modules/nf-core/gffcompare/main'
- include { DROP_COUNTS         } from '../../modules/local/drop_counts'
  include { DROP_SAMPLE_ANNOT   } from '../../modules/local/drop_sample_annot'
  include { DROP_CONFIG_RUN_AE  } from '../../modules/local/drop_config_runAE'
  include { DROP_CONFIG_RUN_AS  } from '../../modules/local/drop_config_runAS'
