@@ -33,17 +33,9 @@ workflow ANALYSE_TRANSCRIPTS {
 
         // DROP
         // Generates count files for samples and merges them with reference count file
-        //star_count = gene_counts.map{ meta, cnt_file -> cnt_file }.collect()
-        star_samples  = gene_counts.map{ meta, cnt_file -> meta }.collect()
-        //DROP_COUNTS(
-        //    star_count,
-        //    star_samples,
-        //    ch_gtf,
-        //    ch_ref_drop_count_file
-        //)
-        //ch_drop_counts = DROP_COUNTS.out.processed_gene_counts.collect()
         
         // Generates sample annotation
+        star_samples  = gene_counts.map{ meta, cnt_file -> meta }.collect()
         ch_bam_files = ch_bam_ds_bai.collect{it[1]}
         DROP_SAMPLE_ANNOT(
             ch_bam_files,
@@ -52,7 +44,6 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_ref_drop_annot_file,
             drop_group_samples_ae,
             drop_group_samples_as
-        //    ch_gtf
         )
 
         // Generates  config file and runs Aberrant expression module
@@ -126,7 +117,6 @@ workflow ANALYSE_TRANSCRIPTS {
         coverage_gtf          = STRINGTIE_STRINGTIE.out.coverage_gtf       // channel: [ val(meta), [ path(coverage_gtf) ] ]
         annotated_gtf         = GFFCOMPARE.out.annotated_gtf               // channel: [ val(meta), [ path(annotated_gtf) ] ]
         stats_gtf             = GFFCOMPARE.out.stats                       // channel: [ val(meta), [ path(stats) ] ]
-        //processed_gene_counts = DROP_COUNTS.out.processed_gene_counts      // channel: [ path(tsv) ]
         annotation_drop       = DROP_SAMPLE_ANNOT.out.drop_annot           // channel: [ path(sample_annotation.tsv) ]
         config_drop_ae        = DROP_CONFIG_RUN_AE.out.config_drop         // channel: [ path(confg_file.yml) ]
         drop_ae_out           = DROP_CONFIG_RUN_AE.out.drop_ae_out         // channel: [ path(drop_output_AE) ]
