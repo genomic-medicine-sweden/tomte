@@ -34,7 +34,7 @@ workflow ANALYSE_TRANSCRIPTS {
         // Generates count files for samples and merges them with reference count file
         
         // Generates sample annotation
-        star_samples  = gene_counts.map{ meta, cnt_file -> meta }.collect()
+        star_samples = gene_counts.map{ meta, cnt_file -> meta }.collect()
         ch_bam_files = ch_bam_ds_bai.collect{it[1]}
         DROP_SAMPLE_ANNOT(
             ch_bam_files,
@@ -46,8 +46,8 @@ workflow ANALYSE_TRANSCRIPTS {
         )
 
         // Generates  config file and runs Aberrant expression module
-        ch_bai_files = ch_bam_ds_bai.collect{it[2]}.toList()
-        ch_bam_bai_files=ch_bam_files.toList().combine(ch_bai_files)
+        ch_bai_files = ch_bam_ds_bai.collect{ it[2] }.toList()
+        ch_bam_bai_files = ch_bam_files.toList().combine(ch_bai_files)
         DROP_CONFIG_RUN_AE(
             ch_fasta_fai_meta, 
             ch_gtf, 
@@ -90,7 +90,7 @@ workflow ANALYSE_TRANSCRIPTS {
         )
 
         // Stringtie
-        ch_bam = ch_bam_bai.map{ meta, bam, bai -> [meta, [bam]]}
+        ch_bam = ch_bam_bai.map{ meta, bam, bai -> [meta, [bam]] }
         STRINGTIE_STRINGTIE(
             ch_bam,
             ch_gtf
@@ -103,7 +103,6 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_gtf.map{ gtf -> [ [id:gtf.simpleName], gtf ] }
         )
 
-        //ch_versions = ch_versions.mix(DROP_COUNTS.out.versions)
         ch_versions = ch_versions.mix(DROP_SAMPLE_ANNOT.out.versions)
         ch_versions = ch_versions.mix(DROP_CONFIG_RUN_AE.out.versions)
         ch_versions = ch_versions.mix(DROP_CONFIG_RUN_AS.out.versions)

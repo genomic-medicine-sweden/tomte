@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-from pathlib import Path
 import csv
 from pandas import read_csv, DataFrame, concat
 import os
@@ -59,8 +58,7 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
     df_samples: DataFrame = read_csv("drop_annotation_given_samples.tsv", sep="\t")
     df_reference: DataFrame = read_csv(ref_annot, sep="\t")
     df_reference["GENE_COUNTS_FILE"] = ref_count_file
-    df_reference["SPLICE_COUNTS_DIR"] = df_reference["SPLICE_COUNTS_DIR"].str.rstrip("/")
-    df_reference["SPLICE_COUNTS_DIR"] = df_reference["SPLICE_COUNTS_DIR"].apply(os.path.basename)
+    df_reference["SPLICE_COUNTS_DIR"] = df_reference["SPLICE_COUNTS_DIR"].str.rstrip("/").apply(os.path.basename)
     df_reference["DROP_GROUP"] = df_reference["DROP_GROUP"].str.replace(" ", "")
     df_samples["COUNT_OVERLAPS"] = df_reference["COUNT_OVERLAPS"].iloc[0]
     df_samples["COUNT_MODE"] = df_reference["COUNT_MODE"].iloc[0]

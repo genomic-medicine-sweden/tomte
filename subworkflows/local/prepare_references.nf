@@ -31,7 +31,7 @@ workflow PREPARE_REFERENCES {
     main:
         ch_versions = Channel.empty()
 
-        fasta_meta=Channel.fromPath(fasta).map { it -> [[id:it[0]], it]}.collect()
+        fasta_meta = Channel.fromPath(fasta).map { it -> [ [id:it[0] ], it] }.collect()
         GUNZIP_FASTA(fasta_meta)
         ch_fasta = fasta.endsWith(".gz") ? GUNZIP_FASTA.out.gunzip.collect() : fasta_meta
 
@@ -43,7 +43,7 @@ workflow PREPARE_REFERENCES {
         BUILD_DICT(ch_fasta)
         ch_dict = BUILD_DICT.out.dict.collect()
 
-        gtf_meta=Channel.fromPath(gtf).map{it -> [[id:it[0]], it]}.collect()
+        gtf_meta = Channel.fromPath(gtf).map{ it -> [ [id:it[0]], it ] }.collect()
         GUNZIP_GTF(gtf_meta)
         ch_gtf_no_meta = gtf.endsWith(".gz") ? GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }.collect() : Channel.fromPath(gtf)
 
@@ -57,21 +57,19 @@ workflow PREPARE_REFERENCES {
         UNTAR_STAR_INDEX( ch_star.map { it -> [[:], it] } )
         ch_star_index = (!star_index) ?  BUILD_STAR_GENOME.out.index.collect() : 
                                         (star_index.endsWith(".gz") ? UNTAR_STAR_INDEX.out.untar.map { it[1] } : star_index)
-                
         // Convert gtf to refflat for picard
         GTF_TO_REFFLAT(ch_gtf_no_meta)
 
         // Get rRNA transcripts and convert to interval_list format
         GET_RRNA_TRANSCRIPTS(ch_gtf_no_meta)
        
-        BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map {it -> [ [id:it.name], it ]}, ch_dict )
+        BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map { it -> [ [id:it.name], it ] }, ch_dict )
 
         UNTAR_VEP_CACHE (ch_vep_cache)
         
         // Preparing transcript fasta
         ch_fasta_fai = ch_fasta.join(ch_fai).collect()
-        GFFREAD(ch_gtf_no_meta.map{it -> [[id:it[0].simpleName], it]},ch_fasta_fai)
-        tr=GFFREAD.out.tr_fasta.collect()
+        GFFREAD(ch_gtf_no_meta.map{ it -> [ [id:it[0].simpleName], it ] },ch_fasta_fai)
         transcript_fasta_no_meta = (!transcript_fasta) ? GFFREAD.out.tr_fasta.collect() :
                                     (transcript_fasta.endsWith(".gz") ? GUNZIP_TRFASTA.out.gunzip.collect().map{ meta, fasta -> [ fasta ] } : transcript_fasta)
 
@@ -109,6 +107,6 @@ workflow PREPARE_REFERENCES {
         refflat          = GTF_TO_REFFLAT.out.refflat.collect()
         rrna_bed         = GET_RRNA_TRANSCRIPTS.out.bed.collect()
         interval_list    = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
-        vep_resources    = UNTAR_VEP_CACHE.out.untar.map{meta, files -> [files]}.collect()     // channel: [ path(cache) ]
+        vep_resources    = UNTAR_VEP_CACHE.out.untar.map{ meta, files -> [files] }.collect()     // channel: [ path(cache) ]
         versions         = ch_versions
 }
