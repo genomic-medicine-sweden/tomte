@@ -4,7 +4,7 @@ R23611	NA	NA	NA	outrider, fraser	TRUE	IntersectionStrict	TRUE	reverse	drop_data	
 R97979	NA	NA	NA	outrider, fraser	TRUE	IntersectionStrict	TRUE	reverse	drop_data	NA	drop_data/geneCounts.tsv	grch37_chr21	NA
 R73084	NA	NA	NA	outrider, fraser	TRUE	IntersectionStrict	TRUE	reverse	drop_data	NA	drop_data/geneCounts.tsv	grch37_chr21	NA
 R34104	NA	NA	NA	outrider, fraser	TRUE	IntersectionStrict	TRUE	reverse	drop_data	NA	drop_data/geneCounts.tsv	grch37_chr21	NA
-R18431	NA	NA	NA	outrider, fraser	TRUE	IntersectionStrict	TRUE	reverse	drop_data	NA	drop_data/geneCounts.tsv	grch37_chr21	NA
+R18431	NA	NA	NA	fraser	TRUE	IntersectionStrict	TRUE	reverse	drop_data	NA	drop_data/geneCounts.tsv	grch37_chr21	NA
 R83610	NA	NA	NA	outrider, fraser	TRUE	IntersectionStrict	TRUE	reverse	drop_data	NA	drop_data/geneCounts.tsv	grch37_chr21	NA
 R0014	NA	NA	NA	outrider, fraser	TRUE	IntersectionStrict	TRUE	reverse	drop_data	NA	drop_data/geneCounts.tsv	grch37_chr21	NA
 R17262	NA	NA	NA	outrider, fraser	TRUE	IntersectionStrict	TRUE	reverse	drop_data	NA	drop_data/geneCounts.tsv	grch37_chr21	NA

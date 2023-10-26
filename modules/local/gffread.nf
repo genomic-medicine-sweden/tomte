@@ -12,8 +12,8 @@ process GFFREAD {
     tuple val(meta2), path(fasta), path(fai)
 
     output:
-    path "*${prefix}.gtf"        , emit: gtf,        optional: true
-    path "*${prefix}.fa"         , emit: tr_fasta,   optional: true
+    path "*_gffread_output.gtf", emit: gtf,        optional: true
+    path "*_gffread_output.fa"  , emit: tr_fasta,   optional: true
     path "versions.yml" , emit: versions
 
     when:
@@ -22,14 +22,13 @@ process GFFREAD {
     script:
     def args   = task.ext.args   ?: ''
     def genome = fasta ? "-g ${fasta}" : ''
-    def prefix = task.ext.prefix ?: "${meta.id}_gffread"
-    def outp   = args.contains("-w ") ? "" : "-o ${prefix}.gtf"
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    def outp   = args.contains("-w") ? "-w ${prefix}_gffread_output.fa" : "-o ${prefix}_gffread_output.gtf"
 
     """
     gffread \\
         $gff \\
         $genome \\
-        $args \\
         $outp
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -40,8 +39,8 @@ process GFFREAD {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}_gffread"
     """
-    touch ${prefix}.gtf
-    touch ${prefix}.fa
+    touch ${prefix}_gffread_output.gtf
+    touch ${prefix}_gffread_output.fa
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -12,9 +12,10 @@ process DROP_SAMPLE_ANNOT {
     input:
     path(bam)
     val(samples)
-    path(processed_gene_counts)
+    path(ref_gene_counts)
     path(ref_annot)
-    path(gtf)
+    val(drop_group_samples_ae)
+    val(drop_group_samples_as)
 
     output:
     path('sample_annotation.tsv'), emit: drop_annot
@@ -27,15 +28,16 @@ process DROP_SAMPLE_ANNOT {
     def ids = "${samples.id}".replace("[","").replace("]","").replace(",","")
     def strandedness = "${samples.strandedness}".replace("[","").replace("]","").replace(",","")
     def single_end = "${samples.single_end}".replace("[","").replace("]","").replace(",","")
+    def drop_group = "${drop_group_samples_ae},${drop_group_samples_as}".replace(" ","").replace("[","").replace("]","")
     """
     $baseDir/bin/drop_sample_annot.py \\
         --bam ${bam} \\
         --samples $ids \\
         --strandedness $strandedness \\
         --single_end $single_end \\
-        --gtf ${gtf} \\
-        --count_file ${processed_gene_counts} \\
+        --ref_count_file ${ref_gene_counts} \\
         --ref_annot ${ref_annot} \\
+        --drop_group_sample $drop_group \\
         --output sample_annotation.tsv
 
     cat <<-END_VERSIONS > versions.yml

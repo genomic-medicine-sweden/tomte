@@ -14,8 +14,10 @@ process DROP_CONFIG_RUN_AS {
     path gtf
     path sample_annotation
     tuple path(bam), path(bai)
+    path ref_drop_count_file
     path ref_splice_folder
     val(genome)
+    val(drop_group_samples_as)
     val(drop_padjcutoff_as)
 
     output:
@@ -29,6 +31,7 @@ process DROP_CONFIG_RUN_AS {
 
     script:
     def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
+    def drop_group = "${drop_group_samples_as}".replace(" ","")
     """
     TMPDIR=\$PWD
 
@@ -39,6 +42,7 @@ process DROP_CONFIG_RUN_AS {
         --gtf ${gtf}\\
         --drop_module AS \\
         --genome_assembly $genome_assembly \\
+        --drop_group_samples $drop_group \\
         --padjcutoff ${drop_padjcutoff_as} \\
         --output config.yaml
 

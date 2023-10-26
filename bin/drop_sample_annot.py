@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
-from pathlib import Path
 import csv
 from pandas import read_csv, DataFrame, concat
+import os
 
 SCRIPT_VERSION = "v1.0"
 SAMPLE_ANNOTATION_COLUMNS = [
@@ -25,7 +25,7 @@ SAMPLE_ANNOTATION_COLUMNS = [
 
 
 def write_sample_annotation_to_tsv(
-    bam: str, samples: str, strandedness: str, single_end: str, gtf: str, count_file: str, out_file: str
+    bam: str, samples: str, strandedness: str, single_end: str, drop_group_sample: str, out_file: str
 ):
     """Write the Sample Annotation tsv file."""
     with open(out_file, "w") as tsv_file:
@@ -34,9 +34,9 @@ def write_sample_annotation_to_tsv(
         for index, id in enumerate(samples):
             sa_dict: dict = {}.fromkeys(SAMPLE_ANNOTATION_COLUMNS, "NA")
             sa_dict["RNA_ID"] = id
-            sa_dict["DROP_GROUP"] = "outrider,fraser"
-            sa_dict["GENE_COUNTS_FILE"] = count_file
-            sa_dict["GENE_ANNOTATION"] = Path(gtf).stem
+            sa_dict["DROP_GROUP"] = drop_group_sample
+            sa_dict["GENE_COUNTS_FILE"] = "NA"
+            sa_dict["GENE_ANNOTATION"] = "NA"
             sa_dict["STRAND"] = strandedness[index]
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
             sa_dict["RNA_BAM_FILE"] = bam[index]
@@ -50,14 +50,16 @@ def is_paired_end(single_end: str) -> bool:
     return False
 
 
-def write_final_annot_to_tsv(count_file: str, ref_annot: str, out_file: str):
+def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str):
     """
     Concatenates the Sample Annotation produced by SampleAnnotation with the one
     provided for the reference samples, checking for duplicate sample IDs
     """
     df_samples: DataFrame = read_csv("drop_annotation_given_samples.tsv", sep="\t")
     df_reference: DataFrame = read_csv(ref_annot, sep="\t")
-    df_reference["GENE_COUNTS_FILE"] = count_file
+    df_reference["GENE_COUNTS_FILE"] = ref_count_file
+    df_reference["SPLICE_COUNTS_DIR"] = df_reference["SPLICE_COUNTS_DIR"].str.rstrip("/").apply(os.path.basename)
+    df_reference["DROP_GROUP"] = df_reference["DROP_GROUP"].str.replace(" ", "")
     df_samples["COUNT_OVERLAPS"] = df_reference["COUNT_OVERLAPS"].iloc[0]
     df_samples["COUNT_MODE"] = df_reference["COUNT_MODE"].iloc[0]
     df_samples["HPO_TERMS"] = df_reference["HPO_TERMS"].iloc[0]
@@ -74,15 +76,15 @@ def parse_args(argv=None):
         formatter_class=argparse.MetavarTypeHelpFormatter,
         description="""Generate DROP sample annotation for patients.""",
     )
-    parser.add_argument("--bam", type=str, nargs="+", help="bam files for the patient", required=True)
+    parser.add_argument("--bam", type=str, nargs="+", help="bam files for the analyzed samples", required=True)
     parser.add_argument("--samples", type=str, nargs="+", help="corresponding sample name", required=True)
     parser.add_argument("--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True)
     parser.add_argument("--single_end", type=str, nargs="+", help="is the sample paired end?", required=True)
-    parser.add_argument("--gtf", type=str, help="Transcript annotation file in gtf format", required=True)
     parser.add_argument(
-        "--count_file", type=str, help="A tsv file of gene counts for all processed samples.", required=True
+        "--ref_count_file", type=str, help="A tsv file of gene counts for reference samples.", required=True
     )
     parser.add_argument("--ref_annot", type=str, help="Path to reference annotation tsv", required=True)
+    parser.add_argument("--drop_group_sample", type=str, help="Drop group of analyzed samples", required=True)
     parser.add_argument("--output", type=str, help="Path to save to", required=True)
     parser.add_argument("--version", action="version", version=SCRIPT_VERSION)
     return parser.parse_args(argv)
@@ -96,11 +98,10 @@ def main():
         samples=args.samples,
         strandedness=args.strandedness,
         single_end=args.single_end,
-        gtf=args.gtf,
-        count_file=args.count_file,
+        drop_group_sample=args.drop_group_sample,
         out_file="drop_annotation_given_samples.tsv",
     )
-    write_final_annot_to_tsv(count_file=args.count_file, ref_annot=args.ref_annot, out_file=args.output)
+    write_final_annot_to_tsv(ref_count_file=args.ref_count_file, ref_annot=args.ref_annot, out_file=args.output)
 
 
 if __name__ == "__main__":

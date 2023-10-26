@@ -43,21 +43,23 @@ workflow ALIGNMENT {
             RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam, subsample_bed, seed_frac)
             ch_bam_bai = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
             if (!downsample_switch) {
-                ch_bam_bai_out = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
+                ch_bam_bai_out = RNA_SUBSAMPLE_REGION.out.bam_bai
+            } else {
+                RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
+                ch_bam_bai_out = RNA_DOWNSAMPLE.out.bam_bai
             }
         } else {
             ch_bam_bai = ch_bam_bai.mix(STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai))
              if (!downsample_switch) {
                 ch_bam_bai_out = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
+            } else {
+                RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
+                ch_bam_bai_out = RNA_DOWNSAMPLE.out.bam_bai
             }
         }
 
         SAMTOOLS_VIEW( STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai), ch_genome_fasta, [] )
 
-        if (downsample_switch) {
-            RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
-            ch_bam_bai_out = ch_bam_bai.mix(RNA_DOWNSAMPLE.out.bam_bai)
-        }
 
         SALMON_QUANT( FASTP.out.reads, salmon_index, gtf, [], false, 'A')
 
