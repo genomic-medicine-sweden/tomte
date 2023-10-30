@@ -349,4 +349,27 @@ class NfcoreTemplate {
             """.stripIndent()
         )
     }
+
+    //
+    // GMS tomte logo (WIP)
+    //
+    public static String gmsLogo(workflow, monochrome_logs) {
+        Map colors = logColours(monochrome_logs)
+        String workflow_version = NfcoreTemplate.version(workflow)
+        String.format(
+            """\n
+            ${dashedLine(monochrome_logs)}
+            ${colors.blue}   _____ __  __  _____            _                  _${colors.reset}
+            ${colors.blue}  / ____|  \\/  |/ ____|          | |                | |${colors.reset}
+            ${colors.blue} | |  __| \\  / | (___    ______  | |_ ___  _ __ ___ | |_ ___${colors.reset}
+            ${colors.blue} | | |_ | |\\/| |\\___ \\  |______| | __/ _ \\| '_ ` _ \\| __/ _ \\${colors.reset}
+            ${colors.blue} | |__| | |  | |____) |          | || (_) | | | | | | ||  __/${colors.reset}
+            ${colors.blue}  \\_____|_|  |_|_____/            \\__\\___/|_| |_| |_|\\__\\___|${colors.reset}
+
+            ${colors.purple}  ${workflow.manifest.name} ${workflow_version}${colors.reset}
+            ${dashedLine(monochrome_logs)}
+            """.stripIndent()
+        )
+    }
+
 }

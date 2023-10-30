@@ -1,4 +1,4 @@
-# nf-core/tomte: Citations
+# genomic-medicine-sweden/tomte: Citations
 
 ## [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 
