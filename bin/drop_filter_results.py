@@ -76,6 +76,9 @@ def filter_outrider_results(
     df_family_annotated_aberrant_expression_top_hits = annotate_with_hgnc(
         df_family_aberrant_expression_top_hits, out_drop_gene_name
     )
+    df_family_annotated_aberrant_expression_top_hits.to_csv(
+        "OUTRIDER_provided_samples_top_hits.tsv", sep="\t", index=False, header=True
+    )
     filter_by_gene_panel(df_family_annotated_aberrant_expression_top_hits, gene_panel, "OUTRIDER")
 
 
