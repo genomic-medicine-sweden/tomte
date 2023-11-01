@@ -98,7 +98,7 @@ Running the pipeline involves three steps:
 
 A samplesheet is used to pass the information about the sample(s), such as the path to the FASTQ files and other meta data (sex, phenotype, etc.,) to the pipeline in csv format.
 
-genomic-medicine-sweden/tomte will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
+genomic-medicine-sweden/tomte will requires the information given bellow.
 
 | Fields         | Description                                                                                                                                                                            |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -113,14 +113,15 @@ It is also possible to include multiple runs of the same sample in a samplesheet
 | case  | sample       | fastq_1                          | fastq_2                          | strandedness |
 | ----- | ------------ | -------------------------------- | -------------------------------- | ------------ |
 | fam_1 | CONTROL_REP1 | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz | reverse      |
-| fam_1 | CONTROL_REP1 | AEG588A1_S1_L003_R1_001.fastq.gz | AEG588A1_S1_L003_R2_001.fastq.gz | reverse      |
-| fam_1 | CONTROL_REP1 | AEG588A1_S1_L004_R1_001.fastq.gz | AEG588A1_S1_L004_R2_001.fastq.gz | reverse      |
+| fam_1 | CONTROL_REP2 | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz | reverse      |
+| fam_1 | PATIENT_1    | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz | reverse      |
+| fam_1 | PATIENT_1    | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz | reverse      |
 
 If you would like to see more examples of what a typical samplesheet looks like for a duo, follow this links, [sample_sheet](https://github.com/genomic-medicine-sweden/tomte/blob/master/test_data/samplesheet_chr21.csv)
 
 #### Reference files and parameters
 
-In genomic-medicine-sweden/tomte, references can be supplied using parameters listed here:[here](https://github.com/genomic-medicine-sweden/tomte/blob/docs/parameters.md).
+In genomic-medicine-sweden/tomte, references can be supplied using parameters.
 
 Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can call SNVs either with BCFtools or with GATK. You also have the option to turn off sections of the pipeline if you do not want to run them. For example, drop aberrant expression module can be turned off by setting `--run_drop_ae_switch FALSE`. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, if you are not running DROP aberrant splicing, you do not need to provide `--reference_drop_splice_folder`.
 

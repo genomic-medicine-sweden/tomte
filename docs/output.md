@@ -6,8 +6,6 @@ This document describes the output produced by the pipeline. Most of the plots a
 
 The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
-<!-- TODO nf-core: Write this documentation describing your workflow's output -->
-
 ## Pipeline overview
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
@@ -31,7 +29,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - ([`ASEReadCounter`](#asereadcounter)) allele Specific Read Counter
   - ([`BootstrapAnn`](#bootstrapann)) asseses allelic inbalance
 - ([`Variant annotation`](#variant-annotation))
-  - ([`VEP`](#vep))) annotation
+  - ([`VEP`](#vep)) annotation
 - ([`Pipeline information and QCs`](#pipeline-information-and-qcs))
   - ([Pipeline information](#pipeline-information)) - Report metrics generated during the workflow execution
   - ([`Picard CollectRnaSeqMetrics`](#picard-collectrnaseqmetrics)) alignment QC
@@ -92,7 +90,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 #### Tracks
 
-Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWig`](https://genome.ucsc.edu/goldenPath/help/bigWig.html)) is used.
+Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWig`](https://genome.ucsc.edu/goldenPath/help/bigWig.html) is used.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -156,7 +154,7 @@ Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### Mpileups
 
-([`BCFtools Mpileups`] (https://samtools.github.io/bcftools/bcftools.html#mpileup)) SNV calling. Default SNV caller.
+([`BCFtools Mpileups`](https://samtools.github.io/bcftools/bcftools.html#mpileup)) SNV calling. Default SNV caller.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -170,8 +168,8 @@ Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### GATK best practices SNV Calling
 
-([`GATK best practices SNV Calling`] (https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels-)) SNV calling will only be activated by setting parameter variant_caller
-to "gatk". Involves several steps: ([`SplitN Cigar Reads`] (https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads)), ([`Haplotype Caller`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller)), ([`Variant Filtration`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration)) and ([`BCFtools stats`] (https://samtools.github.io/bcftools/bcftools.html#stats)).
+([`GATK best practices SNV Calling`](https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels-)) SNV calling will only be activated by setting parameter variant_caller
+to "gatk". Involves several steps: ([`SplitN Cigar Reads`](https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads)), ([`Haplotype Caller`](https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller)), ([`Variant Filtration`](https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration)) and ([`BCFtools stats`](https://samtools.github.io/bcftools/bcftools.html#stats)).
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -187,11 +185,11 @@ to "gatk". Involves several steps: ([`SplitN Cigar Reads`] (https://gatk.broadin
 
 #### ASEReadCounter
 
-([`ASEReadCounter`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter)) allele Specific Read Counter.
+([`ASEReadCounter`](https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter)) allele Specific Read Counter.
 
 #### BootstrapAnn
 
-([`BootstrapAnn`] (https://github.com/J35P312/BootstrapAnn#bootstrapann)) detects expression imbalance between alleles.
+([`BootstrapAnn`](https://github.com/J35P312/BootstrapAnn#bootstrapann)) detects expression imbalance between alleles.
 
 - `bootstrapann`
   - `*ase.vcf`: annotated vcf where allelic imbalance is marked
@@ -202,7 +200,7 @@ to "gatk". Involves several steps: ([`SplitN Cigar Reads`] (https://gatk.broadin
 
 #### VEP
 
-([`VEP`] (https://github.com/Ensembl/ensembl-vep)) annotates vcfs.
+([`VEP`](https://github.com/Ensembl/ensembl-vep)) annotates vcfs.
 
 - `annotate_vep`
   - `*ase_vep.vcf.gz`: annotated vcf
