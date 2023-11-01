@@ -27,7 +27,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [`GATK best practices SNV Calling`](#gatk-best-practices-snv-calling)
 - [`Allele specific variant Calling`](#allele-specific-variant-calling)
   - [`ASEReadCounter`](#asereadcounter) allele Specific Read Counter
-  - [`BootstrapAnn`](#bootstrapann) asseses allelic inbalance
+  - [`BootstrapAnn`](#bootstrapann) assesses allelic imbalance
 - [`Variant annotation`](#variant-annotation)
   - [`VEP`](#vep) annotation
 - [`Pipeline information and QCs`](#pipeline-information-and-qcs)
@@ -69,7 +69,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 </details>
 
-### Allignment
+### Alignment
 
 #### STAR
 
@@ -92,7 +92,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 #### Tracks
 
-Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWig`](https://genome.ucsc.edu/goldenPath/help/bigWig.html) is used.
+Outputs both junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWig`](https://genome.ucsc.edu/goldenPath/help/bigWig.html) is used.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -138,7 +138,7 @@ Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### GffCompare
 
-[`GffCompare`](https://github.com/gpertea/gffcompare) annotates stringtie results with the reference marking them each transcript as normal or aberrant.
+[`GffCompare`](https://github.com/gpertea/gffcompare) annotates stringtie results with the reference transcripts, marking each assembled transcript as either normal or aberrant.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -148,7 +148,7 @@ Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
   - `*.annotated.gtf`: annotated gtf file.
   - `*.tracking`: transcripts assembled on the sample
   - `*.transcripts.gtf.refmap`: list for each reference transcript what query transcript partially or fully matches it.
-  - `*.transcripts.gtf.tmap`: list the most similar reference trnascript to each query transcript.
+  - `*.transcripts.gtf.tmap`: list the most similar reference transcript to each query transcript.
 
 </details>
 
@@ -183,7 +183,7 @@ to "gatk". Involves several steps: [`SplitN Cigar Reads`](https://gatk.broadinst
 
 </details>
 
-### Allele specific variant Calling
+### Allele specific variant calling
 
 #### ASEReadCounter
 
