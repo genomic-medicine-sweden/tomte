@@ -10,30 +10,30 @@ The directories listed below will be created in the results directory after the 
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- ([`Trimming`](#trimming))
-  - ([`FASTP`](#fastp)) trims reads
-- ([`Transcript quantification`](#transcript-quantification))
-  - ([`Salmon`](#salmon)) quantifies transcripts
-- ([`Allignment`](#allignment))
-  - ([`STAR`](#star)) aligns reads to the genome
-- ([`Tracks`](#tracks))
-  - ([`Tracks`](#tracks-1)) outputs tracks
-- ([`Transcript analysis`](#transcript-analysis))
-  - ([`DROP`](#drop)) aberrant expression and aberrant splicing discovery
-  - ([`StringTie`](#stringtie)) guided transcript assembly
-  - ([`GffCompare`] (#gffcompare)) annnotation of guided transcript assembly
-- ([`Variant Calling`](#variant-calling))
-  - ([`BCFtools Mpileups`](#mpileups)) single nucleotide variation calling
-  - ([`GATK best practices SNV Calling`](#gatk-best-practices-snv-calling))
-- ([`Allele specific variant Calling`](#allele-specific-variant-calling))
-  - ([`ASEReadCounter`](#asereadcounter)) allele Specific Read Counter
-  - ([`BootstrapAnn`](#bootstrapann)) asseses allelic inbalance
-- ([`Variant annotation`](#variant-annotation))
-  - ([`VEP`](#vep)) annotation
-- ([`Pipeline information and QCs`](#pipeline-information-and-qcs))
-  - ([Pipeline information](#pipeline-information)) - Report metrics generated during the workflow execution
-  - ([`Picard CollectRnaSeqMetrics`](#picard-collectrnaseqmetrics)) alignment QC
-  - ([`MultiQC`](#multiqc)) presents QCs
+- [`Trimming`](#trimming)
+  - [`FASTP`](#fastp) trims reads
+- [`Transcript quantification`](#transcript-quantification)
+  - [`Salmon`](#salmon) quantifies transcripts
+- [`Allignment`](#allignment)
+  - [`STAR`](#star) aligns reads to the genome
+- [`Tracks`](#tracks)
+  - [`Tracks`](#tracks-1) outputs tracks
+- [`Transcript analysis`](#transcript-analysis)
+  - [`DROP`](#drop) aberrant expression and aberrant splicing discovery
+  - [`StringTie`](#stringtie) guided transcript assembly
+  - [`GffCompare`] (#gffcompare) annnotation of guided transcript assembly
+- [`Variant Calling`](#variant-calling)
+  - [`BCFtools Mpileups`](#mpileups) single nucleotide variation calling
+  - [`GATK best practices SNV Calling`](#gatk-best-practices-snv-calling)
+- [`Allele specific variant Calling`](#allele-specific-variant-calling)
+  - [`ASEReadCounter`](#asereadcounter) allele Specific Read Counter
+  - [`BootstrapAnn`](#bootstrapann) asseses allelic inbalance
+- [`Variant annotation`](#variant-annotation)
+  - [`VEP`](#vep) annotation
+- [`Pipeline information and QCs`](#pipeline-information-and-qcs)
+  - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+  - [`Picard CollectRnaSeqMetrics`](#picard-collectrnaseqmetrics) alignment QC
+  - [`MultiQC`](#multiqc) presents QCs
 
 ### Trimming
 
@@ -66,6 +66,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - `quant.genes.sf`: quantification file per gene.
   - `logs/salmon_quant.log`: log file.
   - `cmd_info.json`: main command line parameters with which Salmon was run.
+
+</details>
 
 ### Allignment
 
@@ -191,6 +193,9 @@ to "gatk". Involves several steps: ([`SplitN Cigar Reads`](https://gatk.broadins
 
 ([`BootstrapAnn`](https://github.com/J35P312/BootstrapAnn#bootstrapann)) detects expression imbalance between alleles.
 
+<details markdown="1">
+<summary>Output files</summary>
+
 - `bootstrapann`
   - `*ase.vcf`: annotated vcf where allelic imbalance is marked
 
@@ -201,6 +206,9 @@ to "gatk". Involves several steps: ([`SplitN Cigar Reads`](https://gatk.broadins
 #### VEP
 
 ([`VEP`](https://github.com/Ensembl/ensembl-vep)) annotates vcfs.
+
+<details markdown="1">
+<summary>Output files</summary>
 
 - `annotate_vep`
   - `*ase_vep.vcf.gz`: annotated vcf
