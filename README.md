@@ -27,25 +27,25 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 2. Transcript quantification ([`Salmon`](https://salmon.readthedocs.io/en/latest/))
 3. Align reads to the genome ([`STAR`](https://github.com/alexdobin/STAR))
 4. Output junction tracks
-5. Output bigwig [`UCSC wigToBigWig`](https://genome.ucsc.edu/goldenPath/help/bigWig.html))
+5. Output bigwig ([`UCSC wigToBigWig`](https://genome.ucsc.edu/goldenPath/help/bigWig.html))
 6. Choice to subsample overrepresented regions ([`Samtools`](https://github.com/samtools/samtools/))
 7. Choice to downsample number of reads ([`Samtools`](https://github.com/samtools/samtools/))
 8. Detection of aberrant expression ([`DROP`](https://github.com/gagneurlab/drop/))
 9. Detection of aberrant splicing ([`DROP`](https://github.com/gagneurlab/drop/))
 10. Filter aberrant expression and aberrant splicing results
 11. Guided transcript assembly ([`StringTie`](https://ccb.jhu.edu/software/stringtie/))
-12. Filtering results of guided transcript assembly ([`GffCompare`] (https://github.com/gpertea/gffcompare))
+12. Filtering results of guided transcript assembly ([`GffCompare`](https://github.com/gpertea/gffcompare))
 13. To Call SNVs either path a or b can be followed. Path A will run by default
     a. Call SNVs
-14. ([`BCFtools Mpileups`] (https://samtools.github.io/bcftools/bcftools.html#mpileup))
+14. ([`BCFtools Mpileups`](https://samtools.github.io/bcftools/bcftools.html#mpileup))
 15. b. Call SNVs
-    1. Split cigar reads ([`SplitN Cigar Reads`] (https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads))
-    2. Haplotype caller ([`Haplotype Caller`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller))
-    3. Variant filtration ([`Variant Filtration`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration))
-    4. BCFtools statistics ([`BCFtools stats`] (https://samtools.github.io/bcftools/bcftools.html#stats))
-16. Allele Specific Read Counter ([`ASEReadCounter`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter))
-17. Asses allelic inbalance ([`BootstrapAnn`] (https://github.com/J35P312/BootstrapAnn#bootstrapann))
-18. Annotation ([`VEP`] (https://github.com/Ensembl/ensembl-vep))
+    1. Split cigar reads ([`SplitN Cigar Reads`](https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads))
+    2. Haplotype caller ([`Haplotype Caller`](https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller))
+    3. Variant filtration ([`Variant Filtration`](https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration))
+    4. BCFtools statistics ([`BCFtools stats`](https://samtools.github.io/bcftools/bcftools.html#stats))
+16. Allele Specific Read Counter ([`ASEReadCounter`](https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter))
+17. Asses allelic inbalance ([`BootstrapAnn`](https://github.com/J35P312/BootstrapAnn#bootstrapann))
+18. Annotation ([`VEP`](https://github.com/Ensembl/ensembl-vep))
 19. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
 20. Present QCs ([`MultiQC`](http://multiqc.info/))
 
@@ -93,11 +93,11 @@ For more details about the output files and reports, please refer to the [output
 
 ## Credits
 
-tomte was originally written by Clinical Genomics Stockholm.
+genomic-medicine-sweden/tomte was written by Clinical Genomics Stockholm, Sweden, with major contributions from [Lucía Peña-Pérez](https://github.com/Lucpen), [Anders Jemt](https://github.com/jemten), and [Jesper Eisfeldt](https://github.com/J35P312).
 
-We thank the following people for their extensive assistance in the development of this pipeline:
+Additional contributors were [Ramprasad Neethiraj](https://github.com/ramprasadn), [Esmee ten Berk de Boer](https://github.com/Esmeetbdb), and [Mei Wu](https://github.com/projectoriented).
 
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+We thank the nf-core community for their extensive assistance in the development of this pipeline.
 
 ## Contributions and Support
 
@@ -107,10 +107,7 @@ For further information or help, don't hesitate to get in touch by opening an [i
 
 ## Citations
 
-<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use  nf-core/tomte for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
-
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
+If you use nf-core/raredisease for your analysis, please cite it using the following doi: [10.5281/zenodo.7995798](https://doi.org/10.5281/zenodo.7995798)
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
