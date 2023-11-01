@@ -86,7 +86,6 @@ Test profile runs the pipeline with a case containing three samples, but if you 
 
 > Note that the default cpu and memory configurations used in tomte are written keeping the test profile (&dataset, which is tiny) in mind. You should override these values in configs to get it to work on larger datasets. Check the section `custom-configuration` below to know more about how to configure resources for your platform.
 
-
 ## Run genomic-medicine-sweden/tomte with your data
 
 Running the pipeline involves three steps:
@@ -101,21 +100,21 @@ A samplesheet is used to pass the information about the sample(s), such as the p
 
 genomic-medicine-sweden/tomte will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
 
-| Fields        | Description                                                                                                                                                                            |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `case`        | Case ID, for the analysis used when generating a family VCF.                                                                                                                           |
-| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `strandedness`| Sample strandness                                                                                                                                                                      |
+| Fields         | Description                                                                                                                                                                            |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `case`         | Case ID, for the analysis used when generating a family VCF.                                                                                                                           |
+| `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
+| `fastq_1`      | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
+| `fastq_2`      | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
+| `strandedness` | Sample strandness                                                                                                                                                                      |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
-| case     | sample      | fastq_1                          | fastq_2                          | strandedness | 
-| -------- | ----------- | -------------------------------- | -------------------------------- | ------------ | 
-| fam_1    | CONTROL_REP1| AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz | reverse      |
-| fam_1    | CONTROL_REP1| AEG588A1_S1_L003_R1_001.fastq.gz | AEG588A1_S1_L003_R2_001.fastq.gz | reverse      |
-| fam_1    | CONTROL_REP1| AEG588A1_S1_L004_R1_001.fastq.gz | AEG588A1_S1_L004_R2_001.fastq.gz | reverse      |
+| case  | sample       | fastq_1                          | fastq_2                          | strandedness |
+| ----- | ------------ | -------------------------------- | -------------------------------- | ------------ |
+| fam_1 | CONTROL_REP1 | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz | reverse      |
+| fam_1 | CONTROL_REP1 | AEG588A1_S1_L003_R1_001.fastq.gz | AEG588A1_S1_L003_R2_001.fastq.gz | reverse      |
+| fam_1 | CONTROL_REP1 | AEG588A1_S1_L004_R1_001.fastq.gz | AEG588A1_S1_L004_R2_001.fastq.gz | reverse      |
 
 If you would like to see more examples of what a typical samplesheet looks like for a duo, follow this links, [sample_sheet](https://github.com/genomic-medicine-sweden/tomte/blob/master/test_data/samplesheet_chr21.csv)
 
@@ -123,7 +122,7 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 In genomic-medicine-sweden/tomte, references can be supplied using parameters listed here:[here](https://github.com/genomic-medicine-sweden/tomte/blob/docs/parameters.md).
 
-Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can call SNVs either with BCFtools or with GATK. You also have the option to turn off sections of the pipeline if you do not want to run them. For example, drop aberrant expression module can be turned off by setting `--run_drop_ae_switch FALSE`.  This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, if you are not running DROP aberrant splicing, you do not need to provide `--reference_drop_splice_folder`.
+Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can call SNVs either with BCFtools or with GATK. You also have the option to turn off sections of the pipeline if you do not want to run them. For example, drop aberrant expression module can be turned off by setting `--run_drop_ae_switch FALSE`. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, if you are not running DROP aberrant splicing, you do not need to provide `--reference_drop_splice_folder`.
 
 genomic-medicine-sweden/tomte consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
 
@@ -131,7 +130,7 @@ genomic-medicine-sweden/tomte consists of several tools used for various purpose
 2. Subsample_region (Samtools)
 3. Variant calling - SNV (BCFTools or GATK's GermlineCNVCaller)
 4. SNV annotation (ensembl VEP)
-5. DROP 
+5. DROP
 
 > We have only listed the groups that require at least one input from the user. For example, the pipeline also runs WigToBigWig, but it does not require any input other than the bam files passed by the pipeline. Hence, it is not mentioned in the list above. To know more about the tools used in the pipeline check the [README](../README.md).
 
@@ -141,18 +140,17 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 1. Alignment
 
-| Mandatory                      | Optional                      |
-| ------------------------------ | ------------------------------|
-| fasta                          | fasta_fai<sup>1</sup>         |
-| gtf                            | sequence_dict<sup>1</sup>     |
-|                                | salmon_index<sup>1</sup>      |
-|                                | star_index<sup>1</sup>        |
-|                                | transcript_fasta<sup>1</sup>  |
-|                                | genome<sup>2</sup>            |
-|                                | platform<sup>3</sup>          |
-|                                | min_trimmed_length<sup>4</sup>|
-|                                | star_two_pass_mode<sup>4</sup>|
-
+| Mandatory | Optional                       |
+| --------- | ------------------------------ |
+| fasta     | fasta_fai<sup>1</sup>          |
+| gtf       | sequence_dict<sup>1</sup>      |
+|           | salmon_index<sup>1</sup>       |
+|           | star_index<sup>1</sup>         |
+|           | transcript_fasta<sup>1</sup>   |
+|           | genome<sup>2</sup>             |
+|           | platform<sup>3</sup>           |
+|           | min_trimmed_length<sup>4</sup> |
+|           | star_two_pass_mode<sup>4</sup> |
 
 <sup>1</sup> If the parameter is not provided by the user, it will be generated from the fasta and gtf files.
 <sup>2</sup> If it is not provided by the user, the default value is GRCh38.
@@ -160,33 +158,32 @@ The mandatory and optional parameters for each category are tabulated below.
 <sup>4</sup> If it is not provided by the user, the default value is 40.
 <sup>5</sup> If it is not provided by the user, the default value is Basic.
 
-
 ##### 2. Subsample region
 
-| Mandatory                      | Optional                            |
-| ------------------------------ | ----------------------------------- |
-| subsample_bed                  | subsample_region_switch <sup>1</sup>|
-|                                | seed_frac<sup>2</sup>               |
+| Mandatory     | Optional                             |
+| ------------- | ------------------------------------ |
+| subsample_bed | subsample_region_switch <sup>1</sup> |
+|               | seed_frac<sup>2</sup>                |
 
 <sup>1</sup> If it is not provided by the user, the default value is true
 <sup>2</sup> If it is not provided by the user, the default value is 0.001
 
 ##### 3. Variant calling - SNV
 
-| Mandatory                      | Optional                            |
-| ------------------------------ | ----------------------------------- |
-|                                | variant_caller<sup>1</sup>          |
-|                                | bcftools_caller_mode<sup>2</sup>    |
+| Mandatory | Optional                         |
+| --------- | -------------------------------- |
+|           | variant_caller<sup>1</sup>       |
+|           | bcftools_caller_mode<sup>2</sup> |
 
 <sup>1</sup> If it is not provided by the user, the default value is bcftools
 <sup>2</sup> If it is not provided by the user, the default value is multiallelic
 
 #### 4. SNV annotation (ensembl VEP)
 
-| Mandatory                      | Optional                            |
-| ------------------------------ | ----------------------------------- |
-| vep_cache                      | vep_cache_version<sup>1</sup>       |
-|                                | vep_filters                         |
+| Mandatory | Optional                      |
+| --------- | ----------------------------- |
+| vep_cache | vep_cache_version<sup>1</sup> |
+|           | vep_filters                   |
 
 <sup>1</sup> For the time being, only 107 is suported
 
@@ -194,15 +191,15 @@ The mandatory and optional parameters for each category are tabulated below.
 
 DROP - aberrant expression
 
-| Mandatory                             | Optional                            |
-| ------------------------------------- | ----------------------------------- |
-| reference_drop_annot_file<sup>1</sup> | run_drop_ae_switch<sup>2</sup>      |
-| reference_drop_count_file             | drop_group_samples_ae<sup>3</sup>   |
-|                                       | drop_padjcutoff_ae<sup>4</sup>      |
-|                                       | drop_zscorecutoff<sup>5</sup>       |
-|                                       | gene_panel_clinical_filter          |
-|                                       | downsample_switch<sup>6</sup>       |
-|                                       | num_reads<sup>7</sup>               |
+| Mandatory                             | Optional                          |
+| ------------------------------------- | --------------------------------- |
+| reference_drop_annot_file<sup>1</sup> | run_drop_ae_switch<sup>2</sup>    |
+| reference_drop_count_file             | drop_group_samples_ae<sup>3</sup> |
+|                                       | drop_padjcutoff_ae<sup>4</sup>    |
+|                                       | drop_zscorecutoff<sup>5</sup>     |
+|                                       | gene_panel_clinical_filter        |
+|                                       | downsample_switch<sup>6</sup>     |
+|                                       | num_reads<sup>7</sup>             |
 
 <sup>1</sup> To get more information on how to format it, see below
 <sup>2</sup> If it is not provided by the user, the default value is true
@@ -214,14 +211,14 @@ DROP - aberrant expression
 
 DROP - aberrant splicing
 
-| Mandatory                             | Optional                            |
-| ------------------------------------- | ----------------------------------- |
-| reference_drop_annot_file<sup>1</sup> | run_drop_as_switch<sup>2</sup>      |
-| reference_drop_splice_folder          | drop_group_samples_as<sup>3</sup>   |
-|                                       | drop_padjcutoff_as<sup>4</sup>      |
-|                                       | gene_panel_clinical_filter          |
-|                                       | downsample_switch<sup>5</sup>       |
-|                                       | num_reads<sup>6</sup>               |
+| Mandatory                             | Optional                          |
+| ------------------------------------- | --------------------------------- |
+| reference_drop_annot_file<sup>1</sup> | run_drop_as_switch<sup>2</sup>    |
+| reference_drop_splice_folder          | drop_group_samples_as<sup>3</sup> |
+|                                       | drop_padjcutoff_as<sup>4</sup>    |
+|                                       | gene_panel_clinical_filter        |
+|                                       | downsample_switch<sup>5</sup>     |
+|                                       | num_reads<sup>6</sup>             |
 
 <sup>1</sup> To get more information on how to format it, see below
 <sup>2</sup> If it is not provided by the user, the default value is true

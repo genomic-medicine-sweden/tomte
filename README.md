@@ -26,7 +26,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 1. Trim reads ([`FASTP`](https://github.com/OpenGene/fastp))
 2. Transcript quantification ([`Salmon`](https://salmon.readthedocs.io/en/latest/))
 3. Align reads to the genome ([`STAR`](https://github.com/alexdobin/STAR))
-4. Output junction tracks 
+4. Output junction tracks
 5. Output bigwig [`UCSC wigToBigWig`](https://genome.ucsc.edu/goldenPath/help/bigWig.html))
 6. Choice to subsample overrepresented regions ([`Samtools`](https://github.com/samtools/samtools/))
 7. Choice to downsample number of reads ([`Samtools`](https://github.com/samtools/samtools/))
@@ -36,19 +36,18 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 11. Guided transcript assembly ([`StringTie`](https://ccb.jhu.edu/software/stringtie/))
 12. Filtering results of guided transcript assembly ([`GffCompare`] (https://github.com/gpertea/gffcompare))
 13. To Call SNVs either path a or b can be followed. Path A will run by default
-   a. Call SNVs 
-   1. ([`BCFtools Mpileups`] (https://samtools.github.io/bcftools/bcftools.html#mpileup))
-13.
-   b. Call SNVs
-   1. Split cigar reads ([`SplitN Cigar Reads`] (https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads))
-   2. Haplotype caller ([`Haplotype Caller`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller))
-   3. Variant filtration ([`Variant Filtration`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration))
-   4. BCFtools statistics ([`BCFtools stats`] (https://samtools.github.io/bcftools/bcftools.html#stats))
-14. Allele Specific Read Counter ([`ASEReadCounter`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter))
-15. Asses allelic inbalance ([`BootstrapAnn`] (https://github.com/J35P312/BootstrapAnn#bootstrapann))
-16. Annotation ([`VEP`] (https://github.com/Ensembl/ensembl-vep))
-17. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
-18. Present QCs ([`MultiQC`](http://multiqc.info/))
+    a. Call SNVs
+14. ([`BCFtools Mpileups`] (https://samtools.github.io/bcftools/bcftools.html#mpileup))
+15. b. Call SNVs
+    1. Split cigar reads ([`SplitN Cigar Reads`] (https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads))
+    2. Haplotype caller ([`Haplotype Caller`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller))
+    3. Variant filtration ([`Variant Filtration`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration))
+    4. BCFtools statistics ([`BCFtools stats`] (https://samtools.github.io/bcftools/bcftools.html#stats))
+16. Allele Specific Read Counter ([`ASEReadCounter`] (https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter))
+17. Asses allelic inbalance ([`BootstrapAnn`] (https://github.com/J35P312/BootstrapAnn#bootstrapann))
+18. Annotation ([`VEP`] (https://github.com/Ensembl/ensembl-vep))
+19. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
+20. Present QCs ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
