@@ -1,60 +1,236 @@
-# tomte: Usage
+# genomic-medicine-sweden/tomte: Usage
 
 ## :warning: Please read this documentation on github website: [tomte usage](https://github.com/genomic-medicine-sweden/tomte)
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
+Table of contents:
+
+- [genomic-medicine-sweden/tomte: Usage](#genomic-medicine-swedentomte-usage)
+  - [Introduction](#introduction)
+  - [Prerequisites](#prerequisites)
+  - [Run genomic-medicine-sweden/tomte with test data](#run-genomic-medicine-swedentomte-with-test-data)
+    - [Updating the pipeline](#updating-the-pipeline)
+  - [Run genomic-medicine-sweden/tomte with your data](#run-genomic-medicine-swedentomte-with-your-data)
+    - [Samplesheet](#samplesheet)
+    - [Reference files and parameters](#reference-files-and-parameters)
+      - [Alignment and pseudo quantification](#1-alignment)
+      - [Region subsampling](#2-subsample-region)
+      - [Variant calling](#3-variant-calling---snv)
+      - [SNV annotation](#4-snv-annotation-ensembl-vep)
+      - [DROP](#5-drop)
+        - [Preparing DROP input](#preparing-input-for-drop)
+  - [Run the pipeline](#run-the-pipeline)
+    - [Direct input in CLI](#direct-input-in-cli)
+    - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
+- [Best practices](#best-practices)
+- [Core Nextflow arguments](#core-nextflow-arguments)
+  - [`-profile`](#-profile)
+  - [`-resume`](#-resume)
+  - [`-c`](#-c)
+- [Custom configuration](#custom-configuration)
+  - [Changing resources](#changing-resources)
+  - [Custom Containers](#custom-containers)
+  - [Custom Tool Arguments](#custom-tool-arguments)
+    - [nf-core/configs](#nf-coreconfigs)
+  - [Azure Resource Requests](#azure-resource-requests)
+  - [Running in the background](#running-in-the-background)
+  - [Nextflow memory requirements](#nextflow-memory-requirements)
+  - [Running the pipeline without Internet access](#running-the-pipeline-without-internet-access)
+
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
+**tomte** is a bioinformatics best-practice analysis pipeline for Pipeline to analyse RNAseq from raredisease patients.
 
-## Samplesheet input
+The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+## Prerequisites
+
+1. Install Nextflow (>=22.10.1) using the instructions [here.](https://nextflow.io/docs/latest/getstarted.html#installation)
+2. Install one of the following technologies for full pipeline reproducibility: Docker, Singularity, Podman, Shifter or Charliecloud.
+   > Almost all nf-core pipelines give you the option to use conda as well. However, some tools used in the tomte pipeline do not have a conda package so we do not support conda at the moment.
+
+### Updating the pipeline
+
+When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
 
 ```bash
---input '[path to samplesheet file]'
+nextflow pull genomic-medicine-sweden/tomte
 ```
 
-### Multiple runs of the same sample
+## Run genomic-medicine-sweden/tomte with test data
 
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
+Before running the pipeline with your data, we recommend running it with the test dataset available in the test_data folder provided with the pipeline and [here](https://github.com/nf-core/test-datasets/tree/raredisease). You do not need to download any of the data as part of it came directly with the pipeline and the other part will be fetched automatically for you when you use the test profile.
 
-```console
-case,sample,fastq_1,fastq_2,strandedness
-CASE_1,CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,reverse
-CASE_1,CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,reverse
-CASE_1,CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,reverse
+Run the following command, where YOURPROFILE is the package manager you installed on your machine. For example, `-profile test,docker` or `-profile test,singularity`:
+
+```
+nextflow run genomic-medicine-sweden/tomte \
+    -revision dev -profile test,<YOURPROFILE> \
+    --outdir <OUTDIR>
 ```
 
-### Full samplesheet
+> Check [nf-core/configs](https://github.com/nf-core/configs/tree/master/conf) to see if a custom config file to run nf-core pipelines already exists for your institute. If so, you can simply use `-profile test,<institute>` in your command. This enables the appropriate package manager and sets the appropriate execution settings for your machine.
+> NB: The order of profiles is important! They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 5 columns to match those defined in the table below.
+Running the command creates the following files in your working directory:
 
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
-
-```console
-case,sample,fastq_1,fastq_2,strandedness
-CASE_1,CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,reverse
-CASE_1,CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz,reverse
-CASE_1,CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz,reverse
-CASE_1,TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,,reverse
-CASE_1,TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,,reverse
-CASE_1,TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,,reverse
-CASE_1,TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,,reverse
+```
+work                # Directory containing the Nextflow working files
+<OUTDIR>            # Finished results in specified location (defined with --outdir)
+.nextflow_log       # Log file from Nextflow
+# Other Nextflow hidden files, like history of pipeline logs.
 ```
 
-| Column         | Description                                                                                                                                                                            |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `case`         | Custom name for the case. Not in use currently                                                                                                                                         |
-| `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1`      | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2`      | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `strandedness` | Library strandedness. Allowed values: "unstranded", "forward", "reverse"                                                                                                               |
+Test profile runs the pipeline with a case containing three samples, but if you would like to test the pipeline with one sample, use `-profile test_one_sample,<YOURPROFILE>`.
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+> Note that the default cpu and memory configurations used in tomte are written keeping the test profile (&dataset, which is tiny) in mind. You should override these values in configs to get it to work on larger datasets. Check the section `custom-configuration` below to know more about how to configure resources for your platform.
 
-## Preparing input for DROP
+
+## Run genomic-medicine-sweden/tomte with your data
+
+Running the pipeline involves three steps:
+
+1. Prepare a samplesheet
+2. Gather all required references
+3. Supply samplesheet and references, and run the command
+
+#### Samplesheet
+
+A samplesheet is used to pass the information about the sample(s), such as the path to the FASTQ files and other meta data (sex, phenotype, etc.,) to the pipeline in csv format.
+
+genomic-medicine-sweden/tomte will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
+
+| Fields        | Description                                                                                                                                                                            |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `case`        | Case ID, for the analysis used when generating a family VCF.                                                                                                                           |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
+| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
+| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
+| `strandedness`| Sample strandness                                                                                                                                                                      |
+
+It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
+
+| case     | sample      | fastq_1                          | fastq_2                          | strandedness | 
+| -------- | ----------- | -------------------------------- | -------------------------------- | ------------ | 
+| fam_1    | CONTROL_REP1| AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz | reverse      |
+| fam_1    | CONTROL_REP1| AEG588A1_S1_L003_R1_001.fastq.gz | AEG588A1_S1_L003_R2_001.fastq.gz | reverse      |
+| fam_1    | CONTROL_REP1| AEG588A1_S1_L004_R1_001.fastq.gz | AEG588A1_S1_L004_R2_001.fastq.gz | reverse      |
+
+If you would like to see more examples of what a typical samplesheet looks like for a duo, follow this links, [sample_sheet](https://github.com/genomic-medicine-sweden/tomte/blob/master/test_data/samplesheet_chr21.csv)
+
+#### Reference files and parameters
+
+In genomic-medicine-sweden/tomte, references can be supplied using parameters listed here:[here](https://github.com/genomic-medicine-sweden/tomte/blob/docs/parameters.md).
+
+Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can call SNVs either with BCFtools or with GATK. You also have the option to turn off sections of the pipeline if you do not want to run them. For example, drop aberrant expression module can be turned off by setting `--run_drop_ae_switch FALSE`.  This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, if you are not running DROP aberrant splicing, you do not need to provide `--reference_drop_splice_folder`.
+
+genomic-medicine-sweden/tomte consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
+
+1. Alignment and pseudo quantification (STAR & Salmon)
+2. Subsample_region (Samtools)
+3. Variant calling - SNV (BCFTools or GATK's GermlineCNVCaller)
+4. SNV annotation (ensembl VEP)
+5. DROP 
+
+> We have only listed the groups that require at least one input from the user. For example, the pipeline also runs WigToBigWig, but it does not require any input other than the bam files passed by the pipeline. Hence, it is not mentioned in the list above. To know more about the tools used in the pipeline check the [README](../README.md).
+
+The mandatory and optional parameters for each category are tabulated below.
+
+> Alignment, QC stats, repeat expansions, SNV variant calling and ensembl VEP are run by default. Hence, the mandatory parameters used by those features will always have to be provided to the pipeline.
+
+##### 1. Alignment
+
+| Mandatory                      | Optional                      |
+| ------------------------------ | ------------------------------|
+| fasta                          | fasta_fai<sup>1</sup>         |
+| gtf                            | sequence_dict<sup>1</sup>     |
+|                                | salmon_index<sup>1</sup>      |
+|                                | star_index<sup>1</sup>        |
+|                                | transcript_fasta<sup>1</sup>  |
+|                                | genome<sup>2</sup>            |
+|                                | platform<sup>3</sup>          |
+|                                | min_trimmed_length<sup>4</sup>|
+|                                | star_two_pass_mode<sup>4</sup>|
+
+
+<sup>1</sup> If the parameter is not provided by the user, it will be generated from the fasta and gtf files.
+<sup>2</sup> If it is not provided by the user, the default value is GRCh38.
+<sup>3</sup> If it is not provided by the user, the default value is illumina.
+<sup>4</sup> If it is not provided by the user, the default value is 40.
+<sup>5</sup> If it is not provided by the user, the default value is Basic.
+
+
+##### 2. Subsample region
+
+| Mandatory                      | Optional                            |
+| ------------------------------ | ----------------------------------- |
+| subsample_bed                  | subsample_region_switch <sup>1</sup>|
+|                                | seed_frac<sup>2</sup>               |
+
+<sup>1</sup> If it is not provided by the user, the default value is true
+<sup>2</sup> If it is not provided by the user, the default value is 0.001
+
+##### 3. Variant calling - SNV
+
+| Mandatory                      | Optional                            |
+| ------------------------------ | ----------------------------------- |
+|                                | variant_caller<sup>1</sup>          |
+|                                | bcftools_caller_mode<sup>2</sup>    |
+
+<sup>1</sup> If it is not provided by the user, the default value is bcftools
+<sup>2</sup> If it is not provided by the user, the default value is multiallelic
+
+#### 4. SNV annotation (ensembl VEP)
+
+| Mandatory                      | Optional                            |
+| ------------------------------ | ----------------------------------- |
+| vep_cache                      | vep_cache_version<sup>1</sup>       |
+|                                | vep_filters                         |
+
+<sup>1</sup> For the time being, only 107 is suported
+
+#### 5. DROP
+
+DROP - aberrant expression
+
+| Mandatory                             | Optional                            |
+| ------------------------------------- | ----------------------------------- |
+| reference_drop_annot_file<sup>1</sup> | run_drop_ae_switch<sup>2</sup>      |
+| reference_drop_count_file             | drop_group_samples_ae<sup>3</sup>   |
+|                                       | drop_padjcutoff_ae<sup>4</sup>      |
+|                                       | drop_zscorecutoff<sup>5</sup>       |
+|                                       | gene_panel_clinical_filter          |
+|                                       | downsample_switch<sup>6</sup>       |
+|                                       | num_reads<sup>7</sup>               |
+
+<sup>1</sup> To get more information on how to format it, see below
+<sup>2</sup> If it is not provided by the user, the default value is true
+<sup>3</sup> If it is not provided by the user, the default value is outrider
+<sup>4</sup> If it is not provided by the user, the default value is 0.05
+<sup>5</sup> If it is not provided by the user, the default value is 0
+<sup>6</sup> If it is not provided by the user, the default value is true
+<sup>7</sup> If it is not provided by the user, the default value is 120000000
+
+DROP - aberrant splicing
+
+| Mandatory                             | Optional                            |
+| ------------------------------------- | ----------------------------------- |
+| reference_drop_annot_file<sup>1</sup> | run_drop_as_switch<sup>2</sup>      |
+| reference_drop_splice_folder          | drop_group_samples_as<sup>3</sup>   |
+|                                       | drop_padjcutoff_as<sup>4</sup>      |
+|                                       | gene_panel_clinical_filter          |
+|                                       | downsample_switch<sup>5</sup>       |
+|                                       | num_reads<sup>6</sup>               |
+
+<sup>1</sup> To get more information on how to format it, see below
+<sup>2</sup> If it is not provided by the user, the default value is true
+<sup>3</sup> If it is not provided by the user, the default value is fraser
+<sup>4</sup> If it is not provided by the user, the default value is 0.1
+<sup>5</sup> If it is not provided by the user, the default value is true
+<sup>6</sup> If it is not provided by the user, the default value is 120000000
+
+##### Preparing input for DROP
 
 If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference counts, splice counts and a sample sheet. The sample sheet should contain the columns as those in the [test sample annotation](../test_data/drop_data/sampleAnnotation.tsv), you do not need to include the samples you are running through the pipeline in the sample sheet.
 
@@ -94,7 +270,7 @@ Do not use `-c <file>` to specify parameters as this will result in errors. Cust
 The above pipeline run specified with a params file in yaml format:
 
 ```bash
-nextflow run nf-core/tomte -profile docker -params-file params.yaml
+nextflow run genomic-medicine-sweden/tomte -profile docker -params-file params.yaml
 ```
 
 with `params.yaml` containing:

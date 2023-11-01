@@ -12,30 +12,30 @@ The directories listed below will be created in the results directory after the 
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- ([`Trimming`] (#Trimming))
+- ([`Trimming`](#trimming))
   - ([`FASTP`](#fastp)) trims reads 
-- ([`Transcript quantification`] (#Transcript quantification))
+- ([`Transcript quantification`](#transcript-quantification))
   - ([`Salmon`](#salmon)) quantifies transcripts
-- ([`Allignment`](#Allignment))
+- ([`Allignment`](#allignment))
   - ([`STAR`](#star)) aligns reads to the genome 
-- ([`Tracks`](#Tracks))
-  - ([`Tracks`](#tracks)) outputs tracks 
-- ([`Transcript analysis`](#Transcript analysis))
+- ([`Tracks`](#tracks))
+  - ([`Tracks`](#tracks-1)) outputs tracks 
+- ([`Transcript analysis`](#transcript-analysis))
   - ([`DROP`](#drop)) aberrant expression and aberrant splicing discovery
   - ([`StringTie`](#stringtie)) guided transcript assembly
   - ([`GffCompare`] (#gffcompare)) annnotation of guided transcript assembly
-- ([`Variant Calling`](#Variant Calling))
-  - ([`BCFtools Mpileups`] (#Mpileups)) single nucleotide variation calling
-  - ([`GATK best practices SNV Calling`] (#GATK best practices SNV Calling))
-- ([`Allele specific variant Calling`](#Allele specific variant Calling))
-  - ([`ASEReadCounter`] (#ASEReadCounter)) allele Specific Read Counter 
-  - ([`BootstrapAnn`] (#BootstrapAnn)) asseses allelic inbalance
-- ([`Variant annotation`](#Variant annotation))
-  - ([`VEP`] (#VEP)) annotation
-- ([`Pipeline information and QCs`](#Pipeline information and QCs))
+- ([`Variant Calling`](#variant-calling))
+  - ([`BCFtools Mpileups`](#mpileups)) single nucleotide variation calling
+  - ([`GATK best practices SNV Calling`](#gatk-best-practices-snv-calling))
+- ([`Allele specific variant Calling`](#allele-specific-variant-calling))
+  - ([`ASEReadCounter`](#asereadcounter)) allele Specific Read Counter 
+  - ([`BootstrapAnn`](#bootstrapann)) asseses allelic inbalance
+- ([`Variant annotation`](#variant-annotation))
+  - ([`VEP`](#vep))) annotation
+- ([`Pipeline information and QCs`](#pipeline-information-and-qcs))
   - ([Pipeline information](#pipeline-information)) - Report metrics generated during the workflow execution
-  - ([`Picard CollectRnaSeqMetrics`](#Picard CollectRnaSeqMetrics)) alignment QC 
-  - ([`MultiQC`](http://multiqc.info/)) presents QCs
+  - ([`Picard CollectRnaSeqMetrics`](#picard-collectrnaseqmetrics)) alignment QC 
+  - ([`MultiQC`](#multiqc)) presents QCs
 
 ### Trimming
 
