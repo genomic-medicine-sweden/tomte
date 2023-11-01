@@ -21,7 +21,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [`Transcript analysis`](#transcript-analysis)
   - [`DROP`](#drop) aberrant expression and aberrant splicing discovery
   - [`StringTie`](#stringtie) guided transcript assembly
-  - [`GffCompare`] (#gffcompare) annnotation of guided transcript assembly
+  - [`GffCompare`](#gffcompare) annnotation of guided transcript assembly
 - [`Variant Calling`](#variant-calling)
   - [`BCFtools Mpileups`](#mpileups) single nucleotide variation calling
   - [`GATK best practices SNV Calling`](#gatk-best-practices-snv-calling)
