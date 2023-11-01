@@ -28,9 +28,13 @@ workflow ALIGNMENT {
     main:
         ch_versions = Channel.empty()
 
-        CAT_FASTQ(reads)
+        ch_fastq = branchFastqToSingleAndMulti(reads)
 
-        FASTP(CAT_FASTQ.out.reads,[],false,false)
+        CAT_FASTQ(ch_fastq.multiple_fq)
+        .reads.mix(ch_fastq.single_fq)
+        .set { ch_cat_fastq }
+
+        FASTP(ch_cat_fastq, [], false, false)
 
         STAR_ALIGN(FASTP.out.reads, star_index, gtf, false, 'illumina', false)
 
@@ -85,4 +89,33 @@ workflow ALIGNMENT {
         salmon_result   = SALMON_QUANT.out.results
         salmon_info     = SALMON_QUANT.out.json_info
         versions        = ch_versions
+}
+
+
+// Custom functions
+
+/**
+* Branch the read channel into differnt channels,
+* depending on whether the sample has multiple fastq files or not.
+* The resulting channels gets the original sample id in meta.
+*
+* @param ch_reads Channel containing meta and fastq reads
+* @return Channel containing meta with original id and branched on number of fastq files
+*/
+def branchFastqToSingleAndMulti(ch_reads) {
+
+    return ch_reads
+        .map {
+            meta, fastq ->
+                original_id = meta.id.split('_T')[0..-2].join('_')
+                [ meta + [id: original_id], fastq ]
+        }
+        .groupTuple()
+        .branch {
+            meta, fastq ->
+                single_fq: fastq.size() == 1
+                    return [ meta, fastq.flatten() ]
+                multiple_fq: fastq.size() > 1
+                    return [ meta, fastq.flatten() ]
+        }
 }
