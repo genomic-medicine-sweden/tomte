@@ -56,7 +56,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 #### Salmon
 
-([`Salmon`](https://salmon.readthedocs.io/en/latest/)) quantifies reads.
+[`Salmon`](https://salmon.readthedocs.io/en/latest/) quantifies reads.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -73,7 +73,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 #### STAR
 
-([`STAR`](https://github.com/alexdobin/STAR)) aligns reads to the genome reference. For further reading and documentation see the [STAR manual](https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf).
+[`STAR`](https://github.com/alexdobin/STAR) aligns reads to the genome reference. For further reading and documentation see the [STAR manual](https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf).
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -109,7 +109,7 @@ Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### DROP
 
-([`DROP`](https://github.com/gagneurlab/drop/)) is a pipleine that detects aberrant expression, aberrant spliceing, and monoallelic expression. For the time being, aberrant expression and aberrant splicing modules are run. Afterwards another script is run to filter results.
+[`DROP`](https://github.com/gagneurlab/drop/) is a pipleine that detects aberrant expression, aberrant spliceing, and monoallelic expression. For the time being, aberrant expression and aberrant splicing modules are run. Afterwards another script is run to filter results.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -124,7 +124,7 @@ Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### StringTie
 
-([`StringTie`](https://ccb.jhu.edu/software/stringtie/)) will perform guided transcript assembly.
+[`StringTie`](https://ccb.jhu.edu/software/stringtie/) will perform guided transcript assembly.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -138,7 +138,7 @@ Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### GffCompare
 
-([`GffCompare`] (https://github.com/gpertea/gffcompare)) annotates stringtie results with the reference marking them each transcript as normal or aberrant.
+[`GffCompare`](https://github.com/gpertea/gffcompare) annotates stringtie results with the reference marking them each transcript as normal or aberrant.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -156,7 +156,7 @@ Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### Mpileups
 
-([`BCFtools Mpileups`](https://samtools.github.io/bcftools/bcftools.html#mpileup)) SNV calling. Default SNV caller.
+[`BCFtools Mpileups`](https://samtools.github.io/bcftools/bcftools.html#mpileup) SNV calling. Default SNV caller.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -170,8 +170,8 @@ Outputs boht junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### GATK best practices SNV Calling
 
-([`GATK best practices SNV Calling`](https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels-)) SNV calling will only be activated by setting parameter variant_caller
-to "gatk". Involves several steps: ([`SplitN Cigar Reads`](https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads)), ([`Haplotype Caller`](https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller)), ([`Variant Filtration`](https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration)) and ([`BCFtools stats`](https://samtools.github.io/bcftools/bcftools.html#stats)).
+[`GATK best practices SNV Calling`](https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels-) SNV calling will only be activated by setting parameter variant_caller
+to "gatk". Involves several steps: [`SplitN Cigar Reads`](https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads), [`Haplotype Caller`](https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller), [`Variant Filtration`](https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration) and [`BCFtools stats`](https://samtools.github.io/bcftools/bcftools.html#stats).
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -187,11 +187,11 @@ to "gatk". Involves several steps: ([`SplitN Cigar Reads`](https://gatk.broadins
 
 #### ASEReadCounter
 
-([`ASEReadCounter`](https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter)) allele Specific Read Counter.
+[`ASEReadCounter`](https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter) allele Specific Read Counter.
 
 #### BootstrapAnn
 
-([`BootstrapAnn`](https://github.com/J35P312/BootstrapAnn#bootstrapann)) detects expression imbalance between alleles.
+[`BootstrapAnn`](https://github.com/J35P312/BootstrapAnn#bootstrapann) detects expression imbalance between alleles.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -205,7 +205,7 @@ to "gatk". Involves several steps: ([`SplitN Cigar Reads`](https://gatk.broadins
 
 #### VEP
 
-([`VEP`](https://github.com/Ensembl/ensembl-vep)) annotates vcfs.
+[`VEP`](https://github.com/Ensembl/ensembl-vep) annotates vcfs.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -235,7 +235,7 @@ to "gatk". Involves several steps: ([`SplitN Cigar Reads`](https://gatk.broadins
 
 #### Picard CollectRnaSeqMetrics
 
-([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/)) alignment QC
+[`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/) alignment QC
 
 <details markdown="1">
 <summary>Output files</summary>
