@@ -38,16 +38,16 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 13. To Call SNVs either path a or b can be followed. Path A will run by default
     a. Call SNVs
     1. ([`BCFtools Mpileups`](https://samtools.github.io/bcftools/bcftools.html#mpileup))
-15. b. Call SNVs
+14. b. Call SNVs
     1. Split cigar reads ([`SplitN Cigar Reads`](https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads))
     2. Haplotype caller ([`Haplotype Caller`](https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller))
     3. Variant filtration ([`Variant Filtration`](https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration))
     4. BCFtools statistics ([`BCFtools stats`](https://samtools.github.io/bcftools/bcftools.html#stats))
-16. Allele Specific Read Counter ([`ASEReadCounter`](https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter))
-17. Assess allelic imbalance ([`BootstrapAnn`](https://github.com/J35P312/BootstrapAnn#bootstrapann))
-18. Annotation ([`VEP`](https://github.com/Ensembl/ensembl-vep))
-19. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
-20. Present QCs ([`MultiQC`](http://multiqc.info/))
+15. Allele Specific Read Counter ([`ASEReadCounter`](https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter))
+16. Assess allelic imbalance ([`BootstrapAnn`](https://github.com/J35P312/BootstrapAnn#bootstrapann))
+17. Annotation ([`VEP`](https://github.com/Ensembl/ensembl-vep))
+18. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
+19. Present QCs ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
