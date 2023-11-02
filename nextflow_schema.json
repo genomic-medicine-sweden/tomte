@@ -148,14 +148,14 @@
                 "vep_cache_version": {
                     "type": "integer",
                     "default": 107,
-                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
-                    "fa_icon": "fas fa-book",
+                    "description": "Specifies version of vep cache to use.",
+                    "fa_icon": "fas fa-folder-open",
                     "enum": [107]
                 },
                 "vep_filters": {
                     "type": "string",
                     "format": "path",
-                    "fa_icon": "fas fa-chart-bar",
+                    "fa_icon": "fas fa-file-csv",
                     "description": "File containing HGNC_IDs of interest on separate lines.",
                     "hidden": true
                 }
@@ -220,7 +220,7 @@
                 },
                 "num_reads": {
                     "type": "integer",
-                    "default": 80000000,
+                    "default": 120000000,
                     "description": "Number of reads to downsample RNAseq sample to",
                     "fa_icon": "fas fa-list-ol"
                 }
@@ -249,13 +249,13 @@
                     "enum": ["consensus", "multiallelic"],
                     "help_text": "Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied."
                 },
-                "run_drop_ae": {
+                "run_drop_ae_switch": {
                     "type": "boolean",
                     "default": true,
                     "description": "Should DROP Aberrant Expression module be run?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "run_drop_as": {
+                "run_drop_as_switch": {
                     "type": "boolean",
                     "default": true,
                     "description": "Should DROP Aberrant Splicing module be run?",

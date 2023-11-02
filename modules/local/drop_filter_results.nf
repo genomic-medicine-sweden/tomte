@@ -17,11 +17,11 @@ process DROP_FILTER_RESULTS {
     path out_drop_as_tsv_in
 
     output:
-    path('OUTRIDER_provided_sample_top20.tsv')         , optional: true, emit: ae_out_unfiltered
-    path('OUTRIDER_provided_sample_top20_filtered.tsv'), optional: true, emit: ae_out_filtered
-    path('FRASER_provided_sample.tsv')                 , optional: true, emit: as_out_unfiltered
-    path('FRASER_provided_sample_filtered.tsv')        , optional: true, emit: as_out_filtered
-    path "versions.yml"                                , emit: versions
+    path('OUTRIDER_provided_samples_top_hits.tsv')         , optional: true, emit: ae_out_unfiltered
+    path('OUTRIDER_provided_samples_top_hits_filtered.tsv'), optional: true, emit: ae_out_filtered
+    path('FRASER_provided_samples_top_hits.tsv')           , optional: true, emit: as_out_unfiltered
+    path('FRASER_provided_samples_top_hits_filtered.tsv')  , optional: true, emit: as_out_filtered
+    path "versions.yml"                                    , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
