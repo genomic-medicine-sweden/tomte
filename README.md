@@ -107,7 +107,7 @@ For further information or help, don't hesitate to get in touch by opening an [i
 
 ## Citations
 
-If you use genomic-medicine-sweden/tomte for your analysis, please cite it using the following doi: [10.5281/zenodo.7995798](https://doi.org/10.5281/zenodo.7995798)
+If you use genomic-medicine-sweden/tomte for your analysis, please cite it using the following doi: [XX.XXXX/zenodo.XXXXXXX](https://doi.org/XX.XXXX/zenodo.XXXXXXX)
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
