@@ -52,8 +52,9 @@ workflow PREPARE_REFERENCES {
 
         ch_fasta_no_meta = ch_fasta.map{ meta, fasta -> [ fasta ] }
 
+        ch_gtf=ch_gtf_no_meta.map { it -> [[:], it] }
         ch_star = star_index ? Channel.fromPath(star_index).collect() : Channel.empty()
-        BUILD_STAR_GENOME (ch_fasta_no_meta, ch_gtf_no_meta)
+        BUILD_STAR_GENOME (ch_fasta, ch_gtf )
         UNTAR_STAR_INDEX( ch_star.map { it -> [[:], it] } )
         ch_star_index = (!star_index) ?  BUILD_STAR_GENOME.out.index.collect() : 
                                         (star_index.endsWith(".gz") ? UNTAR_STAR_INDEX.out.untar.map { it[1] } : star_index)
