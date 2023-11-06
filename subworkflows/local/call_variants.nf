@@ -44,7 +44,7 @@ workflow CALL_VARIANTS {
 
                 BCFTOOLS_MPILEUP(
                     ch_bam_bai.map{ meta, bam, bai -> [ meta, bam, [] ]},
-                    ch_fasta,
+                    ch_fasta.map { it -> [[:], it] },
                     false
                 )
 
