@@ -53,21 +53,24 @@ workflow PREPARE_REFERENCES {
         ch_fasta_no_meta = ch_fasta.map{ meta, fasta -> [ fasta ] }
 
         ch_gtf=ch_gtf_no_meta.map { it -> [[:], it] }
-        ch_star = star_index ? Channel.fromPath(star_index).collect() : Channel.empty()
+        ch_star = star_index ?
+            Channel.fromPath(star_index).collect().map { it -> [ [id:it[0].simpleName], it ] }
+            : Channel.empty()
+
         BUILD_STAR_GENOME (ch_fasta, ch_gtf )
-        UNTAR_STAR_INDEX( ch_star.map { it -> [[:], it] } )
-        ch_star_index = (!star_index) ?  BUILD_STAR_GENOME.out.index.collect() : 
-                                        (star_index.endsWith(".gz") ? UNTAR_STAR_INDEX.out.untar.map { it[1] } : star_index)
+        UNTAR_STAR_INDEX( ch_star.map { it -> [[:], it[1]] } )
+        ch_star_index = (!star_index) ?  BUILD_STAR_GENOME.out.index.collect() :
+                                        (star_index.endsWith(".gz") ? UNTAR_STAR_INDEX.out.untar.map { it[1] } : ch_star)
         // Convert gtf to refflat for picard
         GTF_TO_REFFLAT(ch_gtf_no_meta)
 
         // Get rRNA transcripts and convert to interval_list format
         GET_RRNA_TRANSCRIPTS(ch_gtf_no_meta)
-       
+
         BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map { it -> [ [id:it.name], it ] }, ch_dict )
 
         UNTAR_VEP_CACHE (ch_vep_cache)
-        
+
         // Preparing transcript fasta
         ch_fasta_fai = ch_fasta.join(ch_fai).collect()
         GFFREAD(ch_gtf_no_meta.map{ it -> [ [id:it[0].simpleName], it ] },ch_fasta_fai)
@@ -79,9 +82,9 @@ workflow PREPARE_REFERENCES {
         UNTAR_SALMON_INDEX( ch_salmon.map { it -> [[:], it] } )
         SALMON_INDEX(ch_fasta_no_meta, transcript_fasta_no_meta)
 
-        ch_salmon_index = (!salmon_index) ? SALMON_INDEX.out.index.collect() : 
+        ch_salmon_index = (!salmon_index) ? SALMON_INDEX.out.index.collect() :
                                             (salmon_index.endsWith(".gz") ? UNTAR_SALMON_INDEX.out.untar.map { it[1] } : salmon_index)
-        
+
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
         ch_versions = ch_versions.mix(BUILD_DICT.out.versions)
