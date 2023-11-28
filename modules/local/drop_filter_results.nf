@@ -39,7 +39,9 @@ process DROP_FILTER_RESULTS {
         $gene_panel_filter \\
         $drop_ae_rds \\
         $out_drop_gene_name \\
-        $out_drop_as_tsv
+        $out_drop_as_tsv \\
+        --out_put_file_subfix_as "provided_samples_top_hits_filtered" \\
+        --out_put_file_subfix_ae "provided_samples_top_hits_filtered"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
