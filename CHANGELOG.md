@@ -11,6 +11,7 @@ Initial release of genomic-medicine-sweden/tomte, created with the [nf-core](htt
 
 ### `Fixed`
 - Names of other swtiches (subsample_region_switch, downsample_switch, run_drop_ae_switch and run_drop_as_switch) so that they all start with switch_ (switch_subsample_region, switch_downsample, switch_drop_ae and switch_drop_as)
+- Separated modules.config into smaller configs
 
 ### `Dependencies`
 
