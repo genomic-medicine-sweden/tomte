@@ -175,8 +175,8 @@ workflow TOMTE {
         params.subsample_bed,
         params.seed_frac,
         params.num_reads,
-        params.subsample_region_switch,
-        params.downsample_switch,
+        params.switch_subsample_region,
+        params.switch_downsample,
         ch_references.salmon_index,
         ch_references.fasta_meta
     ).set {ch_alignment}

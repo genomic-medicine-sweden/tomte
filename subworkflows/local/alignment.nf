@@ -20,8 +20,8 @@ workflow ALIGNMENT {
         subsample_bed
         seed_frac
         num_reads
-        subsample_region_switch
-        downsample_switch
+        switch_subsample_region
+        switch_downsample
         salmon_index
         ch_genome_fasta
 
@@ -44,10 +44,10 @@ workflow ALIGNMENT {
         ch_bam_bai = Channel.empty()
         ch_bam_bai_out = Channel.empty()
 
-        if (subsample_region_switch) {
+        if (switch_subsample_region) {
             RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam, subsample_bed, seed_frac)
             ch_bam_bai = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
-            if (!downsample_switch) {
+            if (!switch_downsample) {
                 ch_bam_bai_out = RNA_SUBSAMPLE_REGION.out.bam_bai
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
@@ -55,7 +55,7 @@ workflow ALIGNMENT {
             }
         } else {
             ch_bam_bai = ch_bam_bai.mix(STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai))
-             if (!downsample_switch) {
+             if (!switch_downsample) {
                 ch_bam_bai_out = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
