@@ -163,19 +163,18 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 2. Junction track and bigwig
 
-| Mandatory     | Optional                             |
-| ------------- | ------------------------------------ |
-|               | switch_build_tracks <sup>1</sup>     |
+| Mandatory | Optional                         |
+| --------- | -------------------------------- |
+|           | switch_build_tracks <sup>1</sup> |
 
 <sup>1</sup> If it is not provided by the user, the default value is true
 
-
 ##### 3. Subsample region
 
-| Mandatory     | Optional                             |
-| ------------- | ------------------------------------ |
-| subsample_bed | switch_subsample_region<sup>1</sup>  |
-|               | seed_frac<sup>2</sup>                |
+| Mandatory     | Optional                            |
+| ------------- | ----------------------------------- |
+| subsample_bed | switch_subsample_region<sup>1</sup> |
+|               | seed_frac<sup>2</sup>               |
 
 <sup>1</sup> If it is not provided by the user, the default value is true
 <sup>2</sup> If it is not provided by the user, the default value is 0.001
@@ -198,17 +197,17 @@ The mandatory and optional parameters for each category are tabulated below.
 |           | vep_cache_version<sup>2</sup> |
 |           | vep_filters                   |
 
-<sup>1</sup> If it is not provided by the user,  the default value is true
+<sup>1</sup> If it is not provided by the user, the default value is true
 <sup>2</sup> For the time being, only 107 is suported
 
 #### 6. Stringtie & gffcompare
 
 | Mandatory | Optional                     |
-| --------- | -----------------------------|
+| --------- | ---------------------------- |
 | fasta     | switch_stringtie<sup>1</sup> |
 | gtf       |                              |
 
-<sup>1</sup> If it is not provided by the user,  the default value is true
+<sup>1</sup> If it is not provided by the user, the default value is true
 
 #### 7. DROP
 
@@ -216,7 +215,7 @@ DROP - aberrant expression
 
 | Mandatory                             | Optional                          |
 | ------------------------------------- | --------------------------------- |
-| reference_drop_annot_file<sup>1</sup> | switch_drop_ae<sup>2</sup>    |
+| reference_drop_annot_file<sup>1</sup> | switch_drop_ae<sup>2</sup>        |
 | reference_drop_count_file             | drop_group_samples_ae<sup>3</sup> |
 | fasta                                 | drop_padjcutoff_ae<sup>4</sup>    |
 | gtf                                   | drop_zscorecutoff<sup>5</sup>     |
