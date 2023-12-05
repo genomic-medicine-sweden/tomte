@@ -32,7 +32,7 @@ def annotate_with_hgnc(df_family_aberrant_expression_top_hits: DataFrame, out_dr
 
 
 def filter_by_gene_panel(
-    df_family_top_hits: DataFrame, gene_panel: str, module_name: str, out_put_file_subfix: str
+    df_family_top_hits: DataFrame, gene_panel: str, module_name: str, output_file_subfix: str
 ) -> DataFrame:
     """Filter out from results any gene that is not present in the provided gene panel."""
     if gene_panel != "None":
@@ -44,7 +44,7 @@ def filter_by_gene_panel(
             df_family_top_hits, left_on="hgnc_symbol", right_on="hgncSymbol"
         )
         df_clinical = df_clinical.drop(columns=["hgnc_symbol"])
-        file_name = f"{module_name}_{out_put_file_subfix}.tsv"
+        file_name = f"{module_name}_{output_file_subfix}.tsv"
         df_clinical.to_csv(file_name, sep="\t", index=False, header=True)
 
 
@@ -53,7 +53,7 @@ def filter_outrider_results(
     gene_panel: str,
     out_drop_aberrant_expression_rds: str,
     out_drop_gene_name: str,
-    out_put_file_subfix_ae: str,
+    output_file_subfix_ae: str,
 ):
     """
     Filter results to get only those from the sample(s) provided.
@@ -86,12 +86,12 @@ def filter_outrider_results(
         "OUTRIDER_provided_samples_top_hits.tsv", sep="\t", index=False, header=True
     )
     filter_by_gene_panel(
-        df_family_annotated_aberrant_expression_top_hits, gene_panel, "OUTRIDER", out_put_file_subfix_ae
+        df_family_annotated_aberrant_expression_top_hits, gene_panel, "OUTRIDER", output_file_subfix_ae
     )
 
 
 def filter_fraser_result(
-    samples: list, gene_panel: str, out_drop_aberrant_splicing_tsv: str, out_put_file_subfix_as: str
+    samples: list, gene_panel: str, out_drop_aberrant_splicing_tsv: str, output_file_subfix_as: str
 ):
     """
     Filter results to get only those from the sample(s) provided.
@@ -107,7 +107,7 @@ def filter_fraser_result(
     df_results_family_aberrant_splicing.to_csv(
         "FRASER_provided_samples_top_hits.tsv", sep="\t", index=False, header=True
     )
-    filter_by_gene_panel(df_results_family_aberrant_splicing, gene_panel, "FRASER", out_put_file_subfix_as)
+    filter_by_gene_panel(df_results_family_aberrant_splicing, gene_panel, "FRASER", output_file_subfix_as)
 
 
 def parse_args(argv=None):
@@ -145,7 +145,7 @@ def parse_args(argv=None):
         required=False,
     )
     parser.add_argument(
-        "--out_put_file_subfix_ae",
+        "--output_file_subfix_ae",
         type=str,
         default="provided_samples_top_hits_filtered",
         help="Subfix of Aberrant Expression output file",
@@ -159,7 +159,7 @@ def parse_args(argv=None):
         required=False,
     )
     parser.add_argument(
-        "--out_put_file_subfix_as",
+        "--output_file_subfix_as",
         type=str,
         default="provided_samples_top_hits_filtered",
         help="Subfix of Aberrant Splicing output file",
