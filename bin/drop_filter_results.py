@@ -181,7 +181,7 @@ def main():
         gene_panel=args.gene_panel,
         out_drop_aberrant_expression_rds=args.drop_ae_rds,
         out_drop_gene_name=args.out_drop_gene_name,
-        out_put_file_subfix_ae=args.out_put_file_subfix_ae,
+        output_file_subfix_ae=args.output_file_subfix_ae,
     )
     filter_fraser_result(
         samples=args.samples,
