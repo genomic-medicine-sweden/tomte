@@ -187,7 +187,7 @@ def main():
         samples=args.samples,
         gene_panel=args.gene_panel,
         out_drop_aberrant_splicing_tsv=args.out_drop_as_tsv,
-        out_put_file_subfix_as=args.out_put_file_subfix_as,
+        output_file_subfix_as=args.output_file_subfix_as,
     )
 
 
