@@ -51,7 +51,7 @@ def create_fastq_channel(LinkedHashMap row) {
 // Function to get a list of metadata (e.g. case id) for the case [ meta ]
 def create_case_channel(LinkedHashMap row) {
     def case_info   = [:]
-    case_info.id    = row.case_id
+    case_info.case    = row.case
 
     return case_info
 }

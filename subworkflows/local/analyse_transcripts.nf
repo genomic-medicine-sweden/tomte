@@ -26,6 +26,7 @@ workflow ANALYSE_TRANSCRIPTS {
         drop_padjcutoff_as            // channel [val(drop_padjcutoff_as)]
         drop_zscorecutoff             // channel [val(drop_zscorecutoff)]
         ch_gene_panel_clinical_filter // channel [ path(tsv) ]
+        case_info                     // channel [val(case_id)] 
 
     main:
         ch_versions = Channel.empty()
@@ -83,6 +84,7 @@ workflow ANALYSE_TRANSCRIPTS {
 
         DROP_FILTER_RESULTS(
             star_samples,
+            case_info,
             ch_gene_panel_clinical_filter,
             ch_out_drop_ae_rds,
             ch_out_drop_gene_name,
