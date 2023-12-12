@@ -38,7 +38,8 @@ workflow PREPARE_REFERENCES {
 
         // If no genome indices, create it
         SAMTOOLS_FAIDX_GENOME(ch_fasta,[[],[]])
-        ch_fai = Channel.empty().mix(fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        ch_fai = fai.mix(SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        //ch_fai.view()
 
         BUILD_DICT(ch_fasta)
         ch_dict = BUILD_DICT.out.dict.collect()
@@ -72,7 +73,10 @@ workflow PREPARE_REFERENCES {
         UNTAR_VEP_CACHE (ch_vep_cache)
 
         // Preparing transcript fasta
-        ch_fasta_fai = ch_fasta.join(ch_fai).collect()
+        ch_fai.view()
+        ch_fasta_fai = ch_fasta.mix(ch_fai.map{meta, fai -> fai}).collect()
+        ch_fasta_fai.view()
+        //ch_fasta.view()
         GFFREAD(ch_gtf_no_meta.map{ it -> [ [id:it[0].simpleName], it ] },ch_fasta_fai)
         transcript_fasta_no_meta = (!transcript_fasta) ? GFFREAD.out.tr_fasta.collect() :
                                     (transcript_fasta.endsWith(".gz") ? GUNZIP_TRFASTA.out.gunzip.collect().map{ meta, fasta -> [ fasta ] } : transcript_fasta)
@@ -103,7 +107,7 @@ workflow PREPARE_REFERENCES {
         fasta_no_meta    = ch_fasta_no_meta
         fai              = ch_fai
         fai_no_meta      = ch_fai.map{ meta, fai -> [fai] }.collect()
-        fasta_fai_meta   = ch_fasta.join(ch_fai).collect()
+        fasta_fai_meta   = ch_fasta_fai
         sequence_dict    = BUILD_DICT.out.dict.collect()
         gtf              = ch_gtf_no_meta
         star_index       = ch_star_index
