@@ -36,7 +36,7 @@ def filter_by_gene_panel(
 ) -> DataFrame:
     """Filter out from results any gene that is not present in the provided gene panel."""
     if case_id != "":
-        case_id_ = f"{case_id}_"
+        case_id += "_"
     if gene_panel != "None":
         df_panel: DataFrame = read_csv(
             gene_panel, sep="\t", names=GENE_PANEL_HEADER, header=None, comment="#", index_col=False
@@ -46,7 +46,7 @@ def filter_by_gene_panel(
             df_family_top_hits, left_on="hgnc_symbol", right_on="hgncSymbol"
         )
         df_clinical = df_clinical.drop(columns=["hgnc_symbol"])
-        file_name = f"{case_id_}{module_name}_{output_file_subfix}.tsv"
+        file_name = f"{case_id}{module_name}_{output_file_subfix}.tsv"
         df_clinical.to_csv(file_name, sep="\t", index=False, header=True)
 
 
