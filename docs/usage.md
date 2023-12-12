@@ -123,15 +123,17 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 In genomic-medicine-sweden/tomte, references can be supplied using parameters.
 
-Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can call SNVs either with BCFtools or with GATK. You also have the option to turn off sections of the pipeline if you do not want to run them. For example, drop aberrant expression module can be turned off by setting `--run_drop_ae_switch FALSE`. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, if you are not running DROP aberrant splicing, you do not need to provide `--reference_drop_splice_folder`.
+Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can call SNVs either with BCFtools or with GATK. You also have the option to turn off sections of the pipeline if you do not want to run them. For example, drop aberrant expression module can be turned off by setting `--switch_drop_ae FALSE`. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, if you are not running DROP aberrant splicing, you do not need to provide `--reference_drop_splice_folder`.
 
 genomic-medicine-sweden/tomte consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
 
 1. Alignment and pseudo quantification (STAR & Salmon)
-2. Subsample_region (Samtools)
-3. Variant calling - SNV (BCFTools or GATK's GermlineCNVCaller)
-4. SNV annotation (ensembl VEP)
-5. DROP
+2. Junction track and bigwig
+3. Subsample_region (Samtools)
+4. Variant calling - SNV (BCFTools or GATK's GermlineCNVCaller)
+5. SNV annotation (ensembl VEP)
+6. Stringtie & gffcompare
+7. DROP
 
 > We have only listed the groups that require at least one input from the user. For example, the pipeline also runs WigToBigWig, but it does not require any input other than the bam files passed by the pipeline. Hence, it is not mentioned in the list above. To know more about the tools used in the pipeline check the [README](../README.md).
 
@@ -159,17 +161,25 @@ The mandatory and optional parameters for each category are tabulated below.
 <sup>4</sup> If it is not provided by the user, the default value is 40.
 <sup>5</sup> If it is not provided by the user, the default value is Basic.
 
-##### 2. Subsample region
+##### 2. Junction track and bigwig
 
-| Mandatory     | Optional                             |
-| ------------- | ------------------------------------ |
-| subsample_bed | subsample_region_switch <sup>1</sup> |
-|               | seed_frac<sup>2</sup>                |
+| Mandatory | Optional                         |
+| --------- | -------------------------------- |
+|           | switch_build_tracks <sup>1</sup> |
+
+<sup>1</sup> If it is not provided by the user, the default value is true
+
+##### 3. Subsample region
+
+| Mandatory     | Optional                            |
+| ------------- | ----------------------------------- |
+| subsample_bed | switch_subsample_region<sup>1</sup> |
+|               | seed_frac<sup>2</sup>               |
 
 <sup>1</sup> If it is not provided by the user, the default value is true
 <sup>2</sup> If it is not provided by the user, the default value is 0.001
 
-##### 3. Variant calling - SNV
+##### 4. Variant calling - SNV
 
 | Mandatory | Optional                         |
 | --------- | -------------------------------- |
@@ -179,28 +189,40 @@ The mandatory and optional parameters for each category are tabulated below.
 <sup>1</sup> If it is not provided by the user, the default value is bcftools
 <sup>2</sup> If it is not provided by the user, the default value is multiallelic
 
-#### 4. SNV annotation (ensembl VEP)
+#### 5. SNV annotation (ensembl VEP)
 
 | Mandatory | Optional                      |
 | --------- | ----------------------------- |
-| vep_cache | vep_cache_version<sup>1</sup> |
+| vep_cache | switch_vep<sup>1</sup>        |
+|           | vep_cache_version<sup>2</sup> |
 |           | vep_filters                   |
 
-<sup>1</sup> For the time being, only 107 is suported
+<sup>1</sup> If it is not provided by the user, the default value is true
+<sup>2</sup> For the time being, only 107 is suported
 
-#### 5. DROP
+#### 6. Stringtie & gffcompare
+
+| Mandatory | Optional                     |
+| --------- | ---------------------------- |
+| fasta     | switch_stringtie<sup>1</sup> |
+| gtf       |                              |
+
+<sup>1</sup> If it is not provided by the user, the default value is true
+
+#### 7. DROP
 
 DROP - aberrant expression
 
 | Mandatory                             | Optional                          |
 | ------------------------------------- | --------------------------------- |
-| reference_drop_annot_file<sup>1</sup> | run_drop_ae_switch<sup>2</sup>    |
+| reference_drop_annot_file<sup>1</sup> | switch_drop_ae<sup>2</sup>        |
 | reference_drop_count_file             | drop_group_samples_ae<sup>3</sup> |
-|                                       | drop_padjcutoff_ae<sup>4</sup>    |
-|                                       | drop_zscorecutoff<sup>5</sup>     |
+| fasta                                 | drop_padjcutoff_ae<sup>4</sup>    |
+| gtf                                   | drop_zscorecutoff<sup>5</sup>     |
 |                                       | gene_panel_clinical_filter        |
-|                                       | downsample_switch<sup>6</sup>     |
+|                                       | switch_downsample<sup>6</sup>     |
 |                                       | num_reads<sup>7</sup>             |
+|                                       | genome<sup>8</sup>                |
 
 <sup>1</sup> To get more information on how to format it, see below
 <sup>2</sup> If it is not provided by the user, the default value is true
@@ -209,17 +231,19 @@ DROP - aberrant expression
 <sup>5</sup> If it is not provided by the user, the default value is 0
 <sup>6</sup> If it is not provided by the user, the default value is true
 <sup>7</sup> If it is not provided by the user, the default value is 120000000
+<sup>8</sup> If it is not provided by the user, the default value is GRCh38
 
 DROP - aberrant splicing
 
 | Mandatory                             | Optional                          |
 | ------------------------------------- | --------------------------------- |
-| reference_drop_annot_file<sup>1</sup> | run_drop_as_switch<sup>2</sup>    |
+| reference_drop_annot_file<sup>1</sup> | switch_drop_as<sup>2</sup>        |
 | reference_drop_splice_folder          | drop_group_samples_as<sup>3</sup> |
 |                                       | drop_padjcutoff_as<sup>4</sup>    |
 |                                       | gene_panel_clinical_filter        |
-|                                       | downsample_switch<sup>5</sup>     |
+|                                       | switch_downsample<sup>5</sup>     |
 |                                       | num_reads<sup>6</sup>             |
+|                                       | genome<sup>7</sup>                |
 
 <sup>1</sup> To get more information on how to format it, see below
 <sup>2</sup> If it is not provided by the user, the default value is true
@@ -227,6 +251,7 @@ DROP - aberrant splicing
 <sup>4</sup> If it is not provided by the user, the default value is 0.1
 <sup>5</sup> If it is not provided by the user, the default value is true
 <sup>6</sup> If it is not provided by the user, the default value is 120000000
+<sup>7</sup> If it is not provided by the user, the default value is GRCh38
 
 ##### Preparing input for DROP
 

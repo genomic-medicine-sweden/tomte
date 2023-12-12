@@ -11,6 +11,7 @@ process DROP_FILTER_RESULTS {
 
     input:
     val(samples)
+    val(case_info)
     path gene_panel_clinical_filter
     path out_drop_ae_rds_in
     path out_drop_gene_name_in
@@ -28,6 +29,7 @@ process DROP_FILTER_RESULTS {
 
     script:
     def ids = "${samples.id}".replace("[","").replace("]","").replace(",","")
+    def case_id = "${case_info.case_id}".replace("[","").replace("]","").replace(",","")
     def gene_panel_filter = gene_panel_clinical_filter ? "--gene_panel ${gene_panel_clinical_filter}" : ''
     def drop_ae_rds = out_drop_ae_rds_in ? "--drop_ae_rds ${out_drop_ae_rds_in}" : ''
     def out_drop_gene_name = out_drop_gene_name_in ? "--out_drop_gene_name ${out_drop_gene_name_in}" : ''
@@ -39,7 +41,10 @@ process DROP_FILTER_RESULTS {
         $gene_panel_filter \\
         $drop_ae_rds \\
         $out_drop_gene_name \\
-        $out_drop_as_tsv
+        $out_drop_as_tsv \\
+        --case $case_id \\
+        --output_file_subfix_as "provided_samples_top_hits_filtered" \\
+        --output_file_subfix_ae "provided_samples_top_hits_filtered"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -193,13 +193,13 @@
                     "enum": ["Basic", "None"],
                     "fa_icon": "fas fa-tachometer-alt"
                 },
-                "subsample_region_switch": {
+                "switch_subsample_region": {
                     "type": "boolean",
                     "default": true,
                     "description": "Do you want to subsample the region subsample_bed to the fraction given in seed_frac?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "downsample_switch": {
+                "switch_downsample": {
                     "type": "boolean",
                     "default": true,
                     "description": "Do you want to downsample the number of reads to num_reads?",
@@ -249,13 +249,31 @@
                     "enum": ["consensus", "multiallelic"],
                     "help_text": "Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied."
                 },
-                "run_drop_ae_switch": {
+                "switch_build_tracks": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should tracks be build?",
+                    "fa_icon": "fas fa-toggle-off"
+                },
+                "switch_stringtie": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should stringtie module be run?",
+                    "fa_icon": "fas fa-toggle-off"
+                },
+                "switch_vep": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should VEP module be run?",
+                    "fa_icon": "fas fa-toggle-off"
+                },
+                "switch_drop_ae": {
                     "type": "boolean",
                     "default": true,
                     "description": "Should DROP Aberrant Expression module be run?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "run_drop_as_switch": {
+                "switch_drop_as": {
                     "type": "boolean",
                     "default": true,
                     "description": "Should DROP Aberrant Splicing module be run?",
