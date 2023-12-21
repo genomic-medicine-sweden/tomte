@@ -38,8 +38,6 @@ nextflow_process {
             )
         }
     }
-<<<<<<< HEAD
-=======
 // TODO
 // //
 // // Test with paired-end data
@@ -108,5 +106,4 @@ nextflow_process {
 
 //     FASTQC ( input )
 // }
->>>>>>> TEMPLATE
 }

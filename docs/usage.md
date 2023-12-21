@@ -1,12 +1,8 @@
 # genomic-medicine-sweden/tomte: Usage
 
-<<<<<<< HEAD
-
 ## :warning: Please read this documentation on github website: [tomte usage](https://github.com/genomic-medicine-sweden/tomte)
 
 =======
-
-> > > > > > > TEMPLATE
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
@@ -265,8 +261,6 @@ If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expressio
 
 To obtain the gene counts and splice counts you will have to download the counts from one of the [available databases](https://github.com/gagneurlab/drop#datasets) or run drop locally with your own samples. If you choose the second option, you should start by runnig the module(s) you want to export counts for. Afterwards, you need to run the exportCounts module. Make sure that your config has only the modules you want to export and have already run as <run: true> , that only existing groups are mentioned in the config, and that exportCounts excludGroups is null or contains a group of samples you want to exclude. Finally, run:
 
-<<<<<<< HEAD
-
 ```console
 snakemake exportCounts --cores 1
 ```
@@ -304,8 +298,6 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
 | `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
-
-> > > > > > > TEMPLATE
 
 ## Running the pipeline
 

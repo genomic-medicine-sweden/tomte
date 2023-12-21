@@ -1,12 +1,9 @@
-<<<<<<< HEAD
 
 # tomte: Output
 
 =======
 
 # genomic-medicine-sweden/tomte: Output
-
-> > > > > > > TEMPLATE
 
 ## Introduction
 
