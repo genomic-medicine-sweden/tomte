@@ -9,7 +9,7 @@ Content-Type: text/html; charset=utf-8
 $email_html
 
 --nfcoremimeboundary
-Content-Type: image/png;name="nf-core-tomte_logo.png"
+Content-Type: image/png;name="genomic-medicine-sweden-tomte_logo.png"
 Content-Transfer-Encoding: base64
 Content-ID: <nfcorepipelinelogo>
 Content-Disposition: inline; filename="tomte_logo_light.png"
