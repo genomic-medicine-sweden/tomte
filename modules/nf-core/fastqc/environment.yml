@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 name: fastqc
->>>>>>> TEMPLATE
 channels:
   - conda-forge
   - bioconda

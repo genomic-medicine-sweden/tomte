@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-=======
 name: multiqc
->>>>>>> TEMPLATE
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-<<<<<<< HEAD
-  - bioconda::multiqc=1.17
-=======
   - bioconda::multiqc=1.18
->>>>>>> TEMPLATE

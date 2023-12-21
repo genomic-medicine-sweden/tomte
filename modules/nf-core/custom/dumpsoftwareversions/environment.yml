@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 name: custom_dumpsoftwareversions
->>>>>>> TEMPLATE
 channels:
   - conda-forge
   - bioconda
