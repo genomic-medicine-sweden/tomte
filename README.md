@@ -62,7 +62,7 @@ nextflow run genomic-medicine-sweden/tomte \
 
 ## Credits
 
-genomic-medicine-sweden/tomte was originally written by Clinical Genomics Stockholm.
+genomic-medicine-sweden/tomte was originally written by lucpen.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 

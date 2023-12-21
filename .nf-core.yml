@@ -20,5 +20,7 @@ lint:
     - manifest.homePage
 repository_type: pipeline
 template:
+  author: lucpen
+  description: Analizing RNAseq data
   name: tomte
   prefix: genomic-medicine-sweden
