@@ -1,4 +1,3 @@
-
 # tomte: Documentation
 
 # The tomte documentation is split into the following pages:
