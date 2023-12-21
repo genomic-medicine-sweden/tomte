@@ -1,11 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/tomte
+    genomic-medicine-sweden/tomte
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/tomte
-    Website: https://nf-co.re/tomte
-    Slack  : https://nfcore.slack.com/channels/tomte
+    Github : https://github.com/genomic-medicine-sweden/tomte
 ----------------------------------------------------------------------------------------
 */
 
@@ -55,9 +53,9 @@ WorkflowMain.initialise(workflow, params, log)
 include { TOMTE } from './workflows/tomte'
 
 //
-// WORKFLOW: Run main nf-core/tomte analysis pipeline
+// WORKFLOW: Run main genomic-medicine-sweden/tomte analysis pipeline
 //
-workflow NFCORE_TOMTE {
+workflow GENOMICMEDICINESWEDEN_TOMTE {
     TOMTE ()
 }
 
@@ -72,7 +70,7 @@ workflow NFCORE_TOMTE {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    NFCORE_TOMTE ()
+    GENOMICMEDICINESWEDEN_TOMTE ()
 }
 
 /*

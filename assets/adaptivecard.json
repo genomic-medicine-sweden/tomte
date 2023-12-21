@@ -17,7 +17,7 @@
                         "size": "Large",
                         "weight": "Bolder",
                         "color": "<% if (success) { %>Good<% } else { %>Attention<%} %>",
-                        "text": "nf-core/tomte v${version} - ${runName}",
+                        "text": "genomic-medicine-sweden/tomte v${version} - ${runName}",
                         "wrap": true
                     },
                     {

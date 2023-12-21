@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest an idea for the nf-core/tomte pipeline
+description: Suggest an idea for the genomic-medicine-sweden/tomte pipeline
 labels: enhancement
 body:
   - type: textarea
