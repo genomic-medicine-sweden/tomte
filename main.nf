@@ -73,7 +73,7 @@ include { TOMTE } from './workflows/tomte'
 //
 // WORKFLOW: Run main genomic-medicine-sweden/tomte analysis pipeline
 //
-workflow TOMTE {
+workflow GMS_TOMTE {
     TOMTE ()
 }
 
@@ -88,7 +88,7 @@ workflow TOMTE {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    TOMTE ()
+    GMS_TOMTE ()
 }
 
 /*
