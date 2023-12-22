@@ -10,7 +10,7 @@ However, don't be put off by this template - other more general issues and sugge
 Contributions to the code are even more welcome ;)
 
 If you need help using or modifying genomic-medicine-sweden/tomte then the best place to ask is by creating an [issue] (https://github.com/genomic-medicine-sweden/tomte/issues).
- 
+
 ## Contribution workflow
 
 If you'd like to write some code for genomic-medicine-sweden/tomte, the standard workflow is as follows:
