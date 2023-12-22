@@ -88,7 +88,7 @@ workflow TOMTE {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    GENOMICMEDICINESWEDEN_TOMTE ()
+    TOMTE ()
 }
 
 /*
