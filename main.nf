@@ -73,7 +73,7 @@ include { TOMTE } from './workflows/tomte'
 //
 // WORKFLOW: Run main genomic-medicine-sweden/tomte analysis pipeline
 //
-workflow GENOMICMEDICINESWEDEN_TOMTE {
+workflow TOMTE {
     TOMTE ()
 }
 
