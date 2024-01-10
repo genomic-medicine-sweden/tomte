@@ -38,6 +38,7 @@ process DROP_CONFIG_RUN_AE {
 
     """
     TMPDIR=\$PWD
+    HOME=\$PWD
 
     drop init
 
