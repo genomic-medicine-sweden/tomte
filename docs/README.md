@@ -11,4 +11,4 @@ The genomic-medicine-sweden/tomte documentation is split into the following page
 - [Output](output.md)
   - An overview of the different results produced by the pipeline and how to interpret them.
 
-# You can find a lot more documentation about installing, configuring and running nf-core and nf-core based pipelines on the website: [https://nf-co.re](https://nf-co.re)
+You can find a lot more documentation about installing, configuring and running nf-core and nf-core based pipelines on the website: [https://nf-co.re](https://nf-co.re)
