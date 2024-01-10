@@ -17,7 +17,7 @@ process SAMPLESHEET_CHECK {
     when:
     task.ext.when == null || task.ext.when
 
-    script: // This script is bundled with the pipeline, originally from nf-core
+    script: // This script is bundled with the pipeline, in genomic-medicine-sweden/tomte/bin/
     """
     check_samplesheet.py \\
         $samplesheet \\

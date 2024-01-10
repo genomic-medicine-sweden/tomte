@@ -36,5 +36,5 @@ Pipeline Configuration:
 <% out << summary.collect{ k,v -> " - $k: $v" }.join("\n") %>
 
 --
-tomte
+genomic-medicine-sweden/tomte
 https://github.com/genomic-medicine-sweden/tomte

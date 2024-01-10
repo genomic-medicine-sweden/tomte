@@ -34,6 +34,8 @@ process DROP_CONFIG_RUN_AS {
     def drop_group = "${drop_group_samples_as}".replace(" ","")
     """
     TMPDIR=\$PWD
+    HOME=\$PWD
+
 
     drop init
 

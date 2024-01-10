@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    tomte
+    genomic-medicine-sweden/tomte
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/genomic-medicine-sweden/tomte
 ----------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ WorkflowMain.initialise(workflow, params, log)
 include { TOMTE } from './workflows/tomte'
 
 //
-// WORKFLOW: Run main nf-core/tomte analysis pipeline
+// WORKFLOW: Run main genomic-medicine-sweden/tomte analysis pipeline
 //
 workflow GMS_TOMTE {
     TOMTE ()

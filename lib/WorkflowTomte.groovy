@@ -1,5 +1,5 @@
 //
-// This file holds several functions specific to the workflow/tomte.nf in the nf-core/tomte pipeline
+// This file holds several functions specific to the workflow/tomte.nf in the genomic-medicine-sweden/tomte pipeline
 //
 
 import nextflow.Nextflow
