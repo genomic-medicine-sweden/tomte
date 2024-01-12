@@ -7,8 +7,15 @@
     "items": {
         "type": "object",
         "properties": {
+            "case": {
+                "type": "string",
+                "meta": ["case"],
+                "pattern": "^\\S+$",
+                "errorMessage": "Case name must be provided and cannot contain spaces"
+            },
             "sample": {
                 "type": "string",
+                "meta": ["id"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces"
             },
@@ -29,8 +36,14 @@
                         "maxLength": 0
                     }
                 ]
+            },
+            "strandedness": {
+                "type": "string",
+                "meta": ["strandedness"],
+                "enum": ["unstranded", "forward", "reverse"],
+                "errorMessage": "Sample strandness valid input is unstranded,forward or reverse"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["case", "sample", "fastq_1", "strandedness"]
     }
 }
