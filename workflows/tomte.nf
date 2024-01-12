@@ -113,7 +113,7 @@ workflow TOMTE {
         .combine( ch_original_input )
         .map { counts, meta, fastq1, fastq2 ->
             new_meta = meta + [num_lanes:counts[meta.id],
-                        read_group:"\'@RG\\tID:"+ fastq1.toString().split('/')[-1] + "\\tPL:ILLUMINA\\tSM:"+meta.id+"\'"]
+                        read_group:"\'@RG\\tID:"+ fastq1.toString().split('/')[-1] + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:"+meta.id+"\'"]
             if (!fastq2) {
                 return [ new_meta + [ single_end:true ], [ fastq1 ] ]
             } else {
@@ -135,14 +135,6 @@ workflow TOMTE {
 
     ch_samples   = ch_reads.map { meta, fastqs -> meta}
     ch_case_info = ch_samples.toList().map { create_case_channel(it) }
-
-    //if (params.input) {
-    //    ch_input = Channel.fromPath(params.input)
-    //    CHECK_INPUT (ch_input)
-    //    ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
-    //} else {
-    //    exit 1, 'Input samplesheet not specified!'
-    //}
 
 
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
