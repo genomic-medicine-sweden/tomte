@@ -4,7 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryLog; paramsSummaryMap } from 'plugin/nf-validation'
+include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet } from 'plugin/nf-validation'
 
 def logo = NfcoreTemplate.gmsLogo(workflow, params.monochrome_logs)
 def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
@@ -58,7 +58,6 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 //
 // SUBWORKFLOW: local
 //
-include { CHECK_INPUT             } from '../subworkflows/local/input_check'
 include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_references'
 include { ALIGNMENT               } from '../subworkflows/local/alignment'
 include { BAM_QC                  } from '../subworkflows/local/bam_qc'
@@ -103,13 +102,48 @@ workflow TOMTE {
     ch_versions = Channel.empty()
 
     // Initialize input channels
-    if (params.input) {
-        ch_input = Channel.fromPath(params.input)
-        CHECK_INPUT (ch_input)
-        ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
-    } else {
-        exit 1, 'Input samplesheet not specified!'
-    }
+    ch_input = Channel.fromPath(params.input)
+    Channel.fromSamplesheet("input")
+        .tap { ch_original_input }
+        .map { meta, fastq1, fastq2 -> meta.id }
+        .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
+            counts[sample] = (counts[sample] ?: 0) + 1
+            counts
+        }
+        .combine( ch_original_input )
+        .map { counts, meta, fastq1, fastq2 ->
+            new_meta = meta + [num_lanes:counts[meta.id],
+                        read_group:"\'@RG\\tID:"+ fastq1.toString().split('/')[-1] + "\\tPL:ILLUMINA\\tSM:"+meta.id+"\'"]
+            if (!fastq2) {
+                return [ new_meta + [ single_end:true ], [ fastq1 ] ]
+            } else {
+                return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
+            }
+        }
+        .tap{ ch_input_counts }
+        .map { meta, fastqs -> fastqs }
+        .reduce([:]) { counts, fastqs -> //get line number for each row to construct unique sample ids
+            counts[fastqs] = counts.size() + 1
+            return counts
+        }
+        .combine( ch_input_counts )
+         .map { lineno, meta, fastqs -> //append line number to sampleid
+             new_meta = meta + [id:meta.id+"_T"+lineno[fastqs]]
+             return [ new_meta, fastqs ]
+         }
+         .set { ch_reads }
+
+    ch_samples   = ch_reads.map { meta, fastqs -> meta}
+    ch_case_info = ch_samples.toList().map { create_case_channel(it) }
+
+    //if (params.input) {
+    //    ch_input = Channel.fromPath(params.input)
+    //    CHECK_INPUT (ch_input)
+    //    ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
+    //} else {
+    //    exit 1, 'Input samplesheet not specified!'
+    //}
+
 
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
                                                                         : Channel.value([[],[]])
@@ -161,14 +195,14 @@ workflow TOMTE {
     //
 
     FASTQC (
-        CHECK_INPUT.out.reads
+        ch_reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
 
     // Alignment
     ALIGNMENT(
-        CHECK_INPUT.out.reads,
+        ch_reads,
         ch_references.star_index,
         ch_references.gtf,
         params.platform,
@@ -208,7 +242,7 @@ workflow TOMTE {
         params.drop_padjcutoff_as,
         params.drop_zscorecutoff,
         ch_gene_panel_clinical_filter,
-        CHECK_INPUT.out.case_info
+        ch_case_info
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
 
@@ -282,6 +316,27 @@ workflow TOMTE {
         ch_multiqc_logo.toList()
     )
     multiqc_report = MULTIQC.out.report.toList()
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+// Function to get a list of metadata (e.g. case id) for the case [ meta ]
+def create_case_channel(List rows) {
+    def case_info = [:]
+    def probands = []
+
+    for (item in rows) {
+        probands.add(item.id.split("_T")[0])
+    }
+
+    case_info.probands = probands
+    case_info.id = rows[0].case_id
+
+    return case_info
 }
 
 /*
