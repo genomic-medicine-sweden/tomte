@@ -151,6 +151,21 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()
                                                                         : Channel.empty()
+    ch_vep_extra_files_unsplit  = params.vep_plugin_files               ? Channel.fromPath(params.vep_plugin_files).collect()
+                                                                        : Channel.value([])
+    
+    // Read and store paths in the vep_plugin_files file
+    ch_vep_extra_files_unsplit.splitCsv ( header:true )
+        .map { row ->
+            f = file(row.vep_files[0])
+            if(f.isFile() || f.isDirectory()){
+                return [f]
+            } else {
+                error("\nVep database file ${f} does not exist.")
+            }
+        }
+        .collect()
+        .set {ch_vep_extra_files}
 
     PREPARE_REFERENCES(
         params.fasta,
@@ -264,7 +279,8 @@ workflow TOMTE {
         params.genome,
         params.vep_cache_version,
         ch_vep_cache,
-        ch_references.fasta_no_meta,
+        ch_references.fasta_meta,
+        ch_vep_extra_files,
     )
     ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
 

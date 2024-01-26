@@ -148,10 +148,10 @@
                 },
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": 107,
+                    "default": 110,
                     "description": "Specifies version of vep cache to use.",
                     "fa_icon": "fas fa-folder-open",
-                    "enum": [107]
+                    "enum": [107,110]
                 },
                 "vep_filters": {
                     "type": "string",
@@ -159,6 +159,17 @@
                     "fa_icon": "fas fa-file-csv",
                     "description": "File containing HGNC_IDs of interest on separate lines.",
                     "hidden": true
+                },
+                "vep_plugin_files": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Databases used by both named and custom plugins to annotate variants.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to a file containing the absolute paths to databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/vep_plugin_files_schema.json"
                 }
             },
             "required": ["fasta", "gtf"]

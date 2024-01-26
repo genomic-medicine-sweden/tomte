@@ -29,6 +29,7 @@ params.transcript_fasta               = WorkflowMain.getGenomeAttribute(params, 
 params.vep_cache                      = WorkflowMain.getGenomeAttribute(params, 'vep_cache')
 params.vep_cache_version              = WorkflowMain.getGenomeAttribute(params, 'vep_cache_version')
 params.vep_filters                    = WorkflowMain.getGenomeAttribute(params, 'vep_filters')
+params.vep_plugin_files               = WorkflowMain.getGenomeAttribute(params, 'vep_plugin_files')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

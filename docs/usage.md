@@ -157,10 +157,10 @@ The mandatory and optional parameters for each category are tabulated below.
 |           | min_trimmed_length<sup>4</sup> |
 |           | star_two_pass_mode<sup>4</sup> |
 
-<sup>1</sup> If the parameter is not provided by the user, it will be generated from the fasta and gtf files.
-<sup>2</sup> If it is not provided by the user, the default value is GRCh38.
-<sup>3</sup> If it is not provided by the user, the default value is illumina.
-<sup>4</sup> If it is not provided by the user, the default value is 40.
+<sup>1</sup> If the parameter is not provided by the user, it will be generated from the fasta and gtf files.<br />
+<sup>2</sup> If it is not provided by the user, the default value is GRCh38.<br />
+<sup>3</sup> If it is not provided by the user, the default value is illumina.<br />
+<sup>4</sup> If it is not provided by the user, the default value is 40.<br />
 <sup>5</sup> If it is not provided by the user, the default value is Basic.
 
 ##### 2. Junction track and bigwig
@@ -188,19 +188,21 @@ The mandatory and optional parameters for each category are tabulated below.
 |           | variant_caller<sup>1</sup>       |
 |           | bcftools_caller_mode<sup>2</sup> |
 
-<sup>1</sup> If it is not provided by the user, the default value is bcftools
+<sup>1</sup> If it is not provided by the user, the default value is bcftools<br />
 <sup>2</sup> If it is not provided by the user, the default value is multiallelic
 
 #### 5. SNV annotation (ensembl VEP)
 
-| Mandatory | Optional                      |
-| --------- | ----------------------------- |
-| vep_cache | switch_vep<sup>1</sup>        |
-|           | vep_cache_version<sup>2</sup> |
-|           | vep_filters                   |
+| Mandatory                   | Optional              |
+| --------------------------- | --------------------- |
+| vep_plugin_files<sup>1</sup>| switch_vep<sup>2</sup>|
+|                             | vep_cache<sup>3</sup> |
+|                             | vep_cache_version     |
+|                             | vep_filters           |
 
-<sup>1</sup> If it is not provided by the user, the default value is true
-<sup>2</sup> For the time being, only 107 is suported
+<sup>1</sup> VEP caches can be downloaded [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#cache). VEP plugins may be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter. See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
+<sup>2</sup> If it is not provided by the user, the default value is true<br />
+<sup>3</sup> If it is not provided by the user, the default value is 110, supported values are 107 and 110 <br />
 
 #### 6. Stringtie & gffcompare
 
@@ -226,13 +228,13 @@ DROP - aberrant expression
 |                                       | num_reads<sup>7</sup>             |
 |                                       | genome<sup>8</sup>                |
 
-<sup>1</sup> To get more information on how to format it, see below
-<sup>2</sup> If it is not provided by the user, the default value is true
-<sup>3</sup> If it is not provided by the user, the default value is outrider
-<sup>4</sup> If it is not provided by the user, the default value is 0.05
-<sup>5</sup> If it is not provided by the user, the default value is 0
-<sup>6</sup> If it is not provided by the user, the default value is true
-<sup>7</sup> If it is not provided by the user, the default value is 120000000
+<sup>1</sup> To get more information on how to format it, see below<br />
+<sup>2</sup> If it is not provided by the user, the default value is true<br />
+<sup>3</sup> If it is not provided by the user, the default value is outrider<br />
+<sup>4</sup> If it is not provided by the user, the default value is 0.05<br />
+<sup>5</sup> If it is not provided by the user, the default value is 0<br />
+<sup>6</sup> If it is not provided by the user, the default value is true<br />
+<sup>7</sup> If it is not provided by the user, the default value is 120000000<br />
 <sup>8</sup> If it is not provided by the user, the default value is GRCh38
 
 DROP - aberrant splicing
@@ -247,12 +249,12 @@ DROP - aberrant splicing
 |                                       | num_reads<sup>6</sup>             |
 |                                       | genome<sup>7</sup>                |
 
-<sup>1</sup> To get more information on how to format it, see below
-<sup>2</sup> If it is not provided by the user, the default value is true
-<sup>3</sup> If it is not provided by the user, the default value is fraser
-<sup>4</sup> If it is not provided by the user, the default value is 0.1
-<sup>5</sup> If it is not provided by the user, the default value is true
-<sup>6</sup> If it is not provided by the user, the default value is 120000000
+<sup>1</sup> To get more information on how to format it, see below<br />
+<sup>2</sup> If it is not provided by the user, the default value is true<br />
+<sup>3</sup> If it is not provided by the user, the default value is fraser<br />
+<sup>4</sup> If it is not provided by the user, the default value is 0.1<br />
+<sup>5</sup> If it is not provided by the user, the default value is true<br />
+<sup>6</sup> If it is not provided by the user, the default value is 120000000<br />
 <sup>7</sup> If it is not provided by the user, the default value is GRCh38
 
 ##### Preparing input for DROP
