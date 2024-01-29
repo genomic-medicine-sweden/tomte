@@ -12,6 +12,8 @@ Initial release of genomic-medicine-sweden/tomte, created with the [nf-core](htt
 - switch_vep, switch_build_tracks and switch_stringtie to make the pipeline more versatile [#61](https://github.com/genomic-medicine-sweden/tomte/pull/61)
 - Updated template and nf-tools [#65](https://github.com/genomic-medicine-sweden/tomte/pull/65)
 - Use `nf-validation` plugin for parameter and samplesheet validation [#66](https://github.com/genomic-medicine-sweden/tomte/pull/66)
+- Installed the nf-core version of ensemblvep/vep module [#67](https://github.com/genomic-medicine-sweden/tomte/pull/67)
+- A new parameter `vep_plugin_files` to supply files required by vep plugins [#67](https://github.com/genomic-medicine-sweden/tomte/pull/67)
 
 ### `Fixed`
 
