@@ -4,7 +4,7 @@ import argparse
 from pandas import DataFrame, read_csv, concat
 import pyreadr
 
-SCRIPT_VERSION = "v1.0"
+SCRIPT_VERSION = "v1.1"
 GENE_PANEL_HEADER = ["chromosome", "gene_start", "gene_stop", "hgnc_id", "hgnc_symbol"]
 GENE_PANEL_COLUMNS_TO_KEEP = ["hgnc_symbol", "hgnc_id"]
 
@@ -24,11 +24,19 @@ def get_top_hits(sample_id: str, df_results_family_aberrant_expression: DataFram
     return df_id[:20]
 
 
-def annotate_with_hgnc(df_family_aberrant_expression_top_hits: DataFrame, out_drop_gene_name: str) -> DataFrame:
-    """Annotate results from DROP Aberrant Expression with hgnc ids."""
+def annotate_with_drop_gene_name(df_family_results: DataFrame, out_drop_gene_name: str) -> DataFrame:
+    """Annotate results from DROP with hgnc symbols."""
     df_genes: DataFrame = read_csv(out_drop_gene_name)
+    common_columns = list(set(df_genes.columns) & set(df_family_results.columns))
     df_genes.rename(columns={"gene_name": "hgncSymbol"}, inplace=True)
-    return df_genes.merge(df_family_aberrant_expression_top_hits, left_on="gene_id", right_on="geneID")
+    df_genes.rename(columns={"gene_id": "geneID"}, inplace=True)
+    if common_columns:
+        df_merged = df_genes.drop(common_columns, axis=1).merge(
+            df_family_results, left_on="hgncSymbol", right_on="hgncSymbol"
+        )
+    else:
+        df_merged = df_genes.merge(df_family_results, left_on="geneID", right_on="geneID")
+    return df_merged
 
 
 def filter_by_gene_panel(
@@ -82,7 +90,7 @@ def filter_outrider_results(
             sort=False,
         )
         df_family_aberrant_expression_top_hits = df_family_aberrant_expression_top_hits.drop(columns=["index"])
-    df_family_annotated_aberrant_expression_top_hits = annotate_with_hgnc(
+    df_family_annotated_aberrant_expression_top_hits = annotate_with_drop_gene_name(
         df_family_aberrant_expression_top_hits, out_drop_gene_name
     )
     df_family_annotated_aberrant_expression_top_hits.to_csv(
@@ -94,7 +102,12 @@ def filter_outrider_results(
 
 
 def filter_fraser_result(
-    samples: list, gene_panel: str, out_drop_aberrant_splicing_tsv: str, case_id: str, output_file_subfix_as: str
+    samples: list,
+    gene_panel: str,
+    out_drop_aberrant_splicing_tsv: str,
+    out_drop_gene_name: str,
+    case_id: str,
+    output_file_subfix_as: str,
 ):
     """
     Filter results to get only those from the sample(s) provided.
@@ -107,6 +120,9 @@ def filter_fraser_result(
     df_results_family_aberrant_splicing: DataFrame = df_results_aberrant_splicing.loc[
         df_results_aberrant_splicing["sampleID"].isin(samples)
     ]
+    df_results_family_aberrant_splicing = annotate_with_drop_gene_name(
+        df_results_family_aberrant_splicing, out_drop_gene_name
+    )
     df_results_family_aberrant_splicing.to_csv(
         "FRASER_provided_samples_top_hits.tsv", sep="\t", index=False, header=True
     )
@@ -145,7 +161,7 @@ def parse_args(argv=None):
         type=str,
         default="None",
         help="Path to gene name annotion, output from DROP Aberrant Expression",
-        required=False,
+        required=True,
     )
     parser.add_argument(
         "--case_id",
@@ -186,21 +202,24 @@ def parse_args(argv=None):
 def main():
     """Coordinate argument parsing and program execution."""
     args = parse_args()
-    filter_outrider_results(
-        samples=args.samples,
-        gene_panel=args.gene_panel,
-        out_drop_aberrant_expression_rds=args.drop_ae_rds,
-        out_drop_gene_name=args.out_drop_gene_name,
-        case_id=args.case_id,
-        output_file_subfix_ae=args.output_file_subfix_ae,
-    )
-    filter_fraser_result(
-        samples=args.samples,
-        gene_panel=args.gene_panel,
-        out_drop_aberrant_splicing_tsv=args.out_drop_as_tsv,
-        case_id=args.case_id,
-        output_file_subfix_as=args.output_file_subfix_as,
-    )
+    if args.drop_ae_rds != "None":
+        filter_outrider_results(
+            samples=args.samples,
+            gene_panel=args.gene_panel,
+            out_drop_aberrant_expression_rds=args.drop_ae_rds,
+            out_drop_gene_name=args.out_drop_gene_name,
+            case_id=args.case_id,
+            output_file_subfix_ae=args.output_file_subfix_ae,
+        )
+    if args.out_drop_as_tsv != "None":
+        filter_fraser_result(
+            samples=args.samples,
+            gene_panel=args.gene_panel,
+            out_drop_aberrant_splicing_tsv=args.out_drop_as_tsv,
+            out_drop_gene_name=args.out_drop_gene_name,
+            case_id=args.case_id,
+            output_file_subfix_as=args.output_file_subfix_as,
+        )
 
 
 if __name__ == "__main__":
