@@ -77,18 +77,21 @@ workflow ANALYSE_TRANSCRIPTS {
 
         ch_out_drop_ae_rds    = DROP_CONFIG_RUN_AE.out.drop_ae_rds    ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()
                                                                         : Channel.empty()
-        ch_out_drop_gene_name = DROP_CONFIG_RUN_AE.out.drop_gene_name ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
+        ch_out_drop_gene_name_ae = DROP_CONFIG_RUN_AE.out.drop_gene_name ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
+                                                                        : Channel.empty()
+        ch_out_drop_gene_name_as = DROP_CONFIG_RUN_AS.out.drop_gene_name ? DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
                                                                         : Channel.empty()
         ch_out_drop_as_tsv    = DROP_CONFIG_RUN_AS.out.drop_as_tsv    ? DROP_CONFIG_RUN_AS.out.drop_as_tsv.collect()
                                                                         : Channel.empty()
+        ch_out_drop_gene_name    = params.switch_drop_ae    ? ch_out_drop_gene_name_ae : ch_out_drop_gene_name_as
 
         DROP_FILTER_RESULTS(
             star_samples,
             case_info,
             ch_gene_panel_clinical_filter,
-            ch_out_drop_ae_rds,
+            ch_out_drop_ae_rds.ifEmpty([]),
             ch_out_drop_gene_name,
-            ch_out_drop_as_tsv
+            ch_out_drop_as_tsv.ifEmpty([])
         )
 
         // Stringtie
