@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/genomic-medicine-sweden/tomte/master/nextflow_schema.json",
     "title": "genomic-medicine-sweden/tomte pipeline parameters",
-    "description": "Analizing RNAseq data",
+    "description": "Analyzing RNAseq data",
     "type": "object",
     "definitions": {
         "input_output_options": {

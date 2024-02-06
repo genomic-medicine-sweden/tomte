@@ -21,6 +21,6 @@ lint:
 repository_type: pipeline
 template:
   author: lucpen
-  description: Analizing RNAseq data
+  description: Analyzing RNAseq data
   name: tomte
   prefix: genomic-medicine-sweden
