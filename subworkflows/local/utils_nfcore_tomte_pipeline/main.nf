@@ -267,7 +267,7 @@ def methodsDescriptionText(mqc_methods_yaml) {
     //
     // GMS tomte logo (WIP)
     //
- def gmsTomteLogo(monochrome_logs=true) {
+def gmsTomteLogo(monochrome_logs=true) {
     Map colors = logColours(monochrome_logs)
     String.format(
         """\n
@@ -285,11 +285,7 @@ def methodsDescriptionText(mqc_methods_yaml) {
     )
 }
 
-
-
-
-
- def gmsTomteHatLogo(monochrome_logs=true) {
+def gmsTomteHatLogo(monochrome_logs=true) {
     Map colors = logColours(monochrome_logs)
     String.format(
         """\n
@@ -308,7 +304,7 @@ def methodsDescriptionText(mqc_methods_yaml) {
     )
 }
 
- def gmsTomteHatLogo2(monochrome_logs=true) {
+def gmsTomteHatLogo2(monochrome_logs=true) {
     Map colors = logColours(monochrome_logs)
     String.format(
         """\n

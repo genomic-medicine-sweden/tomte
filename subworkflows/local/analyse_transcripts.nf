@@ -2,12 +2,12 @@
 // ANALYSE TRANSCRITPS
 //
 
- include { STRINGTIE_STRINGTIE } from '../../modules/nf-core/stringtie/stringtie/main'
- include { GFFCOMPARE          } from '../../modules/nf-core/gffcompare/main'
- include { DROP_SAMPLE_ANNOT   } from '../../modules/local/drop_sample_annot'
- include { DROP_CONFIG_RUN_AE  } from '../../modules/local/drop_config_runAE'
- include { DROP_CONFIG_RUN_AS  } from '../../modules/local/drop_config_runAS'
- include { DROP_FILTER_RESULTS } from '../../modules/local/drop_filter_results'
+include { STRINGTIE_STRINGTIE } from '../../modules/nf-core/stringtie/stringtie/main'
+include { GFFCOMPARE          } from '../../modules/nf-core/gffcompare/main'
+include { DROP_SAMPLE_ANNOT   } from '../../modules/local/drop_sample_annot'
+include { DROP_CONFIG_RUN_AE  } from '../../modules/local/drop_config_runAE'
+include { DROP_CONFIG_RUN_AS  } from '../../modules/local/drop_config_runAS'
+include { DROP_FILTER_RESULTS } from '../../modules/local/drop_filter_results'
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
@@ -75,14 +75,14 @@ workflow ANALYSE_TRANSCRIPTS {
             drop_padjcutoff_as
         )
 
-        ch_out_drop_ae_rds       = DROP_CONFIG_RUN_AE.out.drop_ae_rds    ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()
-                                                                         : Channel.empty()
-        ch_out_drop_gene_name_ae = DROP_CONFIG_RUN_AE.out.drop_gene_name ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
-                                                                         : Channel.empty()
-        ch_out_drop_gene_name_as = DROP_CONFIG_RUN_AS.out.drop_gene_name ? DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
-                                                                         : Channel.empty()
-        ch_out_drop_as_tsv       = DROP_CONFIG_RUN_AS.out.drop_as_tsv    ? DROP_CONFIG_RUN_AS.out.drop_as_tsv.collect()
-                                                                         : Channel.empty()
+        ch_out_drop_ae_rds       = DROP_CONFIG_RUN_AE.out.drop_ae_rds       ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()
+                                                                            : Channel.empty()
+        ch_out_drop_gene_name_ae = DROP_CONFIG_RUN_AE.out.drop_gene_name    ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
+                                                                            : Channel.empty()
+        ch_out_drop_gene_name_as = DROP_CONFIG_RUN_AS.out.drop_gene_name    ? DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
+                                                                            : Channel.empty()
+        ch_out_drop_as_tsv       = DROP_CONFIG_RUN_AS.out.drop_as_tsv       ? DROP_CONFIG_RUN_AS.out.drop_as_tsv.collect()
+                                                                            : Channel.empty()
         ch_out_drop_gene_name    = params.switch_drop_ae ? ch_out_drop_gene_name_ae : ch_out_drop_gene_name_as
 
         DROP_FILTER_RESULTS(

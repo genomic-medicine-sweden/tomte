@@ -55,7 +55,7 @@ workflow ALIGNMENT {
             }
         } else {
             ch_bam_bai = ch_bam_bai.mix(STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai))
-             if (!switch_downsample) {
+            if (!switch_downsample) {
                 ch_bam_bai_out = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
