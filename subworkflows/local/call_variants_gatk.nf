@@ -50,7 +50,7 @@ workflow CALL_VARIANTS_GATK {
             [ [:], ch_fai],
             [ [:], ch_dict]
         )
-        ch_versions = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first())
 
         BCFTOOLS_STATS(
             GATK4_HAPLOTYPECALLER.out.vcf.join(GATK4_HAPLOTYPECALLER.out.tbi),

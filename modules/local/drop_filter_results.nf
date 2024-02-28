@@ -28,8 +28,8 @@ process DROP_FILTER_RESULTS {
     task.ext.when == null || task.ext.when
 
     script:
-    def ids = "${samples.probands}".replace("[","").replace("]","").replace(",","")
-    def case_id = "${case_info.case}".replace("[","").replace("]","").replace(",","")
+    def ids = "${samples.id}".replace("[","").replace("]","").replace(",","")
+    def case_id = "${case_info.id}".replace("[","").replace("]","").replace(",","")
     def gene_panel_filter = gene_panel_clinical_filter ? "--gene_panel ${gene_panel_clinical_filter}" : ''
     def drop_ae_rds = out_drop_ae_rds_in ? "--drop_ae_rds ${out_drop_ae_rds_in}" : ''
     def out_drop_gene_name = out_drop_gene_name_in ? "--out_drop_gene_name ${out_drop_gene_name_in}" : ''

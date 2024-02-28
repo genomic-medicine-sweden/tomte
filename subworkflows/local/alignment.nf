@@ -31,8 +31,8 @@ workflow ALIGNMENT {
         ch_fastq = branchFastqToSingleAndMulti(reads)
 
         CAT_FASTQ(ch_fastq.multiple_fq)
-        .reads.mix(ch_fastq.single_fq)
-        .set { ch_cat_fastq }
+            .reads.mix(ch_fastq.single_fq)
+            .set { ch_cat_fastq }
 
         FASTP(ch_cat_fastq, [], false, false)
 
@@ -64,7 +64,6 @@ workflow ALIGNMENT {
         }
 
         SAMTOOLS_VIEW( STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai), ch_genome_fasta, [] )
-
 
         SALMON_QUANT( FASTP.out.reads, salmon_index, gtf, [], false, 'A')
 
@@ -106,17 +105,15 @@ workflow ALIGNMENT {
 def branchFastqToSingleAndMulti(ch_reads) {
 
     return ch_reads
-        .map {
-            meta, fastq ->
-                original_id = meta.id.split('_T')[0..-2].join('_')
-                [ meta + [id: original_id], fastq ]
+        .map { meta, fastqs ->
+            return [ groupKey( meta + [id:meta.sample], meta.fq_pairs ), fastqs ]
         }
         .groupTuple()
         .branch {
-            meta, fastq ->
-                single_fq: fastq.size() == 1
-                    return [ meta, fastq.flatten() ]
-                multiple_fq: fastq.size() > 1
-                    return [ meta, fastq.flatten() ]
+            meta, fastqs ->
+                single_fq: fastqs.size() == 1
+                    return [ meta, fastqs.flatten() ]
+                multiple_fq: fastqs.size() > 1
+                    return [ meta, fastqs.flatten() ]
         }
 }

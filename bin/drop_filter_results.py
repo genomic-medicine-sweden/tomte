@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
-from pandas import DataFrame, read_csv, concat
+
 import pyreadr
+from pandas import DataFrame, concat, read_csv
 
 SCRIPT_VERSION = "v1.1"
 GENE_PANEL_HEADER = ["chromosome", "gene_start", "gene_stop", "hgnc_id", "hgnc_symbol"]
@@ -45,6 +46,7 @@ def filter_by_gene_panel(
     """Filter out from results any gene that is not present in the provided gene panel."""
     if case_id != "":
         case_id += "_"
+        print(case_id)
     if gene_panel != "None":
         df_panel: DataFrame = read_csv(
             gene_panel, sep="\t", names=GENE_PANEL_HEADER, header=None, comment="#", index_col=False
