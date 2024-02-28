@@ -290,14 +290,14 @@ def gmsTomteHatLogo(monochrome_logs=true) {
     String.format(
         """\n
         ${dashedLine(monochrome_logs)}
-                                                                             ${colors.red}@++@${colors.reset}
+        ${colors.red}                                                                     @++@${colors.reset}
         ${colors.blue}   _____ __  __  _____            _                  _              ${colors.red}@    @${colors.reset}
         ${colors.blue}  / ____|  \\/  |/ ____|          | |                | |            ${colors.red}@      @@${colors.reset}
         ${colors.blue} | |  __| \\  / | (___    ______  | |_ ___  _ __ ___ | |_ ___      ${colors.red}@       @${colors.white}(+)${colors.reset}
         ${colors.blue} | | |_ | |\\/| |\\___ \\  |______| | __/ _ \\| '_ ` _ \\| __/ _ \\    ${colors.red}@        @${colors.reset}
         ${colors.blue} | |__| | |  | |____) |          | || (_) | | | | | | ||  __/    ${colors.red}@         @${colors.reset}
         ${colors.blue}  \\_____|_|  |_|_____/            \\__\\___/|_| |_| |_|\\__\\___|    ${colors.red}@         @${colors.reset}
-                                                                         ${colors.white}@===${colors.yellow}(@)${colors.white}===@${colors.reset}
+        ${colors.white}                                                                 @===${colors.yellow}(@)${colors.white}===@${colors.reset}
         ${colors.purple}  ${workflow.manifest.name} ${getWorkflowVersion()}${colors.reset}
         ${dashedLine(monochrome_logs)}
         """.stripIndent()
@@ -309,14 +309,14 @@ def gmsTomteHatLogo2(monochrome_logs=true) {
     String.format(
         """\n
         ${dashedLine(monochrome_logs)}                 ${colors.red}_${colors.reset}
-                                                                             ${colors.red}/  \\${colors.reset}
+        ${colors.red}                                                                     /  \\${colors.reset}
         ${colors.blue}   _____ __  __  _____            _                  _              ${colors.red}/     \\${colors.reset}
         ${colors.blue}  / ____|  \\/  |/ ____|          | |                | |            ${colors.red}/      |\\${colors.reset}
         ${colors.blue} | |  __| \\  / | (___    ______  | |_ ___  _ __ ___ | |_ ___      ${colors.red}/       |${colors.white}(+)${colors.reset}
         ${colors.blue} | | |_ | |\\/| |\\___ \\  |______| | __/ _ \\| '_ ` _ \\| __/ _ \\    ${colors.red}|        \\${colors.reset}
         ${colors.blue} | |__| | |  | |____) |          | || (_) | | | | | | ||  __/    ${colors.red}|         |${colors.reset}
         ${colors.blue}  \\_____|_|  |_|_____/            \\__\\___/|_| |_| |_|\\__\\___|    ${colors.red}|_________|${colors.reset}
-                                                                         ${colors.white}{_________}${colors.reset}
+        ${colors.white}                                                                 {_________}${colors.reset}
         ${colors.purple}  ${workflow.manifest.name} ${getWorkflowVersion()}${colors.reset}
         ${dashedLine(monochrome_logs)}
         """.stripIndent()
