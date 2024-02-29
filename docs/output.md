@@ -1,7 +1,3 @@
-# tomte: Output
-
-=======
-
 # genomic-medicine-sweden/tomte: Output
 
 ## Introduction

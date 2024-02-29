@@ -48,9 +48,9 @@ workflow CALL_VARIANTS {
                     false
                 )
 
-                ch_vcf = ch_vcf.mix(BCFTOOLS_MPILEUP.out.vcf.first())
-                ch_tbi = ch_tbi.mix(BCFTOOLS_MPILEUP.out.tbi.first())
-                ch_stats = ch_stats.mix(BCFTOOLS_MPILEUP.out.stats.first())
+                ch_vcf = ch_vcf.mix(BCFTOOLS_MPILEUP.out.vcf)
+                ch_tbi = ch_tbi.mix(BCFTOOLS_MPILEUP.out.tbi)
+                ch_stats = ch_stats.mix(BCFTOOLS_MPILEUP.out.stats)
                 ch_versions = ch_versions.mix(BCFTOOLS_MPILEUP.out.versions.first())
 
                 break

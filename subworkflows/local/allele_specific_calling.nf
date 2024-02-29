@@ -2,7 +2,7 @@
 // Allele specific variant calling
 //
 
-include { BCFTOOLS_VIEW        } from '../../modules/nf-core/bcftools/view/main' 
+include { BCFTOOLS_VIEW        } from '../../modules/nf-core/bcftools/view/main'
 include { BCFTOOLS_INDEX       } from '../../modules/nf-core/bcftools/index/main'
 include { GATK4_ASEREADCOUNTER } from '../../modules/nf-core/gatk4/asereadcounter/main'
 include { BOOTSTRAPANN         } from '../../modules/local/bootstrapann'
@@ -33,11 +33,11 @@ workflow ALLELE_SPECIFIC_CALLING {
             BCFTOOLS_VIEW.out.vcf
         )
         ch_versions = ch_versions.mix(BCFTOOLS_INDEX.out.versions.first())
-        
+
         dict_no_meta = dict.map{ meta, it -> [it] }.collect()
         GATK4_ASEREADCOUNTER(
             bam_bai,
-            BCFTOOLS_VIEW.out.vcf.join(BCFTOOLS_INDEX.out.tbi), 
+            BCFTOOLS_VIEW.out.vcf.join(BCFTOOLS_INDEX.out.tbi),
             fasta,
             fai,
             dict_no_meta,
