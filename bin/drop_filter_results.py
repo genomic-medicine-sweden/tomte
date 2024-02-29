@@ -46,7 +46,6 @@ def filter_by_gene_panel(
     """Filter out from results any gene that is not present in the provided gene panel."""
     if case_id != "":
         case_id += "_"
-        print(case_id)
     if gene_panel != "None":
         df_panel: DataFrame = read_csv(
             gene_panel, sep="\t", names=GENE_PANEL_HEADER, header=None, comment="#", index_col=False
