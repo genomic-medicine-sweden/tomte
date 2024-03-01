@@ -18,6 +18,7 @@ nextflow.enable.dsl = 2
 include { TOMTE                   } from './workflows/tomte'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_tomte_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_tomte_pipeline'
+
 include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_tomte_pipeline'
 
 /*

@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the nf-core/pipeline pipeline
+// Subworkflow with functionality specific to the genomic-medicine-sweden/tomte pipeline
 //
 
 /*
@@ -170,7 +170,9 @@ workflow PIPELINE_COMPLETION {
 //
 def validateInputParameters() {
     genomeExistsError()
-}//
+}
+
+//
 // Validate channels from input samplesheet
 //
 def validateInputSamplesheet(input) {
@@ -208,7 +210,9 @@ def genomeExistsError() {
             "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         error(error_string)
     }
-}//
+}
+
+//
 // Generate methods description for MultiQC
 //
 def toolCitationText() {
