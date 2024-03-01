@@ -18,7 +18,6 @@
                         "type": "string",
                         "format": "directory-path",
                         "exists": true
-
                     }
                 ],
                 "errorMessage": "The path to one of your vep plugin files could not be found"
