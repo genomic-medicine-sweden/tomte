@@ -16,9 +16,9 @@
             "sample": {
                 "type": "string",
                 "exists": true,
-                "meta": ["id", "sample"],
                 "pattern": "^\\S+$",
-                "errorMessage": "Sample name must be provided and cannot contain spaces"
+                "errorMessage": "Sample name must be provided and cannot contain spaces",
+                "meta": ["id", "sample"]
             },
             "fastq_1": {
                 "type": "string",
@@ -33,7 +33,7 @@
                     {
                         "type": "string",
                         "format": "file-path",
-                        "exists": "true",
+                        "exists": true,
                         "pattern": "^\\S+\\.f(ast)?q\\.gz$"
                     },
                     {
