@@ -86,7 +86,6 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_out_drop_gene_name    = params.switch_drop_ae ? ch_out_drop_gene_name_ae : ch_out_drop_gene_name_as
 
         DROP_FILTER_RESULTS(
-            star_samples,
             case_info,
             ch_gene_panel_clinical_filter,
             ch_out_drop_ae_rds.ifEmpty([]),
@@ -116,19 +115,19 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_versions = ch_versions.mix(GFFCOMPARE.out.versions.first())
 
     emit:
-        transcript_gtf        = STRINGTIE_STRINGTIE.out.transcript_gtf     // channel: [ val(meta), [ path(transctript_gtf)] ]
-        abundance             = STRINGTIE_STRINGTIE.out.abundance          // channel: [ val(meta), [ path(abundance) ] ]
-        coverage_gtf          = STRINGTIE_STRINGTIE.out.coverage_gtf       // channel: [ val(meta), [ path(coverage_gtf) ] ]
-        annotated_gtf         = GFFCOMPARE.out.annotated_gtf               // channel: [ val(meta), [ path(annotated_gtf) ] ]
-        stats_gtf             = GFFCOMPARE.out.stats                       // channel: [ val(meta), [ path(stats) ] ]
-        annotation_drop       = DROP_SAMPLE_ANNOT.out.drop_annot           // channel: [ path(sample_annotation.tsv) ]
-        config_drop_ae        = DROP_CONFIG_RUN_AE.out.config_drop         // channel: [ path(confg_file.yml) ]
-        drop_ae_out           = DROP_CONFIG_RUN_AE.out.drop_ae_out         // channel: [ path(drop_output_AE) ]
-        config_drop_as        = DROP_CONFIG_RUN_AS.out.config_drop         // channel: [ path(confg_file.yml) ]
-        drop_as_out           = DROP_CONFIG_RUN_AS.out.drop_as_out         // channel: [ path(drop_output_AS) ]
-        drop_filter_ae_res    = DROP_FILTER_RESULTS.out.ae_out_filtered    // channel: [ path(drop_AE_filtered.tsv) ]
-        drop_unfilter_ae_res  = DROP_FILTER_RESULTS.out.ae_out_unfiltered  // channel: [ path(drop_AE_unfiltered.tsv) ]
-        drop_filter_as_res    = DROP_FILTER_RESULTS.out.as_out_filtered    // channel: [ path(drop_AS_filtered.tsv) ]
-        drop_unfilter_as_res  = DROP_FILTER_RESULTS.out.as_out_unfiltered  // channel: [ path(drop_AS_unfiltered.tsv) ]
-        versions              = ch_versions                                // channel: [ path(versions.yml) ]
+        transcript_gtf        = STRINGTIE_STRINGTIE.out.transcript_gtf   // channel: [ val(meta), [ path(transctript_gtf)] ]
+        abundance             = STRINGTIE_STRINGTIE.out.abundance        // channel: [ val(meta), [ path(abundance) ] ]
+        coverage_gtf          = STRINGTIE_STRINGTIE.out.coverage_gtf     // channel: [ val(meta), [ path(coverage_gtf) ] ]
+        annotated_gtf         = GFFCOMPARE.out.annotated_gtf             // channel: [ val(meta), [ path(annotated_gtf) ] ]
+        stats_gtf             = GFFCOMPARE.out.stats                     // channel: [ val(meta), [ path(stats) ] ]
+        annotation_drop       = DROP_SAMPLE_ANNOT.out.drop_annot         // channel: [ path(sample_annotation.tsv) ]
+        config_drop_ae        = DROP_CONFIG_RUN_AE.out.config_drop       // channel: [ path(confg_file.yml) ]
+        drop_ae_out           = DROP_CONFIG_RUN_AE.out.drop_ae_out       // channel: [ path(drop_output_AE) ]
+        config_drop_as        = DROP_CONFIG_RUN_AS.out.config_drop       // channel: [ path(confg_file.yml) ]
+        drop_as_out           = DROP_CONFIG_RUN_AS.out.drop_as_out       // channel: [ path(drop_output_AS) ]
+        drop_ae_out_clinical  = DROP_FILTER_RESULTS.out.ae_out_clinical  // channel: [ path(drop_AE_clinical.tsv) ]
+        drop_ae_out_research  = DROP_FILTER_RESULTS.out.ae_out_research  // channel: [ path(drop_AE_research.tsv) ]
+        drop_as_out_clinical  = DROP_FILTER_RESULTS.out.as_out_clinical  // channel: [ path(drop_AS_clinical.tsv) ]
+        drop_as_out_research  = DROP_FILTER_RESULTS.out.as_out_research  // channel: [ path(drop_AS_research.tsv) ]
+        versions              = ch_versions                              // channel: [ path(versions.yml) ]
 }

@@ -245,7 +245,7 @@ def create_case_channel(List rows) {
         probands.add(item.sample)
     }
 
-    case_info.probands = probands
+    case_info.probands = probands.unique()
     case_info.id = rows[0].case
 
     return case_info
