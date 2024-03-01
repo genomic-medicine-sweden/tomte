@@ -8,10 +8,19 @@
         "type": "object",
         "properties": {
             "vep_files": {
-                "type": "string",
-                "format": "file-path",
-                "exists": true,
-                "errorMessage": "Path to vep plugin files and their indices"
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "format": "file-path",
+                        "exists": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "directory-path",
+                        "exists": true
+                    }
+                ],
+                "errorMessage": "The path to one of your vep plugin files could not be found"
             }
         },
         "required": ["vep_files"]
