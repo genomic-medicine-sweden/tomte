@@ -14,12 +14,18 @@ Initial release of genomic-medicine-sweden/tomte, created with the [nf-core](htt
 - Use `nf-validation` plugin for parameter and samplesheet validation [#66](https://github.com/genomic-medicine-sweden/tomte/pull/66)
 - Installed the nf-core version of ensemblvep/vep module [#67](https://github.com/genomic-medicine-sweden/tomte/pull/67)
 - A new parameter `vep_plugin_files` to supply files required by vep plugins [#67](https://github.com/genomic-medicine-sweden/tomte/pull/67)
+- The possibility of using `igenomes_base` to point to a path where genome specific reference files are placed (fasta, fai, gtf, star_index, salmon_index, subsample_bed) [#76](https://github.com/genomic-medicine-sweden/tomte/pull/76)
 
 ### `Fixed`
 
-- Renamed the other switches (subsample_region_switch, downsample_switch, run_drop_ae_switch and run_drop_as_switch) so that they all start with switch\* (switch_subsample_region, switch_downsample, switch_drop_ae and switch_drop_as)
-- Separated modules.config into smaller configs
-- Patch tools update [#71](https://github.com/genomic-medicine-sweden/tomte/pull/71)
+- Renamed the other switches (subsample_region_switch, downsample_switch, run_drop_ae_switch and run_drop_as_switch) so that they all start with switch\* (switch_subsample_region, switch_downsample, switch_drop_ae and switch_drop_as) [#61](https://github.com/genomic-medicine-sweden/tomte/pull/61)
+- Separated modules.config into smaller configs [#61](https://github.com/genomic-medicine-sweden/tomte/pull/61)
+- Missing fasta_fai channel when fai file is given [#63](https://github.com/genomic-medicine-sweden/tomte/pull/63)
+- DROP output file columns, removing duplicate column and adding same ids to both AE and AS [#68](https://github.com/genomic-medicine-sweden/tomte/pull/68)
+- Patch tools update and case ID parsing [#71](https://github.com/genomic-medicine-sweden/tomte/pull/71)
+- Naming of DROP output files [#72](https://github.com/genomic-medicine-sweden/tomte/pull/72)
+- VEP plugin schema to allow for directories [#74](https://github.com/genomic-medicine-sweden/tomte/pull/74)
+- Made params.platform into a channel [#75](https://github.com/genomic-medicine-sweden/tomte/pull/75)
 
 ### `Dependencies`
 
