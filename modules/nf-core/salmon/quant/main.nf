@@ -69,6 +69,7 @@ process SALMON_QUANT {
 
     if [ -f $prefix/aux_info/meta_info.json ]; then
         cp $prefix/aux_info/meta_info.json "${prefix}_meta_info.json"
+        cp $prefix/quant.sf "${prefix}_quant.sf"
     fi
 
     cat <<-END_VERSIONS > versions.yml
