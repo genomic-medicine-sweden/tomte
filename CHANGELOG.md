@@ -26,6 +26,7 @@ Initial release of genomic-medicine-sweden/tomte, created with the [nf-core](htt
 - Naming of DROP output files [#72](https://github.com/genomic-medicine-sweden/tomte/pull/72)
 - VEP plugin schema to allow for directories [#74](https://github.com/genomic-medicine-sweden/tomte/pull/74)
 - Made params.platform into a channel [#75](https://github.com/genomic-medicine-sweden/tomte/pull/75)
+- Changed name of salmon's quant.nf to include sample id [#78](https://github.com/genomic-medicine-sweden/tomte/pull/78)
 
 ### `Dependencies`
 
