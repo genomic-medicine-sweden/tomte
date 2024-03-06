@@ -121,7 +121,7 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 #### Reference files and parameters
 
-In genomic-medicine-sweden/tomte, references can be supplied using parameters.
+In genomic-medicine-sweden/tomte, references can be supplied using parameters. We have also introduced the possiblility of using the `--igenomes_base` parameter to point to a path where genome specific reference files are placed (fasta, fai, gtf, star_index, salmon_index, subsample_bed). To make sure that the names of the reference files match those in your directory, check [igenomes.config](https://github.com/genomic-medicine-sweden/tomte/blob/master/conf/igenomes.config).
 
 Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can call SNVs either with BCFtools or with GATK. You also have the option to turn off sections of the pipeline if you do not want to run them. For example, drop aberrant expression module can be turned off by setting `--switch_drop_ae FALSE`. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, if you are not running DROP aberrant splicing, you do not need to provide `--reference_drop_splice_folder`.
 
