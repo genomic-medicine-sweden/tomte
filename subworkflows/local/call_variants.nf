@@ -17,7 +17,7 @@ workflow CALL_VARIANTS {
         ch_fai         // channel (mandatory): [ path(fai) ]
         ch_dict        // channel (mandatory): [ path(dict) ]
         variant_caller // string (mandatory)
-        ch_case_info   // string (mandatory)
+        ch_case_info   // channel (mandatory): [ val(case_info) ]
 
     main:
 
