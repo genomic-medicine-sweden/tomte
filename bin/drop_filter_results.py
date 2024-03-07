@@ -200,7 +200,7 @@ def parse_args(argv=None):
     parser.add_argument(
         "--output_name_fragment_ae",
         type=str,
-        default="OUTRIDER_provided_samples_top_hits",
+        default="outrider_top_hits",
         help="Central fragment of Aberrant Expression output file, case will be added at the beginning and clinical/research at end",
         required=False,
     )
@@ -214,7 +214,7 @@ def parse_args(argv=None):
     parser.add_argument(
         "--output_name_fragment_as",
         type=str,
-        default="FRASER_provided_samples_top_hits",
+        default="fraser_top_hits",
         help="Central fragment of Aberrant Splicing output file, case will be added at the beginning and clinical/research at end",
         required=False,
     )
