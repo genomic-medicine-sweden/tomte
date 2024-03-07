@@ -157,7 +157,8 @@ workflow TOMTE {
         ch_references.fasta_no_meta,
         ch_references.fai_no_meta,
         ch_references.sequence_dict,
-        params.variant_caller
+        params.variant_caller,
+        ch_case_info
     )
     ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
 
