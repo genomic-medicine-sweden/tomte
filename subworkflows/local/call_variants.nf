@@ -106,6 +106,9 @@ workflow CALL_VARIANTS {
         TABIX_TABIX(ch_vcf)
         ch_tbi=TABIX_TABIX.out.tbi
 
+        ch_versions = ch_versions.mix(BCFTOOLS_MERGE.out.versions.first())
+        ch_versions = ch_versions.mix(TABIX_TABIX.out.versions.first())
+
     emit:
         vcf      = ch_vcf              // channel: [ val(meta), path(vcf) ]
         tbi      = ch_tbi              // channel: [ val(meta), path(tbi) ]
