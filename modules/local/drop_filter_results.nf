@@ -17,10 +17,10 @@ process DROP_FILTER_RESULTS {
     path out_drop_as_tsv_in
 
     output:
-    path('*OUTRIDER_provided_samples_top_hits_research.tsv') , optional: true, emit: ae_out_research
-    path('*OUTRIDER_provided_samples_top_hits_clinical.tsv') , optional: true, emit: ae_out_clinical
-    path('*FRASER_provided_samples_top_hits_research.tsv')   , optional: true, emit: as_out_research
-    path('*FRASER_provided_samples_top_hits_clinical.tsv')   , optional: true, emit: as_out_clinical
+    path('*outrider_top_hits_research.tsv') , optional: true, emit: ae_out_research
+    path('*outrider_top_hits_clinical.tsv') , optional: true, emit: ae_out_clinical
+    path('*fraser_top_hits_research.tsv')   , optional: true, emit: as_out_research
+    path('*fraser_top_hits_clinical.tsv')   , optional: true, emit: as_out_clinical
     path "versions.yml"                                      , emit: versions
 
     when:
@@ -51,10 +51,10 @@ process DROP_FILTER_RESULTS {
 
     stub:
     """
-    touch OUTRIDER_provided_samples_top_hits_research.tsv
-    touch OUTRIDER_provided_samples_top_hits_clinical.tsv
-    touch FRASER_provided_samples_top_hits_research.tsv
-    touch FRASER_provided_samples_top_hits_clinical.tsv
+    touch outrider_top_hits_research.tsv
+    touch outrider_top_hits_clinical.tsv
+    touch fraser_top_hits_research.tsv
+    touch fraser_top_hits_clinical.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
