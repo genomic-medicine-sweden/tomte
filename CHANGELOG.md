@@ -15,6 +15,7 @@ Initial release of genomic-medicine-sweden/tomte, created with the [nf-core](htt
 - Installed the nf-core version of ensemblvep/vep module [#67](https://github.com/genomic-medicine-sweden/tomte/pull/67)
 - A new parameter `vep_plugin_files` to supply files required by vep plugins [#67](https://github.com/genomic-medicine-sweden/tomte/pull/67)
 - The possibility of using `igenomes_base` to point to a path where genome specific reference files are placed (fasta, fai, gtf, star_index, salmon_index, subsample_bed) [#76](https://github.com/genomic-medicine-sweden/tomte/pull/76)
+- Merging of case's vcf files [#80](https://github.com/genomic-medicine-sweden/tomte/pull/80)
 
 ### `Fixed`
 

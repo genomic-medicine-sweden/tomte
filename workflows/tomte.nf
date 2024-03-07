@@ -157,7 +157,8 @@ workflow TOMTE {
         ch_references.fasta_no_meta,
         ch_references.fai_no_meta,
         ch_references.sequence_dict,
-        params.variant_caller
+        params.variant_caller,
+        ch_case_info
     )
     ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
 
@@ -192,7 +193,7 @@ workflow TOMTE {
     // Collate and save software versions
     //
     softwareVersionsToYAML(ch_versions)
-        .collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'nf_core_pipeline_software_mqc_versions.yml', sort: true, newLine: true)
+        .collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'tomte_software_mqc_versions.yml', sort: true, newLine: true)
         .set { ch_collated_versions }
 
     //
