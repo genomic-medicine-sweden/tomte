@@ -1,0 +1,13 @@
+Changes in module 'nf-core/salmon/quant'
+--- modules/nf-core/salmon/quant/main.nf
++++ modules/nf-core/salmon/quant/main.nf
+@@ -69,6 +69,7 @@
+ 
+     if [ -f $prefix/aux_info/meta_info.json ]; then
+         cp $prefix/aux_info/meta_info.json "${prefix}_meta_info.json"
++        cp $prefix/quant.sf "${prefix}_quant.sf"
+     fi
+ 
+     cat <<-END_VERSIONS > versions.yml
+
+************************************************************

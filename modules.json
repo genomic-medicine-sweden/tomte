@@ -104,7 +104,8 @@
                     "salmon/quant": {
                         "branch": "master",
                         "git_sha": "03a8562231d575c313266c193a980594b941e3ea",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/salmon/quant/salmon-quant.diff"
                     },
                     "samtools/faidx": {
                         "branch": "master",
