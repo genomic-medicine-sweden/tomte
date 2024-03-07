@@ -67,7 +67,7 @@ workflow CALL_VARIANTS {
                     .ifEmpty([])
                     .toList()
                     .set { file_list_vcf }
-            
+
                 BCFTOOLS_MPILEUP.out.tbi
                     .collect{it[1]}
                     .ifEmpty([])
