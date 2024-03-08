@@ -5,6 +5,7 @@
 // Modules
 include { BCFTOOLS_MPILEUP   } from '../../modules/nf-core/bcftools/mpileup/main'
 include { BCFTOOLS_MERGE     } from '../../modules/nf-core/bcftools/merge/main'
+include { RENAME_FILES       } from '../../modules/local/rename_files'
 include { TABIX_TABIX        } from '../../modules/nf-core/tabix/tabix/main'
 
 // Subworkflows
@@ -102,7 +103,12 @@ workflow CALL_VARIANTS {
             []
         )
 
-        ch_vcf =  BCFTOOLS_MERGE.out.merged_variants.mix(ch_case_vcf.single)
+        RENAME_FILES( ch_case_vcf.single)
+
+        BCFTOOLS_MERGE.out.merged_variants
+            .mix( RENAME_FILES.out.output )
+            .set { ch_vcf }
+
         TABIX_TABIX( ch_vcf )
         ch_tbi = TABIX_TABIX.out.tbi
 
