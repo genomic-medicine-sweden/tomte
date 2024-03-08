@@ -36,7 +36,7 @@ workflow ALIGNMENT {
 
         FASTP(ch_cat_fastq, [], false, false)
 
-        ch_gtf = gtf.map { it -> [[:], it] }
+        ch_gtf = gtf.map { it -> [[:], it] }.collect()
         STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, platform, false)
 
         SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
