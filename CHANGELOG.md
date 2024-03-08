@@ -29,6 +29,7 @@ Initial release of genomic-medicine-sweden/tomte, created with the [nf-core](htt
 - Made params.platform into a channel [#75](https://github.com/genomic-medicine-sweden/tomte/pull/75)
 - Changed name of salmon's quant.nf to include sample id [#78](https://github.com/genomic-medicine-sweden/tomte/pull/78)
 - Shortened name of DROP output files [#79](https://github.com/genomic-medicine-sweden/tomte/pull/79)
+- Merging of vcfs has been moved to after bootstrapAnn [#81](https://github.com/genomic-medicine-sweden/tomte/pull/81)
 
 ### `Dependencies`
 
