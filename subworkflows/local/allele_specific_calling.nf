@@ -54,7 +54,7 @@ workflow ALLELE_SPECIFIC_CALLING {
             GATK4_ASEREADCOUNTER.out.csv
         )
         ch_versions = ch_versions.mix(BOOTSTRAPANN.out.versions.first())
-        
+
         BOOTSTRAPANN.out.vcf
                     .collect{it[1]}
                     .ifEmpty([])
@@ -66,12 +66,12 @@ workflow ALLELE_SPECIFIC_CALLING {
                     .ifEmpty([])
                     .toList()
                     .set { file_list_tbi }
-        
+
         ch_case_info
             .combine(file_list_vcf)
             .combine(file_list_tbi)
             .set { ch_vcf_tbi }
-        
+
         ch_vcf_tbi.branch {
             meta, vcf, tbi ->
                 single: vcf.size() == 1
@@ -99,8 +99,6 @@ workflow ALLELE_SPECIFIC_CALLING {
         ch_versions = ch_versions.mix( RENAME_FILES.out.versions.first() )
         ch_versions = ch_versions.mix( TABIX_TABIX.out.versions.first() )
 
-
-    
     emit:
         vcf      = ch_vcf      // channel: [ val(meta), [ path(vcf) ] ]
         tbi      = ch_tbi      // channel: [ val(meta), [ path(tbi) ] ]
