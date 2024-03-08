@@ -2,13 +2,15 @@
 // Allele specific variant calling
 //
 
-include { BCFTOOLS_VIEW        } from '../../modules/nf-core/bcftools/view/main'
-include { BCFTOOLS_INDEX       } from '../../modules/nf-core/bcftools/index/main'
-include { GATK4_ASEREADCOUNTER } from '../../modules/nf-core/gatk4/asereadcounter/main'
-include { BOOTSTRAPANN         } from '../../modules/local/bootstrapann'
-include { BCFTOOLS_MERGE       } from '../../modules/nf-core/bcftools/merge/main'
-include { RENAME_FILES         } from '../../modules/local/rename_files'
-include { TABIX_TABIX          } from '../../modules/nf-core/tabix/tabix/main'
+include { BCFTOOLS_VIEW                      } from '../../modules/nf-core/bcftools/view/main'
+include { BCFTOOLS_INDEX                     } from '../../modules/nf-core/bcftools/index/main'
+include { GATK4_ASEREADCOUNTER               } from '../../modules/nf-core/gatk4/asereadcounter/main'
+include { BOOTSTRAPANN                       } from '../../modules/local/bootstrapann'
+include { TABIX_BGZIP                        } from '../../modules/nf-core/tabix/bgzip/main'
+include { BCFTOOLS_INDEX as BCFTOOLS_INDEX_2 } from '../../modules/nf-core/bcftools/index/main'
+include { BCFTOOLS_MERGE                     } from '../../modules/nf-core/bcftools/merge/main'
+include { RENAME_FILES                       } from '../../modules/local/rename_files'
+include { TABIX_TABIX                        } from '../../modules/nf-core/tabix/tabix/main'
 
 
 workflow ALLELE_SPECIFIC_CALLING {
@@ -55,14 +57,20 @@ workflow ALLELE_SPECIFIC_CALLING {
         )
         ch_versions = ch_versions.mix(BOOTSTRAPANN.out.versions.first())
 
-        BOOTSTRAPANN.out.vcf
+        TABIX_BGZIP(BOOTSTRAPANN.out.vcf)
+        ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions.first())
+
+        BCFTOOLS_INDEX_2(TABIX_BGZIP.out.output)
+        ch_versions = ch_versions.mix(BCFTOOLS_INDEX_2.out.versions.first())
+
+        TABIX_BGZIP.out.output
                     .collect{it[1]}
                     .ifEmpty([])
                     .toList()
                     .set { file_list_vcf }
 
-        BOOTSTRAPANN.out.vcf
-                    .collect{it[2]}
+        BCFTOOLS_INDEX_2.out.tbi
+                    .collect{it[1]}
                     .ifEmpty([])
                     .toList()
                     .set { file_list_tbi }
