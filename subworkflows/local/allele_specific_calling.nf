@@ -33,12 +33,10 @@ workflow ALLELE_SPECIFIC_CALLING {
             [],
             []
         )
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions.first())
 
         BCFTOOLS_INDEX(
             BCFTOOLS_VIEW.out.vcf
         )
-        ch_versions = ch_versions.mix(BCFTOOLS_INDEX.out.versions.first())
 
         ch_dict_no_meta = ch_dict.map{ meta, it -> [it] }.collect()
         GATK4_ASEREADCOUNTER(
@@ -49,19 +47,15 @@ workflow ALLELE_SPECIFIC_CALLING {
             ch_dict_no_meta,
             ch_intervals
         )
-        ch_versions = ch_versions.mix(GATK4_ASEREADCOUNTER.out.versions.first())
 
         BOOTSTRAPANN(
             ch_ind_vcf_tbi,
             GATK4_ASEREADCOUNTER.out.csv
         )
-        ch_versions = ch_versions.mix(BOOTSTRAPANN.out.versions.first())
 
         TABIX_BGZIP(BOOTSTRAPANN.out.vcf)
-        ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions.first())
 
         BCFTOOLS_INDEX_2(TABIX_BGZIP.out.output)
-        ch_versions = ch_versions.mix(BCFTOOLS_INDEX_2.out.versions.first())
 
         TABIX_BGZIP.out.output
                     .collect{it[1]}
@@ -103,6 +97,12 @@ workflow ALLELE_SPECIFIC_CALLING {
         TABIX_TABIX( ch_vcf )
         ch_tbi = TABIX_TABIX.out.tbi
 
+        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_INDEX.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_ASEREADCOUNTER.out.versions.first())
+        ch_versions = ch_versions.mix(BOOTSTRAPANN.out.versions.first())
+        ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_INDEX_2.out.versions.first())
         ch_versions = ch_versions.mix( BCFTOOLS_MERGE.out.versions.first() )
         ch_versions = ch_versions.mix( RENAME_FILES.out.versions.first() )
         ch_versions = ch_versions.mix( TABIX_TABIX.out.versions.first() )
