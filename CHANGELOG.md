@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 1.1.0 - Rudolph [2024-03-11]
 
-Initial release of genomic-medicine-sweden/tomte, created with the [nf-core](https://nf-co.re/) template.
+Release of genomic-medicine-sweden/tomte, created with the [nf-core](https://nf-co.re/) template.
 
 ### `Added`
 
