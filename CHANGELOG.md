@@ -30,6 +30,7 @@ Initial release of genomic-medicine-sweden/tomte, created with the [nf-core](htt
 - Changed name of salmon's quant.nf to include sample id [#78](https://github.com/genomic-medicine-sweden/tomte/pull/78)
 - Shortened name of DROP output files [#79](https://github.com/genomic-medicine-sweden/tomte/pull/79)
 - Merging of vcfs has been moved to after bootstrapAnn [#81](https://github.com/genomic-medicine-sweden/tomte/pull/81)
+- Substituted bgzip and tabix modules by bgzip_tabix module [#85](https://github.com/genomic-medicine-sweden/tomte/pull/85)
 
 ### `Dependencies`
 
