@@ -221,8 +221,21 @@ def toolCitationText() {
     // Uncomment function in methodsDescriptionText to render in MultiQC report
     def citation_text = [
             "Tools used in the workflow included:",
+            "BCFtools (Danecek et al. 2021),",
+            "DROP (Yépez et al. 2021),",
+            params.switch_vep ? "EnsemblVEP (McLaren et al. 2016)," : "",
+            "fastp (Chen et al. 2018),",
             "FastQC (Andrews 2010),",
-            "MultiQC (Ewels et al. 2016)",
+            params.switch_drop_as ? "FRASER (Mertes et al 2021)," : "",
+            "GATK (McKenna et al. 2010),",
+            params.switch_stringtie ? "GFFCompare (Pertea et al. 2020)," : "",
+            "MultiQC (Ewels et al. 2016),",
+            params.switch_drop_as ? "OUTRIDER (Brechtmann et al. 2018)," : "",
+            "SAMtools (Danecek et al. 2021),",
+            "Salmon (Patro et al. 2017),",
+            "STAR (Dobin et al. 2012),",
+            params.switch_stringtie ? "StringTie (Perteat et al. 2015)," : "",
+            params.switch_build_tracks ? "UCSC tools (Kent et al. 2010)" : "",
             "."
         ].join(' ').trim()
 
@@ -252,11 +265,11 @@ def methodsDescriptionText(mqc_methods_yaml) {
     meta["nodoi_text"] = meta.manifest_map.doi ? "": "<li>If available, make sure to update the text to include the Zenodo DOI of version of the pipeline used. </li>"
 
     // Tool references
-    meta["tool_citations"] = ""
+    //meta["tool_citations"] = ""
     meta["tool_bibliography"] = ""
 
     // TODO nf-core: Only uncomment below if logic in toolCitationText/toolBibliographyText has been filled!
-    // meta["tool_citations"] = toolCitationText().replaceAll(", \\.", ".").replaceAll("\\. \\.", ".").replaceAll(", \\.", ".")
+    meta["tool_citations"] = toolCitationText().replaceAll(", \\.", ".").replaceAll("\\. \\.", ".").replaceAll(", \\.", ".")
     // meta["tool_bibliography"] = toolBibliographyText()
 
 

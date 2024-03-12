@@ -14,7 +14,7 @@
 
   > Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. GigaScience. 2021;10(2):giab008. doi:10.1093/gigascience/giab008
 
-- [UCSC tools] (https://academic.oup.com/bioinformatics/article/26/17/2204/199001)
+- [UCSC tools](https://academic.oup.com/bioinformatics/article/26/17/2204/199001)
 
   > Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. BigWig and BigBed: enabling browsing of large distributed datasets. Bioinformatics. 2010 Sep 1;26(17):2204-7. doi: 10.1093/bioinformatics/btq351
 
@@ -26,9 +26,21 @@
 
   > McLaren W, Gil L, Hunt SE, et al. The Ensembl Variant Effect Predictor. Genome Biol. 2016;17(1):122. doi:10.1186/s13059-016-0974-4
 
+- [DROP](https://www.nature.com/articles/s41596-020-00462-5)
+
+  > Yépez, V.A., Mertes, C., Müller, M.F. et al. Detection of aberrant gene expression events in RNA sequencing data. Nat Protoc 16, 1276–1296 (2021). doi:10.1038/s41596-020-00462-5
+
+- [fastp](https://www.ncbi.nlm.nih.gov/pubmed/30423086/)
+
+  > Chen S, Zhou Y, Chen Y, Gu J. fastp: an ultra-fast all-in-one FASTQ preprocessor. Bioinformatics. 2018 Sep 1;34(17):i884-i890. doi: 10.1093/bioinformatics/bty560. PubMed PMID: 30423086; PubMed Central PMCID: PMC6129281.
+
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 
   > Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online].
+
+- [FRASER](https://www.nature.com/articles/s41467-020-20573-7)
+
+  > Mertes C, Scheller IF, Yépez VA, et al. Detection of aberrant splicing events in RNA-seq data using FRASER [published correction appears in Nat Commun. 2022 Jun 16;13(1):3474]. Nat Commun. 2021;12(1):529. Published 2021 Jan 22. doi:10.1038/s41467-020-20573-7
 
 - [GATK](https://genome.cshlp.org/content/20/9/1297)
 
@@ -42,6 +54,12 @@
 
   > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
 
+- [OUTRIDER](https://www.sciencedirect.com/science/article/pii/S0002929718304014?via%3Dihub)
+
+  > Brechtmann F, Mertes C, Matusevičiūtė A, et al. OUTRIDER: A Statistical Method for Detecting Aberrantly Expressed Genes in RNA Sequencing Data. Am J Hum Genet. 2018;103(6):907-917. doi:10.1016/j.ajhg.2018.10.025
+
+- [picard-tools](http://broadinstitute.github.io/picard)
+
 - [StringTie](http://ccb.jhu.edu/software/stringtie/)
 
   > Pertea M, Pertea GM, Antonescu CM, Chang TC, Mendell JT, Salzberg SL. StringTie enables improved reconstruction of a transcriptome from RNA-seq reads. Nat Biotechnol. 2015 Mar;33(3):290-5. doi: 10.1038/nbt.3122. Epub 2015 Feb 18. PMID: 25690850; PMCID: PMC4643835.
@@ -49,6 +67,10 @@
 - [Salmon](https://pubmed.ncbi.nlm.nih.gov/28263959/)
 
   > Patro R, Duggal G, Love MI, Irizarry RA, Kingsford C. Salmon provides fast and bias-aware quantification of transcript expression Nat Methods. 2017 Apr;14(4):417-419. doi: 10.1038/nmeth.4197. Epub 2017 Mar 6. PubMed PMID: 28263959; PubMed Central PMCID: PMC5600148.
+
+- [STAR](https://pubmed.ncbi.nlm.nih.gov/23104886/)
+
+  > Dobin A, Davis CA, Schlesinger F, Drenkow J, Zaleski C, Jha S, Batut P, Chaisson M, Gingeras TR. STAR: ultrafast universal RNA-seq aligner Bioinformatics. 2013 Jan 1;29(1):15-21. doi: 10.1093/bioinformatics/bts635. Epub 2012 Oct 25. PubMed PMID: 23104886; PubMed Central PMCID: PMC3530905.
 
 ## Software packaging/containerisation tools
 
