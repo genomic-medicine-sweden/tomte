@@ -225,7 +225,7 @@ def toolCitationText() {
             "FastQC (Andrews 2010),",
             params.switch_drop_as ? "FRASER (Mertes et al 2021)," : "",
             "GATK (McKenna et al. 2010),",
-            params.switch_stringtie ? "GFFCompare (Pertea et al. 2020), StringTie (Perteat et al. 2015)," : "",
+            params.switch_stringtie ? "GFFCompare (Pertea et al. 2020), StringTie (Pertea et al. 2015)," : "",
             "MultiQC (Ewels et al. 2016),",
             params.switch_drop_ae ? "OUTRIDER (Brechtmann et al. 2018)," : "",
             "SAMtools (Danecek et al. 2021),",
