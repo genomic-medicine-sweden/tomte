@@ -33,6 +33,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [`Pipeline information and QCs`](#pipeline-information-and-qcs)
   - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
   - [`Picard CollectRnaSeqMetrics`](#picard-collectrnaseqmetrics) alignment QC
+  - [`Picard CollectInsertSizeMetrics`](#picard-collectinsertsizemetrics) insert size
   - [`MultiQC`](#multiqc) presents QCs
 
 ### Trimming
@@ -242,6 +243,16 @@ to "gatk". Involves several steps: [`SplitN Cigar Reads`](https://gatk.broadinst
 
 - `bam_qc/`
   - `*rna_metrics`: metrics describing the distribution of the bases within the transcripts.
+
+#### Picard CollectInsertSizeMetrics
+
+[`Picard CollectInsertSizeMetrics`](https://broadinstitute.github.io/picard/) 
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `bam_qc/`
+  - `sample.txt`: metrics describing the insert size.
 
 </details>
 
