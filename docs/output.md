@@ -243,7 +243,7 @@ to "gatk". Involves several steps: [`SplitN Cigar Reads`](https://gatk.broadinst
 
 - `bam_qc/`
   - `*rna_metrics`: metrics describing the distribution of the bases within the transcripts.
-  - `sample.txt`: metrics describing the insert size.
+  - `*_insert_size.txt`: metrics describing the insert size.
 
 #### Picard CollectInsertSizeMetrics
 
