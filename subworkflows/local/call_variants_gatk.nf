@@ -14,17 +14,17 @@ workflow CALL_VARIANTS_GATK {
         ch_bam_bai // channel (mandatory): [ val(meta), [ path(bam), path(bai) ] ]
         ch_fasta   // channel (mandatory): [ path(fasta) ]
         ch_fai     // channel (mandatory): [ path(fai) ]
-        ch_dict    // channel (mandatory): [ path(dict) ]
+        ch_dict    // channel (mandatory): [ val(meta), path(dict) ]
 
     main:
 
         ch_versions = Channel.empty()
 
         GATK4_SPLITNCIGARREADS(
-            ch_bam_bai.map{ meta, bam, bai -> [ meta, bam, bai, [] ]},
+            ch_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, []] },
             ch_fasta,
             ch_fai,
-            ch_dict
+            ch_dict.map{ meta, dict -> dict }
         )
         ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions.first())
 
@@ -34,29 +34,32 @@ workflow CALL_VARIANTS_GATK {
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
         ch_split_bam_bai = GATK4_SPLITNCIGARREADS.out.bam.join(SAMTOOLS_INDEX.out.bai)
-        GATK4_HAPLOTYPECALLER(
-            ch_split_bam_bai.map{ meta, bam, bai -> [ meta, bam, bai, [], [] ] },
-            ch_fasta,
-            ch_fai,
+
+	    GATK4_HAPLOTYPECALLER(
+            ch_split_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, [], []] },
+            ch_fasta.map{ fasta -> [[:], fasta] },
+            ch_fai.map{ fai -> [[:], fai] },
             ch_dict,
-            [],
-            [],
+            [[],[]],
+            [[],[]],
         )
         ch_versions = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first())
 
         GATK4_VARIANTFILTRATION(
             GATK4_HAPLOTYPECALLER.out.vcf.join(GATK4_HAPLOTYPECALLER.out.tbi),
-            [ [:], ch_fasta],
-            [ [:], ch_fai],
-            [ [:], ch_dict]
+            ch_fasta.map{ fasta -> [[:], fasta] },
+            ch_fai.map{ fai -> [[:], fai] },
+            ch_dict
         )
         ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first())
 
         BCFTOOLS_STATS(
             GATK4_HAPLOTYPECALLER.out.vcf.join(GATK4_HAPLOTYPECALLER.out.tbi),
-            [],
-            [],
-            [],
+            [[],[]],
+            [[],[]],
+            [[],[]],
+            [[],[]],
+            [[],[]],
         )
         ch_versions = ch_versions.mix(BCFTOOLS_STATS.out.versions.first())
 
