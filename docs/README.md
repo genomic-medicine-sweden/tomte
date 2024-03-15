@@ -1,6 +1,6 @@
-# tomte: Documentation
+# genomic-medicine-sweden/tomte: Documentation
 
-# The tomte documentation is split into the following pages:
+# The genomic-medicine-sweden/tomte documentation is split into the following pages:
 
 # genomic-medicine-sweden/tomte: Documentation
 

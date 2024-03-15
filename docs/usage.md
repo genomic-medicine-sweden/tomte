@@ -129,8 +129,8 @@ genomic-medicine-sweden/tomte consists of several tools used for various purpose
 
 1. Alignment and pseudo quantification (STAR & Salmon)
 2. Junction track and bigwig
-3. Subsample_region (Samtools)
-4. Variant calling - SNV (BCFTools or GATK's GermlineCNVCaller)
+3. Subsample region (Samtools)
+4. Variant calling - SNV (BCFTools or GATK's HaplotypeCaller)
 5. SNV annotation (ensembl VEP)
 6. Stringtie & gffcompare
 7. DROP

@@ -15,7 +15,7 @@ def get_top_hits(
 ) -> DataFrame:
     """
     Filter results to get only those with the id provided.
-    If there are >= 20 hits it will output all of them.
+    If there are <= 20 hits it will output all of them.
     If there are less than 20 hits, it will output the 20 with the lowest p-value.
     """
     df_id: DataFrame = df_results_family_aberrant_expression[
@@ -134,8 +134,8 @@ def filter_fraser_result(
     """
     Filter results to get only those from the sample(s) provided.
     Two tsvs will be outputed:
-        - One filtered to keep gense in the gene panel (if provided).
-        - Another that is unfilterd.
+        - One filtered to keep genes in the gene panel (if provided).
+        - Another that is unfiltered.
     """
     df_results_aberrant_splicing: DataFrame = read_csv(
         out_drop_aberrant_splicing_tsv, sep="\t"
