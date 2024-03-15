@@ -35,7 +35,7 @@ workflow CALL_VARIANTS_GATK {
 
         ch_split_bam_bai = GATK4_SPLITNCIGARREADS.out.bam.join(SAMTOOLS_INDEX.out.bai)
 
-	    GATK4_HAPLOTYPECALLER(
+        GATK4_HAPLOTYPECALLER(
             ch_split_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, [], []] },
             ch_fasta.map{ fasta -> [[:], fasta] },
             ch_fai.map{ fai -> [[:], fai] },
