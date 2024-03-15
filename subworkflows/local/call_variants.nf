@@ -13,7 +13,7 @@ workflow CALL_VARIANTS {
         ch_bam_bai     // channel (mandatory): [ val(meta), [ path(bam), path(bai) ] ]
         ch_fasta       // channel (mandatory): [ path(fasta) ]
         ch_fai         // channel (mandatory): [ path(fai) ]
-        ch_dict        // channel (mandatory): [ path(dict) ]
+        ch_dict        // channel (mandatory): [ val(meta), path(dict) ]
         variant_caller // string (mandatory)
 
     main:
