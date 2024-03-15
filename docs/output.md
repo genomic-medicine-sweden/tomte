@@ -247,7 +247,7 @@ to "gatk". Involves several steps: [`SplitN Cigar Reads`](https://gatk.broadinst
 
 #### Picard CollectInsertSizeMetrics
 
-[`Picard CollectInsertSizeMetrics`](https://broadinstitute.github.io/picard/) 
+[`Picard CollectInsertSizeMetrics`](https://broadinstitute.github.io/picard/)
 
 <details markdown="1">
 <summary>Output files</summary>
