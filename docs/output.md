@@ -31,7 +31,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [`Variant annotation`](#variant-annotation)
   - [`VEP`](#vep) annotation
 - [`Pipeline information and QCs`](#pipeline-information-and-qcs)
-  - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+  - [Pipeline information](#pipeline-information) - report metrics generated during the workflow execution
   - [`Picard CollectRnaSeqMetrics`](#picard-collectrnaseqmetrics) alignment QC
   - [`Picard CollectInsertSizeMetrics`](#picard-collectinsertsizemetrics) insert size
   - [`MultiQC`](#multiqc) presents QCs
