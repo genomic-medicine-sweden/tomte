@@ -1,7 +1,7 @@
 # ![tomte](docs/images/tomte_logo_light.png#gh-light-mode-only) ![tomte](docs/images/tomte_logo_dark.png#gh-dark-mode-only)
 
 [![GitHub Actions CI Status](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/ci.yml/badge.svg)](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/ci.yml)
-[![GitHub Actions Linting Status](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/linting.yml/badge.svg)](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![GitHub Actions Linting Status](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/linting.yml/badge.svg)](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.10828946-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.10828946)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.04.0-23aa62.svg)](https://www.nextflow.io/)
@@ -103,7 +103,7 @@ For further information or help, don't hesitate to get in touch by opening an [i
 
 ## Citations
 
-If you use genomic-medicine-sweden/tomte for your analysis, please cite it using the following doi: [XX.XXXX/zenodo.XXXXXXX](https://doi.org/XX.XXXX/zenodo.XXXXXXX)
+If you use genomic-medicine-sweden/tomte for your analysis, please cite it using the following doi: [10.5281/zenodo.10828946](https://doi.org/10.5281/zenodo.10828946)
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
