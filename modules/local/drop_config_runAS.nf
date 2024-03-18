@@ -24,6 +24,7 @@ process DROP_CONFIG_RUN_AS {
     path('config.yaml')             , emit: config_drop
     path('output')                  , emit: drop_as_out
     path('FRASER_results_fraser--*'), emit: drop_as_tsv
+    path('gene_name_mapping*')      , emit: drop_gene_name
     path "versions.yml"             , emit: versions
 
     when:
@@ -34,6 +35,8 @@ process DROP_CONFIG_RUN_AS {
     def drop_group = "${drop_group_samples_as}".replace(" ","")
     """
     TMPDIR=\$PWD
+    HOME=\$PWD
+
 
     drop init
 
@@ -49,6 +52,7 @@ process DROP_CONFIG_RUN_AS {
     snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime
 
     cp output/html/AberrantSplicing/FRASER_results_fraser--*.tsv .
+    cp output/processed_data/preprocess/*/gene_name_mapping_*.tsv .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -61,6 +65,7 @@ process DROP_CONFIG_RUN_AS {
     """
     touch config.yaml
     touch FRASER_results_fraser--.tsv
+    touch gene_name_mapping_.tsv
     mkdir output
 
     cat <<-END_VERSIONS > versions.yml

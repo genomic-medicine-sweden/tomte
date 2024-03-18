@@ -1,4 +1,4 @@
-# tomte: Output
+# genomic-medicine-sweden/tomte: Output
 
 ## Introduction
 
@@ -31,8 +31,9 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [`Variant annotation`](#variant-annotation)
   - [`VEP`](#vep) annotation
 - [`Pipeline information and QCs`](#pipeline-information-and-qcs)
-  - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+  - [Pipeline information](#pipeline-information) - report metrics generated during the workflow execution
   - [`Picard CollectRnaSeqMetrics`](#picard-collectrnaseqmetrics) alignment QC
+  - [`Picard CollectInsertSizeMetrics`](#picard-collectinsertsizemetrics) insert size
   - [`MultiQC`](#multiqc) presents QCs
 
 ### Trimming
@@ -242,6 +243,18 @@ to "gatk". Involves several steps: [`SplitN Cigar Reads`](https://gatk.broadinst
 
 - `bam_qc/`
   - `*rna_metrics`: metrics describing the distribution of the bases within the transcripts.
+  - `*_insert_size.txt`: metrics describing the insert size.
+
+#### Picard CollectInsertSizeMetrics
+
+[`Picard CollectInsertSizeMetrics`](https://broadinstitute.github.io/picard/)
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `bam_qc/`
+  - `*rna_metrics`: metrics describing the distribution of the bases within the transcripts.
+  - `sample.txt`: metrics describing the insert size.
 
 </details>
 

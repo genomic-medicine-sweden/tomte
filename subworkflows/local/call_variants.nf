@@ -13,7 +13,7 @@ workflow CALL_VARIANTS {
         ch_bam_bai     // channel (mandatory): [ val(meta), [ path(bam), path(bai) ] ]
         ch_fasta       // channel (mandatory): [ path(fasta) ]
         ch_fai         // channel (mandatory): [ path(fai) ]
-        ch_dict        // channel (mandatory): [ path(dict) ]
+        ch_dict        // channel (mandatory): [ val(meta), path(dict) ]
         variant_caller // string (mandatory)
 
     main:
@@ -33,6 +33,7 @@ workflow CALL_VARIANTS {
                     ch_fai,
                     ch_dict,
                 )
+
                 ch_vcf = ch_vcf.mix(CALL_VARIANTS_GATK.out.vcf)
                 ch_tbi = ch_tbi.mix(CALL_VARIANTS_GATK.out.tbi)
                 ch_stats = ch_stats.mix(CALL_VARIANTS_GATK.out.stats)
@@ -48,9 +49,9 @@ workflow CALL_VARIANTS {
                     false
                 )
 
-                ch_vcf = ch_vcf.mix(BCFTOOLS_MPILEUP.out.vcf.first())
-                ch_tbi = ch_tbi.mix(BCFTOOLS_MPILEUP.out.tbi.first())
-                ch_stats = ch_stats.mix(BCFTOOLS_MPILEUP.out.stats.first())
+                ch_vcf = ch_vcf.mix(BCFTOOLS_MPILEUP.out.vcf)
+                ch_tbi = ch_tbi.mix(BCFTOOLS_MPILEUP.out.tbi)
+                ch_stats = ch_stats.mix(BCFTOOLS_MPILEUP.out.stats)
                 ch_versions = ch_versions.mix(BCFTOOLS_MPILEUP.out.versions.first())
 
                 break

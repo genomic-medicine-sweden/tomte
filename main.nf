@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    tomte
+    genomic-medicine-sweden/tomte
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/genomic-medicine-sweden/tomte
 ----------------------------------------------------------------------------------------
@@ -11,24 +11,36 @@ nextflow.enable.dsl = 2
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+include { TOMTE                   } from './workflows/tomte'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_tomte_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_tomte_pipeline'
+
+include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_tomte_pipeline'
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.fasta                          = WorkflowMain.getGenomeAttribute(params, 'fasta')
-params.fai                            = WorkflowMain.getGenomeAttribute(params, 'fai')
-params.gtf                            = WorkflowMain.getGenomeAttribute(params, 'gtf')
-params.reference_drop_count_file      = WorkflowMain.getGenomeAttribute(params, 'reference_drop_count_file')
-params.reference_drop_splice_folder   = WorkflowMain.getGenomeAttribute(params, 'reference_drop_splice_folder')
-params.reference_drop_annot_file      = WorkflowMain.getGenomeAttribute(params, 'reference_drop_annot_file')
-params.gene_panel_clinical_filter     = WorkflowMain.getGenomeAttribute(params, 'gene_panel_clinical_filter')
-params.sequence_dict                  = WorkflowMain.getGenomeAttribute(params, 'sequence_dict')
-params.star_index                     = WorkflowMain.getGenomeAttribute(params, 'star_index')
-params.salmon_index                   = WorkflowMain.getGenomeAttribute(params, 'salmon_index')
-params.transcript_fasta               = WorkflowMain.getGenomeAttribute(params, 'transcript_fasta')
-params.vep_cache                      = WorkflowMain.getGenomeAttribute(params, 'vep_cache')
-params.vep_cache_version              = WorkflowMain.getGenomeAttribute(params, 'vep_cache_version')
-params.vep_filters                    = WorkflowMain.getGenomeAttribute(params, 'vep_filters')
+params.fasta                        = getGenomeAttribute('fasta')
+params.fai                          = getGenomeAttribute('fai')
+params.gtf                          = getGenomeAttribute('gtf')
+params.reference_drop_count_file    = getGenomeAttribute('reference_drop_count_file')
+params.reference_drop_splice_folder = getGenomeAttribute('reference_drop_splice_folder')
+params.reference_drop_annot_file    = getGenomeAttribute('reference_drop_annot_file')
+params.gene_panel_clinical_filter   = getGenomeAttribute('gene_panel_clinical_filter')
+params.sequence_dict                = getGenomeAttribute('sequence_dict')
+params.star_index                   = getGenomeAttribute('star_index')
+params.salmon_index                 = getGenomeAttribute('salmon_index')
+params.transcript_fasta             = getGenomeAttribute('transcript_fasta')
+params.vep_cache                    = getGenomeAttribute('vep_cache')
+params.vep_filters                  = getGenomeAttribute('vep_filters')
+params.vep_plugin_files             = getGenomeAttribute('vep_plugin_files')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,59 +48,77 @@ params.vep_filters                    = WorkflowMain.getGenomeAttribute(params, 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.subsample_bed                  = WorkflowMain.getGenomeAttribute(params, 'subsample_bed')
+params.subsample_bed                  = getGenomeAttribute('subsample_bed')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    VALIDATE & PRINT PARAMETER SUMMARY
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-include { validateParameters; paramsHelp } from 'plugin/nf-validation'
-
-// Print help message if needed
-if (params.help) {
-    def logo = NfcoreTemplate.gmsLogo(workflow, params.monochrome_logs)
-    def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
-    def String command = "nextflow run ${workflow.manifest.name} --input samplesheet.csv --genome GRCh37 -profile docker"
-    log.info logo + paramsHelp(command) + citation + NfcoreTemplate.dashedLine(params.monochrome_logs)
-    System.exit(0)
-}
-
-// Validate input parameters
-if (params.validate_params) {
-    validateParameters()
-}
-
-WorkflowMain.initialise(workflow, params, log)
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOW FOR PIPELINE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-include { TOMTE } from './workflows/tomte'
-
-//
-// WORKFLOW: Run main nf-core/tomte analysis pipeline
-//
-workflow GMS_TOMTE {
-    TOMTE ()
-}
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN ALL WORKFLOWS
+    NAMED WORKFLOWS FOR PIPELINE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
 //
-// WORKFLOW: Execute a single named workflow for the pipeline
-// See: https://github.com/nf-core/rnaseq/issues/619
+// WORKFLOW: Run main analysis pipeline depending on type of input
 //
+workflow GENOMICMEDICINESWEDEN_TOMTE {
+
+    take:
+    samplesheet // channel: samplesheet read in from --input
+
+    main:
+
+    //
+    // WORKFLOW: Run pipeline
+    //
+    TOMTE (
+        samplesheet
+    )
+
+    emit:
+    multiqc_report = TOMTE.out.multiqc_report // channel: /path/to/multiqc_report.html
+
+}
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    RUN MAIN WORKFLOW
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
 workflow {
-    GMS_TOMTE ()
+
+    main:
+
+    //
+    // SUBWORKFLOW: Run initialisation tasks
+    //
+    PIPELINE_INITIALISATION (
+        params.version,
+        params.help,
+        params.validate_params,
+        params.monochrome_logs,
+        args,
+        params.outdir,
+        params.input
+    )
+
+    //
+    // WORKFLOW: Run main workflow
+    //
+    GENOMICMEDICINESWEDEN_TOMTE (
+        PIPELINE_INITIALISATION.out.samplesheet
+    )
+
+    //
+    // SUBWORKFLOW: Run completion tasks
+    //
+    PIPELINE_COMPLETION (
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
+        params.outdir,
+        params.monochrome_logs,
+        params.hook_url,
+        GENOMICMEDICINESWEDEN_TOMTE.out.multiqc_report
+    )
 }
 
 /*

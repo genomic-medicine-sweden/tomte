@@ -20,8 +20,8 @@ workflow ALIGNMENT {
         subsample_bed
         seed_frac
         num_reads
-        subsample_region_switch
-        downsample_switch
+        switch_subsample_region
+        switch_downsample
         salmon_index
         ch_genome_fasta
 
@@ -31,12 +31,12 @@ workflow ALIGNMENT {
         ch_fastq = branchFastqToSingleAndMulti(reads)
 
         CAT_FASTQ(ch_fastq.multiple_fq)
-        .reads.mix(ch_fastq.single_fq)
-        .set { ch_cat_fastq }
+            .reads.mix(ch_fastq.single_fq)
+            .set { ch_cat_fastq }
 
         FASTP(ch_cat_fastq, [], false, false)
 
-        ch_gtf = gtf.map { it -> [[:], it] }
+        ch_gtf = gtf.map { it -> [[:], it] }.collect()
         STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, platform, false)
 
         SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
@@ -44,10 +44,10 @@ workflow ALIGNMENT {
         ch_bam_bai = Channel.empty()
         ch_bam_bai_out = Channel.empty()
 
-        if (subsample_region_switch) {
+        if (switch_subsample_region) {
             RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam, subsample_bed, seed_frac)
             ch_bam_bai = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
-            if (!downsample_switch) {
+            if (!switch_downsample) {
                 ch_bam_bai_out = RNA_SUBSAMPLE_REGION.out.bam_bai
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
@@ -55,7 +55,7 @@ workflow ALIGNMENT {
             }
         } else {
             ch_bam_bai = ch_bam_bai.mix(STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai))
-             if (!downsample_switch) {
+            if (!switch_downsample) {
                 ch_bam_bai_out = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
@@ -64,7 +64,6 @@ workflow ALIGNMENT {
         }
 
         SAMTOOLS_VIEW( STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai), ch_genome_fasta, [] )
-
 
         SALMON_QUANT( FASTP.out.reads, salmon_index, gtf, [], false, 'A')
 
@@ -106,17 +105,15 @@ workflow ALIGNMENT {
 def branchFastqToSingleAndMulti(ch_reads) {
 
     return ch_reads
-        .map {
-            meta, fastq ->
-                original_id = meta.id.split('_T')[0..-2].join('_')
-                [ meta + [id: original_id], fastq ]
+        .map { meta, fastqs ->
+            return [ groupKey( meta + [id:meta.sample], meta.fq_pairs ), fastqs ]
         }
         .groupTuple()
         .branch {
-            meta, fastq ->
-                single_fq: fastq.size() == 1
-                    return [ meta, fastq.flatten() ]
-                multiple_fq: fastq.size() > 1
-                    return [ meta, fastq.flatten() ]
+            meta, fastqs ->
+                single_fq: fastqs.size() == 1
+                    return [ meta, fastqs.flatten() ]
+                multiple_fq: fastqs.size() > 1
+                    return [ meta, fastqs.flatten() ]
         }
 }

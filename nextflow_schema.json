@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/tomte/master/nextflow_schema.json",
-    "title": "nf-core/tomte pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/genomic-medicine-sweden/tomte/master/nextflow_schema.json",
+    "title": "genomic-medicine-sweden/tomte pipeline parameters",
     "description": "Pipeline to analyse RNAseq from raredisease patients",
     "type": "object",
     "definitions": {
@@ -16,10 +16,11 @@
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
+                    "schema": "assets/schema_input.json",
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/tomte/usage#samplesheet-input).",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 5 columns (case, sample, fastq1, fastq2 and strandedness), and a header row.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
@@ -147,10 +148,10 @@
                 },
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": 107,
+                    "default": 110,
                     "description": "Specifies version of vep cache to use.",
                     "fa_icon": "fas fa-folder-open",
-                    "enum": [107]
+                    "enum": [107, 110]
                 },
                 "vep_filters": {
                     "type": "string",
@@ -158,6 +159,17 @@
                     "fa_icon": "fas fa-file-csv",
                     "description": "File containing HGNC_IDs of interest on separate lines.",
                     "hidden": true
+                },
+                "vep_plugin_files": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Databases used by both named and custom plugins to annotate variants.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to a file containing the absolute paths to databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/vep_plugin_files_schema.json"
                 }
             },
             "required": ["fasta", "gtf"]
@@ -193,13 +205,13 @@
                     "enum": ["Basic", "None"],
                     "fa_icon": "fas fa-tachometer-alt"
                 },
-                "subsample_region_switch": {
+                "switch_subsample_region": {
                     "type": "boolean",
                     "default": true,
                     "description": "Do you want to subsample the region subsample_bed to the fraction given in seed_frac?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "downsample_switch": {
+                "switch_downsample": {
                     "type": "boolean",
                     "default": true,
                     "description": "Do you want to downsample the number of reads to num_reads?",
@@ -207,7 +219,6 @@
                 },
                 "subsample_bed": {
                     "type": "string",
-                    "default": "None",
                     "format": "file-path",
                     "fa_icon": "far fa-file-code",
                     "description": "Bed with regions to subsample"
@@ -249,13 +260,31 @@
                     "enum": ["consensus", "multiallelic"],
                     "help_text": "Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied."
                 },
-                "run_drop_ae_switch": {
+                "switch_build_tracks": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should tracks be build?",
+                    "fa_icon": "fas fa-toggle-off"
+                },
+                "switch_stringtie": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should stringtie module be run?",
+                    "fa_icon": "fas fa-toggle-off"
+                },
+                "switch_vep": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should VEP module be run?",
+                    "fa_icon": "fas fa-toggle-off"
+                },
+                "switch_drop_ae": {
                     "type": "boolean",
                     "default": true,
                     "description": "Should DROP Aberrant Expression module be run?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "run_drop_as_switch": {
+                "switch_drop_as": {
                     "type": "boolean",
                     "default": true,
                     "description": "Should DROP Aberrant Splicing module be run?",
@@ -293,7 +322,6 @@
                 },
                 "reference_drop_annot_file": {
                     "type": "string",
-                    "default": "None",
                     "description": "Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP.",
                     "fa_icon": "fas fa-file",
                     "format": "file-path",
@@ -301,7 +329,6 @@
                 },
                 "reference_drop_count_file": {
                     "type": "string",
-                    "default": "None",
                     "description": "If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to use as controls",
                     "fa_icon": "fas fa-file",
                     "format": "file-path",
@@ -309,7 +336,6 @@
                 },
                 "reference_drop_splice_folder": {
                     "type": "string",
-                    "default": "None",
                     "description": "If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside folder must be tsv.gz",
                     "fa_icon": "fas fa-folder-open"
                 },

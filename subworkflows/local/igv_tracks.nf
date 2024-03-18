@@ -3,8 +3,8 @@
 //
 
 include { JUNCTION_TRACK   } from '../../modules/local/junction_track'
-include { UCSC_WIGTOBIGWIG } from '../../modules/nf-core/ucsc/wigtobigwig/main'                                                                          
-include { TABIX_BGZIPTABIX } from '../../modules/nf-core/tabix/bgziptabix/main'                                                                          
+include { UCSC_WIGTOBIGWIG } from '../../modules/nf-core/ucsc/wigtobigwig/main'
+include { TABIX_BGZIPTABIX } from '../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow IGV_TRACKS {
     take:

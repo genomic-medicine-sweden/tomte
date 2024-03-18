@@ -1,4 +1,3 @@
-repository_type: pipeline
 lint:
   files_exist: false
     - assets/nf-core-tomte_logo_light.png
@@ -7,6 +6,8 @@ lint:
     - docs/images/tomte_logo.eps
     - docs/images/tomte_pipeline_metromap.eps
     - docs/images/tomte_pipeline_metromap.png
+    - conf/modules.config
+    - .github/ISSUE_TEMPLATE/config.yml
   files_unchanged: false
     - assets/sendmail_template.txt
     - .github/CONTRIBUTING.md
@@ -19,7 +20,15 @@ lint:
     - assets/email_template.txt
     - lib/NfcoreTemplate.groovy
     - docs/README.md
+    - pyproject.toml
+  multiqc_config:
+    - report_comment
   nextflow_config:
     - manifest.name
     - manifest.homePage
-  multiqc_config: false
+repository_type: pipeline
+template:
+  author: lucpen
+  description: Analyzing RNAseq data
+  name: tomte
+  prefix: genomic-medicine-sweden

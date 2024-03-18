@@ -7,13 +7,23 @@
     "items": {
         "type": "object",
         "properties": {
+            "case": {
+                "type": "string",
+                "meta": ["case"],
+                "pattern": "^\\S+$",
+                "errorMessage": "Case name must be provided and cannot contain spaces"
+            },
             "sample": {
                 "type": "string",
+                "exists": true,
                 "pattern": "^\\S+$",
-                "errorMessage": "Sample name must be provided and cannot contain spaces"
+                "errorMessage": "Sample name must be provided and cannot contain spaces",
+                "meta": ["id", "sample"]
             },
             "fastq_1": {
                 "type": "string",
+                "format": "file-path",
+                "exists": true,
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             },
@@ -22,6 +32,8 @@
                 "anyOf": [
                     {
                         "type": "string",
+                        "format": "file-path",
+                        "exists": true,
                         "pattern": "^\\S+\\.f(ast)?q\\.gz$"
                     },
                     {
@@ -29,8 +41,14 @@
                         "maxLength": 0
                     }
                 ]
+            },
+            "strandedness": {
+                "type": "string",
+                "meta": ["strandedness"],
+                "enum": ["unstranded", "forward", "reverse"],
+                "errorMessage": "Sample strandness valid input is unstranded,forward or reverse"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["case", "sample", "fastq_1", "strandedness"]
     }
 }
