@@ -47,11 +47,13 @@ workflow ALIGNMENT {
         if (switch_subsample_region) {
             RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam, subsample_bed, seed_frac)
             ch_bam_bai = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
+            ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
             if (!switch_downsample) {
                 ch_bam_bai_out = RNA_SUBSAMPLE_REGION.out.bam_bai
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
                 ch_bam_bai_out = RNA_DOWNSAMPLE.out.bam_bai
+                ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
             }
         } else {
             ch_bam_bai = ch_bam_bai.mix(STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai))
@@ -60,6 +62,7 @@ workflow ALIGNMENT {
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
                 ch_bam_bai_out = RNA_DOWNSAMPLE.out.bam_bai
+                ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
             }
         }
 
@@ -71,9 +74,7 @@ workflow ALIGNMENT {
         ch_versions = ch_versions.mix(FASTP.out.versions.first())
         ch_versions = ch_versions.mix(STAR_ALIGN.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
-        ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_VIEW.out.versions.first())
-        ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
         ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
 
     emit:
