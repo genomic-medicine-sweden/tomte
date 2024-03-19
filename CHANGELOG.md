@@ -18,6 +18,7 @@ Release of genomic-medicine-sweden/tomte, created with the [nf-core](https://nf-
 - Merging of case's vcf files [#80](https://github.com/genomic-medicine-sweden/tomte/pull/80)
 - Reference list to MultiQC report [#88](https://github.com/genomic-medicine-sweden/tomte/pull/88)
 - Added module to calculate insert size and added results to MultiQC report [#90](https://github.com/genomic-medicine-sweden/tomte/pull/90)
+- Added automatic tests to test the pipeline with all switches set to false [#100](https://github.com/genomic-medicine-sweden/tomte/pull/100)
 
 ### `Fixed`
 
@@ -33,7 +34,8 @@ Release of genomic-medicine-sweden/tomte, created with the [nf-core](https://nf-
 - Shortened name of DROP output files [#79](https://github.com/genomic-medicine-sweden/tomte/pull/79)
 - Merging of vcfs has been moved to after bootstrapAnn [#81](https://github.com/genomic-medicine-sweden/tomte/pull/81)
 - Substituted bgzip and tabix modules by bgzip_tabix module [#85](https://github.com/genomic-medicine-sweden/tomte/pull/85)
-- Updated module input channels in the GATK variant calling subworkflow [#89](https://github.com/genomic-medicine-sweden/tomte/pull/85)
+- Updated module input channels in the GATK variant calling subworkflow [#89](https://github.com/genomic-medicine-sweden/tomte/pull/89)
+- Subsample and downsample switches [#97](https://github.com/genomic-medicine-sweden/tomte/pull/97)
 
 ### `Dependencies`
 
