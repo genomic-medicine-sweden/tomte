@@ -8,7 +8,7 @@ process GTFTOGENEPRED_REFFLAT {
         'biocontainers/ucsc-gtftogenepred:377--ha8a8165_5' }"
 
     input:
-    path(gtf)
+    tuple val(meta), path(gtf)
 
     output:
     path('*.refflat')   , emit: refflat

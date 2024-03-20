@@ -62,10 +62,10 @@ workflow PREPARE_REFERENCES {
         ch_star_index = (!star_index) ?  BUILD_STAR_GENOME.out.index.collect() :
                                         (star_index.endsWith(".gz") ? UNTAR_STAR_INDEX.out.untar.map { it[1] } : ch_star)
         // Convert gtf to refflat for picard
-        GTF_TO_REFFLAT(ch_gtf_no_meta)
+        GTF_TO_REFFLAT(ch_gtf)
 
         // Get rRNA transcripts and convert to interval_list format
-        GET_RRNA_TRANSCRIPTS(ch_gtf_no_meta)
+        GET_RRNA_TRANSCRIPTS(ch_gtf)
 
         BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map { it -> [ [id:it.name], it ] }, ch_dict )
 
