@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### `Added`
+
+- Added automatic tests to test the pipeline with all switches set to false [#100](https://github.com/genomic-medicine-sweden/tomte/pull/100)
+
+### `Fixed`
+
+- Subsample and downsample switches [#97](https://github.com/genomic-medicine-sweden/tomte/pull/97)
+
 ## 1.1.0 - Rudolph [2024-03-11]
 
 Release of genomic-medicine-sweden/tomte, created with the [nf-core](https://nf-co.re/) template.
@@ -33,7 +41,7 @@ Release of genomic-medicine-sweden/tomte, created with the [nf-core](https://nf-
 - Shortened name of DROP output files [#79](https://github.com/genomic-medicine-sweden/tomte/pull/79)
 - Merging of vcfs has been moved to after bootstrapAnn [#81](https://github.com/genomic-medicine-sweden/tomte/pull/81)
 - Substituted bgzip and tabix modules by bgzip_tabix module [#85](https://github.com/genomic-medicine-sweden/tomte/pull/85)
-- Updated module input channels in the GATK variant calling subworkflow [#89](https://github.com/genomic-medicine-sweden/tomte/pull/85)
+- Updated module input channels in the GATK variant calling subworkflow [#89](https://github.com/genomic-medicine-sweden/tomte/pull/89)
 
 ### `Dependencies`
 

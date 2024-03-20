@@ -26,6 +26,9 @@ jobs:
         NXF_VER:
           - "23.04.0"
           - "latest-everything"
+        parameters:
+          - "-profile test,docker"
+          - "-profile test,docker --switch_subsample_region false --switch_downsample false --switch_build_tracks false --switch_stringtie false --switch_vep false --switch_drop_ae false --switch_drop_as false"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
@@ -43,4 +46,4 @@ jobs:
         # For example: adding multiple test runs with different parameters
         # Remember that you can parallelise this by using strategy.matrix
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
+          nextflow run ${GITHUB_WORKSPACE} ${{ matrix.parameters }} --outdir ./results
