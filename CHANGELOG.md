@@ -4,9 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### `Added`
+
 - Added automatic tests to test the pipeline with all switches set to false [#100](https://github.com/genomic-medicine-sweden/tomte/pull/100)
 
 ### `Fixed`
+
 - Subsample and downsample switches [#97](https://github.com/genomic-medicine-sweden/tomte/pull/97)
 
 ## 1.1.0 - Rudolph [2024-03-11]
