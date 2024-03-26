@@ -11,10 +11,10 @@ include { BCFTOOLS_STATS          } from '../../modules/nf-core/bcftools/stats/m
 
 workflow CALL_VARIANTS_GATK {
     take:
-        ch_bam_bai // channel (mandatory): [ val(meta), [ path(bam), path(bai) ] ]
-        ch_fasta   // channel (mandatory): [ path(fasta) ]
-        ch_fai     // channel (mandatory): [ path(fai) ]
-        ch_dict    // channel (mandatory): [ val(meta), path(dict) ]
+        ch_bam_bai // channel: [mandatory] [ val(meta), [ path(bam), path(bai) ] ]
+        ch_fasta   // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai     // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_dict    // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
 
@@ -24,7 +24,7 @@ workflow CALL_VARIANTS_GATK {
             ch_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, []] },
             ch_fasta,
             ch_fai,
-            ch_dict.map{ meta, dict -> dict }
+            ch_dict
         )
         ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions.first())
 
@@ -37,8 +37,8 @@ workflow CALL_VARIANTS_GATK {
 
         GATK4_HAPLOTYPECALLER(
             ch_split_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, [], []] },
-            ch_fasta.map{ fasta -> [[:], fasta] },
-            ch_fai.map{ fai -> [[:], fai] },
+            ch_fasta,
+            ch_fai,
             ch_dict,
             [[],[]],
             [[],[]],
@@ -47,8 +47,8 @@ workflow CALL_VARIANTS_GATK {
 
         GATK4_VARIANTFILTRATION(
             GATK4_HAPLOTYPECALLER.out.vcf.join(GATK4_HAPLOTYPECALLER.out.tbi),
-            ch_fasta.map{ fasta -> [[:], fasta] },
-            ch_fai.map{ fai -> [[:], fai] },
+            ch_fasta,
+            ch_fai,
             ch_dict
         )
         ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first())

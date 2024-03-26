@@ -29,8 +29,8 @@ workflow CALL_VARIANTS {
 
                 CALL_VARIANTS_GATK(
                     ch_bam_bai,
-                    ch_fasta.map{ meta, fasta -> fasta },
-                    ch_fai.map{ meta, fai -> fai },
+                    ch_fasta,
+                    ch_fai,
                     ch_dict,
                 )
 

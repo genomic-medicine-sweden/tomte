@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Subsample and downsample switches [#97](https://github.com/genomic-medicine-sweden/tomte/pull/97)
 - Now all reference files come with meta to avoid confusion [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
-- GATK4_ASEREADCOUNTER has been updated [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
+- GATK4_ASEREADCOUNTER and GATK4_SPLITNCIGARREADS have been updated [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
 
 ## 1.1.0 - Rudolph [2024-03-11]
 

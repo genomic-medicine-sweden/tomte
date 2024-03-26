@@ -73,7 +73,7 @@
                     },
                     "gatk4/splitncigarreads": {
                         "branch": "master",
-                        "git_sha": "8797a219dfdac9bfa08645a6ad234f104b96fb76",
+                        "git_sha": "1e15ad71d9022293985dd02e24186e5e496a0b3c",
                         "installed_by": ["modules"]
                     },
                     "gatk4/variantfiltration": {
