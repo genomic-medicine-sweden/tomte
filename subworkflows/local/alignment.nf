@@ -16,12 +16,12 @@ workflow ALIGNMENT {
         reads                   // channel: [mandatory] [ val(meta), [path(reads)]  ]
         star_index              // channel: [mandatory] [ val(meta), path(star_index) ]
         ch_gtf                  // channel: [mandatory] [ val(meta), path(gtf) ]
-        platform                // channel: [ val(platform) ]
-        subsample_bed           // patrameter: [ path(subsample_bed) ]
-        seed_frac               // patrameter: [ val(seed_frac) ]
-        num_reads               // patrameter: [ val(num_reads) ]
-        switch_subsample_region // patrameter: [ val(switch_subsample_region) ]
-        switch_downsample       // patrameter: [ val(switch_downsample) ]
+        platform                // ArrayList: platform 
+        subsample_bed           // string: subsample_bed 
+        seed_frac               // bigdecimal: seed_frac 
+        num_reads               // integer: num_reads
+        switch_subsample_region // boolean: switch_subsample_region 
+        switch_downsample       // boolean: switch_downsample
         salmon_index            // channel: [mandatory] [ path(salmon_index) ]
         ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
 
