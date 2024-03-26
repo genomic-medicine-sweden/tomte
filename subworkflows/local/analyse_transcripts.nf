@@ -11,20 +11,20 @@ include { DROP_FILTER_RESULTS } from '../../modules/local/drop_filter_results'
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
-        ch_bam_bai                    // channel [mandatory]: [ val(meta), [ path(bam) ],[ path(bai) ] ]
-        ch_bam_ds_bai                 // channel [mandatory]: [ val(meta), [ path(bam) ],[ path(bai) ] ]
-        ch_gtf                        // channel [mandatory]: [ val(meta), [ path(gtf) ] ]
-        ch_fasta_fai                  // channel [mandatory]: [ val(meta), [ path(fasta), path(fai) ]
-        gene_counts                   // channel: [ val(meta), path(tsv) ]
-        ch_ref_drop_count_file        // channel: [ path(tsv) ]
-        ch_ref_drop_annot_file        // channel: [ path(tsv) ]
-        ch_ref_drop_splice_folder     // channel: [ path(folder) ]
-        genome                        // parameter: [ val(genome) ]
-        drop_group_samples_ae         // parameter: [ val(drop_group_samples_ae) ]
-        drop_group_samples_as         // parameter: [ val(drop_group_samples_as) ]
-        drop_padjcutoff_ae            // parameter: [ val(drop_padjcutoff_ae) ]
-        drop_padjcutoff_as            // parameter: [ val(drop_padjcutoff_as) ]
-        drop_zscorecutoff             // parameter: [ val(drop_zscorecutoff) ]
+        ch_bam_bai                    // channel: [mandatory] [ val(meta), [ path(bam) ],[ path(bai) ] ]
+        ch_bam_ds_bai                 // channel: [mandatory] [ val(meta), [ path(bam) ],[ path(bai) ] ]
+        ch_gtf                        // channel: [mandatory] [ val(meta), [ path(gtf) ] ]
+        ch_fasta_fai                  // channel: [mandatory] [ val(meta), [ path(fasta), path(fai) ]
+        gene_counts                   // channel: [optional]  [ val(meta), path(tsv) ]
+        ch_ref_drop_count_file        // channel: [optional]  [ path(tsv) ]
+        ch_ref_drop_annot_file        // channel: [optional]  [ path(tsv) ]
+        ch_ref_drop_splice_folder     // channel: [optional]  [ path(folder) ]
+        genome                        // string:  [optional] 'hg19', 'GRCh37', 'hg38' or 'GRCh38'
+        drop_group_samples_ae         // string:  [optional] default: 'outrider'
+        drop_group_samples_as         // string:  [optional] default: 'fraser'
+        drop_padjcutoff_ae            // float:   [optional] default: 0.05
+        drop_padjcutoff_as            // float:   [optional] default: 0.1
+        drop_zscorecutoff             // float:   [optional] default: 0
         ch_gene_panel_clinical_filter // channel: [ path(tsv) ]
         case_info                     // channel: [ val(case_id) ]
 

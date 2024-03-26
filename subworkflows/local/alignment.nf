@@ -16,12 +16,12 @@ workflow ALIGNMENT {
         reads                   // channel: [mandatory] [ val(meta), [path(reads)]  ]
         star_index              // channel: [mandatory] [ val(meta), path(star_index) ]
         ch_gtf                  // channel: [mandatory] [ val(meta), path(gtf) ]
-        platform                // ArrayList: platform 
-        subsample_bed           // string: subsample_bed 
-        seed_frac               // bigdecimal: seed_frac 
-        num_reads               // integer: num_reads
-        switch_subsample_region // boolean: switch_subsample_region 
-        switch_downsample       // boolean: switch_downsample
+        ch_platform             // channel: [mandatory] [ val(platform) ]
+        subsample_bed           // channel: [optional]  [ path(subsample_bed) ]
+        seed_frac               // float:   [optional]  default: 0.001
+        num_reads               // integer: [optional]  default: 120000000
+        switch_subsample_region // boolean: [mandatory] default: true
+        switch_downsample       // boolean: [mandatory] default: true
         salmon_index            // channel: [mandatory] [ path(salmon_index) ]
         ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
 
@@ -36,7 +36,7 @@ workflow ALIGNMENT {
 
         FASTP(ch_cat_fastq, [], false, false)
 
-        STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, platform, false)
+        STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, ch_platform, false)
 
         SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
 

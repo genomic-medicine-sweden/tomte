@@ -69,7 +69,7 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files).collect()
                                                                         : Channel.value([])
-    ch_platform                   = params.platform.collect()
+    ch_platform                   = Channel.from(params.platform).collect()
 
     // Read and store paths in the vep_plugin_files file
     ch_vep_extra_files_unsplit.splitCsv ( header:true )
@@ -114,7 +114,7 @@ workflow TOMTE {
         ch_references.star_index,
         ch_references.gtf,
         ch_platform,
-        params.subsample_bed,
+        ch_subsample_bed,
         params.seed_frac,
         params.num_reads,
         params.switch_subsample_region,

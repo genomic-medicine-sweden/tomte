@@ -20,13 +20,13 @@ include { SALMON_INDEX as SALMON_INDEX                 } from '../../modules/nf-
 
 workflow PREPARE_REFERENCES {
     take:
-        fasta            // patrameter: [ path(fasta) ]
-        fai              // channel: [ val(meta), path(fai) ]
-        star_index       // patrameter: [ path(star_index) ]
-        gtf              // patrameter: [ path(gtf) ]
-        ch_vep_cache     // channel: [ path(vep_cache) ]
-        transcript_fasta // patrameter: [ path(transcript_fasta) ]
-        salmon_index     // patrameter: [ path(salmon_index) ]
+        fasta            // path:    [mandatory] path to fasta
+        fai              // channel: [optional]  [ val(meta), path(fai) ]
+        star_index       // path:    [optional]  path to star_index
+        gtf              // path:    [mandatory] path to gtf
+        ch_vep_cache     // channel: [optional]  [ path(vep_cache) ]
+        transcript_fasta // path:    [optional]  path to transcript_fasta
+        salmon_index     // path:    [optional]  path to salmon_index
 
     main:
         ch_versions = Channel.empty()
@@ -43,16 +43,15 @@ workflow PREPARE_REFERENCES {
         BUILD_DICT(ch_fasta)
         ch_dict = BUILD_DICT.out.dict.collect()
 
-        gtf_meta = Channel.fromPath(gtf).map{ it -> [ [id:it[0]], it ] }
-        GUNZIP_GTF(gtf_meta)
-        ch_gtf_no_meta = gtf.endsWith(".gz") ? GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }.collect() : Channel.fromPath(gtf).collect()
+        gtf_meta = Channel.fromPath(gtf).map{ it -> [ [id:it[0]], it ] }.collect()
+        GUNZIP_GTF(gtf_meta)        
+        ch_gtf = gtf.endsWith(".gz") ? GUNZIP_GTF.out.gunzip.collect() : gtf_meta.collect()
 
         // Get chrom sizes
         GET_CHROM_SIZES( ch_fai )
 
         ch_fasta_no_meta = ch_fasta.map{ meta, fasta -> [ fasta ] }
 
-        ch_gtf=ch_gtf_no_meta.map { it -> [[:], it] }.collect()
         ch_star = star_index ?
             Channel.fromPath(star_index).collect().map { it -> [ [id:it[0].simpleName], it ] }
             : Channel.empty()
@@ -76,7 +75,7 @@ workflow PREPARE_REFERENCES {
         // Preparing transcript fasta
         ch_fasta_fai = ch_fasta.mix(ch_fai.map{meta, fai -> fai}).collect()
 
-        GFFREAD(ch_gtf_no_meta.map{ it -> [ [id:it[0].simpleName], it ] },ch_fasta_fai)
+        GFFREAD(ch_gtf, ch_fasta_fai)
         transcript_fasta_no_meta = (!transcript_fasta) ? GFFREAD.out.tr_fasta.collect() :
                                     (transcript_fasta.endsWith(".gz") ? GUNZIP_TRFASTA.out.gunzip.collect().map{ meta, fasta -> [ fasta ] } : transcript_fasta)
 
