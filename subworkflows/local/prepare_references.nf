@@ -20,13 +20,13 @@ include { SALMON_INDEX as SALMON_INDEX                 } from '../../modules/nf-
 
 workflow PREPARE_REFERENCES {
     take:
-        fasta            // path:    [mandatory] path to fasta
-        fai              // channel: [optional]  [ val(meta), path(fai) ]
-        star_index       // path:    [optional]  path to star_index
-        gtf              // path:    [mandatory] path to gtf
-        ch_vep_cache     // channel: [optional]  [ path(vep_cache) ]
-        transcript_fasta // path:    [optional]  path to transcript_fasta
-        salmon_index     // path:    [optional]  path to salmon_index
+        fasta            // parameter: [mandatory] path to fasta
+        fai              // channel:   [optional]  [ val(meta), path(fai) ]
+        star_index       // parameter: [optional]  path to star_index
+        gtf              // parameter: [mandatory] path to gtf
+        ch_vep_cache     // channel:   [optional]  [ path(vep_cache) ]
+        transcript_fasta // parameter: [optional]  path to transcript_fasta
+        salmon_index     // parameter: [optional]  path to salmon_index
 
     main:
         ch_versions = Channel.empty()

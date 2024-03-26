@@ -10,11 +10,11 @@ include { CALL_VARIANTS_GATK } from './call_variants_gatk.nf'
 
 workflow CALL_VARIANTS {
     take:
-        ch_bam_bai     // channel: [mandatory] [ val(meta), [ path(bam), path(bai) ] ]
-        ch_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai         // channel: [mandatory] [ val(meta),  path(fai) ]
-        ch_dict        // channel: [mandatory] [ val(meta), path(dict) ]
-        variant_caller // string:  [mandatory] default: 'bcftools'
+        ch_bam_bai     // channel:   [mandatory] [ val(meta), [ path(bam), path(bai) ] ]
+        ch_fasta       // channel:   [mandatory] [ val(meta), path(fasta) ]
+        ch_fai         // channel:   [mandatory] [ val(meta),  path(fai) ]
+        ch_dict        // channel:   [mandatory] [ val(meta), path(dict) ]
+        variant_caller // parameter: [mandatory] default: 'bcftools'
 
     main:
 
