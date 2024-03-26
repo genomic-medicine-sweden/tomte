@@ -44,7 +44,7 @@ workflow PREPARE_REFERENCES {
         ch_dict = BUILD_DICT.out.dict.collect()
 
         gtf_meta = Channel.fromPath(gtf).map{ it -> [ [id:it[0]], it ] }.collect()
-        GUNZIP_GTF(gtf_meta)        
+        GUNZIP_GTF(gtf_meta)
         ch_gtf = gtf.endsWith(".gz") ? GUNZIP_GTF.out.gunzip.collect() : gtf_meta.collect()
 
         // Get chrom sizes
