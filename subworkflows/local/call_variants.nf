@@ -10,11 +10,11 @@ include { CALL_VARIANTS_GATK } from './call_variants_gatk.nf'
 
 workflow CALL_VARIANTS {
     take:
-        ch_bam_bai     // channel (mandatory): [ val(meta), [ path(bam), path(bai) ] ]
-        ch_fasta       // channel (mandatory): [ path(fasta) ]
-        ch_fai         // channel (mandatory): [ path(fai) ]
-        ch_dict        // channel (mandatory): [ val(meta), path(dict) ]
-        variant_caller // string (mandatory)
+        ch_bam_bai     // channel: [ val(meta), [ path(bam), path(bai) ] ]
+        ch_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai         // channel: [ val(meta),  path(fai) ]
+        ch_dict        // channel: [ val(meta), path(dict) ]
+        variant_caller // parameter: [ val(variant_caller) ]
 
     main:
 
@@ -29,8 +29,8 @@ workflow CALL_VARIANTS {
 
                 CALL_VARIANTS_GATK(
                     ch_bam_bai,
-                    ch_fasta,
-                    ch_fai,
+                    ch_fasta.map{ meta, fasta -> fasta },
+                    ch_fai.map{ meta, fai -> fai },
                     ch_dict,
                 )
 
@@ -45,7 +45,7 @@ workflow CALL_VARIANTS {
 
                 BCFTOOLS_MPILEUP(
                     ch_bam_bai.map{ meta, bam, bai -> [ meta, bam, [] ]},
-                    ch_fasta.map { it -> [[:], it] },
+                    ch_fasta,
                     false
                 )
 

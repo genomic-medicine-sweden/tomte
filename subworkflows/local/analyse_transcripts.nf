@@ -11,22 +11,22 @@ include { DROP_FILTER_RESULTS } from '../../modules/local/drop_filter_results'
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
-        ch_bam_bai                    // channel (mandatory): [ val(meta), [ path(bam) ],[ path(bai) ] ]
-        ch_bam_ds_bai                 // channel (mandatory): [ val(meta), [ path(bam) ],[ path(bai) ] ]
-        ch_gtf                        // channel (mandatory): [ val(meta), [ path(gtf) ] ]
-        ch_fasta_fai_meta             // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
-        gene_counts                   // channel [val(meta), path(tsv)]
-        ch_ref_drop_count_file        // channel [ path(tsv) ]
-        ch_ref_drop_annot_file        // channel [ path(tsv) ]
-        ch_ref_drop_splice_folder     // channel [ path(folder) ]
-        genome                        // channel [val(genome)]
-        drop_group_samples_ae         // channel [val(drop_group_samples_ae)]
-        drop_group_samples_as         // channel [val(drop_group_samples_as)]
-        drop_padjcutoff_ae            // channel [val(drop_padjcutoff_ae)]
-        drop_padjcutoff_as            // channel [val(drop_padjcutoff_as)]
-        drop_zscorecutoff             // channel [val(drop_zscorecutoff)]
-        ch_gene_panel_clinical_filter // channel [ path(tsv) ]
-        case_info                     // channel [val(case_id)]
+        ch_bam_bai                    // channel [mandatory]: [ val(meta), [ path(bam) ],[ path(bai) ] ]
+        ch_bam_ds_bai                 // channel [mandatory]: [ val(meta), [ path(bam) ],[ path(bai) ] ]
+        ch_gtf                        // channel [mandatory]: [ val(meta), [ path(gtf) ] ]
+        ch_fasta_fai                  // channel [mandatory]: [ val(meta), [ path(fasta), path(fai) ]
+        gene_counts                   // channel: [ val(meta), path(tsv) ]
+        ch_ref_drop_count_file        // channel: [ path(tsv) ]
+        ch_ref_drop_annot_file        // channel: [ path(tsv) ]
+        ch_ref_drop_splice_folder     // channel: [ path(folder) ]
+        genome                        // parameter: [ val(genome) ]
+        drop_group_samples_ae         // parameter: [ val(drop_group_samples_ae) ]
+        drop_group_samples_as         // parameter: [ val(drop_group_samples_as) ]
+        drop_padjcutoff_ae            // parameter: [ val(drop_padjcutoff_ae) ]
+        drop_padjcutoff_as            // parameter: [ val(drop_padjcutoff_as) ]
+        drop_zscorecutoff             // parameter: [ val(drop_zscorecutoff) ]
+        ch_gene_panel_clinical_filter // channel: [ path(tsv) ]
+        case_info                     // channel: [ val(case_id) ]
 
     main:
         ch_versions = Channel.empty()
@@ -50,7 +50,7 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_bai_files = ch_bam_ds_bai.collect{ it[2] }.toList()
         ch_bam_bai_files = ch_bam_files.toList().combine(ch_bai_files)
         DROP_CONFIG_RUN_AE(
-            ch_fasta_fai_meta,
+            ch_fasta_fai,
             ch_gtf,
             DROP_SAMPLE_ANNOT.out.drop_annot,
             ch_bam_bai_files,
@@ -64,7 +64,7 @@ workflow ANALYSE_TRANSCRIPTS {
 
         // Generates  config file and runs Aberrant splicing module
         DROP_CONFIG_RUN_AS(
-            ch_fasta_fai_meta,
+            ch_fasta_fai,
             ch_gtf,
             DROP_SAMPLE_ANNOT.out.drop_annot,
             ch_bam_bai_files,
@@ -97,13 +97,13 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_bam = ch_bam_bai.map{ meta, bam, bai -> [meta, [bam]] }
         STRINGTIE_STRINGTIE(
             ch_bam,
-            ch_gtf.map{ meta, gtf ->  gtf  }
+            ch_gtf.map{ meta, gtf -> gtf }
         )
 
         // Compare stringtie results to reference
         GFFCOMPARE(
             STRINGTIE_STRINGTIE.out.transcript_gtf,
-            ch_fasta_fai_meta,
+            ch_fasta_fai,
             ch_gtf
         )
 

@@ -13,17 +13,17 @@ include { SAMTOOLS_VIEW        } from '../../modules/nf-core/samtools/view/main'
 
 workflow ALIGNMENT {
     take:
-        reads                   // channel: (mandatory) [ val(meta), [path(reads)]  ]
-        star_index              // channel: (mandatory) [ val(meta), path(star_index) ]
-        ch_gtf                  // channel: (mandatory) [ val(meta), path(gtf) ]
+        reads                   // channel: [mandatory] [ val(meta), [path(reads)]  ]
+        star_index              // channel: [mandatory] [ val(meta), path(star_index) ]
+        ch_gtf                  // channel: [mandatory] [ val(meta), path(gtf) ]
         platform                // channel: [ val(platform) ]
-        subsample_bed           // channel: [ path(subsample_bed) ]
-        seed_frac               // channel: [ val(seed_frac) ]
-        num_reads               // channel: [ val(num_reads) ]
-        switch_subsample_region // channel: [ val(switch_subsample_region) ]
-        switch_downsample       // channel: [ val(switch_downsample) ]
-        salmon_index            // channel: (mandatory) [ path(salmon_index) ]
-        ch_genome_fasta         // channel: (mandatory) [ val(meta), path(fasta) ]
+        subsample_bed           // patrameter: [ path(subsample_bed) ]
+        seed_frac               // patrameter: [ val(seed_frac) ]
+        num_reads               // patrameter: [ val(num_reads) ]
+        switch_subsample_region // patrameter: [ val(switch_subsample_region) ]
+        switch_downsample       // patrameter: [ val(switch_downsample) ]
+        salmon_index            // channel: [mandatory] [ path(salmon_index) ]
+        ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
 
     main:
         ch_versions = Channel.empty()

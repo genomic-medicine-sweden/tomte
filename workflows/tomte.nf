@@ -120,13 +120,13 @@ workflow TOMTE {
         params.switch_subsample_region,
         params.switch_downsample,
         ch_references.salmon_index,
-        ch_references.fasta_meta
+        ch_references.fasta
     ).set { ch_alignment }
     ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
 
     BAM_QC(
         ch_alignment.bam,
-        ch_references.fasta_no_meta,
+        ch_references.fasta,
         ch_references.refflat,
         ch_references.interval_list
     )
@@ -136,7 +136,7 @@ workflow TOMTE {
         ch_alignment.bam_bai,
         ch_alignment.bam_ds_bai,
         ch_references.gtf,
-        ch_references.fasta_fai_meta,
+        ch_references.fasta_fai,
         ch_alignment.gene_counts,
         ch_ref_drop_count_file,
         ch_ref_drop_annot_file,
@@ -154,8 +154,8 @@ workflow TOMTE {
 
     CALL_VARIANTS(
         ch_alignment.bam_bai,
-        ch_references.fasta_no_meta,
-        ch_references.fai_no_meta,
+        ch_references.fasta,
+        ch_references.fai,
         ch_references.sequence_dict,
         params.variant_caller
     )
@@ -164,8 +164,8 @@ workflow TOMTE {
     ALLELE_SPECIFIC_CALLING(
         CALL_VARIANTS.out.vcf_tbi,
         ch_alignment.bam_bai,
-        ch_references.fasta_no_meta,
-        ch_references.fai_no_meta,
+        ch_references.fasta,
+        ch_references.fai,
         ch_references.sequence_dict,
         ch_references.interval_list,
         ch_case_info
@@ -177,7 +177,7 @@ workflow TOMTE {
         params.genome,
         params.vep_cache_version,
         ch_vep_cache,
-        ch_references.fasta_meta,
+        ch_references.fasta,
         ch_vep_extra_files,
     )
     ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)

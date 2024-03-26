@@ -20,13 +20,13 @@ include { SALMON_INDEX as SALMON_INDEX                 } from '../../modules/nf-
 
 workflow PREPARE_REFERENCES {
     take:
-        fasta
-        fai
-        star_index
-        gtf
-        ch_vep_cache
-        transcript_fasta
-        salmon_index
+        fasta            // patrameter: [ path(fasta) ]
+        fai              // channel: [ val(meta), path(fai) ]
+        star_index       // patrameter: [ path(star_index) ]
+        gtf              // patrameter: [ path(gtf) ]
+        ch_vep_cache     // channel: [ path(vep_cache) ]
+        transcript_fasta // patrameter: [ path(transcript_fasta) ]
+        salmon_index     // patrameter: [ path(salmon_index) ]
 
     main:
         ch_versions = Channel.empty()
@@ -68,8 +68,10 @@ workflow PREPARE_REFERENCES {
         GET_RRNA_TRANSCRIPTS(ch_gtf)
 
         BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map { it -> [ [id:it.name], it ] }, ch_dict )
+        ch_interval = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
 
         UNTAR_VEP_CACHE (ch_vep_cache)
+        ch_untar_vep = UNTAR_VEP_CACHE.out.untar.map{ meta, files -> [files] }.collect()
 
         // Preparing transcript fasta
         ch_fasta_fai = ch_fasta.mix(ch_fai.map{meta, fai -> fai}).collect()
@@ -99,19 +101,17 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(SALMON_INDEX.out.versions)
 
     emit:
-        chrom_sizes      = GET_CHROM_SIZES.out.sizes.collect()                                 // channel: [ path(sizes) ]
-        fasta_meta       = ch_fasta
-        fasta_no_meta    = ch_fasta_no_meta
-        fai              = ch_fai
-        fai_no_meta      = ch_fai.map{ meta, fai -> [fai] }.collect()
-        fasta_fai_meta   = ch_fasta_fai
-        sequence_dict    = BUILD_DICT.out.dict.collect()
-        gtf              = ch_gtf
-        star_index       = ch_star_index
-        salmon_index     = ch_salmon_index
-        refflat          = GTF_TO_REFFLAT.out.refflat.collect()
-        rrna_bed         = GET_RRNA_TRANSCRIPTS.out.bed.collect()
-        interval_list    = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
-        vep_resources    = UNTAR_VEP_CACHE.out.untar.map{ meta, files -> [files] }.collect()     // channel: [ path(cache) ]
-        versions         = ch_versions
+        chrom_sizes   = GET_CHROM_SIZES.out.sizes.collect()        // channel: [ path(sizes) ]
+        fasta         = ch_fasta                                   // channel: [ val(meta), path(fasta) ]
+        fai           = ch_fai                                     // channel: [ val(meta), path(fai) ]
+        fasta_fai     = ch_fasta_fai                               // channel: [ val(meta), path(fasta), path(fai) ]
+        sequence_dict = BUILD_DICT.out.dict.collect()              // channel: [ val(meta), path(dict) ]
+        gtf           = ch_gtf                                     // channel: [ val(meta), path(gtf) ]
+        star_index    = ch_star_index                              // channel: [ val(meta), path(star_index) ]
+        salmon_index  = ch_salmon_index                            // channel: [ path(salmon_index) ]
+        refflat       = GTF_TO_REFFLAT.out.refflat.collect()       // channel: [ path(refflat) ]
+        rrna_bed      = GET_RRNA_TRANSCRIPTS.out.bed.collect()     // channel: [ path(bed) ]
+        interval_list = ch_interval                                // channel: [ path(interval) ]
+        vep_resources = ch_untar_vep                               // channel: [ path(cache) ]
+        versions      = ch_versions                                // channel: [ path(versions.yml) ]
 }
