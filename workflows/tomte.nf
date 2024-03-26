@@ -96,7 +96,7 @@ workflow TOMTE {
 
     // Gather built indices or get them from the params
     ch_chrom_sizes      = ch_references.chrom_sizes
-    ch_sequence_dict    = params.sequence_dict          ? Channel.fromPath(params.sequence_dict).collect()
+    ch_sequence_dict    = params.sequence_dict          ? Channel.fromPath(params.sequence_dict).map { it -> [[:], it] }.collect()
                                                         : ( ch_references.sequence_dict            ?: Channel.empty() )
     ch_subsample_bed    = params.subsample_bed          ? Channel.fromPath(params.subsample_bed).collect()
                                                         : Channel.empty()
@@ -156,7 +156,7 @@ workflow TOMTE {
         ch_alignment.bam_bai,
         ch_references.fasta,
         ch_references.fai,
-        ch_references.sequence_dict,
+        ch_sequence_dict,
         params.variant_caller
     )
     ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
@@ -166,7 +166,7 @@ workflow TOMTE {
         ch_alignment.bam_bai,
         ch_references.fasta,
         ch_references.fai,
-        ch_references.sequence_dict,
+        ch_sequence_dict,
         ch_references.interval_list,
         ch_case_info
     )
