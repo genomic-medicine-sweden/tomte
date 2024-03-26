@@ -8,12 +8,12 @@ include { TABIX_TABIX as TABIX_VEP } from '../../modules/nf-core/tabix/tabix/mai
 
 workflow ANNOTATE_SNV {
     take:
-    vcf                   // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
-    val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
-    val_vep_cache_version // string: [mandatory] default: 107
-    ch_vep_cache          // channel: [mandatory] [ path(cache) ]
-    ch_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
-    ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
+    vcf                   // channel:   [mandatory] [ val(meta), path(vcf), path(tbi) ]
+    val_vep_genome        // parameter: [mandatory] 'GRCh37' or 'GRCh38'
+    val_vep_cache_version // parameter: [mandatory] default: 110
+    ch_vep_cache          // channel:   [mandatory] [ path(cache) ]
+    ch_fasta              // channel:   [mandatory] [ val(meta), path(fasta) ]
+    ch_vep_extra_files    // channel:   [mandatory] [ path(files) ]
 
     main:
         ch_versions = Channel.empty()

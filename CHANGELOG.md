@@ -6,10 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Added automatic tests to test the pipeline with all switches set to false [#100](https://github.com/genomic-medicine-sweden/tomte/pull/100)
+- Added better documentation on subworkflow input [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
 
 ### `Fixed`
 
 - Subsample and downsample switches [#97](https://github.com/genomic-medicine-sweden/tomte/pull/97)
+- Now all reference files come with meta to avoid confusion [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
+- GATK4_ASEREADCOUNTER and GATK4_SPLITNCIGARREADS have been updated [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
 
 ## 1.1.0 - Rudolph [2024-03-11]
 

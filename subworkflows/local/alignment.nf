@@ -13,17 +13,17 @@ include { SAMTOOLS_VIEW        } from '../../modules/nf-core/samtools/view/main'
 
 workflow ALIGNMENT {
     take:
-        reads
-        star_index
-        gtf
-        platform
-        subsample_bed
-        seed_frac
-        num_reads
-        switch_subsample_region
-        switch_downsample
-        salmon_index
-        ch_genome_fasta
+        reads                   // channel:   [mandatory] [ val(meta), [path(reads)]  ]
+        star_index              // channel:   [mandatory] [ val(meta), path(star_index) ]
+        ch_gtf                  // channel:   [mandatory] [ val(meta), path(gtf) ]
+        ch_platform             // channel:   [mandatory] [ val(platform) ]
+        subsample_bed           // channel:   [optional]  [ path(subsample_bed) ]
+        seed_frac               // parameter: [optional]  default: 0.001
+        num_reads               // parameter: [optional]  default: 120000000
+        switch_subsample_region // parameter: [mandatory] default: true
+        switch_downsample       // parameter: [mandatory] default: true
+        salmon_index            // channel:   [mandatory] [ path(salmon_index) ]
+        ch_genome_fasta         // channel:   [mandatory] [ val(meta), path(fasta) ]
 
     main:
         ch_versions = Channel.empty()
@@ -36,8 +36,7 @@ workflow ALIGNMENT {
 
         FASTP(ch_cat_fastq, [], false, false)
 
-        ch_gtf = gtf.map { it -> [[:], it] }.collect()
-        STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, platform, false)
+        STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, ch_platform, false)
 
         SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
 
@@ -68,7 +67,7 @@ workflow ALIGNMENT {
 
         SAMTOOLS_VIEW( STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai), ch_genome_fasta, [] )
 
-        SALMON_QUANT( FASTP.out.reads, salmon_index, gtf, [], false, 'A')
+        SALMON_QUANT( FASTP.out.reads, salmon_index, ch_gtf.map{ meta, gtf ->  gtf  }, [], false, 'A')
 
         ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first())
         ch_versions = ch_versions.mix(FASTP.out.versions.first())
@@ -78,18 +77,18 @@ workflow ALIGNMENT {
         ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
 
     emit:
-        merged_reads    = CAT_FASTQ.out.reads
-        fastp_report    = FASTP.out.json
-        bam             = STAR_ALIGN.out.bam
-        bam_bai         = ch_bam_bai
-        bam_ds_bai      = ch_bam_bai_out
-        gene_counts     = STAR_ALIGN.out.read_per_gene_tab
-        spl_junc        = STAR_ALIGN.out.spl_junc_tab
-        star_log_final  = STAR_ALIGN.out.log_final
-        star_wig        = STAR_ALIGN.out.wig
-        salmon_result   = SALMON_QUANT.out.results
-        salmon_info     = SALMON_QUANT.out.json_info
-        versions        = ch_versions
+        merged_reads    = CAT_FASTQ.out.reads              // channel: [ val(meta), path(fastq) ]
+        fastp_report    = FASTP.out.json                   // channel: [ val(meta), path(json) ]
+        bam             = STAR_ALIGN.out.bam               // channel: [ val(meta), path(bam) ]
+        bam_bai         = ch_bam_bai                       // channel: [ val(meta), path(bam), path(bai) ]
+        bam_ds_bai      = ch_bam_bai_out                   // channel: [ val(meta), path(bam), path(bai) ]
+        gene_counts     = STAR_ALIGN.out.read_per_gene_tab // channel: [ val(meta), path(tsv) ]
+        spl_junc        = STAR_ALIGN.out.spl_junc_tab      // channel: [ val(meta), path(tsv) ]
+        star_log_final  = STAR_ALIGN.out.log_final         // channel: [ val(meta), path(log) ]
+        star_wig        = STAR_ALIGN.out.wig               // channel: [ val(meta), path(wig) ]
+        salmon_result   = SALMON_QUANT.out.results         // channel: [ val(meta), path(results) ]
+        salmon_info     = SALMON_QUANT.out.json_info       // channel: [ val(meta), path(json) ]
+        versions        = ch_versions                      // channel: [ path(versions.yml) ]
 }
 
 
