@@ -13,7 +13,7 @@ workflow ANALYSE_TRANSCRIPTS {
     take:
         ch_bam_bai                    // channel (mandatory): [ val(meta), [ path(bam) ],[ path(bai) ] ]
         ch_bam_ds_bai                 // channel (mandatory): [ val(meta), [ path(bam) ],[ path(bai) ] ]
-        ch_gtf                        // channel (mandatory): [ path(gtf) ]
+        ch_gtf                        // channel (mandatory): [ val(meta), [ path(gtf) ] ]
         ch_fasta_fai_meta             // channel (mandatory): [ val(meta), [ path(fasta), path(fai) ]
         gene_counts                   // channel [val(meta), path(tsv)]
         ch_ref_drop_count_file        // channel [ path(tsv) ]
@@ -97,14 +97,14 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_bam = ch_bam_bai.map{ meta, bam, bai -> [meta, [bam]] }
         STRINGTIE_STRINGTIE(
             ch_bam,
-            ch_gtf
+            ch_gtf.map{ meta, gtf ->  gtf  }
         )
 
         // Compare stringtie results to reference
         GFFCOMPARE(
             STRINGTIE_STRINGTIE.out.transcript_gtf,
             ch_fasta_fai_meta,
-            ch_gtf.map{ gtf -> [ [id:gtf.simpleName], gtf ] }
+            ch_gtf
         )
 
         ch_versions = ch_versions.mix(DROP_SAMPLE_ANNOT.out.versions)

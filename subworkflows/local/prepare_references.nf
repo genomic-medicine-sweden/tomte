@@ -43,16 +43,16 @@ workflow PREPARE_REFERENCES {
         BUILD_DICT(ch_fasta)
         ch_dict = BUILD_DICT.out.dict.collect()
 
-        gtf_meta = Channel.fromPath(gtf).map{ it -> [ [id:it[0]], it ] }.collect()
+        gtf_meta = Channel.fromPath(gtf).map{ it -> [ [id:it[0]], it ] }
         GUNZIP_GTF(gtf_meta)
-        ch_gtf_no_meta = gtf.endsWith(".gz") ? GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }.collect() : Channel.fromPath(gtf)
+        ch_gtf_no_meta = gtf.endsWith(".gz") ? GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }.collect() : Channel.fromPath(gtf).collect()
 
         // Get chrom sizes
         GET_CHROM_SIZES( ch_fai )
 
         ch_fasta_no_meta = ch_fasta.map{ meta, fasta -> [ fasta ] }
 
-        ch_gtf=ch_gtf_no_meta.map { it -> [[:], it] }
+        ch_gtf=ch_gtf_no_meta.map { it -> [[:], it] }.collect()
         ch_star = star_index ?
             Channel.fromPath(star_index).collect().map { it -> [ [id:it[0].simpleName], it ] }
             : Channel.empty()
@@ -84,7 +84,7 @@ workflow PREPARE_REFERENCES {
         SALMON_INDEX(ch_fasta_no_meta, transcript_fasta_no_meta)
 
         ch_salmon_index = (!salmon_index) ? SALMON_INDEX.out.index.collect() :
-                                            (salmon_index.endsWith(".gz") ? UNTAR_SALMON_INDEX.out.untar.map { it[1] } : salmon_index)
+                                            (salmon_index.endsWith(".gz") ? UNTAR_SALMON_INDEX.out.untar.map { it[1] } : salmon_index.collect())
 
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
@@ -106,7 +106,7 @@ workflow PREPARE_REFERENCES {
         fai_no_meta      = ch_fai.map{ meta, fai -> [fai] }.collect()
         fasta_fai_meta   = ch_fasta_fai
         sequence_dict    = BUILD_DICT.out.dict.collect()
-        gtf              = ch_gtf_no_meta
+        gtf              = ch_gtf
         star_index       = ch_star_index
         salmon_index     = ch_salmon_index
         refflat          = GTF_TO_REFFLAT.out.refflat.collect()
