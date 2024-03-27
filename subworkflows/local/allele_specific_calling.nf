@@ -37,8 +37,8 @@ workflow ALLELE_SPECIFIC_CALLING {
             BCFTOOLS_VIEW.out.vcf
         )
 
-        ch_vcf_tbi = BCFTOOLS_VIEW.out.vcf.join(BCFTOOLS_INDEX.out.tbi)
-        ch_bam_bai_vcf_tbi = ch_bam_bai.join(ch_vcf_tbi)
+        ch_vcf_tbi_sample = BCFTOOLS_VIEW.out.vcf.join(BCFTOOLS_INDEX.out.tbi)
+        ch_bam_bai_vcf_tbi = ch_bam_bai.join(ch_vcf_tbi_sample)
         GATK4_ASEREADCOUNTER(
             ch_bam_bai_vcf_tbi,
             ch_fasta,
