@@ -8,7 +8,7 @@ process GET_RRNA_TRANSCRIPTS {
         'biocontainers/pirate:1.0.4--hdfd78af_2' }"
 
     input:
-    path(gtf)
+    tuple val(meta), path(gtf)
 
     output:
     path('rrna.gtf')    , emit: rrnagtf

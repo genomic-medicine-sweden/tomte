@@ -9,7 +9,7 @@ process BOOTSTRAPANN {
 
     input:
     tuple val(meta), path(vcf), path(tbi)
-    tuple val(meta), path(csv)
+    tuple val(meta2), path(csv)
 
     output:
     tuple val(meta), path("*.vcf"), emit: vcf

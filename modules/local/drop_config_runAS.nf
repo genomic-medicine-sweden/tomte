@@ -11,7 +11,7 @@ process DROP_CONFIG_RUN_AS {
 
     input:
     tuple val(meta), path(fasta), path(fai)
-    path gtf
+    tuple val(meta2), path(gtf)
     path sample_annotation
     tuple path(bam), path(bai)
     path ref_drop_count_file

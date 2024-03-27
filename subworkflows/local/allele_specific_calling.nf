@@ -14,13 +14,13 @@ include { TABIX_TABIX          } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow ALLELE_SPECIFIC_CALLING {
     take:
-        ch_ind_vcf_tbi // channel (mandatory): [ val(meta), [ path(vcf), path(tbi) ] ]
-        ch_bam_bai     // channel (mandatory): [ val(meta), [ path(bam), path(bai) ] ]
-        ch_fasta       // channel (mandatory): [ path(fasta) ]
-        ch_fai         // channel (mandatory): [ path(fai) ]
-        ch_dict        // channel (mandatory): [ val(meta), [ path(dict) ] ]
-        ch_intervals   // channel (mandatory): [ path(intervals) ]
-        ch_case_info   // channel (mandatory): [ val(case_info) ]
+        ch_ind_vcf_tbi // channel: [mandatory] [ val(meta), [ path(vcf), path(tbi) ] ]
+        ch_bam_bai     // channel: [mandatory] [ val(meta), [ path(bam), path(bai) ] ]
+        ch_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai         // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_dict        // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_intervals   // channel: [mandatory] [ path(intervals) ]
+        ch_case_info   // channel: [mandatory] [ val(case_info) ]
 
     main:
         ch_versions = Channel.empty()
@@ -37,13 +37,12 @@ workflow ALLELE_SPECIFIC_CALLING {
             BCFTOOLS_VIEW.out.vcf
         )
 
-        ch_dict_no_meta = ch_dict.map{ meta, it -> [it] }.collect()
         GATK4_ASEREADCOUNTER(
             ch_bam_bai,
             BCFTOOLS_VIEW.out.vcf.join(BCFTOOLS_INDEX.out.tbi),
             ch_fasta,
             ch_fai,
-            ch_dict_no_meta,
+            ch_dict,
             ch_intervals
         )
 
@@ -80,8 +79,8 @@ workflow ALLELE_SPECIFIC_CALLING {
             }.set { ch_case_vcf }
 
         BCFTOOLS_MERGE( ch_case_vcf.multiple,
-            ch_fasta.map { it -> [[:], it] },
-            ch_fai.map { it -> [[:], it] },
+            ch_fasta,
+            ch_fai,
             []
         )
 
