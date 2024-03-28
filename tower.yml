@@ -3,11 +3,9 @@ reports:
     display: "MultiQC HTML report"
   samplesheet.csv:
     display: "Auto-created samplesheet with collated metadata and FASTQ paths"
-  "pipeline_dag*.html":
-    display: "Nextflow workflow diagram"
-  "*.fastp.html":
+  "**/*.fastp.html":
     display: "Trimming report from fastp"
-  "**/Scripts_AberrantExpression_pipeline_OUTRIDER_Datasets.html":
-    display: "OUTRIDER summary"
-  "**/Scripts_AberrantSplicing_pipeline_FRASER_Datasets.html":
-    display: "FRASER summary"
+  ##"**/Scripts_AberrantExpression_pipeline_OUTRIDER_Datasets.html":
+  ##  display: "OUTRIDER summary"
+  ##"**/Scripts_AberrantSplicing_pipeline_FRASER_Datasets.html":
+  ##  display: "FRASER summary"
