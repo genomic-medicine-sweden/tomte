@@ -32,7 +32,7 @@ process DROP_CONFIG_RUN_AE {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: '' 
+    def args = task.ext.args ?: ''
     def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
     def drop_group = "${drop_group_samples_ae}".replace(" ","")
     def zscorecutoff = drop_zScoreCutoff ? "--zscorecutoff ${drop_zScoreCutoff}" : ''
