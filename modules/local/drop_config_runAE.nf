@@ -32,6 +32,7 @@ process DROP_CONFIG_RUN_AE {
     task.ext.when == null || task.ext.when
 
     script:
+    def args = task.ext.args ?: '' 
     def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
     def drop_group = "${drop_group_samples_ae}".replace(" ","")
     def zscorecutoff = drop_zScoreCutoff ? "--zscorecutoff ${drop_zScoreCutoff}" : ''
@@ -52,7 +53,7 @@ process DROP_CONFIG_RUN_AE {
         $zscorecutoff \\
         --output config.yaml
 
-    snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime
+    snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime $args
 
     cp output/processed_results/aberrant_expression/*/outrider/outrider/OUTRIDER_results_all.Rds .
     cp output/processed_data/preprocess/*/gene_name_mapping_*.tsv .
