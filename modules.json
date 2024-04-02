@@ -53,7 +53,7 @@
                     },
                     "gatk4/asereadcounter": {
                         "branch": "master",
-                        "git_sha": "89cf292ab826db67279cf11339c5afc53a9e419d",
+                        "git_sha": "5f2f5ca857c25f794f69c8127a6d9a3a592ab857",
                         "installed_by": ["modules"]
                     },
                     "gatk4/bedtointervallist": {
