@@ -72,7 +72,7 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_star_index                 = params.star_index                   ? Channel.fromPath(params.star_index).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                         : Channel.empty()
-    ch_transcript_fasta           = params.transcript_fasta             ? Channel.fromPath(params.transcript_fasta).colelct()
+    ch_transcript_fasta           = params.transcript_fasta             ? Channel.fromPath(params.transcript_fasta)
                                                                         : Channel.empty()
     ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                         : Channel.empty()
@@ -123,7 +123,7 @@ workflow TOMTE {
     ALIGNMENT(
         ch_samplesheet,
         ch_references.star_index,
-        ch_gtf,
+        ch_references.gtf,
         ch_platform,
         ch_subsample_bed,
         params.seed_frac,
@@ -146,7 +146,7 @@ workflow TOMTE {
     ANALYSE_TRANSCRIPTS(
         ch_alignment.bam_bai,
         ch_alignment.bam_ds_bai,
-        ch_gtf,
+        ch_references.gtf,
         ch_references.fasta_fai,
         ch_alignment.gene_counts,
         ch_ref_drop_count_file,
