@@ -31,6 +31,7 @@ process DROP_CONFIG_RUN_AS {
     task.ext.when == null || task.ext.when
 
     script:
+    def args = task.ext.args ?: ''
     def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
     def drop_group = "${drop_group_samples_as}".replace(" ","")
     """
@@ -49,7 +50,7 @@ process DROP_CONFIG_RUN_AS {
         --padjcutoff ${drop_padjcutoff_as} \\
         --output config.yaml
 
-    snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime
+    snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime $args
 
     cp output/html/AberrantSplicing/FRASER_results_fraser--*.tsv .
     cp output/processed_data/preprocess/*/gene_name_mapping_*.tsv .

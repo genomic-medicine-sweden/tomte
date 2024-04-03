@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added automatic tests to test the pipeline with all switches set to false [#100](https://github.com/genomic-medicine-sweden/tomte/pull/100)
 - Added better documentation on subworkflow input [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
+- Added option to add extra arguments to DROP aberrant expression and aberrant splicing [#104](https://github.com/genomic-medicine-sweden/tomte/pull/104)
 
 ### `Fixed`
 
