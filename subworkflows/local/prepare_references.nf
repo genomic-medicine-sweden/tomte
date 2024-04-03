@@ -38,7 +38,7 @@ workflow PREPARE_REFERENCES {
             branch{ it ->
                 compressed: it[1].toUriString().endsWith(".gz") // If the file ends with .gz
                     return [it[0], it[1]]
-                uncompressed: !(it[1].toUriString().endsWith(".gz")) // If the file dowsn't ends with .gz
+                uncompressed: !(it[1].toUriString().endsWith(".gz")) // If the file doesn't end with .gz
                     return [it[0], it[1]]
                 }
                 .set{ch_fasta_mix}
@@ -62,7 +62,7 @@ workflow PREPARE_REFERENCES {
             branch{ it ->
                 compressed: it[1].toUriString().endsWith(".gz") // If the file ends with .gz
                     return [it[0], it[1]]
-                uncompressed: !(it[1].toUriString().endsWith(".gz")) // If the file dowsn't ends with .gz
+                uncompressed: !(it[1].toUriString().endsWith(".gz")) // If the file doesn't end with .gz
                     return [it[0], it[1]]
                 }
                 .set{ch_gtf_mix}
@@ -77,7 +77,7 @@ workflow PREPARE_REFERENCES {
             branch{ it ->
                 compressed: it[1].toUriString().endsWith(".gz") // If the file ends with .gz
                     return [it[0], it[1]]
-                uncompressed: !(it[1].toUriString().endsWith(".gz")) // If the file dowsn't ends with .gz
+                uncompressed: !(it[1].toUriString().endsWith(".gz")) // If the file doesn't end with .gz
                     return [it[0], it[1]]
                 }
                 .set{ch_star_mix}
@@ -103,11 +103,10 @@ workflow PREPARE_REFERENCES {
             branch{ it ->
                 compressed: it.toUriString().endsWith(".gz") // If the file ends with .gz
                     return it
-                uncompressed: !(it.toUriString().endsWith(".gz")) // If the file dowsn't ends with .gz
+                uncompressed: !(it.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
                     return it
                 }
                 .set{ch_transcript_fasta_mix}
-        ch_transcript_fasta_mix.compressed.view()
 
         ch_transcript_fasta_mixed = ch_transcript_fasta_mix.uncompressed.mix(GUNZIP_TRFASTA.out.gunzip.map{meta, index -> index}.collect())
         ch_transcript_fasta_final = ch_transcript_fasta_mixed.mix(GFFREAD.out.tr_fasta.collect())
@@ -120,7 +119,7 @@ workflow PREPARE_REFERENCES {
             branch{ it ->
                 compressed: it.toUriString().endsWith(".gz") // If the file ends with .gz
                     return it
-                uncompressed: !(it.toUriString().endsWith(".gz")) // If the file dowsn't ends with .gz
+                uncompressed: !(it.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
                     return it
                 }
                 .set{ch_salmon_mix}
