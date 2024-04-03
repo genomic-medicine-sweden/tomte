@@ -85,7 +85,6 @@ workflow PREPARE_REFERENCES {
         ch_star_mixed = ch_star_mix.uncompressed.mix(UNTAR_STAR_INDEX.out.untar.collect())
         ch_star_final = ch_star_mixed.mix(BUILD_STAR_GENOME.out.index.collect())
 
-               
         // Convert gtf to refflat for picard
         GTF_TO_REFFLAT(ch_gtf_final)
 
@@ -132,14 +131,14 @@ workflow PREPARE_REFERENCES {
         // Untar vep chache is necesary
         UNTAR_VEP_CACHE (ch_vep_cache_input.map { it -> [[id:'vep_cache'], it] })
         ch_untar_vep = UNTAR_VEP_CACHE.out.untar.map{ meta, files -> [files] }.collect()
- 
+
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
         ch_versions = ch_versions.mix(BUILD_DICT.out.versions)
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
         ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
         ch_versions = ch_versions.mix(GUNZIP_TRFASTA.out.versions)
-        ch_versions = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)        
+        ch_versions = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
         ch_versions = ch_versions.mix(BUILD_STAR_GENOME.out.versions)
         ch_versions = ch_versions.mix(GTF_TO_REFFLAT.out.versions)
         ch_versions = ch_versions.mix(GET_RRNA_TRANSCRIPTS.out.versions)
