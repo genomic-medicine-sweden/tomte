@@ -78,8 +78,8 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_subsample_bed              = params.subsample_bed                ? Channel.fromPath(params.subsample_bed).collect()
                                                                         : Channel.empty()
-    ch_vep_cache_unprocessed    = params.vep_cache                      ? Channel.fromPath(params.vep_cache).collect()
-                                                                        : Channel.value([[],[]])
+    ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
+                                                                        : Channel.empty()
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files).collect()
                                                                         : Channel.value([])
     ch_vep_filters                = params.vep_filters                  ? Channel.fromPath(params.vep_filters).collect()
@@ -109,10 +109,6 @@ workflow TOMTE {
         ch_salmon_index,
         ch_sequence_dict
     ).set { ch_references }
-
-    // Gather built indices or get them from the params
-    ch_vep_cache  = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") ) ? ch_references.vep_resources
-                                                                                : ch_vep_cache_unprocessed
 
     FASTQC (
         ch_samplesheet
@@ -187,7 +183,7 @@ workflow TOMTE {
         ALLELE_SPECIFIC_CALLING.out.vcf,
         params.genome,
         params.vep_cache_version,
-        ch_vep_cache,
+        ch_references.vep_cache,
         ch_references.fasta,
         ch_vep_extra_files,
     )

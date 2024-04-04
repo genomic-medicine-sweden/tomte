@@ -60,7 +60,7 @@ workflow PREPARE_REFERENCES {
         GUNZIP_GTF(ch_gtf)
         ch_gtf.
             branch{ meta, gtf ->
-                compressed: meta.toUriString().endsWith(".gz") // If the file ends with .gz
+                compressed: gtf.toUriString().endsWith(".gz") // If the file ends with .gz
                     return [ meta, gtf ]
                 uncompressed: !(gtf.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
                     return [ meta, gtf ]
@@ -74,11 +74,11 @@ workflow PREPARE_REFERENCES {
         // Untar star index if necessary
         UNTAR_STAR_INDEX(ch_star_index_input)
         ch_star_index_input.
-            branch{ it ->
-                compressed: it[1].toUriString().endsWith(".gz") // If the file ends with .gz
-                    return [it[0], it[1]]
-                uncompressed: !(it[1].toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-                    return [it[0], it[1]]
+            branch{ meta, star_index ->
+                compressed: star_index.toUriString().endsWith(".gz") // If the file ends with .gz
+                    return [ meta, star_index ]
+                uncompressed: !(star_index.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
+                    return [ meta, star_index ]
                 }
                 .set{ch_star_mix}
 
@@ -94,17 +94,17 @@ workflow PREPARE_REFERENCES {
         ch_interval = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
 
         // Preparing transcript fasta
-        ch_fasta_fai = ch_fasta_final.mix(ch_fai.map{meta, fai -> fai}).collect()
+        ch_fasta_fai = ch_fasta_final.join(ch_fai).collect()
         GFFREAD(ch_gtf_final, ch_fasta_fai)
 
         // Gunzip transcript fasta if necessary
         GUNZIP_TRFASTA ( ch_transcript_fasta_input.map { it -> [[:], it] } )
         ch_transcript_fasta_input.
-            branch{ it ->
-                compressed: it.toUriString().endsWith(".gz") // If the file ends with .gz
-                    return it
-                uncompressed: !(it.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-                    return it
+            branch{ tr_fasta ->
+                compressed: tr_fasta.toUriString().endsWith(".gz") // If the file ends with .gz
+                    return tr_fasta
+                uncompressed: !(tr_fasta.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
+                    return tr_fasta
                 }
                 .set{ch_transcript_fasta_mix}
 
@@ -116,11 +116,11 @@ workflow PREPARE_REFERENCES {
         // Untar salmon index if necessary
         UNTAR_SALMON_INDEX( ch_salmon_index_input.map { it -> [[:], it] } )
         ch_salmon_index_input.
-            branch{ it ->
-                compressed: it.toUriString().endsWith(".gz") // If the file ends with .gz
-                    return it
-                uncompressed: !(it.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-                    return it
+            branch{ salmon_index ->
+                compressed: salmon_index.toUriString().endsWith(".gz") // If the file ends with .gz
+                    return salmon_index
+                uncompressed: !(salmon_index.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
+                    return salmon_index
                 }
                 .set{ch_salmon_mix}
 
@@ -128,8 +128,17 @@ workflow PREPARE_REFERENCES {
         ch_salmon_final = ch_salmon_mixed.mix(SALMON_INDEX.out.index.collect())
 
         // Untar vep chache is necesary
-        UNTAR_VEP_CACHE (ch_vep_cache_input.map { it -> [[id:'vep_cache'], it] })
-        ch_untar_vep = UNTAR_VEP_CACHE.out.untar.map{ meta, files -> [files] }.collect()
+        UNTAR_VEP_CACHE (ch_vep_cache_input.map { vep_cache -> [[id:'vep_cache'], vep_cache] })
+        ch_vep_cache_input.
+            branch{ vep_cache ->
+                compressed: vep_cache.toUriString().endsWith(".gz") // If the file ends with .gz
+                    return vep_cache
+                uncompressed: !(vep_cache.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
+                    return vep_cache
+                }
+                .set{ch_vep_cache_mix}
+
+        ch_final_vep = ch_vep_cache_mix.uncompressed.mix(UNTAR_VEP_CACHE.out.untar.map{meta, vep_cache -> vep_cache}.collect())
 
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
@@ -159,6 +168,6 @@ workflow PREPARE_REFERENCES {
         refflat       = GTF_TO_REFFLAT.out.refflat.collect()   // channel: [ path(refflat) ]
         rrna_bed      = GET_RRNA_TRANSCRIPTS.out.bed.collect() // channel: [ path(bed) ]
         interval_list = ch_interval                            // channel: [ path(interval) ]
-        vep_resources = ch_untar_vep                           // channel: [ path(cache) ]
+        vep_cache     = ch_final_vep.collect()                 // channel: [ path(cache) ]
         versions      = ch_versions                            // channel: [ path(versions.yml) ]
 }
