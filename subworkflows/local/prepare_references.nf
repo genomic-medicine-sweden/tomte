@@ -35,11 +35,11 @@ workflow PREPARE_REFERENCES {
         // Gunzip fasta if necessary
         GUNZIP_FASTA(ch_fasta)
         ch_fasta.
-            branch{ it ->
-                compressed: it[1].toUriString().endsWith(".gz") // If the file ends with .gz
-                    return [it[0], it[1]]
-                uncompressed: !(it[1].toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-                    return [it[0], it[1]]
+            branch{ meta, fasta ->
+                compressed: fasta.toUriString().endsWith(".gz") // If the file ends with .gz
+                    return [ meta, fasta ]
+                uncompressed: !(fasta.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
+                    return [ meta, fasta ]
                 }
                 .set{ch_fasta_mix}
 
@@ -59,18 +59,18 @@ workflow PREPARE_REFERENCES {
         // Gunzip gtf if necessary
         GUNZIP_GTF(ch_gtf)
         ch_gtf.
-            branch{ it ->
-                compressed: it[1].toUriString().endsWith(".gz") // If the file ends with .gz
-                    return [it[0], it[1]]
-                uncompressed: !(it[1].toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-                    return [it[0], it[1]]
+            branch{ meta, gtf ->
+                compressed: meta.toUriString().endsWith(".gz") // If the file ends with .gz
+                    return [ meta, gtf ]
+                uncompressed: !(gtf.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
+                    return [ meta, gtf ]
                 }
                 .set{ch_gtf_mix}
 
         ch_gtf_final = ch_gtf_mix.uncompressed.mix(GUNZIP_GTF.out.gunzip.collect())
 
         // If no star index, create it
-        BUILD_STAR_GENOME ( ch_fasta_final, ch_gtf_final )
+        BUILD_STAR_GENOME( ch_fasta_final, ch_gtf_final )
         // Untar star index if necessary
         UNTAR_STAR_INDEX(ch_star_index_input)
         ch_star_index_input.
