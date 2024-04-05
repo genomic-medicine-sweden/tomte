@@ -50,26 +50,41 @@ workflow TOMTE {
     ch_versions      = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
+    // Mandatory
     ch_samples   = ch_samplesheet.map { meta, fastqs -> meta }
     ch_case_info = ch_samples.toList().map { create_case_channel(it) }
+    ch_fasta     = Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_gtf       = Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_platform  = Channel.from(params.platform).collect()
 
-    ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
-                                                                        : Channel.value([[],[]])
-    ch_vep_filters                = params.vep_filters                  ? Channel.fromPath(params.vep_filters).collect()
-                                                                        : Channel.value([])
-    fai                           = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+    // Optional
+    ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                        : Channel.empty()
+    ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()
+                                                                        : Channel.empty()
+    ch_ref_drop_annot_file        = params.reference_drop_annot_file    ? Channel.fromPath(params.reference_drop_annot_file).collect()
                                                                         : Channel.empty()
     ch_ref_drop_count_file        = params.reference_drop_count_file    ? Channel.fromPath(params.reference_drop_count_file).collect()
                                                                         : Channel.empty()
     ch_ref_drop_splice_folder     = params.reference_drop_splice_folder ? Channel.fromPath(params.reference_drop_splice_folder).collect()
                                                                         : Channel.empty()
-    ch_ref_drop_annot_file        = params.reference_drop_annot_file    ? Channel.fromPath(params.reference_drop_annot_file).collect()
+    ch_salmon_index               = params.salmon_index                 ? Channel.fromPath(params.salmon_index)
                                                                         : Channel.empty()
-    ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()
+    ch_star_index                 = params.star_index                   ? Channel.fromPath(params.star_index).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                        : Channel.empty()
+    ch_transcript_fasta           = params.transcript_fasta             ? Channel.fromPath(params.transcript_fasta)
+                                                                        : Channel.empty()
+    ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                                        : Channel.empty()
+    ch_subsample_bed              = params.subsample_bed                ? Channel.fromPath(params.subsample_bed).collect()
+                                                                        : Channel.empty()
+    ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
                                                                         : Channel.empty()
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files).collect()
                                                                         : Channel.value([])
-    ch_platform                   = Channel.from(params.platform).collect()
+    ch_vep_filters                = params.vep_filters                  ? Channel.fromPath(params.vep_filters).collect()
+                                                                        : Channel.value([])
+
 
     // Read and store paths in the vep_plugin_files file
     ch_vep_extra_files_unsplit.splitCsv ( header:true )
@@ -85,23 +100,15 @@ workflow TOMTE {
         .set {ch_vep_extra_files}
 
     PREPARE_REFERENCES(
-        params.fasta,
-        fai,
-        params.star_index,
-        params.gtf,
+        ch_fasta,
+        ch_fai,
+        ch_star_index,
+        ch_gtf,
         ch_vep_cache_unprocessed,
-        params.transcript_fasta,
-        params.salmon_index
+        ch_transcript_fasta,
+        ch_salmon_index,
+        ch_sequence_dict
     ).set { ch_references }
-
-    // Gather built indices or get them from the params
-    ch_chrom_sizes      = ch_references.chrom_sizes
-    ch_sequence_dict    = params.sequence_dict          ? Channel.fromPath(params.sequence_dict).map{ it -> [[:], it] }.collect()
-                                                        : ( ch_references.sequence_dict            ?: Channel.empty() )
-    ch_subsample_bed    = params.subsample_bed          ? Channel.fromPath(params.subsample_bed).collect()
-                                                        : Channel.empty()
-    ch_vep_cache        = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
-                                                        : ( params.vep_cache  ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
 
     FASTQC (
         ch_samplesheet
@@ -156,7 +163,7 @@ workflow TOMTE {
         ch_alignment.bam_bai,
         ch_references.fasta,
         ch_references.fai,
-        ch_sequence_dict,
+        ch_references.sequence_dict,
         params.variant_caller
     )
     ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
@@ -166,7 +173,7 @@ workflow TOMTE {
         ch_alignment.bam_bai,
         ch_references.fasta,
         ch_references.fai,
-        ch_sequence_dict,
+        ch_references.sequence_dict,
         ch_references.interval_list,
         ch_case_info
     )
@@ -176,7 +183,7 @@ workflow TOMTE {
         ALLELE_SPECIFIC_CALLING.out.vcf,
         params.genome,
         params.vep_cache_version,
-        ch_vep_cache,
+        ch_references.vep_cache,
         ch_references.fasta,
         ch_vep_extra_files,
     )
@@ -184,7 +191,7 @@ workflow TOMTE {
 
     IGV_TRACKS(
         ch_alignment.star_wig,
-        ch_chrom_sizes,
+        ch_references.chrom_sizes,
         ch_alignment.spl_junc
     )
     ch_versions = ch_versions.mix(IGV_TRACKS.out.versions)
