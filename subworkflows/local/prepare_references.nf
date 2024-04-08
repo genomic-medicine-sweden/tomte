@@ -31,7 +31,7 @@ workflow PREPARE_REFERENCES {
 
     main:
         ch_versions = Channel.empty()
-        
+
         // Gunzip fasta if necessary
         GUNZIP_FASTA(ch_fasta)
         ch_fasta_mix = branchChannelToCompressedAndUncompressed(ch_fasta)
