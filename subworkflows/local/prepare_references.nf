@@ -126,7 +126,7 @@ workflow PREPARE_REFERENCES {
 }
 // Custom functions
 /**
-* Branch a channel into differnt channels,
+* Branch a channel into different channels,
 * depending on whether the path is compressed or not.
 * The resulting channels get meta only if the original one had it.
 *
