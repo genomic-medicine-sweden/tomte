@@ -34,14 +34,6 @@ workflow PREPARE_REFERENCES {
         
         // Gunzip fasta if necessary
         GUNZIP_FASTA(ch_fasta)
-        //ch_fasta.
-        //    branch{ meta, fasta ->
-        //        compressed: fasta.toUriString().endsWith(".gz") // If the file ends with .gz
-        //            return [ meta, fasta ]
-        //        uncompressed: !(fasta.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-        //            return [ meta, fasta ]
-        //        }
-        //        .set{ch_fasta_mix}
         ch_fasta_mix = branchChannelToCompressedAndUncompressed(ch_fasta)
 
         ch_fasta_final = ch_fasta_mix.uncompressed.mix(GUNZIP_FASTA.out.gunzip.collect())
@@ -59,15 +51,6 @@ workflow PREPARE_REFERENCES {
 
         // Gunzip gtf if necessary
         GUNZIP_GTF(ch_gtf)
-        //ch_gtf.
-        //    branch{ meta, gtf ->
-        //        compressed: gtf.toUriString().endsWith(".gz") // If the file ends with .gz
-        //            return [ meta, gtf ]
-        //        uncompressed: !(gtf.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-        //            return [ meta, gtf ]
-        //        }
-        //        .set{ch_gtf_mix}
-
         ch_gtf_mix = branchChannelToCompressedAndUncompressed(ch_gtf)
         ch_gtf_final = ch_gtf_mix.uncompressed.mix(GUNZIP_GTF.out.gunzip.collect())
 
@@ -75,15 +58,6 @@ workflow PREPARE_REFERENCES {
         BUILD_STAR_GENOME( ch_fasta_final, ch_gtf_final )
         // Untar star index if necessary
         UNTAR_STAR_INDEX(ch_star_index_input)
-        //ch_star_index_input.
-        //    branch{ meta, star_index ->
-        //        compressed: star_index.toUriString().endsWith(".gz") // If the file ends with .gz
-        //            return [ meta, star_index ]
-        //        uncompressed: !(star_index.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-        //            return [ meta, star_index ]
-        //        }
-        //        .set{ch_star_mix}
-
         ch_star_mix = branchChannelToCompressedAndUncompressed(ch_star_index_input)
         ch_star_mixed = ch_star_mix.uncompressed.mix(UNTAR_STAR_INDEX.out.untar.collect())
         ch_star_final = ch_star_mixed.mix(BUILD_STAR_GENOME.out.index.collect())
@@ -102,15 +76,6 @@ workflow PREPARE_REFERENCES {
 
         // Gunzip transcript fasta if necessary
         GUNZIP_TRFASTA ( ch_transcript_fasta_input.map { it -> [[:], it] } )
-        //ch_transcript_fasta_input.
-        //    branch{ tr_fasta ->
-        //        compressed: tr_fasta.toUriString().endsWith(".gz") // If the file ends with .gz
-        //            return tr_fasta
-        //        uncompressed: !(tr_fasta.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-        //            return tr_fasta
-        //        }
-        //        .set{ch_transcript_fasta_mix}
-
         ch_transcript_fasta_mix = branchChannelToCompressedAndUncompressed(ch_transcript_fasta_input)
         ch_transcript_fasta_mixed = ch_transcript_fasta_mix.uncompressed.mix(GUNZIP_TRFASTA.out.gunzip.map{meta, index -> index}.collect())
         ch_transcript_fasta_final = ch_transcript_fasta_mixed.mix(GFFREAD.out.tr_fasta.collect())
@@ -119,30 +84,12 @@ workflow PREPARE_REFERENCES {
         SALMON_INDEX(ch_fasta_final.map{ meta, fasta -> [ fasta ] }, ch_transcript_fasta_final)
         // Untar salmon index if necessary
         UNTAR_SALMON_INDEX( ch_salmon_index_input.map { it -> [[:], it] } )
-        //ch_salmon_index_input.
-        //    branch{ salmon_index ->
-        //        compressed: salmon_index.toUriString().endsWith(".gz") // If the file ends with .gz
-        //            return salmon_index
-        //        uncompressed: !(salmon_index.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-        //            return salmon_index
-        //        }
-        //        .set{ch_salmon_mix}
-
         ch_salmon_mix = branchChannelToCompressedAndUncompressed(ch_salmon_index_input)
         ch_salmon_mixed = ch_salmon_mix.uncompressed.mix(UNTAR_SALMON_INDEX.out.untar.map{meta, index -> index}.collect())
         ch_salmon_final = ch_salmon_mixed.mix(SALMON_INDEX.out.index.collect())
 
         // Untar vep chache is necesary
         UNTAR_VEP_CACHE (ch_vep_cache_input.map { vep_cache -> [[id:'vep_cache'], vep_cache] })
-        //ch_vep_cache_input.
-        //    branch{ vep_cache ->
-        //        compressed: vep_cache.toUriString().endsWith(".gz") // If the file ends with .gz
-        //            return vep_cache
-        //        uncompressed: !(vep_cache.toUriString().endsWith(".gz")) // If the file doesn't end with .gz
-        //            return vep_cache
-        //        }
-        //        .set{ch_vep_cache_mix}
-
         ch_vep_cache_mix = branchChannelToCompressedAndUncompressed(ch_vep_cache_input)
         ch_final_vep = ch_vep_cache_mix.uncompressed.mix(UNTAR_VEP_CACHE.out.untar.map{meta, vep_cache -> vep_cache}.collect())
 
