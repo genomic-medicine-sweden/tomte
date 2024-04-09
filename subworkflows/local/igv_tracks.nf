@@ -8,9 +8,9 @@ include { TABIX_BGZIPTABIX } from '../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow IGV_TRACKS {
     take:
-        wig
-        chrom_sizes
-        spl_junc
+        wig         // channel: [mandatory] [ val(meta), path(wig) ]
+        chrom_sizes // channel: [mandatory] [ path(sizes) ]
+        spl_junc    // channel: [mandatory] [ val(meta), path(tsv) ]
 
     main:
         ch_versions = Channel.empty()
@@ -41,7 +41,7 @@ workflow IGV_TRACKS {
 
 
     emit:
-        bw       = UCSC_WIGTOBIGWIG.out.bw
-        bed      = TABIX_BGZIPTABIX.out.gz_tbi
-        versions = ch_versions
+        bw       = UCSC_WIGTOBIGWIG.out.bw     // channel: [ val(meta), path(bw) ]
+        bed      = TABIX_BGZIPTABIX.out.gz_tbi // channel: [ val(meta), path(bed.gz), path(tbi) ]
+        versions = ch_versions                 // channel: [ path(versions.yml) ]
 }

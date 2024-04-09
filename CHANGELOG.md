@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added automatic tests to test the pipeline with all switches set to false [#100](https://github.com/genomic-medicine-sweden/tomte/pull/100)
 - Added better documentation on subworkflow input [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
 - Added option to add extra arguments to DROP aberrant expression and aberrant splicing [#104](https://github.com/genomic-medicine-sweden/tomte/pull/104)
+- Added a function to branch references into compressed/uncompressed [#107](https://github.com/genomic-medicine-sweden/tomte/pull/107)
 
 ### `Fixed`
 
@@ -16,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GATK4_ASEREADCOUNTER and GATK4_SPLITNCIGARREADS have been updated [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
 - Updated GATK4_ASEREADCOUNTER, now bam and vcf will be given as one channel [#103](https://github.com/genomic-medicine-sweden/tomte/pull/103)
 - Prepare reference subworkflow has been reformated and simplified [#105](https://github.com/genomic-medicine-sweden/tomte/pull/105)
-- FastQC have been updated to correctly allocate memory [#168](https://github.com/genomic-medicine-sweden/tomte/pull/168)
+- FastQC have been updated to correctly allocate memory [#106](https://github.com/genomic-medicine-sweden/tomte/pull/106)
 
 ## 1.1.0 - Rudolph [2024-03-11]
 
