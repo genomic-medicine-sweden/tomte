@@ -205,16 +205,16 @@
                     "enum": ["Basic", "None"],
                     "fa_icon": "fas fa-tachometer-alt"
                 },
-                "switch_subsample_region": {
+                "skip_subsample_region": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Do you want to subsample the region subsample_bed to the fraction given in seed_frac?",
+                    "default": false,
+                    "description": "Should subsampling the region subsample_bed to the fraction given in seed_frac be skipped?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "switch_downsample": {
+                "skip_downsample": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Do you want to downsample the number of reads to num_reads?",
+                    "default": false,
+                    "description": "Should downsampling the number of reads to num_reads be skipped?",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "subsample_bed": {
@@ -260,34 +260,34 @@
                     "enum": ["consensus", "multiallelic"],
                     "help_text": "Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied."
                 },
-                "switch_build_tracks": {
+                "skip_build_tracks": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Should tracks be build?",
+                    "default": false,
+                    "description": "Should track building be skipped?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "switch_stringtie": {
+                "skip_stringtie": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Should stringtie module be run?",
+                    "default": false,
+                    "description": "Should stringtie module be skipped?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "switch_vep": {
+                "skip_vep": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Should VEP module be run?",
+                    "default": false,
+                    "description": "Should VEP module be skipped?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "switch_drop_ae": {
+                "skip_drop_ae": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Should DROP Aberrant Expression module be run?",
+                    "default": false,
+                    "description": "Should DROP Aberrant Expression module be skipped?",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "switch_drop_as": {
+                "skip_drop_as": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Should DROP Aberrant Splicing module be run?",
+                    "default": false,
+                    "description": "Should DROP Aberrant Splicing module be skipped?",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "drop_group_samples_ae": {

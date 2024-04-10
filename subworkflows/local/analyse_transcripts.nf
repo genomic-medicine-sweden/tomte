@@ -27,6 +27,7 @@ workflow ANALYSE_TRANSCRIPTS {
         drop_zscorecutoff             // parameter: [optional]  default: 0
         ch_gene_panel_clinical_filter // channel:   [optional]  [ path(tsv) ]
         case_info                     // channel:   [optional]  [ val(case_id) ]
+        skip_drop_ae                  // parameter: [mandatory] default: 'false'
 
     main:
         ch_versions = Channel.empty()
@@ -83,7 +84,7 @@ workflow ANALYSE_TRANSCRIPTS {
                                                                             : Channel.empty()
         ch_out_drop_as_tsv       = DROP_CONFIG_RUN_AS.out.drop_as_tsv       ? DROP_CONFIG_RUN_AS.out.drop_as_tsv.collect()
                                                                             : Channel.empty()
-        ch_out_drop_gene_name    = params.switch_drop_ae ? ch_out_drop_gene_name_ae : ch_out_drop_gene_name_as
+        ch_out_drop_gene_name    = (!skip_drop_ae) ? ch_out_drop_gene_name_ae : ch_out_drop_gene_name_as
 
         DROP_FILTER_RESULTS(
             case_info,
