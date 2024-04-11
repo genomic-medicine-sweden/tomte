@@ -208,13 +208,13 @@
                 "skip_subsample_region": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Should subsampling the region subsample_bed to the fraction given in seed_frac be skipped?",
+                    "description": "Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_downsample": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Should downsampling the number of reads to num_reads be skipped?",
+                    "description": "Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "subsample_bed": {
@@ -263,31 +263,31 @@
                 "skip_build_tracks": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Should track building be skipped?",
+                    "description": "Skip building splice junction tracks for IGV.",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_stringtie": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Should stringtie module be skipped?",
+                    "description": "Skip analysis with StringTie",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_vep": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Should VEP module be skipped?",
+                    "description": "Skip Ensembl Variant Effect Predictor",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_drop_ae": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Should DROP Aberrant Expression module be skipped?",
+                    "description": "Skip DROP Aberrant Expression module ",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_drop_as": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Should DROP Aberrant Splicing module be skipped?",
+                    "description": "Skip DROP Aberrant Splicing module",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "drop_group_samples_ae": {
