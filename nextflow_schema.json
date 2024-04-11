@@ -205,16 +205,16 @@
                     "enum": ["Basic", "None"],
                     "fa_icon": "fas fa-tachometer-alt"
                 },
-                "switch_subsample_region": {
+                "skip_subsample_region": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Do you want to subsample the region subsample_bed to the fraction given in seed_frac?",
+                    "default": false,
+                    "description": "Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "switch_downsample": {
+                "skip_downsample": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Do you want to downsample the number of reads to num_reads?",
+                    "default": false,
+                    "description": "Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "subsample_bed": {
@@ -260,34 +260,34 @@
                     "enum": ["consensus", "multiallelic"],
                     "help_text": "Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied."
                 },
-                "switch_build_tracks": {
+                "skip_build_tracks": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Should tracks be build?",
+                    "default": false,
+                    "description": "Skip building splice junction tracks for IGV.",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "switch_stringtie": {
+                "skip_stringtie": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Should stringtie module be run?",
+                    "default": false,
+                    "description": "Skip analysis with StringTie",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "switch_vep": {
+                "skip_vep": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Should VEP module be run?",
+                    "default": false,
+                    "description": "Skip Ensembl Variant Effect Predictor",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "switch_drop_ae": {
+                "skip_drop_ae": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Should DROP Aberrant Expression module be run?",
+                    "default": false,
+                    "description": "Skip DROP Aberrant Expression module ",
                     "fa_icon": "fas fa-toggle-off"
                 },
-                "switch_drop_as": {
+                "skip_drop_as": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Should DROP Aberrant Splicing module be run?",
+                    "default": false,
+                    "description": "Skip DROP Aberrant Splicing module",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "drop_group_samples_ae": {

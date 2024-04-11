@@ -124,8 +124,8 @@ workflow TOMTE {
         ch_subsample_bed,
         params.seed_frac,
         params.num_reads,
-        params.switch_subsample_region,
-        params.switch_downsample,
+        params.skip_subsample_region,
+        params.skip_downsample,
         ch_references.salmon_index,
         ch_references.fasta
     ).set { ch_alignment }
@@ -155,7 +155,8 @@ workflow TOMTE {
         params.drop_padjcutoff_as,
         params.drop_zscorecutoff,
         ch_gene_panel_clinical_filter,
-        ch_case_info
+        ch_case_info,
+        params.skip_drop_ae
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
 

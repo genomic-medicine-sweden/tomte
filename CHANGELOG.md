@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Parameters
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+
+:::note
+Parameter has been updated if both old and new parameter information is present.
+Parameter has been added if just the new parameter information is present.
+Parameter has been removed if new parameter information isn't present.
+:::
+
 ### `Added`
 
 - Added automatic tests to test the pipeline with all switches set to false [#100](https://github.com/genomic-medicine-sweden/tomte/pull/100)
@@ -18,6 +29,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated GATK4_ASEREADCOUNTER, now bam and vcf will be given as one channel [#103](https://github.com/genomic-medicine-sweden/tomte/pull/103)
 - Prepare reference subworkflow has been reformated and simplified [#105](https://github.com/genomic-medicine-sweden/tomte/pull/105)
 - FastQC have been updated to correctly allocate memory [#106](https://github.com/genomic-medicine-sweden/tomte/pull/106)
+
+### `Parameters`
+
+- Updated parameter names to make their use easier and more clear, changing the names from `switch` to `skip` and their default value from `true` to `false` [#108](https://github.com/genomic-medicine-sweden/tomte/pull/108)
+
+| Old parameter               | New parameter             |
+| --------------------------- | ------------------------- |
+| `--switch_subsample_region` | `--skip_subsample_region` |
+| `--switch_downsample`       | `--skip_downsample`       |
+| `--switch_build_tracks`     | `--skip_build_tracks`     |
+| `--switch_stringtie`        | `--skip_stringtie`        |
+| `--switch_vep`              | `--skip_vep`              |
+| `--switch_drop_ae`          | `--skip_drop_ae`          |
+| `--switch_drop_as`          | `--skip_drop_as`          |
+
+:::note Parameter has been updated if both old and new parameter information is present. Parameter has been added if just the new parameter information is present. Parameter has been removed if new parameter information isn't present. :::
 
 ## 1.1.0 - Rudolph [2024-03-11]
 
