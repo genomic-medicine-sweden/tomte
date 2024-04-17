@@ -74,8 +74,6 @@ workflow ANNOTATE_SNV {
         ch_versions = ch_versions.mix( TABIX_TABIX.out.versions )
 
     emit:
-        //vcf_gz   = ENSEMBLVEP_VEP.out.vcf    // channel: [ val(meta), path(vcf.gz) ]
-        //tbi_gz   = TABIX_VEP.out.tbi         // channel: [ val(meta), path(tbi) ]
         tab_gz   = ENSEMBLVEP_VEP.out.tab    // channel: [ val(meta), path(tab.gz) ]
         json_gz  = ENSEMBLVEP_VEP.out.json   // channel: [ val(meta), path(json.gz) ]
         report   = ENSEMBLVEP_VEP.out.report // channel: [ path(html) ]
