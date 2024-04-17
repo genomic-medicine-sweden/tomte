@@ -88,7 +88,7 @@ workflow ANALYSE_TRANSCRIPTS {
 
         DROP_FILTER_RESULTS(
             case_info,
-            ch_gene_panel_clinical_filter,
+            ch_gene_panel_clinical_filter.ifEmpty([]),
             ch_out_drop_ae_rds.ifEmpty([]),
             ch_out_drop_gene_name,
             ch_out_drop_as_tsv.ifEmpty([])
