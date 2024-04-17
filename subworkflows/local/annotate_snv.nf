@@ -8,7 +8,7 @@ include { TABIX_BGZIPTABIX     } from '../../modules/nf-core/tabix/bgziptabix/ma
 include { TABIX_TABIX          } from '../../modules/nf-core/tabix/tabix/main'
 include { GAWK                 } from '../../modules/nf-core/gawk/main'
 include { CREATE_HGNCIDS_FILE  } from '../../modules/local/create_hgncids_file.nf'
-include { ENSEMBLVEP_FILTERVEP } from '../../modules/nf-core/ensemblvep/filtervep/main'   
+include { ENSEMBLVEP_FILTERVEP } from '../../modules/nf-core/ensemblvep/filtervep/main'
 
 
 
@@ -42,7 +42,7 @@ workflow ANNOTATE_SNV {
                 research: [ meta + [ set: "research" ], vcf ]
             }
             .set { ch_clin_research_vcf }
-        
+
         RENAME_FILES( ch_clin_research_vcf.research )
 
         TABIX_TABIX( RENAME_FILES.out.output )
