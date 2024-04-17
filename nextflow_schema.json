@@ -334,7 +334,7 @@
                 },
                 "gene_panel_clinical_filter": {
                     "type": "string",
-                    "description": "tsv file containing genes on which results from drop and vep will be filtered to avoid incidental findings, the fourth column must contain hgnc ids",
+                    "description": "tsv file containing genes on which results from drop and vep will be filtered to avoid incidental findings, columns should be chromosome, gene_start, gene_stop, hgnc_id, hgnc_symbol",
                     "fa_icon": "fas fa-file"
                 }
             }

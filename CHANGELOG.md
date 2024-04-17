@@ -20,7 +20,7 @@ Parameter has been removed if new parameter information isn't present.
 - Added better documentation on subworkflow input [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
 - Added option to add extra arguments to DROP aberrant expression and aberrant splicing [#104](https://github.com/genomic-medicine-sweden/tomte/pull/104)
 - Added a function to branch references into compressed/uncompressed [#107](https://github.com/genomic-medicine-sweden/tomte/pull/107)
-- Added local module create_hgncids_file.nf and nf-core module filter vep to create a clinical vcf [#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
+- Added nf-core modules gawk and filter vep to create a clinical vcf [#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
 
 ### `Fixed`
 
@@ -30,14 +30,14 @@ Parameter has been removed if new parameter information isn't present.
 - Updated GATK4_ASEREADCOUNTER, now bam and vcf will be given as one channel [#103](https://github.com/genomic-medicine-sweden/tomte/pull/103)
 - Prepare reference subworkflow has been reformated and simplified [#105](https://github.com/genomic-medicine-sweden/tomte/pull/105)
 - FastQC have been updated to correctly allocate memory [#106](https://github.com/genomic-medicine-sweden/tomte/pull/106)
-- vep_hgnc is now extracted from gene_panel_clinical_filter [#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
+- vep_filters is now extracted from gene_panel_clinical_filter [#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
 
 ### `Parameters`
 
 - Removed `--vep_filters`, it will now be automatically extracted from the `--gene_panel_clinical_filter`[#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
-  | Old parameter | New parameter |
-  | --------------------------- | ------------------------- |
-  | `--vep_filters` | |
+  | Old parameter   | New parameter |
+  | --------------- | ------------- |
+  | `--vep_filters` |               |
 
 - Updated parameter names to make their use easier and more clear, changing the names from `switch` to `skip` and their default value from `true` to `false` [#108](https://github.com/genomic-medicine-sweden/tomte/pull/108)
 

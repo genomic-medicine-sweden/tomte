@@ -7,7 +7,6 @@ include { RENAME_FILES         } from '../../modules/local/rename_files'
 include { TABIX_BGZIPTABIX     } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_TABIX          } from '../../modules/nf-core/tabix/tabix/main'
 include { GAWK                 } from '../../modules/nf-core/gawk/main'
-include { CREATE_HGNCIDS_FILE  } from '../../modules/local/create_hgncids_file.nf'
 include { ENSEMBLVEP_FILTERVEP } from '../../modules/nf-core/ensemblvep/filtervep/main'
 
 
@@ -48,13 +47,11 @@ workflow ANNOTATE_SNV {
         TABIX_TABIX( RENAME_FILES.out.output )
         ch_vcf_research = RENAME_FILES.out.output.join(TABIX_TABIX.out.tbi)
 
+        // Generate Clinical filter
         GAWK( ch_gene_panel_clinical_filter.map{it -> [[id:'hgnc'], it]}.collect(),
             [] )
 
-        // Generate Clinical filter
-        CREATE_HGNCIDS_FILE( GAWK.out.output )
-            .txt
-            .set {ch_hgnc_ids}
+        ch_hgnc_ids = GAWK.out.output.map{ meta, hgnc_ids -> [ hgnc_ids ] }
 
         //Filter results
         ENSEMBLVEP_FILTERVEP(
