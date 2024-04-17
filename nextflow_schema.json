@@ -153,13 +153,6 @@
                     "fa_icon": "fas fa-folder-open",
                     "enum": [107, 110]
                 },
-                "vep_filters": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-file-csv",
-                    "description": "File containing HGNC_IDs of interest on separate lines.",
-                    "hidden": true
-                },
                 "vep_plugin_files": {
                     "type": "string",
                     "exists": true,
@@ -341,7 +334,7 @@
                 },
                 "gene_panel_clinical_filter": {
                     "type": "string",
-                    "description": "If you are running DROP, tsv file containing genes on which results will be filtered to avoid incidental findings",
+                    "description": "tsv file containing genes on which results from drop and vep will be filtered to avoid incidental findings, the fourth column must contain hgnc ids",
                     "fa_icon": "fas fa-file"
                 }
             }

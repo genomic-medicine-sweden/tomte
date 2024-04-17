@@ -212,8 +212,10 @@ to "gatk". Involves several steps: [`SplitN Cigar Reads`](https://gatk.broadinst
 <summary>Output files</summary>
 
 - `annotate_vep`
-  - `*ase_vep.vcf.gz`: annotated vcf
-  - `*ase_vep.vcf.gz.tbi`: index for annotated vcf
+  - `*vep_research.vcf.gz`: annotated vcf conatining all snvs
+  - `*vep_research.vcf.gz.tbi`: index for annotated vcf containing all snvs
+  - `*vep_clinical.vcf.gz`: annotated vcf filtered according to genes provided by gene_panel_clinical_filter
+  - `*vep_clinical.vcf.gz.tbi`: index for annotated vcf filtered according to genes provided by gene_panel_clinical_filter
 
 </details>
 

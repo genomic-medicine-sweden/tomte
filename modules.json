@@ -36,6 +36,11 @@
                         "git_sha": "0997b47c93c06b49aa7b3fefda87e728312cf2ca",
                         "installed_by": ["modules"]
                     },
+                    "ensemblvep/filtervep": {
+                        "branch": "master",
+                        "git_sha": "1e6b8886d30f7a7129dcd1ff46ef3a20038294d5",
+                        "installed_by": ["modules"]
+                    },
                     "ensemblvep/vep": {
                         "branch": "master",
                         "git_sha": "76a0696a60c41c57fc5f6040ac31b11ce5d4d8dd",
@@ -79,6 +84,11 @@
                     "gatk4/variantfiltration": {
                         "branch": "master",
                         "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
+                        "installed_by": ["modules"]
+                    },
+                    "gawk": {
+                        "branch": "master",
+                        "git_sha": "da4d05d04e65227d4307e87940842f1a14de62c7",
                         "installed_by": ["modules"]
                     },
                     "gffcompare": {

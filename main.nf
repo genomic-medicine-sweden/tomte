@@ -39,7 +39,6 @@ params.star_index                   = getGenomeAttribute('star_index')
 params.salmon_index                 = getGenomeAttribute('salmon_index')
 params.transcript_fasta             = getGenomeAttribute('transcript_fasta')
 params.vep_cache                    = getGenomeAttribute('vep_cache')
-params.vep_filters                  = getGenomeAttribute('vep_filters')
 params.vep_plugin_files             = getGenomeAttribute('vep_plugin_files')
 
 /*

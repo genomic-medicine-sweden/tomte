@@ -191,12 +191,12 @@ The mandatory and optional parameters for each category are tabulated below.
 
 #### 5. SNV annotation (ensembl VEP)
 
-| Mandatory                    | Optional              |
-| ---------------------------- | --------------------- |
-| vep_plugin_files<sup>1</sup> | skip_vep<sup>2</sup>  |
-|                              | vep_cache<sup>3</sup> |
-|                              | vep_cache_version     |
-|                              | vep_filters           |
+| Mandatory                    | Optional                   |
+| ---------------------------- | -------------------------- |
+| vep_plugin_files<sup>1</sup> | skip_vep<sup>2</sup>       |
+|                              | vep_cache<sup>3</sup>      |
+|                              | vep_cache_version          |
+|                              | gene_panel_clinical_filter |
 
 <sup>1</sup> VEP caches can be downloaded [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#cache). VEP plugins may be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter. See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
 <sup>2</sup> If it is not provided by the user, the default value is false<br />
