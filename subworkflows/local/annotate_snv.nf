@@ -74,11 +74,11 @@ workflow ANNOTATE_SNV {
         ch_versions = ch_versions.mix( TABIX_TABIX.out.versions )
 
     emit:
-        tab_gz   = ENSEMBLVEP_VEP.out.tab    // channel: [ val(meta), path(tab.gz) ]
-        json_gz  = ENSEMBLVEP_VEP.out.json   // channel: [ val(meta), path(json.gz) ]
-        report   = ENSEMBLVEP_VEP.out.report // channel: [ path(html) ]
-        ch_vcf_clin = ch_vcf_clin // channel: [ val(meta), path(vcf.gz) path(tbi)]
-        ch_vcf_research = ch_vcf_research // channel: [ val(meta), path(vcf.gz) path(tbi)]
-        versions = ch_versions               // channel: [ path(versions.yml) ]
+        tab_gz          = ENSEMBLVEP_VEP.out.tab    // channel: [ val(meta), path(tab.gz) ]
+        json_gz         = ENSEMBLVEP_VEP.out.json   // channel: [ val(meta), path(json.gz) ]
+        report          = ENSEMBLVEP_VEP.out.report // channel: [ path(html) ]
+        ch_vcf_clin     = ch_vcf_clin               // channel: [ val(meta), path(vcf.gz) path(tbi)]
+        ch_vcf_research = ch_vcf_research           // channel: [ val(meta), path(vcf.gz) path(tbi)]
+        versions        = ch_versions               // channel: [ path(versions.yml) ]
 }
 
