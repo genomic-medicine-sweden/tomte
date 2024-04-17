@@ -35,9 +35,9 @@ Parameter has been removed if new parameter information isn't present.
 ### `Parameters`
 
 - Removed `--vep_filters`, it will now be automatically extracted from the `--gene_panel_clinical_filter`[#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
-  | Old parameter   | New parameter |
+  | Old parameter | New parameter |
   | --------------- | ------------- |
-  | `--vep_filters` |               |
+  | `--vep_filters` | |
 
 - Updated parameter names to make their use easier and more clear, changing the names from `switch` to `skip` and their default value from `true` to `false` [#108](https://github.com/genomic-medicine-sweden/tomte/pull/108)
 
