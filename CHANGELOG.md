@@ -14,6 +14,16 @@ Parameter has been added if just the new parameter information is present.
 Parameter has been removed if new parameter information isn't present.
 :::
 
+## 1.2.1 - [XXXX-XX-XX]
+
+### `Added`
+
+### `Fixed`
+
+### `Parameters`
+
+## 1.2.0 - Santa [2024-04-19]
+
 ### `Added`
 
 - Added automatic tests to test the pipeline with all switches set to false [#100](https://github.com/genomic-medicine-sweden/tomte/pull/100)
