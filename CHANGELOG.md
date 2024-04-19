@@ -14,7 +14,7 @@ Parameter has been added if just the new parameter information is present.
 Parameter has been removed if new parameter information isn't present.
 :::
 
-## 1.1.2 - [XXXX-XX-XX]
+## 1.2.1 - [XXXX-XX-XX]
 
 ### `Added`
 
@@ -22,7 +22,7 @@ Parameter has been removed if new parameter information isn't present.
 
 ### `Parameters`
 
-## 1.1.1 - Santa [2024-04-19]
+## 1.2.0 - Santa [2024-04-19]
 
 ### `Added`
 
