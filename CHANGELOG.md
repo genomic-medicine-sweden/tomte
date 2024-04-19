@@ -31,6 +31,7 @@ Parameter has been removed if new parameter information isn't present.
 - Prepare reference subworkflow has been reformated and simplified [#105](https://github.com/genomic-medicine-sweden/tomte/pull/105)
 - FastQC have been updated to correctly allocate memory [#106](https://github.com/genomic-medicine-sweden/tomte/pull/106)
 - vep_filters is now extracted from gene_panel_clinical_filter [#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
+- Updated modules bcftools/stats, ensemblvep/vep, fastp, gatk4/bedtointervallist, samtools/faidx 
 
 ### `Parameters`
 

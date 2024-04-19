@@ -65,6 +65,7 @@ workflow ANNOTATE_SNV {
         ch_vcf_clin = TABIX_BGZIPTABIX.out.gz_tbi
 
         ch_versions = ch_versions.mix( ENSEMBLVEP_VEP.out.versions.first() )
+        ch_versions = ch_versions.mix( RENAME_FILES.out.versions )
         ch_versions = ch_versions.mix( GAWK.out.versions )
         ch_versions = ch_versions.mix( ENSEMBLVEP_FILTERVEP.out.versions )
         ch_versions = ch_versions.mix( TABIX_BGZIPTABIX.out.versions )
