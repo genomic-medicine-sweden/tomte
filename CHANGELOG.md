@@ -22,7 +22,7 @@ Parameter has been removed if new parameter information isn't present.
 
 ### `Parameters`
 
-## 1.1.2 - Santa [2024-04-19]
+## 1.1.1 - Santa [2024-04-19]
 
 ### `Added`
 
