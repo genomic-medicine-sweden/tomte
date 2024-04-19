@@ -13,6 +13,16 @@ Parameter has been updated if both old and new parameter information is present.
 Parameter has been added if just the new parameter information is present.
 Parameter has been removed if new parameter information isn't present.
 :::
+## 1.1.2 -  [XXXX-XX-XX]
+
+### `Added`
+
+### `Fixed`
+
+### `Parameters`
+
+
+## 1.1.2 - Santa [2024-04-19]
 
 ### `Added`
 
