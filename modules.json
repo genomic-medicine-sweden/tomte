@@ -88,7 +88,7 @@
                     },
                     "gawk": {
                         "branch": "master",
-                        "git_sha": "da4d05d04e65227d4307e87940842f1a14de62c7",
+                        "git_sha": "e8dd194205c8657440afc34695e3bb2d32840ce0",
                         "installed_by": ["modules"]
                     },
                     "gffcompare": {
