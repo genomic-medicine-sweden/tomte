@@ -8,10 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Old parameter | New parameter |
 | ------------- | ------------- |
 
-> [!NOTE]
-> Parameter has been updated if both old and new parameter information is present.
-> Parameter has been added if just the new parameter information is present.
-> Parameter has been removed if new parameter information isn't present.
+:::note
+Parameter has been updated if both old and new parameter information is present.
+Parameter has been added if just the new parameter information is present.
+Parameter has been removed if new parameter information isn't present.
+:::
 
 
 ## 2.0.1 - [XXXX-XX-XX]
@@ -62,8 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | `--switch_drop_ae`          | `--skip_drop_ae`          |
 | `--switch_drop_as`          | `--skip_drop_as`          |
 
-> [!NOTE]
-> Parameter has been updated if both old and new parameter information is present. Parameter has been added if just the new parameter information is present. Parameter has been removed if new parameter information isn't present.
+:::note Parameter has been updated if both old and new parameter information is present. Parameter has been added if just the new parameter information is present. Parameter has been removed if new parameter information isn't present. :::
 ## 1.1.0 - Rudolph [2024-03-11]
 
 Release of genomic-medicine-sweden/tomte, created with the [nf-core](https://nf-co.re/) template.
