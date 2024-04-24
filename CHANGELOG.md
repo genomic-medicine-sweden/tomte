@@ -14,7 +14,6 @@ Parameter has been added if just the new parameter information is present.
 Parameter has been removed if new parameter information isn't present.
 :::
 
-
 ## 2.0.1 - [XXXX-XX-XX]
 
 ### `Added`
@@ -64,6 +63,7 @@ Parameter has been removed if new parameter information isn't present.
 | `--switch_drop_as`          | `--skip_drop_as`          |
 
 :::note Parameter has been updated if both old and new parameter information is present. Parameter has been added if just the new parameter information is present. Parameter has been removed if new parameter information isn't present. :::
+
 ## 1.1.0 - Rudolph [2024-03-11]
 
 Release of genomic-medicine-sweden/tomte, created with the [nf-core](https://nf-co.re/) template.
