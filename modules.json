@@ -118,12 +118,12 @@
                     },
                     "salmon/index": {
                         "branch": "master",
-                        "git_sha": "87e89b225e856a9071d66f248f04bf9f56bf4107",
+                        "git_sha": "cb6b2b94fc40dea58f0b1e3dd095f3dd24f2ac8a",
                         "installed_by": ["modules"]
                     },
                     "salmon/quant": {
                         "branch": "master",
-                        "git_sha": "87e89b225e856a9071d66f248f04bf9f56bf4107",
+                        "git_sha": "cb6b2b94fc40dea58f0b1e3dd095f3dd24f2ac8a",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/salmon/quant/salmon-quant.diff"
                     },
