@@ -17,13 +17,13 @@
                     },
                     "bcftools/mpileup": {
                         "branch": "master",
-                        "git_sha": "44096c08ffdbc694f5f92ae174ea0f7ba0f37e09",
+                        "git_sha": "e7df38a545d7d72083eededabd8849f731a01502",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/bcftools/mpileup/bcftools-mpileup.diff"
                     },
                     "bcftools/stats": {
                         "branch": "master",
-                        "git_sha": "44096c08ffdbc694f5f92ae174ea0f7ba0f37e09",
+                        "git_sha": "618364f55cb88f6c283f6c6c45c24d5f9f08f998",
                         "installed_by": ["modules"]
                     },
                     "bcftools/view": {
@@ -36,19 +36,24 @@
                         "git_sha": "0997b47c93c06b49aa7b3fefda87e728312cf2ca",
                         "installed_by": ["modules"]
                     },
+                    "ensemblvep/filtervep": {
+                        "branch": "master",
+                        "git_sha": "1e6b8886d30f7a7129dcd1ff46ef3a20038294d5",
+                        "installed_by": ["modules"]
+                    },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "76a0696a60c41c57fc5f6040ac31b11ce5d4d8dd",
+                        "git_sha": "3db4f8488315cd7d7cf3fcb64251f6603210e831",
                         "installed_by": ["modules"]
                     },
                     "fastp": {
                         "branch": "master",
-                        "git_sha": "003920c7f9a8ae19b69a97171922880220bedf56",
+                        "git_sha": "95cf5fe0194c7bf5cb0e3027a2eb7e7c89385080",
                         "installed_by": ["modules"]
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "f4ae1d942bd50c5c0b9bd2de1393ce38315ba57c",
+                        "git_sha": "285a50500f9e02578d90b3ce6382ea3c30216acd",
                         "installed_by": ["modules"]
                     },
                     "gatk4/asereadcounter": {
@@ -58,7 +63,7 @@
                     },
                     "gatk4/bedtointervallist": {
                         "branch": "master",
-                        "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
+                        "git_sha": "d3f215802f696f7993f25c759781d2db91232015",
                         "installed_by": ["modules"]
                     },
                     "gatk4/createsequencedictionary": {
@@ -79,6 +84,11 @@
                     "gatk4/variantfiltration": {
                         "branch": "master",
                         "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
+                        "installed_by": ["modules"]
+                    },
+                    "gawk": {
+                        "branch": "master",
+                        "git_sha": "e8dd194205c8657440afc34695e3bb2d32840ce0",
                         "installed_by": ["modules"]
                     },
                     "gffcompare": {
@@ -108,18 +118,18 @@
                     },
                     "salmon/index": {
                         "branch": "master",
-                        "git_sha": "ffc101e1b84ef3df2e4e4a966e84b3c513ae5693",
+                        "git_sha": "cb6b2b94fc40dea58f0b1e3dd095f3dd24f2ac8a",
                         "installed_by": ["modules"]
                     },
                     "salmon/quant": {
                         "branch": "master",
-                        "git_sha": "03a8562231d575c313266c193a980594b941e3ea",
+                        "git_sha": "cb6b2b94fc40dea58f0b1e3dd095f3dd24f2ac8a",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/salmon/quant/salmon-quant.diff"
                     },
                     "samtools/faidx": {
                         "branch": "master",
-                        "git_sha": "f4596fe0bdc096cf53ec4497e83defdb3a94ff62",
+                        "git_sha": "f153f1f10e1083c49935565844cccb7453021682",
                         "installed_by": ["modules"]
                     },
                     "samtools/index": {

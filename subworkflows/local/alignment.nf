@@ -13,17 +13,17 @@ include { SAMTOOLS_VIEW        } from '../../modules/nf-core/samtools/view/main'
 
 workflow ALIGNMENT {
     take:
-        reads                   // channel:   [mandatory] [ val(meta), [path(reads)]  ]
-        star_index              // channel:   [mandatory] [ val(meta), path(star_index) ]
-        ch_gtf                  // channel:   [mandatory] [ val(meta), path(gtf) ]
-        ch_platform             // channel:   [mandatory] [ val(platform) ]
-        subsample_bed           // channel:   [optional]  [ path(subsample_bed) ]
-        seed_frac               // parameter: [optional]  default: 0.001
-        num_reads               // parameter: [optional]  default: 120000000
-        switch_subsample_region // parameter: [mandatory] default: true
-        switch_downsample       // parameter: [mandatory] default: true
-        salmon_index            // channel:   [mandatory] [ path(salmon_index) ]
-        ch_genome_fasta         // channel:   [mandatory] [ val(meta), path(fasta) ]
+        reads                 // channel:   [mandatory] [ val(meta), [path(reads)]  ]
+        star_index            // channel:   [mandatory] [ val(meta), path(star_index) ]
+        ch_gtf                // channel:   [mandatory] [ val(meta), path(gtf) ]
+        ch_platform           // channel:   [mandatory] [ val(platform) ]
+        subsample_bed         // channel:   [optional]  [ path(subsample_bed) ]
+        seed_frac             // parameter: [optional]  default: 0.001
+        num_reads             // parameter: [optional]  default: 120000000
+        skip_subsample_region // parameter: [mandatory] default: true
+        skip_downsample       // parameter: [mandatory] default: true
+        salmon_index          // channel:   [mandatory] [ path(salmon_index) ]
+        ch_genome_fasta       // channel:   [mandatory] [ val(meta), path(fasta) ]
 
     main:
         ch_versions = Channel.empty()
@@ -43,11 +43,11 @@ workflow ALIGNMENT {
         ch_bam_bai = Channel.empty()
         ch_bam_bai_out = Channel.empty()
 
-        if (switch_subsample_region) {
+        if (!skip_subsample_region) {
             RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam, subsample_bed, seed_frac)
             ch_bam_bai = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
             ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
-            if (!switch_downsample) {
+            if (skip_downsample) {
                 ch_bam_bai_out = RNA_SUBSAMPLE_REGION.out.bam_bai
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
@@ -56,7 +56,7 @@ workflow ALIGNMENT {
             }
         } else {
             ch_bam_bai = ch_bam_bai.mix(STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai))
-            if (!switch_downsample) {
+            if (skip_downsample) {
                 ch_bam_bai_out = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)

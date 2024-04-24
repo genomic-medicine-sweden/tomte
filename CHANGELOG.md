@@ -3,10 +3,34 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Parameters
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+
+:::note
+Parameter has been updated if both old and new parameter information is present.
+Parameter has been added if just the new parameter information is present.
+Parameter has been removed if new parameter information isn't present.
+:::
+
+## 2.0.1 - [XXXX-XX-XX]
+
+### `Added`
+
+### `Fixed`
+
+### `Parameters`
+
+## 2.0.0 - Santa [2024-04-19]
+
 ### `Added`
 
 - Added automatic tests to test the pipeline with all switches set to false [#100](https://github.com/genomic-medicine-sweden/tomte/pull/100)
 - Added better documentation on subworkflow input [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
+- Added option to add extra arguments to DROP aberrant expression and aberrant splicing [#104](https://github.com/genomic-medicine-sweden/tomte/pull/104)
+- Added a function to branch references into compressed/uncompressed [#107](https://github.com/genomic-medicine-sweden/tomte/pull/107)
+- Added nf-core modules gawk and filter vep to create a clinical vcf [#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
 
 ### `Fixed`
 
@@ -14,6 +38,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Now all reference files come with meta to avoid confusion [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
 - GATK4_ASEREADCOUNTER and GATK4_SPLITNCIGARREADS have been updated [#101](https://github.com/genomic-medicine-sweden/tomte/pull/101)
 - Updated GATK4_ASEREADCOUNTER, now bam and vcf will be given as one channel [#103](https://github.com/genomic-medicine-sweden/tomte/pull/103)
+- Prepare reference subworkflow has been reformated and simplified [#105](https://github.com/genomic-medicine-sweden/tomte/pull/105)
+- FastQC have been updated to correctly allocate memory [#106](https://github.com/genomic-medicine-sweden/tomte/pull/106)
+- vep_filters is now extracted from gene_panel_clinical_filter [#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
+- Updated modules bcftools/stats, ensemblvep/vep, fastp, gatk4/bedtointervallist, samtools/faidx [#110](https://github.com/genomic-medicine-sweden/tomte/pull/110)
+
+### `Parameters`
+
+- Removed `--vep_filters`, it will now be automatically extracted from the `--gene_panel_clinical_filter`[#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
+  | Old parameter | New parameter |
+  | --------------- | ------------- |
+  | `--vep_filters` | |
+
+- Updated parameter names to make their use easier and more clear, changing the names from `switch` to `skip` and their default value from `true` to `false` [#108](https://github.com/genomic-medicine-sweden/tomte/pull/108)
+
+| Old parameter               | New parameter             |
+| --------------------------- | ------------------------- |
+| `--switch_subsample_region` | `--skip_subsample_region` |
+| `--switch_downsample`       | `--skip_downsample`       |
+| `--switch_build_tracks`     | `--skip_build_tracks`     |
+| `--switch_stringtie`        | `--skip_stringtie`        |
+| `--switch_vep`              | `--skip_vep`              |
+| `--switch_drop_ae`          | `--skip_drop_ae`          |
+| `--switch_drop_as`          | `--skip_drop_as`          |
+
+:::note Parameter has been updated if both old and new parameter information is present. Parameter has been added if just the new parameter information is present. Parameter has been removed if new parameter information isn't present. :::
 
 ## 1.1.0 - Rudolph [2024-03-11]
 
