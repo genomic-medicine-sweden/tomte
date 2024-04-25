@@ -14,11 +14,21 @@ Parameter has been added if just the new parameter information is present.
 Parameter has been removed if new parameter information isn't present.
 :::
 
-## 2.0.1 - [XXXX-XX-XX]
+## 2.0.2 - [XXXX-XX-XX]
 
 ### `Added`
 
 ### `Fixed`
+
+### `Parameters`
+
+## 2.0.1 - Grinch [2024-04-25]
+
+### `Added`
+
+### `Fixed`
+
+- Vep annotated research results will be published [#115](https://github.com/genomic-medicine-sweden/tomte/pull/115)
 
 ### `Parameters`
 
