@@ -65,11 +65,6 @@ def checkProfileProvided(nextflow_cli_args) {
 // Citation string for pipeline
 //
 def workflowCitation() {
-<<<<<<< HEAD
-    return "If you use ${workflow.manifest.name} for your analysis please cite:\n\n" +
-        "* The pipeline\n" +
-        "  ${workflow.manifest.doi}\n\n" +
-=======
     def temp_doi_ref = ""
     String[] manifest_doi = workflow.manifest.doi.tokenize(",")
     // Using a loop to handle multiple DOIs
@@ -79,7 +74,6 @@ def workflowCitation() {
     return "If you use ${workflow.manifest.name} for your analysis please cite:\n\n" +
         "* The pipeline\n" +
         temp_doi_ref + "\n" +
->>>>>>> TEMPLATE
         "* The nf-core framework\n" +
         "  https://doi.org/10.1038/s41587-020-0439-x\n\n" +
         "* Software dependencies\n" +
