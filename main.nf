@@ -15,7 +15,11 @@ nextflow.enable.dsl = 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+<<<<<<< HEAD
 include { TOMTE                   } from './workflows/tomte'
+=======
+include { TOMTE  } from './workflows/tomte'
+>>>>>>> TEMPLATE
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_tomte_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_tomte_pipeline'
 
