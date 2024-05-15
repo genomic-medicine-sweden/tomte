@@ -26,6 +26,7 @@ lint:
   nextflow_config:
     - manifest.name
     - manifest.homePage
+nf_core_version: 2.14.1
 repository_type: pipeline
 template:
   author: lucpen
