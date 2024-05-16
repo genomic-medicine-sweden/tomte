@@ -31,10 +31,10 @@ jobs:
           - "-profile test,docker --skip_subsample_region true --skip_downsample true --skip_build_tracks true --skip_stringtie true --skip_vep true --skip_drop_ae true --skip_drop_as true"
     steps:
       - name: Check out pipeline code
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: Install Nextflow
-        uses: nf-core/setup-nextflow@b9f764e8ba5c76b712ace14ecbfcef0e40ae2dd8 # v1
+        uses: nf-core/setup-nextflow@v2
         with:
           version: "${{ matrix.NXF_VER }}"
 
