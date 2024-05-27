@@ -100,7 +100,7 @@ workflow ALLELE_SPECIFIC_CALLING {
         BCFTOOLS_MERGE.out.merged_variants
             .mix( RENAME_FILES.out.output )
             .set { ch_vcf_merged }
-        
+
         TABIX_TABIX( ch_vcf_merged )
 
         ch_in_split_multi=ch_vcf_merged.join(TABIX_TABIX.out.tbi)
