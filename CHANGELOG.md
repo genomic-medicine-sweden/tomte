@@ -6,13 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2.0.2 - [XXXX-XX-XX]
 
 ### `Added`
+
 - Installed bcftools/norm [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
 - Installed bcftools/annotate [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
+
 ### `Fixed`
 
 - One line per call on vcf to make vcf suitable for Scout [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
 - Added variant caller to vcf to make vcf suitable for Scout [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
 - Normalised calls in vcf [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
+
 ### `Parameters`
 
 ### `Changed`
