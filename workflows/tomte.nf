@@ -51,11 +51,12 @@ workflow TOMTE {
     ch_multiqc_files = Channel.empty()
 
     // Mandatory
-    ch_samples   = ch_samplesheet.map { meta, fastqs -> meta }
-    ch_case_info = ch_samples.toList().map { create_case_channel(it) }
-    ch_fasta     = Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
-    ch_gtf       = Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
-    ch_platform  = Channel.from(params.platform).collect()
+    ch_samples        = ch_samplesheet.map { meta, fastqs -> meta }
+    ch_case_info      = ch_samples.toList().map { create_case_channel(it) }
+    ch_fasta          = Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_gtf            = Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_platform       = Channel.from(params.platform).collect()
+    ch_foundin_header = Channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
 
     // Optional
     ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
@@ -174,7 +175,10 @@ workflow TOMTE {
         ch_references.fai,
         ch_references.sequence_dict,
         ch_references.interval_list,
-        ch_case_info
+        ch_case_info,
+        ch_foundin_header,
+        params.variant_caller,
+        ch_references.chrom_sizes
     )
     ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
 
