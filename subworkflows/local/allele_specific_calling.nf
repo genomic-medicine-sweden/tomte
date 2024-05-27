@@ -21,15 +21,15 @@ include { BCFTOOLS_ANNOTATE                    } from '../../modules/nf-core/bcf
 
 workflow ALLELE_SPECIFIC_CALLING {
     take:
-        ch_ind_vcf_tbi // channel: [mandatory] [ val(meta), [ path(vcf), path(tbi) ] ]
-        ch_bam_bai     // channel: [mandatory] [ val(meta), [ path(bam), path(bai) ] ]
-        ch_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai         // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_dict        // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_intervals   // channel: [mandatory] [ path(intervals) ]
-        ch_case_info   // channel: [mandatory] [ val(case_info) ]
+        ch_ind_vcf_tbi     // channel: [mandatory] [ val(meta), [ path(vcf), path(tbi) ] ]
+        ch_bam_bai         // channel: [mandatory] [ val(meta), [ path(bam), path(bai) ] ]
+        ch_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai             // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_dict            // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_intervals       // channel: [mandatory] [ path(intervals) ]
+        ch_case_info       // channel: [mandatory] [ val(case_info) ]
         ch_foundin_header  // channel: [mandatory] [ path(header) ]
-        variant_caller // parameter: [mandatory] default: 'bcftools'
+        variant_caller     // parameter: [mandatory] default: 'bcftools'
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
 
     main:
