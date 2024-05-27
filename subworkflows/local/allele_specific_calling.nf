@@ -28,8 +28,8 @@ workflow ALLELE_SPECIFIC_CALLING {
         ch_dict            // channel: [mandatory] [ val(meta), path(dict) ]
         ch_intervals       // channel: [mandatory] [ path(intervals) ]
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
-        ch_foundin_header  // channel: [mandatory] [ path(header) ]
         variant_caller     // parameter: [mandatory] default: 'bcftools'
+        ch_foundin_header  // channel: [mandatory] [ path(header) ]
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
 
     main:

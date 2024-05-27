@@ -164,7 +164,9 @@ workflow TOMTE {
         ch_references.fasta,
         ch_references.fai,
         ch_references.sequence_dict,
-        params.variant_caller
+        params.variant_caller,
+        ch_foundin_header,
+        ch_references.chrom_sizes
     )
     ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
 
@@ -176,8 +178,8 @@ workflow TOMTE {
         ch_references.sequence_dict,
         ch_references.interval_list,
         ch_case_info,
-        ch_foundin_header,
         params.variant_caller,
+        ch_foundin_header,
         ch_references.chrom_sizes
     )
     ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
