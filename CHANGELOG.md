@@ -8,12 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 ### `Fixed`
+
 - One line per call on vcf to make vcf suitable for Scout [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
 - Added variant caller to vcf to make vcf suitable for Scout [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
 
 ### `Parameters`
 
 ### `Changed`
+
 - Updated template to v2.14.1 [#123](https://github.com/genomic-medicine-sweden/tomte/pull/123)
 
 ## 2.0.1 - Grinch [2024-04-25]
