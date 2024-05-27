@@ -103,7 +103,7 @@ workflow ALLELE_SPECIFIC_CALLING {
 
         TABIX_TABIX( ch_vcf_merged )
 
-        ch_in_split_multi=ch_vcf_merged.join(TABIX_TABIX.out.tbi)
+        ch_in_split_multi = ch_vcf_merged.join(TABIX_TABIX.out.tbi)
         SPLIT_MULTIALLELICS(ch_in_split_multi, ch_fasta)
         TABIX_AFTER_SPLIT(SPLIT_MULTIALLELICS.out.vcf)
 
