@@ -28,9 +28,6 @@ workflow ALLELE_SPECIFIC_CALLING {
         ch_dict            // channel: [mandatory] [ val(meta), path(dict) ]
         ch_intervals       // channel: [mandatory] [ path(intervals) ]
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
-        variant_caller     // parameter: [mandatory] default: 'bcftools'
-        ch_foundin_header  // channel: [mandatory] [ path(header) ]
-        ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
 
     main:
         ch_versions = Channel.empty()
@@ -111,27 +108,6 @@ workflow ALLELE_SPECIFIC_CALLING {
         REMOVE_DUPLICATES(ch_remove_dup_in, ch_fasta)
         TABIX_REMOVE_DUP(REMOVE_DUPLICATES.out.vcf)
 
-        ch_genome_chrsizes.flatten().map{chromsizes ->
-            return [[id:variant_caller], chromsizes]
-            }
-            .set { ch_varcallerinfo }
-
-        ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
-            .map{meta,bed,tbi -> return [bed, tbi]}
-            .set{ch_varcallerbed}
-
-        REMOVE_DUPLICATES.out.vcf
-            .join(TABIX_REMOVE_DUP.out.tbi)
-            .combine(ch_varcallerbed)
-            .combine(ch_foundin_header)
-            .set { ch_annotate_in }
-
-        BCFTOOLS_ANNOTATE(ch_annotate_in)
-
-        TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
-
-
-
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_INDEX.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_ASEREADCOUNTER.out.versions.first())
@@ -142,13 +118,11 @@ workflow ALLELE_SPECIFIC_CALLING {
         ch_versions = ch_versions.mix( TABIX_TABIX.out.versions.first() )
         ch_versions = ch_versions.mix( SPLIT_MULTIALLELICS.out.versions.first() )
         ch_versions = ch_versions.mix( TABIX_AFTER_SPLIT.out.versions.first() )
-        ch_versions = ch_versions.mix( ADD_VARCALLER_TO_BED.out.versions.first() )
+        ch_versions = ch_versions.mix( REMOVE_DUPLICATES.out.versions.first() )
         ch_versions = ch_versions.mix( TABIX_REMOVE_DUP.out.versions.first() )
-        ch_versions = ch_versions.mix( BCFTOOLS_ANNOTATE.out.versions.first() )
-        ch_versions = ch_versions.mix( TABIX_ANNOTATE.out.versions.first() )
 
     emit:
-        vcf      = BCFTOOLS_ANNOTATE.out.vcf // channel: [ val(meta), [ path(vcf) ] ]
-        tbi      = TABIX_ANNOTATE.out.tbi    // channel: [ val(meta), [ path(tbi) ] ]
+        vcf      = REMOVE_DUPLICATES.out.vcf // channel: [ val(meta), [ path(vcf) ] ]
+        tbi      = TABIX_REMOVE_DUP.out.tbi    // channel: [ val(meta), [ path(tbi) ] ]
         versions = ch_versions               // channel: [ path(versions.yml) ]
 }
