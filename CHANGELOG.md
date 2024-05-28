@@ -3,24 +3,24 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### Parameters
-
-| Old parameter | New parameter |
-| ------------- | ------------- |
-
-:::note
-Parameter has been updated if both old and new parameter information is present.
-Parameter has been added if just the new parameter information is present.
-Parameter has been removed if new parameter information isn't present.
-:::
-
 ## 2.0.2 - [XXXX-XX-XX]
 
 ### `Added`
 
+- Installed bcftools/norm [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
+- Installed bcftools/annotate [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
+
 ### `Fixed`
 
+- One line per call on vcf to make vcf suitable for Scout [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
+- Added variant caller to vcf to make vcf suitable for Scout [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
+- Normalised calls in vcf [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
+
 ### `Parameters`
+
+### `Changed`
+
+- Updated template to v2.14.1 [#123](https://github.com/genomic-medicine-sweden/tomte/pull/123)
 
 ## 2.0.1 - Grinch [2024-04-25]
 
