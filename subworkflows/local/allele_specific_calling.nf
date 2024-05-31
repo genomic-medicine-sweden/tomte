@@ -26,7 +26,6 @@ workflow ALLELE_SPECIFIC_CALLING {
         ch_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_fai             // channel: [mandatory] [ val(meta), path(fai) ]
         ch_dict            // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_intervals       // channel: [mandatory] [ path(intervals) ]
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
 
     main:
@@ -51,7 +50,7 @@ workflow ALLELE_SPECIFIC_CALLING {
             ch_fasta,
             ch_fai,
             ch_dict,
-            ch_intervals
+            []
         )
 
         BOOTSTRAPANN(
