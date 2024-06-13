@@ -16,12 +16,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added variant caller to vcf to make vcf suitable for Scout [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
 - Normalised calls in vcf [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
 - Removed regions parameter from ASEReadCounter to obtain ASE for all regions [#128](https://github.com/genomic-medicine-sweden/tomte/pull/128)
+- Updated container for GET_CHROM_SIZES [#132](https://github.com/genomic-medicine-sweden/tomte/pull/132)
+- Updated container for RENAME_FILES [#132](https://github.com/genomic-medicine-sweden/tomte/pull/132)
 
 ### `Parameters`
 
 ### `Changed`
 
 - Updated template to v2.14.1 [#123](https://github.com/genomic-medicine-sweden/tomte/pull/123)
+- Changed DROP output column names to camel case [#132](https://github.com/genomic-medicine-sweden/tomte/pull/132)
 
 ## 2.0.1 - Grinch [2024-04-25]
 
