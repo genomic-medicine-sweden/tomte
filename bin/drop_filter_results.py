@@ -116,7 +116,6 @@ def filter_outrider_results(
     df_family_annotated_aberrant_expression_top_hits = annotate_with_drop_gene_name(
         df_family_aberrant_expression_top_hits, out_drop_gene_name
     )
-    # df_family_annotated_aberrant_expression_top_hits = camelize_dataframe_columns(df_family_annotated_aberrant_expression_top_hits)
     file_name_research = f"{case_id}{output_name_fragment_ae}_research.tsv"
     camelize_dataframe_columns(df_family_annotated_aberrant_expression_top_hits).to_csv(
         file_name_research, sep="\t", index=False, header=True
@@ -151,7 +150,6 @@ def filter_fraser_result(
         df_results_family_aberrant_splicing, out_drop_gene_name
     )
     file_name_research = f"{case_id}{output_name_fragment_as}_research.tsv"
-    # df_results_family_aberrant_splicing = camelize_dataframe_columns(df_results_family_aberrant_splicing)
     camelize_dataframe_columns(df_results_family_aberrant_splicing).to_csv(
         file_name_research, sep="\t", index=False, header=True
     )
@@ -160,14 +158,22 @@ def filter_fraser_result(
     )
 
 
-def camelize_dataframe_columns(df):
-    def camelize(string):
-        if match("^[a-z]+([A-Z][a-z0-9]*)*$", string):
-            return string
-        parts = split("([^a-zA-Z0-9])", string)
-        camelized = "".join(part.capitalize() for part in parts if part.isalnum())
-        return camelized[0].lower() + camelized[1:]
+def camelize(string: str) -> str:
+    """
+    Returns the provided string in camel case
+    """
+    if match("^[a-z]+([A-Z][a-z0-9]*)*$", string):
+        return string
+    parts = split("([^a-zA-Z0-9])", string)
+    camelized = "".join(part.capitalize() for part in parts if part.isalnum())
+    # Return camelized string or original if empty
+    return camelized[0].lower() + camelized[1:] if camelized else string
 
+
+def camelize_dataframe_columns(df: DataFrame) -> DataFrame:
+    """
+    Returns the provided dataframe with column names in camel case
+    """
     df.columns = [camelize(col) for col in df.columns]
     return df
 
