@@ -10,7 +10,6 @@ process GENECODE_DOWNLOAD {
     input:
     val vep_cache_version
     val genome
-    val gnomad_version2download
 
     output:
     tuple val(meta), path("vep_cache")  , emit: vep_cache
@@ -18,7 +17,7 @@ process GENECODE_DOWNLOAD {
 
 
     script:
-
+    def gnomad_version2download = "${genome}".contains("38") ? "4.0": "2.1.1"
     """
     vep_url="ftp://ftp.ensembl.org/pub/release-${vep_cache_version}/variation/indexed_vep_cache/homo_sapiens_merged_vep_${vep_cache_version}_${genome}.tar.gz"
     clinvar_vcf_url="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_${genome}/weekly/clinvar.vcf.gz"
@@ -30,7 +29,7 @@ process GENECODE_DOWNLOAD {
     wget -O homo_sapiens_merged_vep.tar.gz $vep_url && tar xvf homo_sapiens_merged_vep.tar.gz && rm homo_sapiens_merged_vep.tar.gz
 
     # Vep plugins
-    mkdir vep_plugins; cd vep_plugins
+    mkdir ../vep_plugins; cd ../vep_plugins
 
     # Clinvar
     wget -O clinvar_${current_date}.vcf.gz $clinvar_vcf_url
@@ -59,6 +58,7 @@ process GENECODE_DOWNLOAD {
     stub:
     """
     touch vep_cache
+    touch vep_plugins
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

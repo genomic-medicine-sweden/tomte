@@ -26,8 +26,6 @@ process GENECODE_DOWNLOAD {
     gunzip ${genome}.primary_assembly.genome.fa.gz
     gunzip gencode.v${gencode_version}.primary_assembly.annotation.gtf.gz
 
-
-
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         wget: \$(echo wget -V 2>&1 | grep "GNU Wget" | cut -d" " -f3 > versions.yml)
