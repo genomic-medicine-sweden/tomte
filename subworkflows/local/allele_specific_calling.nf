@@ -1,7 +1,8 @@
 //
 // Allele specific variant calling
 //
-
+include { BCFTOOLS_NORM                        } from '../../modules/nf-core/bcftools/norm/main'
+include { TABIX_TABIX as TABIX_NORM            } from '../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_VIEW                        } from '../../modules/nf-core/bcftools/view/main'
 include { BCFTOOLS_INDEX                       } from '../../modules/nf-core/bcftools/index/main'
 include { GATK4_ASEREADCOUNTER                 } from '../../modules/nf-core/gatk4/asereadcounter/main'
@@ -31,9 +32,16 @@ workflow ALLELE_SPECIFIC_CALLING {
     main:
         ch_versions = Channel.empty()
 
+        // Keep only one variant per position in the vcf
+        BCFTOOLS_NORM(
+            ch_ind_vcf_tbi,
+            ch_fasta
+        )
+        TABIX_NORM(BCFTOOLS_NORM.out.vcf)
+
         // Keep only does variants in the vcf that are SNVs and are heterozygote
         BCFTOOLS_VIEW(
-            ch_ind_vcf_tbi,
+            BCFTOOLS_NORM.out.vcf.join(TABIX_NORM.out.tbi),
             [],
             [],
             []
