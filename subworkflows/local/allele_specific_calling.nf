@@ -1,18 +1,14 @@
 //
 // Allele specific variant calling
 //
-
+include { BCFTOOLS_NORM                        } from '../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_VIEW                        } from '../../modules/nf-core/bcftools/view/main'
-include { BCFTOOLS_INDEX                       } from '../../modules/nf-core/bcftools/index/main'
 include { GATK4_ASEREADCOUNTER                 } from '../../modules/nf-core/gatk4/asereadcounter/main'
 include { BOOTSTRAPANN                         } from '../../modules/local/bootstrapann'
 include { TABIX_BGZIPTABIX                     } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { BCFTOOLS_MERGE                       } from '../../modules/nf-core/bcftools/merge/main'
 include { RENAME_FILES                         } from '../../modules/local/rename_files'
 include { TABIX_TABIX                          } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_AFTER_SPLIT     } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_REMOVE_DUP      } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_ANNOTATE        } from '../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES   } from '../../modules/nf-core/bcftools/norm/main'
 include { ADD_VARCALLER_TO_BED                 } from '../../modules/local/add_varcallername_to_bed'
@@ -31,19 +27,21 @@ workflow ALLELE_SPECIFIC_CALLING {
     main:
         ch_versions = Channel.empty()
 
+        // Keep only one variant per position in the vcf
+        BCFTOOLS_NORM(
+            ch_ind_vcf_tbi,
+            ch_fasta
+        )
+
         // Keep only does variants in the vcf that are SNVs and are heterozygote
         BCFTOOLS_VIEW(
-            ch_ind_vcf_tbi,
+            BCFTOOLS_NORM.out.vcf.join(BCFTOOLS_NORM.out.tbi),
             [],
             [],
             []
         )
 
-        BCFTOOLS_INDEX(
-            BCFTOOLS_VIEW.out.vcf
-        )
-
-        ch_vcf_tbi_sample = BCFTOOLS_VIEW.out.vcf.join(BCFTOOLS_INDEX.out.tbi)
+        ch_vcf_tbi_sample = BCFTOOLS_VIEW.out.vcf.join(BCFTOOLS_VIEW.out.tbi)
         ch_bam_bai_vcf_tbi = ch_bam_bai.join(ch_vcf_tbi_sample)
         GATK4_ASEREADCOUNTER(
             ch_bam_bai_vcf_tbi,
@@ -101,14 +99,12 @@ workflow ALLELE_SPECIFIC_CALLING {
 
         ch_in_split_multi = ch_vcf_merged.join(TABIX_TABIX.out.tbi)
         SPLIT_MULTIALLELICS(ch_in_split_multi, ch_fasta)
-        TABIX_AFTER_SPLIT(SPLIT_MULTIALLELICS.out.vcf)
 
-        ch_remove_dup_in = SPLIT_MULTIALLELICS.out.vcf.join(TABIX_AFTER_SPLIT.out.tbi)
+        ch_remove_dup_in = SPLIT_MULTIALLELICS.out.vcf.join(SPLIT_MULTIALLELICS.out.tbi)
         REMOVE_DUPLICATES(ch_remove_dup_in, ch_fasta)
-        TABIX_REMOVE_DUP(REMOVE_DUPLICATES.out.vcf)
 
+        ch_versions = ch_versions.mix(BCFTOOLS_NORM.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions.first())
-        ch_versions = ch_versions.mix(BCFTOOLS_INDEX.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_ASEREADCOUNTER.out.versions.first())
         ch_versions = ch_versions.mix(BOOTSTRAPANN.out.versions.first())
         ch_versions = ch_versions.mix(TABIX_BGZIPTABIX.out.versions.first())
@@ -116,12 +112,10 @@ workflow ALLELE_SPECIFIC_CALLING {
         ch_versions = ch_versions.mix( RENAME_FILES.out.versions.first() )
         ch_versions = ch_versions.mix( TABIX_TABIX.out.versions.first() )
         ch_versions = ch_versions.mix( SPLIT_MULTIALLELICS.out.versions.first() )
-        ch_versions = ch_versions.mix( TABIX_AFTER_SPLIT.out.versions.first() )
         ch_versions = ch_versions.mix( REMOVE_DUPLICATES.out.versions.first() )
-        ch_versions = ch_versions.mix( TABIX_REMOVE_DUP.out.versions.first() )
 
     emit:
         vcf      = REMOVE_DUPLICATES.out.vcf // channel: [ val(meta), [ path(vcf) ] ]
-        tbi      = TABIX_REMOVE_DUP.out.tbi    // channel: [ val(meta), [ path(tbi) ] ]
+        tbi      = REMOVE_DUPLICATES.out.tbi // channel: [ val(meta), [ path(tbi) ] ]
         versions = ch_versions               // channel: [ path(versions.yml) ]
 }
