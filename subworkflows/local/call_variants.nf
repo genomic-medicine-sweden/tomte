@@ -80,7 +80,7 @@ workflow CALL_VARIANTS {
         ADD_VARCALLER_TO_BED(ch_varcallerinfo)
         ch_bed_in_annot=ADD_VARCALLER_TO_BED.out.gz.collect()
         ch_tbi_in_annot=ADD_VARCALLER_TO_BED.out.tbi.collect()
-        
+
         BCFTOOLS_ANNOTATE(
             REMOVE_DUPLICATES.out.vcf.join(REMOVE_DUPLICATES.out.tbi),
             ch_bed_in_annot,
