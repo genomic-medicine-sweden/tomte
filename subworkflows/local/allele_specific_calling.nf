@@ -11,8 +11,6 @@ include { RENAME_FILES                         } from '../../modules/local/renam
 include { TABIX_TABIX                          } from '../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES   } from '../../modules/nf-core/bcftools/norm/main'
-include { ADD_VARCALLER_TO_BED                 } from '../../modules/local/add_varcallername_to_bed'
-include { BCFTOOLS_ANNOTATE                    } from '../../modules/nf-core/bcftools/annotate/main'
 
 
 workflow ALLELE_SPECIFIC_CALLING {
@@ -103,11 +101,11 @@ workflow ALLELE_SPECIFIC_CALLING {
         ch_remove_dup_in = SPLIT_MULTIALLELICS.out.vcf.join(SPLIT_MULTIALLELICS.out.tbi)
         REMOVE_DUPLICATES(ch_remove_dup_in, ch_fasta)
 
-        ch_versions = ch_versions.mix(BCFTOOLS_NORM.out.versions.first())
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions.first())
-        ch_versions = ch_versions.mix(GATK4_ASEREADCOUNTER.out.versions.first())
-        ch_versions = ch_versions.mix(BOOTSTRAPANN.out.versions.first())
-        ch_versions = ch_versions.mix(TABIX_BGZIPTABIX.out.versions.first())
+        ch_versions = ch_versions.mix( BCFTOOLS_NORM.out.versions.first() )
+        ch_versions = ch_versions.mix( BCFTOOLS_VIEW.out.versions.first() )
+        ch_versions = ch_versions.mix( GATK4_ASEREADCOUNTER.out.versions.first() )
+        ch_versions = ch_versions.mix( BOOTSTRAPANN.out.versions.first() )
+        ch_versions = ch_versions.mix( TABIX_BGZIPTABIX.out.versions.first() )
         ch_versions = ch_versions.mix( BCFTOOLS_MERGE.out.versions.first() )
         ch_versions = ch_versions.mix( RENAME_FILES.out.versions.first() )
         ch_versions = ch_versions.mix( TABIX_TABIX.out.versions.first() )
