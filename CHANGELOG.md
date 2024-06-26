@@ -3,7 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.0.2 - [XXXX-XX-XX]
+## 2.2.1 - [XXXX-XX-XX]
+
+### `Added`
+
+### `Fixed`
+
+### `Parameters`
+
+### `Changed`
+
+## 2.2.0 - Elve [2024-04-26]
 
 ### `Added`
 
@@ -28,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed DROP output column names to camel case [#132](https://github.com/genomic-medicine-sweden/tomte/pull/132)
 - Updated bcftools view and norm to be able to create index within the actual module [#137](https://github.com/genomic-medicine-sweden/tomte/pull/137)
 - Updated bcftools annot to be able to create index within the actual module [#140](https://github.com/genomic-medicine-sweden/tomte/pull/140)
+- Updated modules bcftools/merge, bcftools/mpileup, bcftools/stats, ensemblvep/vep, fastp, gawk, multiqc, salmon/quant, samtools/faidx, samtools/index and samtools/view [#141](https://github.com/genomic-medicine-sweden/tomte/pull/141)
+- Removed unused modules bcftools/index and tabix/bgzip [#141](https://github.com/genomic-medicine-sweden/tomte/pull/141)
 
 ## 2.0.1 - Grinch [2024-04-25]
 
