@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-## 2.1.0 - Elve [2024-06-26]
+## 2.1.0 - Elf [2024-06-26]
 
 ### `Added`
 
