@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.0.2 - [XXXX-XX-XX]
+## 2.1.0 - Elf [2024-06-26]
 
 ### `Added`
 
@@ -28,6 +28,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed DROP output column names to camel case [#132](https://github.com/genomic-medicine-sweden/tomte/pull/132)
 - Updated bcftools view and norm to be able to create index within the actual module [#137](https://github.com/genomic-medicine-sweden/tomte/pull/137)
 - Updated bcftools annot to be able to create index within the actual module [#140](https://github.com/genomic-medicine-sweden/tomte/pull/140)
+- Updated modules bcftools/merge, bcftools/mpileup, bcftools/stats, ensemblvep/vep, fastp, gawk, multiqc, salmon/quant, samtools/faidx, samtools/index and samtools/view [#141](https://github.com/genomic-medicine-sweden/tomte/pull/141)
+- Removed unused modules bcftools/index and tabix/bgzip [#141](https://github.com/genomic-medicine-sweden/tomte/pull/141)
+
+| Tool             | Old version | New version |
+| ---------------- | ----------- | ----------- |
+| bcftools/index   | 1.18        |             |
+| bcftools/merge   | 1.18        | 1.20        |
+| bcftools/mpileup | 1.18        | 1.20        |
+| bcftools/norm    | 1.18        | 1.20        |
+| bcftools/stats   | 1.18        | 1.20        |
+| bcftools/view    | 1.18        | 1.20        |
+| fastp            | 0.23.4      | 0.23.4      |
+| gawk             | 5.1.0       | 5.3.0       |
+| multiqc          | 1.21        | 1.22.3      |
+| salmon/quant     | 1.10.1      | 1.10.1      |
+| samtools/faidx   | 1.19.2      | 1.20        |
+| samtools/index   | 1.19.2      | 1.20        |
+| samtools/view    | 1.19.2      | 1.20        |
+| tabix/bgzip      | 1.19.1      |             |
+
+:::note Version has been updated if both old and new version information is present. Version has been added if just the new version information is present. Version has been removed if new version information isn't present. :::
 
 ## 2.0.1 - Grinch [2024-04-25]
 
