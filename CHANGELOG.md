@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - One line per call on vcf to make vcf suitable for Scout [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
 - Added variant caller to vcf to make vcf suitable for Scout [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
 - Normalised calls in vcf [#127](https://github.com/genomic-medicine-sweden/tomte/pull/127)
-- Removed regions parameter from ASEReadCounter to obtain ASE for all regions [#128](https://github.com/genomic-medicine-sweden/tomte/pull/128)
+- Removed regions parameter from ASEReadCounter to obtain ASE for all regions [#129](https://github.com/genomic-medicine-sweden/tomte/pull/129)
 - Updated container for GET_CHROM_SIZES [#132](https://github.com/genomic-medicine-sweden/tomte/pull/132)
 - Updated container for RENAME_FILES [#132](https://github.com/genomic-medicine-sweden/tomte/pull/132)
 - Fixed GATK's ASEReadCounter by adding bcftools norm to avoid having duplicated positions in vcf [#137](https://github.com/genomic-medicine-sweden/tomte/pull/137)
