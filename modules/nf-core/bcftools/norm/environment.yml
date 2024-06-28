@@ -1,7 +1,7 @@
-name: bcftools_index
+name: bcftools_norm
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - bioconda::bcftools=1.18
+  - bioconda::bcftools=1.20
