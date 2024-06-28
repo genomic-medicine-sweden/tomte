@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
-from re import split
-from re import match
+from re import match, split
 import pyreadr
 from pandas import DataFrame, concat, read_csv
 
