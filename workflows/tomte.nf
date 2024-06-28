@@ -13,6 +13,7 @@ include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pi
 //
 // SUBWORKFLOW: local
 //
+include { DOWNLOAD_REFERENCES     } from '../subworkflows/local/download_references'
 include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_references'
 include { ALIGNMENT               } from '../subworkflows/local/alignment'
 include { BAM_QC                  } from '../subworkflows/local/bam_qc'
@@ -53,12 +54,21 @@ workflow TOMTE {
     // Mandatory
     ch_samples        = ch_samplesheet.map { meta, fastqs -> meta }
     ch_case_info      = ch_samples.toList().map { create_case_channel(it) }
-    ch_fasta          = Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
-    ch_gtf            = Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
+    //ch_fasta          = Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
+    //ch_gtf            = Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
     ch_platform       = Channel.from(params.platform).collect()
     ch_foundin_header = Channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
 
+    DOWNLOAD_REFERENCES(
+        params.genome,
+        params.genome_version
+    ).set { downloads }
+
     // Optional
+    ch_fasta                      = params.fasta                        ? Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                        : downloads.fasta.map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                        : downloads.gtf.map {it -> [[id:it[0].simpleName], it]}.collect()
     ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                         : Channel.empty()
     ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()

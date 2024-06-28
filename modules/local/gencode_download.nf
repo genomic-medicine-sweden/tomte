@@ -1,5 +1,5 @@
-process GENECODE_DOWNLOAD {
-    tag "ensembl"
+process GENCODE_DOWNLOAD {
+    tag "gencode"
     label 'process_low'
 
     conda "bioconda::gnu-wget=1.18"
@@ -8,23 +8,29 @@ process GENECODE_DOWNLOAD {
         'quay.io/biocontainers/gnu-wget:1.18--h5bf99c6_5' }"
 
     input:
-    val ensembl_version
-    val gencode_version
-    val meta
+    val genome
+    val genome_gencode_version
+    val download
 
     output:
-    tuple val(meta), path("*.fa")  , emit: fasta
-    tuple val(meta), path("*.gtf") , emit: gtf
-    path "versions.yml"            , emit: versions
+    path("*.fa")       , optional:true, emit: fasta
+    path("*.gtf")      , optional:true, emit: gtf
+    path "versions.yml", emit: versions
     
 
     script:
+    def folder_gencode = genome.contains("38") ? "" : "/${genome}_mapping"
+    def gtf_file_name = genome.contains("38") ? "gencode.v${genome_gencode_version}.primary_assembly.annotation.gtf.gz" : "gencode.v${genome_gencode_version}lift${genome_gencode_version}.annotation.gtf.gz"
     """
-    wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_${gencode_version}/${genome}.primary_assembly.genome.fa.gz
-    wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_${gencode_version}/gencode.v${gencode_version}.primary_assembly.annotation.gtf.gz
+    if [[ "${download}" == 'fasta' ]]; then
+        wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_${genome_gencode_version}$folder_gencode/${genome}.primary_assembly.genome.fa.gz
+        gunzip ${genome}.primary_assembly.genome.fa.gz
+    fi
 
-    gunzip ${genome}.primary_assembly.genome.fa.gz
-    gunzip gencode.v${gencode_version}.primary_assembly.annotation.gtf.gz
+    if [[ "${download}" == 'gtf' ]]; then
+        wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_${genome_gencode_version}$folder_gencode/$gtf_file_name
+        gunzip $gtf_file_name
+    fi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -35,7 +41,7 @@ process GENECODE_DOWNLOAD {
     stub:
     """
     touch ${genome}.primary_assembly.genome.fa
-    touch gencode.v${gencode_version}.primary_assembly.annotation.gtf
+    touch gencode.v${genome_gencode_version}.primary_assembly.annotation.gtf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
