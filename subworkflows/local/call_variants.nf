@@ -72,14 +72,14 @@ workflow CALL_VARIANTS {
         ch_remove_dup_in = SPLIT_MULTIALLELICS.out.vcf.join(SPLIT_MULTIALLELICS.out.tbi)
         REMOVE_DUPLICATES(ch_remove_dup_in, ch_fasta)
 
-        ch_genome_chrsizes.flatten().map{chromsizes ->
+        ch_genome_chrsizes.flatten().map { chromsizes ->
             return [[id:variant_caller], chromsizes]
             }
             .set { ch_varcallerinfo }
 
         ADD_VARCALLER_TO_BED(ch_varcallerinfo)
-        ch_bed_in_annot=ADD_VARCALLER_TO_BED.out.gz.collect()
-        ch_tbi_in_annot=ADD_VARCALLER_TO_BED.out.tbi.collect()
+        ch_bed_in_annot = ADD_VARCALLER_TO_BED.out.gz.collect()
+        ch_tbi_in_annot = ADD_VARCALLER_TO_BED.out.tbi.collect()
 
         BCFTOOLS_ANNOTATE(
             REMOVE_DUPLICATES.out.vcf.join(REMOVE_DUPLICATES.out.tbi),
