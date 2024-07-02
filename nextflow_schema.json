@@ -65,7 +65,7 @@
                     "default": "GRCh38"
                 },
                 "genome_version": {
-                    "type": "string",
+                    "type": "integer",
                     "description": "Name of Genomes gencode reference version to download if fasta or gtf is not provided.",
                     "default": 37,
                     "fa_icon": "fas fa-book",
@@ -174,6 +174,12 @@
                     "pattern": "^\\S+\\.csv$",
                     "mimetype": "text/csv",
                     "schema": "assets/vep_plugin_files_schema.json"
+                },
+                "skip_download_vep": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "fas fa-toggle-on",
+                    "description": "Skip vep cache download"
                 }
             }
         },

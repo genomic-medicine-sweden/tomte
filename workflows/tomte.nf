@@ -61,7 +61,8 @@ workflow TOMTE {
 
     DOWNLOAD_REFERENCES(
         params.genome,
-        params.genome_version
+        params.genome_version,
+        params.vep_cache_version
     ).set { downloads }
 
     // Optional
@@ -69,6 +70,10 @@ workflow TOMTE {
                                                                         : downloads.fasta.map {it -> [[id:it[0].simpleName], it]}.collect()
     ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                         : downloads.gtf.map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
+                                                                        : Channel.empty().mix(downloads.vep_cache)
+    ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files).collect()
+                                                                        : Channel.value([]).mix(downloads.vep_plugin)
     ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                         : Channel.empty()
     ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()
@@ -89,10 +94,6 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_subsample_bed              = params.subsample_bed                ? Channel.fromPath(params.subsample_bed).collect()
                                                                         : Channel.empty()
-    ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
-                                                                        : Channel.empty()
-    ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files).collect()
-                                                                        : Channel.value([])
 
 
     // Read and store paths in the vep_plugin_files file
