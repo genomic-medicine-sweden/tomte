@@ -25,14 +25,14 @@ process VEP_DOWNLOAD {
     def clinvar_vcf_url="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_${genome}/weekly/clinvar.vcf.gz"
     def clinvar_tbi_url="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_${genome}/weekly/clinvar.vcf.gz.tbi"
 
-    """    
+    """
     # Create file listing all vep plugins to use. Note that file extension must be .csv
     echo "vep_files" > vep_files.csv
     echo "vep_cache/vep_plugins/clinvar_${current_date}.vcf.gz" >> vep_files.csv
     echo "vep_cache/vep_plugins/clinvar_${current_date}.vcf.gz.tbi" >> vep_files.csv
     echo "vep_cache/vep_plugins/${gnomad_vcf}" >> vep_files.csv
     echo "vep_cache/vep_plugins/${gnomad_vcf}.tbi" >> vep_files.csv
-    
+
     # Vep cache
     mkdir vep_cache; cd vep_cache
     wget -O homo_sapiens_merged_vep.tar.gz $vep_url && tar xvf homo_sapiens_merged_vep.tar.gz && rm homo_sapiens_merged_vep.tar.gz
