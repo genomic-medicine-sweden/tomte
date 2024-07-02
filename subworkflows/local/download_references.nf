@@ -17,7 +17,6 @@ workflow DOWNLOAD_REFERENCES {
 
         // Download fasta if not provided
         FASTA_DOWNLOAD(ch_genome, ch_genome_version, "fasta")
-        print(params)
 
         // Download gtf if not provided
         GTF_DOWNLOAD(ch_genome, ch_genome_version, "gtf")
