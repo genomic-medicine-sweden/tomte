@@ -17,6 +17,8 @@ process GENCODE_DOWNLOAD {
     path("*.gtf")      , optional:true, emit: gtf
     path "versions.yml", emit: versions
 
+    when:
+    task.ext.when == null || task.ext.when
 
     script:
     def folder_gencode = genome.contains("38") ? "" : "/${genome}_mapping"

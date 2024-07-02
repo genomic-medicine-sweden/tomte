@@ -16,6 +16,8 @@ process VEP_DOWNLOAD {
     path("vep_files.csv")  , emit: plugin_file
     path "versions.yml"    , emit: versions
 
+    when:
+    task.ext.when == null || task.ext.when
 
     script:
     def gnomad_version2download = "${genome}".contains("38") ? "4.0": "2.1.1"
