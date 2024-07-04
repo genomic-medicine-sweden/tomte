@@ -87,8 +87,7 @@
                     "help_text": "If none provided, will be generated automatically from the FASTA reference",
                     "description": "Path to FASTA genome index file.",
                     "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
-                    "fa_icon": "far fa-file-code",
-                    "hidden": true
+                    "fa_icon": "far fa-file-code"
                 },
                 "gtf": {
                     "type": "string",
@@ -103,7 +102,6 @@
                     "type": "boolean",
                     "description": "Do not load the iGenomes reference config.",
                     "fa_icon": "fas fa-ban",
-                    "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
                 },
                 "platform": {
@@ -125,8 +123,7 @@
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
                     "pattern": "^\\S+\\.dict$",
-                    "description": "Genome dictionary file",
-                    "hidden": true
+                    "description": "Genome dictionary file"
                 },
                 "star_index": {
                     "type": "string",
