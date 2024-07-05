@@ -2,11 +2,10 @@ process VEP_DOWNLOAD {
     tag "vep"
     label 'process_low'
 
-    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
-        exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
-    }
-
-    container "docker.io/clinicalgenomics/vep_annotaion_download:1.0"
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/bcftools:1.20--h8b25389_0':
+        'biocontainers/bcftools:1.20--h8b25389_0' }"
 
     input:
     val genome
@@ -27,6 +26,7 @@ process VEP_DOWNLOAD {
     def vep_url="ftp://ftp.ensembl.org/pub/release-${vep_cache_version}/variation/indexed_vep_cache/homo_sapiens_merged_vep_${vep_cache_version}_${genome}.tar.gz"
     def clinvar_vcf_url="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_${genome}/weekly/clinvar.vcf.gz"
     def clinvar_tbi_url="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_${genome}/weekly/clinvar.vcf.gz.tbi"
+    def base_gnomad_path="https://storage.googleapis.com/gcp-public-data--gnomad/release/${gnomad_version2download}/vcf/genomes/gnomad.genomes."
 
     """
     # Create file listing all vep plugins to use. Note that file extension must be .csv
@@ -47,7 +47,19 @@ process VEP_DOWNLOAD {
     wget -O clinvar_${current_date}.vcf.gz $clinvar_vcf_url
     wget -O clinvar_${current_date}.vcf.gz.tbi $clinvar_tbi_url
 
-    gsutil rsync -r gs://gcp-public-data--gnomad/release/${gnomad_version2download}/vcf/genomes/ .
+    # Gnomad
+    for chr in {1..22} X Y; do
+        if [[ "${genome}" == *"38"* ]]; then
+            wget ${base_gnomad_path}v${gnomad_version2download}.sites.chr\${chr}.vcf.bgz
+            wget ${base_gnomad_path}v${gnomad_version2download}.sites.chr\${chr}.vcf.bgz.tbi
+        else
+            if [[ "\$chr" != "Y" ]]; then
+                wget ${base_gnomad_path}r${gnomad_version2download}.sites.\${chr}.vcf.bgz
+                wget ${base_gnomad_path}r${gnomad_version2download}.sites.\${chr}.vcf.bgz.tbi
+            fi
+        fi
+    done
+
     bcftools concat gnomad.genomes.*${gnomad_version2download}.sites.*{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X,Y}.vcf.bgz | bcftools annotate --output-type z --output gnomad_v${gnomad_version2download}.vcf.gz --include 'FILTER="PASS"' --remove ^INFO/AF,INFO/AF_grpmax,INFO/AF_popmax
     tabix -p vcf gnomad_v${gnomad_version2download}.vcf.gz
     rm gnomad.genomes.*${gnomad_version2download}.*.vcf.bgz*
