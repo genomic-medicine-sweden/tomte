@@ -123,6 +123,8 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 In genomic-medicine-sweden/tomte, references can be supplied using parameters. We have also introduced the possiblility of using the `--igenomes_base` parameter to point to a path where genome specific reference files are placed (fasta, fai, gtf, star_index, salmon_index, subsample_bed). To make sure that the names of the reference files match those in your directory, check [igenomes.config](https://github.com/genomic-medicine-sweden/tomte/blob/master/conf/igenomes.config).
 
+If no references are provided by the user the pipeline will automatically download a fasta and a gtf file. The user can select the desired genome and gencode version using `--genome` and `--genome_version`. If the user also wants to download vep cache and vep plugins references they will have to set `--skip_download_vep false`, bare in mind that about ~400GB of data will be downloaded, the data will then be processed and its size significantly reduced.
+
 Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can call SNVs either with BCFtools or with GATK. You also have the option to turn off sections of the pipeline if you do not want to run them. For example, drop aberrant expression module can be turned off by setting `--skip_drop_ae true`. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, if you are not running DROP aberrant splicing, you do not need to provide `--reference_drop_splice_folder`.
 
 genomic-medicine-sweden/tomte consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
@@ -145,21 +147,24 @@ The mandatory and optional parameters for each category are tabulated below.
 
 | Mandatory | Optional                       |
 | --------- | ------------------------------ |
-| fasta     | fasta_fai<sup>1</sup>          |
-| gtf       | sequence_dict<sup>1</sup>      |
-|           | salmon_index<sup>1</sup>       |
-|           | star_index<sup>1</sup>         |
-|           | transcript_fasta<sup>1</sup>   |
-|           | genome<sup>2</sup>             |
-|           | platform<sup>3</sup>           |
-|           | min_trimmed_length<sup>4</sup> |
-|           | star_two_pass_mode<sup>4</sup> |
+|           | fasta<sup>1</sup>              |
+|           | gtf<sup>1</sup>                |
+|           | fasta_fai<sup>2</sup>          |
+|           | sequence_dict<sup>2</sup>      |
+|           | salmon_index<sup>2</sup>       |
+|           | star_index<sup>2</sup>         |
+|           | transcript_fasta<sup>2</sup>   |
+|           | genome<sup>3</sup>             |
+|           | platform<sup>4</sup>           |
+|           | min_trimmed_length<sup>5</sup> |
+|           | star_two_pass_mode<sup>6</sup> |
 
-<sup>1</sup> If the parameter is not provided by the user, it will be generated from the fasta and gtf files.<br />
-<sup>2</sup> If it is not provided by the user, the default value is GRCh38.<br />
-<sup>3</sup> If it is not provided by the user, the default value is illumina.<br />
-<sup>4</sup> If it is not provided by the user, the default value is 40.<br />
-<sup>5</sup> If it is not provided by the user, the default value is Basic.
+<sup>1</sup> If the parameter is not provided by the user, it will be downloaded.<br />
+<sup>2</sup> If the parameter is not provided by the user, it will be generated from the fasta and gtf files.<br />
+<sup>3</sup> If it is not provided by the user, the default value is GRCh38.<br />
+<sup>4</sup> If it is not provided by the user, the default value is illumina.<br />
+<sup>5</sup> If it is not provided by the user, the default value is 40.<br />
+<sup>6</sup> If it is not provided by the user, the default value is Basic.
 
 ##### 2. Junction track and bigwig
 
@@ -191,16 +196,17 @@ The mandatory and optional parameters for each category are tabulated below.
 
 #### 5. SNV annotation (ensembl VEP)
 
-| Mandatory                    | Optional                   |
-| ---------------------------- | -------------------------- |
-| vep_plugin_files<sup>1</sup> | skip_vep<sup>2</sup>       |
-|                              | vep_cache<sup>3</sup>      |
-|                              | vep_cache_version          |
-|                              | gene_panel_clinical_filter |
+| Mandatory | Optional                      |
+| --------- | ----------------------------- |
+|           | skip_vep<sup>1</sup>          |
+|           | vep_plugin_files<sup>2</sup>  |
+|           | vep_cache<sup>2</sup>         |
+|           | vep_cache_version<sup>3</sup> |
+|           | gene_panel_clinical_filter    |
 
-<sup>1</sup> VEP caches can be downloaded [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#cache). VEP plugins may be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter. See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
-<sup>2</sup> If it is not provided by the user, the default value is false<br />
-<sup>3</sup> If it is not provided by the user, the default value is 110, supported values are 107 and 110 <br />
+<sup>1</sup> If it is not provided by the user, the default value is false<br />
+<sup>2</sup> VEP cache and plugins can be automatically downloaded by the pipeline by setting `--skip_download_vep false`. VEP caches can also be downloaded [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#cache). VEP plugins may also be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter. See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
+<sup>3</sup> If it is not provided by the user, the default value is 110, supported values are 107 and 110
 
 #### 6. Stringtie & gffcompare
 
