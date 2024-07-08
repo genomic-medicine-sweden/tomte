@@ -8,18 +8,18 @@ include { VEP_DOWNLOAD                       } from '../../modules/local/vep_ann
 
 workflow DOWNLOAD_REFERENCES {
     take:
-        ch_genome                 // channel: [mandatory]   val(genome)
-        ch_genome_version         // channel: [mandatory]   val(genome_version)
-        ch_vep_cache_version      // channel: [optional]    val(vep_cache_version)
+        ch_genome                    // channel: [mandatory]   val(genome)
+        ch_genome_annotation_version // channel: [mandatory]   val(genome_annotation_version)
+        ch_vep_cache_version         // channel: [optional]    val(vep_cache_version)
 
     main:
         ch_versions = Channel.empty()
 
         // Download fasta if not provided
-        FASTA_DOWNLOAD(ch_genome, ch_genome_version, "fasta")
+        FASTA_DOWNLOAD(ch_genome, ch_genome_annotation_version, "fasta")
 
         // Download gtf if not provided
-        GTF_DOWNLOAD(ch_genome, ch_genome_version, "gtf")
+        GTF_DOWNLOAD(ch_genome, ch_genome_annotation_version, "gtf")
 
         // Download vep references if skip_download_vep = False & params.vep_cache is not provided
         VEP_DOWNLOAD(ch_genome, ch_vep_cache_version)

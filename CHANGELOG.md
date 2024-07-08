@@ -13,12 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Parameters`
 
-- Added `--genome_version`, the version of tue gencode reference version to download if fasta or gtf is not provided and switch `--skip_download_vep` for the vep reference download [#144](https://github.com/genomic-medicine-sweden/tomte/pull/144)
+- Added `--genome_annotation_version`, the version of tue gencode reference version to download if fasta or gtf is not provided and switch `--skip_download_vep` for the vep reference download [#144](https://github.com/genomic-medicine-sweden/tomte/pull/144)
 
-| Old parameter | New parameter         |
-| ------------- | --------------------- |
-|               | `--genome_version`    |
-|               | `--skip_download_vep` |
+| Old parameter | New parameter                 |
+| ------------- | ----------------------------- |
+|               | `--genome_annotation_version` |
+|               | `--skip_download_vep`         |
 
 :::note Parameter has been updated if both old and new parameter information is present. Parameter has been added if just the new parameter information is present. Parameter has been removed if new parameter information isn't present. :::
 

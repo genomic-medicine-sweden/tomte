@@ -61,7 +61,7 @@ workflow TOMTE {
 
     DOWNLOAD_REFERENCES(
         params.genome,
-        params.genome_version,
+        params.genome_annotation_version,
         params.vep_cache_version
     ).set { downloads }
 
