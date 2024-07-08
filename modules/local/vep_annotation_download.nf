@@ -1,6 +1,6 @@
 process VEP_DOWNLOAD {
     tag "vep"
-    label 'process_medium'
+    label 'process_long'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
