@@ -60,7 +60,7 @@ process VEP_DOWNLOAD {
         fi
     done
 
-    bcftools concat gnomad.genomes.*${gnomad_version2download}.sites.*{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X,Y}.vcf.bgz | bcftools annotate --output-type z --output gnomad_v${gnomad_version2download}.vcf.gz --include 'FILTER="PASS"' --remove ^INFO/AF,INFO/AF_grpmax,INFO/AF_popmax
+    bcftools concat gnomad.genomes.*${gnomad_version2download}.sites.*{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X,Y}.vcf.bgz | bcftools annotate --output-type z --output gnomad_v${gnomad_version2download}.vcf.gz --include 'FILTER="PASS"' --remove ^INFO/AF,INFO/AF_grpmax,INFO/AF_popmax --threads $task.cpus
     tabix -p vcf gnomad_v${gnomad_version2download}.vcf.gz
     rm gnomad.genomes.*${gnomad_version2download}.*.vcf.bgz*
 
