@@ -13,7 +13,7 @@ process VEP_DOWNLOAD {
 
     output:
     path("vep_cache")      , emit: vep_cache
-    path("vep_files.csv")  , emit: plugin_file
+    path("vep_plugin_files.csv")  , emit: plugin_file
     path "versions.yml"    , emit: versions
 
     when:
@@ -30,11 +30,11 @@ process VEP_DOWNLOAD {
 
     """
     # Create file listing all vep plugins to use. Note that file extension must be .csv
-    echo "vep_files" > vep_files.csv
-    echo "vep_cache/vep_plugins/clinvar_${current_date}.vcf.gz" >> vep_files.csv
-    echo "vep_cache/vep_plugins/clinvar_${current_date}.vcf.gz.tbi" >> vep_files.csv
-    echo "vep_cache/vep_plugins/${gnomad_vcf}" >> vep_files.csv
-    echo "vep_cache/vep_plugins/${gnomad_vcf}.tbi" >> vep_files.csv
+    echo "vep_files" > vep_plugin_files.csv
+    echo "vep_cache/vep_plugins/clinvar_${current_date}.vcf.gz" >> vep_plugin_files.csv
+    echo "vep_cache/vep_plugins/clinvar_${current_date}.vcf.gz.tbi" >> vep_plugin_files.csv
+    echo "vep_cache/vep_plugins/${gnomad_vcf}" >> vep_plugin_files.csv
+    echo "vep_cache/vep_plugins/${gnomad_vcf}.tbi" >> vep_plugin_files.csv
 
     # Vep cache
     mkdir vep_cache; cd vep_cache
@@ -60,10 +60,16 @@ process VEP_DOWNLOAD {
         fi
     done
 
-    bcftools concat gnomad.genomes.*${gnomad_version2download}.sites.*{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X,Y}.vcf.bgz | bcftools annotate --output-type z --output gnomad_v${gnomad_version2download}.vcf.gz --include 'FILTER="PASS"' --remove ^INFO/AF,INFO/AF_grpmax,INFO/AF_popmax --threads $task.cpus
+    if [[ "${genome}" == *"38"* ]]; then
+        bcftools concat gnomad.genomes.*${gnomad_version2download}.sites.chr{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X,Y}.vcf.bgz | bcftools annotate --output-type z --output gnomad_v${gnomad_version2download}.vcf.gz --include 'FILTER="PASS"' --remove ^INFO/AF,INFO/AF_grpmax,INFO/AF_popmax --threads $task.cpus
+    else
+        bcftools concat gnomad.genomes.*${gnomad_version2download}.sites.{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X}.vcf.bgz | bcftools annotate --output-type z --output gnomad_v${gnomad_version2download}.vcf.gz --include 'FILTER="PASS"' --remove ^INFO/AF,INFO/AF_grpmax,INFO/AF_popmax --threads $task.cpus
+    fi
+
     tabix -p vcf gnomad_v${gnomad_version2download}.vcf.gz
     rm gnomad.genomes.*${gnomad_version2download}.*.vcf.bgz*
 
+    cd ../..
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -74,7 +80,7 @@ process VEP_DOWNLOAD {
     stub:
     """
     touch vep_cache
-    touch vep_plugins.csv
+    touch vep_plugin_files.csv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
