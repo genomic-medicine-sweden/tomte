@@ -12,16 +12,16 @@ process VEP_DOWNLOAD {
     val vep_cache_version
 
     output:
-    path("vep_cache")      , emit: vep_cache
-    path("vep_plugin_files.csv")  , emit: plugin_file
-    path "versions.yml"    , emit: versions
+    path("vep_cache")           , emit: vep_cache
+    path("vep_plugin_files.csv"), emit: plugin_file
+    path "versions.yml"         , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
     def gnomad_version2download = "${genome}".contains("38") ? "4.0": "2.1.1"
-    def current_date  = new java.util.Date().format( 'yyyy-MM-dd')
+    def current_date  = new java.util.Date().format('yyyy-MM-dd')
     def gnomad_vcf="gnomad_v${gnomad_version2download}.vcf.gz"
     def vep_url="ftp://ftp.ensembl.org/pub/release-${vep_cache_version}/variation/indexed_vep_cache/homo_sapiens_merged_vep_${vep_cache_version}_${genome}.tar.gz"
     def clinvar_vcf_url="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_${genome}/weekly/clinvar.vcf.gz"
@@ -85,6 +85,9 @@ process VEP_DOWNLOAD {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         wget: \$(echo wget -V 2>&1 | grep "GNU Wget" | cut -d" " -f3 > versions.yml)
+        bcftools: \$(bcftools --version 2>&1 | head -n1 | sed 's/^.*bcftools //; s/ .*\$//')
+        tabix: \$(echo \$(tabix -h 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
+        
     END_VERSIONS
     """
 
