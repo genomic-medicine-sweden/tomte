@@ -50,11 +50,11 @@ process VEP_DOWNLOAD {
     # Gnomad
     for chr in {1..22} X Y; do
         if [[ "${genome}" == *"38"* ]]; then
-            wget ${base_gnomad_path}v${gnomad_version2download}.sites.chr\${chr}.vcf.bgz
+            wget ${base_gnomad_path}v${gnomad_version2download}.sites.chr\${chr}.vcf.bgz --timeout=0
             wget ${base_gnomad_path}v${gnomad_version2download}.sites.chr\${chr}.vcf.bgz.tbi
         else
             if [[ "\$chr" != "Y" ]]; then
-                wget ${base_gnomad_path}r${gnomad_version2download}.sites.\${chr}.vcf.bgz
+                wget ${base_gnomad_path}r${gnomad_version2download}.sites.\${chr}.vcf.bgz --timeout=0
                 wget ${base_gnomad_path}r${gnomad_version2download}.sites.\${chr}.vcf.bgz.tbi
             fi
         fi
@@ -87,7 +87,6 @@ process VEP_DOWNLOAD {
         wget: \$(echo wget -V 2>&1 | grep "GNU Wget" | cut -d" " -f3 > versions.yml)
         bcftools: \$(bcftools --version 2>&1 | head -n1 | sed 's/^.*bcftools //; s/ .*\$//')
         tabix: \$(echo \$(tabix -h 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-        
     END_VERSIONS
     """
 

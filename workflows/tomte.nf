@@ -59,9 +59,10 @@ workflow TOMTE {
 
     DOWNLOAD_REFERENCES(
         params.genome,
-        params.genome_annotation_version,
+        params.gencode_annotation_version,
         params.vep_cache_version
     ).set { downloads }
+    ch_versions = ch_versions.mix(DOWNLOAD_REFERENCES.out.versions)
 
     // Optional
     ch_fasta                      = params.fasta                        ? Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
@@ -117,6 +118,7 @@ workflow TOMTE {
         ch_salmon_index,
         ch_sequence_dict
     ).set { ch_references }
+    ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions.first())
 
     FASTQC (
         ch_samplesheet
