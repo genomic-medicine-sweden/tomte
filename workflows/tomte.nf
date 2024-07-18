@@ -71,8 +71,8 @@ workflow TOMTE {
                                                                         : downloads.gtf.map {it -> [[id:it[0].simpleName], it]}.collect()
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
                                                                         : Channel.empty().mix(downloads.vep_cache)
-    ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files).collect()
-                                                                        : Channel.value().mix(downloads.vep_plugin)
+    ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
+                                                                        : Channel.empty().mix(downloads.vep_plugin)
     ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                         : Channel.empty()
     ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()
@@ -96,17 +96,23 @@ workflow TOMTE {
 
 
     // Read and store paths in the vep_plugin_files file
-    ch_vep_extra_files_unsplit.splitCsv ( header:true )
-        .map { row ->
-            f = file(row.vep_files[0])
-            if(f.isFile() || f.isDirectory()){
-                return [f]
+    ch_vep_extra_files_unsplit.splitCsv(header: true)
+    .flatMap { row -> 
+        row.vep_files.split(',').collect { file(it.trim()) }
+    }
+    .map { f ->
+        if (params.skip_download_vep) {
+            if(f.isFile() || f.isDirectory()) {
+                return f
             } else {
                 error("\nVep database file ${f} does not exist.")
             }
+        } else {
+            return f
         }
-        .collect()
-        .set {ch_vep_extra_files}
+    }
+    .collect()
+    .set { ch_vep_extra_files }
 
     PREPARE_REFERENCES(
         ch_fasta,
