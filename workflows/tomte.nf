@@ -97,7 +97,7 @@ workflow TOMTE {
 
     // Read and store paths in the vep_plugin_files file
     ch_vep_extra_files_unsplit.splitCsv(header: true)
-    .flatMap { row -> 
+    .flatMap { row ->
         row.vep_files.split(',').collect { file(it.trim()) }
     }
     .map { f ->
