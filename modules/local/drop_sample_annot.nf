@@ -1,5 +1,5 @@
 process DROP_SAMPLE_ANNOT {
-    tag "DROP_sample_annot"
+    tag "DROP_annot_file"
     label 'process_low'
 
     // Exit if running this module with -profile conda / -profile mamba
@@ -10,8 +10,7 @@ process DROP_SAMPLE_ANNOT {
     container "docker.io/clinicalgenomics/drop:1.3.3"
 
     input:
-    path(bam)
-    val(samples)
+    tuple val(ids), val(single_ends), val(strandednesses), path(bam), path(bai)
     path(ref_gene_counts)
     path(ref_annot)
     val(drop_group_samples_ae)
@@ -25,14 +24,14 @@ process DROP_SAMPLE_ANNOT {
     task.ext.when == null || task.ext.when
 
     script:
-    def ids = "${samples.id}".replace("[","").replace("]","").replace(",","")
-    def strandedness = "${samples.strandedness}".replace("[","").replace("]","").replace(",","")
-    def single_end = "${samples.single_end}".replace("[","").replace("]","").replace(",","")
+    def id = "${ids}".replace("[","").replace("]","").replace(",","")
+    def single_end = "${single_ends}".replace("[","").replace("]","").replace(",","")
+    def strandedness = "${strandednesses}".replace("[","").replace("]","").replace(",","")
     def drop_group = "${drop_group_samples_ae},${drop_group_samples_as}".replace(" ","").replace("[","").replace("]","")
     """
     $baseDir/bin/drop_sample_annot.py \\
         --bam ${bam} \\
-        --samples $ids \\
+        --samples $id \\
         --strandedness $strandedness \\
         --single_end $single_end \\
         --ref_count_file ${ref_gene_counts} \\

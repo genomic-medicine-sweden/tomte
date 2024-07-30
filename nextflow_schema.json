@@ -44,7 +44,8 @@
                 "save_mapped_as_cram": {
                     "type": "boolean",
                     "description": "Do you want to save bam as cram",
-                    "fa_icon": "far fa-file-archive"
+                    "fa_icon": "far fa-file-archive",
+                    "default": true
                 }
             }
         },
@@ -59,7 +60,8 @@
                     "description": "Name of iGenomes reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive.",
                     "fa_icon": "fas fa-book",
                     "enum": ["hg19", "GRCh37", "hg38", "GRCh38"],
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
+                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.",
+                    "default": "GRCh38"
                 },
                 "fasta": {
                     "type": "string",
@@ -200,13 +202,11 @@
                 },
                 "skip_subsample_region": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_downsample": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.",
                     "fa_icon": "fas fa-toggle-off"
                 },
@@ -255,33 +255,34 @@
                 },
                 "skip_build_tracks": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Skip building splice junction tracks for IGV.",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_stringtie": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Skip analysis with StringTie",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_vep": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Skip Ensembl Variant Effect Predictor",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_drop_ae": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Skip DROP Aberrant Expression module ",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_drop_as": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Skip DROP Aberrant Splicing module",
                     "fa_icon": "fas fa-toggle-off"
+                },
+                "skip_export_counts_drop": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-toggle-on",
+                    "default": true,
+                    "description": "Skip export counts for DROP. It will export information from those modules run. Read usage for further information."
                 },
                 "drop_group_samples_ae": {
                     "type": "string",

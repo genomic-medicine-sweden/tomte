@@ -215,16 +215,17 @@ The mandatory and optional parameters for each category are tabulated below.
 
 DROP - aberrant expression
 
-| Mandatory                             | Optional                          |
-| ------------------------------------- | --------------------------------- |
-| reference_drop_annot_file<sup>1</sup> | skip_drop_ae<sup>2</sup>          |
-| reference_drop_count_file             | drop_group_samples_ae<sup>3</sup> |
-| fasta                                 | drop_padjcutoff_ae<sup>4</sup>    |
-| gtf                                   | drop_zscorecutoff<sup>5</sup>     |
-|                                       | gene_panel_clinical_filter        |
-|                                       | skip_downsample<sup>6</sup>       |
-|                                       | num_reads<sup>7</sup>             |
-|                                       | genome<sup>8</sup>                |
+| Mandatory                             | Optional                            |
+| ------------------------------------- | ----------------------------------- |
+| reference_drop_annot_file<sup>1</sup> | skip_drop_ae<sup>2</sup>            |
+| reference_drop_count_file             | drop_group_samples_ae<sup>3</sup>   |
+| fasta                                 | drop_padjcutoff_ae<sup>4</sup>      |
+| gtf                                   | drop_zscorecutoff<sup>5</sup>       |
+|                                       | gene_panel_clinical_filter          |
+|                                       | skip_downsample<sup>6</sup>         |
+|                                       | num_reads<sup>7</sup>               |
+|                                       | genome<sup>8</sup>                  |
+|                                       | skip_export_counts_drop<sup>9</sup> |
 
 <sup>1</sup> To get more information on how to format it, see below<br />
 <sup>2</sup> If it is not provided by the user, the default value is false<br />
@@ -234,18 +235,20 @@ DROP - aberrant expression
 <sup>6</sup> If it is not provided by the user, the default value is false<br />
 <sup>7</sup> If it is not provided by the user, the default value is 120000000<br />
 <sup>8</sup> If it is not provided by the user, the default value is GRCh38
+<sup>9</sup> If it is not provided by the user, the default value is true<br />
 
 DROP - aberrant splicing
 
-| Mandatory                             | Optional                          |
-| ------------------------------------- | --------------------------------- |
-| reference_drop_annot_file<sup>1</sup> | skip_drop_as<sup>2</sup>          |
-| reference_drop_splice_folder          | drop_group_samples_as<sup>3</sup> |
-|                                       | drop_padjcutoff_as<sup>4</sup>    |
-|                                       | gene_panel_clinical_filter        |
-|                                       | skip_downsample<sup>5</sup>       |
-|                                       | num_reads<sup>6</sup>             |
-|                                       | genome<sup>7</sup>                |
+| Mandatory                             | Optional                            |
+| ------------------------------------- | ----------------------------------- |
+| reference_drop_annot_file<sup>1</sup> | skip_drop_as<sup>2</sup>            |
+| reference_drop_splice_folder          | drop_group_samples_as<sup>3</sup>   |
+|                                       | drop_padjcutoff_as<sup>4</sup>      |
+|                                       | gene_panel_clinical_filter          |
+|                                       | skip_downsample<sup>5</sup>         |
+|                                       | num_reads<sup>6</sup>               |
+|                                       | genome<sup>7</sup>                  |
+|                                       | skip_export_counts_drop<sup>8</sup> |
 
 <sup>1</sup> To get more information on how to format it, see below<br />
 <sup>2</sup> If it is not provided by the user, the default value is false<br />
@@ -254,16 +257,32 @@ DROP - aberrant splicing
 <sup>5</sup> If it is not provided by the user, the default value is false<br />
 <sup>6</sup> If it is not provided by the user, the default value is 120000000<br />
 <sup>7</sup> If it is not provided by the user, the default value is GRCh38
+<sup>8</sup> If it is not provided by the user, the default value is true<br />
 
 ##### Preparing input for DROP
 
 If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference counts, splice counts and a sample sheet. The sample sheet should contain the columns as those in the [test sample annotation](../test_data/drop_data/sampleAnnotation.tsv), you do not need to include the samples you are running through the pipeline in the sample sheet.
 
-To obtain the gene counts and splice counts you will have to download the counts from one of the [available databases](https://github.com/gagneurlab/drop#datasets) or run drop locally with your own samples. If you choose the second option, you should start by runnig the module(s) you want to export counts for. Afterwards, you need to run the exportCounts module. Make sure that your config has only the modules you want to export and have already run as <run: true> , that only existing groups are mentioned in the config, and that exportCounts excludGroups is null or contains a group of samples you want to exclude. Finally, run:
+###### Preparing your DROP control database
 
-```console
-snakemake exportCounts --cores 1
-```
+You have several options on how to create such a database. You can either build it or download it from one of the [available databases](https://github.com/gagneurlab/drop#datasets).
+
+To build your own database you will need at least 50 for aberrant expression, if you only run aberrant splicing 30 samples will suffice but DROP authors recommend to have at least around 100 for both modules. You can use Tomte to build your own database, to do so we recommend to run with the following parameters:
+
+- `--skip_export_counts_drop false` this switch will ensure that a folder called export_counts is created
+- `--skip_drop_as false` if you want to get a database for aberrant splicing
+- `--skip_drop_ae false` if you want to get a database for aberrant expression
+- `--skip_subsample_region false` if you have sequenced any material with overrrepresented regions (such as hemoglobin in whole blood) we recommend to remove it by setting this parameter to false and providing a bed with thet overrepresented region with `--subsample_bed`
+- `--skip_downsample false` if you have very deeply sequenced samples, we recommend to downsample, the default is 60M read pairs
+- `--skip_build_tracks true`, `--skip_stringtie true`, `--skip_vep true` as most users will be interested in getting the database rather than other downstream results
+
+Running DROP with many samples requires a lot of time and a lot of memory, that is why we recommend to subsample overrepresented regions and downsampled if you have deeply sequenced samples. If your run fails for either of this reasons, try to relaunched it from the work directory where DROP was run so that DROP continues from the point where it failed (if you restart the pipeline with `-resume` it will begin from the start and it will likely fail in the same way).
+
+To restart DROP, start by finding the work directory where it was run. You can do so by opening the execution trace file in the pipeline_info folder and looking at the hash of the processes with name `TOMTE:ANALYSE_TRANSCRIPTS:DROP_CONFIG_RUN_AE` and `TOMTE:ANALYSE_TRANSCRIPTS:DROP_CONFIG_RUN_AS`. The work directory used to run the pipeline followed by the hash should be enough information to find the folder where DROP was run. Tomte should have set everything up in that directory so go into it and restart the run by running from the container created by Tomte the script `.command.sh`. If you want to run it with slurm remember to add a header with number of cores, time...
+
+If you want to add samples to an existing database, follow the same steps described above, making sure that you also provide the database you want to add samples to by using `--reference_drop_annot_file` and `--reference_drop_count_file` and/or `--reference_drop_splice_folder`. In this case scenerio, make sure that you have used the same references for the database as for the new set of samples.
+
+If you prefer to run DROP locally outside from Tomte follow instructions given by the [authors of DROP](https://github.com/gagneurlab/drop)
 
 ## Running the pipeline
 
