@@ -1,6 +1,6 @@
 process DROP_CONFIG_RUN_AS {
     tag "DROP_CONFIG_RUN_AS"
-    label 'process_high'
+    label 'process_drop'
 
     // Exit if running this module with -profile conda / -profile mamba
     if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
@@ -18,13 +18,16 @@ process DROP_CONFIG_RUN_AS {
     path ref_splice_folder
     val(genome)
     val(drop_group_samples_as)
+    val(drop_group_samples_ae)
     val(drop_padjcutoff_as)
+    val(skip_export_counts_drop)
 
     output:
     path('config.yaml')             , emit: config_drop
     path('output')                  , emit: drop_as_out
     path('FRASER_results_fraser--*'), emit: drop_as_tsv
     path('gene_name_mapping*')      , emit: drop_gene_name
+    path('exported_counts')         , emit: gene_counts_as, optional: true
     path "versions.yml"             , emit: versions
 
     when:
@@ -34,6 +37,7 @@ process DROP_CONFIG_RUN_AS {
     def args = task.ext.args ?: ''
     def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
     def drop_group = "${drop_group_samples_as}".replace(" ","")
+    def drop_other_group_samples = "${drop_group_samples_ae}".replace(" ","")
     """
     TMPDIR=\$PWD
     HOME=\$PWD
@@ -47,10 +51,18 @@ process DROP_CONFIG_RUN_AS {
         --drop_module AS \\
         --genome_assembly $genome_assembly \\
         --drop_group_samples $drop_group \\
+        --drop_other_group_samples $drop_other_group_samples \\
         --padjcutoff ${drop_padjcutoff_as} \\
         --output config.yaml
 
     snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime $args
+
+    if [[ !skip_export_counts_drop ]]; then
+        snakemake exportCounts --cores 1
+        mkdir exported_counts
+        cp sample_annotation.tsv exported_counts/.
+        cp output/processed_results/exported_counts/*/*.gz exported_counts/.
+    fi
 
     cp output/html/AberrantSplicing/FRASER_results_fraser--*.tsv .
     cp output/processed_data/preprocess/*/gene_name_mapping_*.tsv .
@@ -68,6 +80,7 @@ process DROP_CONFIG_RUN_AS {
     touch FRASER_results_fraser--.tsv
     touch gene_name_mapping_.tsv
     mkdir output
+    mkdir exported_counts
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
