@@ -38,7 +38,7 @@ workflow ANALYSE_TRANSCRIPTS {
 
         // Generates sample annotation
         ch_bam_files = ch_bam_ds_bai.collect{it[1]}
-        
+
         ch_bam_ds_bai
             .map { meta, bam, bai ->
             [ meta.id, meta.single_end, meta.strandedness, bam, bai ]
