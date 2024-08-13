@@ -3,7 +3,7 @@ adaptivecard.json
 slackreport.json
 .nextflow*
 work/
-test_data/
+test_data/*
 results/
 .DS_Store
 testing/
