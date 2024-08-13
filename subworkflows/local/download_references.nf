@@ -23,7 +23,7 @@ workflow DOWNLOAD_REFERENCES {
 
         // Download gtf if not provided
         GTF_DOWNLOAD(ch_genome, ch_gencode_annotation_version, "gtf")
-        
+    
         // Read and store paths in vep_refs_download_unprocessed
         ch_vep_refs_download_unprocessed.splitCsv(header: true)
             .map { row -> return tuple(row.name, row.path_for_wget) }

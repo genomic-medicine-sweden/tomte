@@ -51,7 +51,7 @@ process BUILD_VEP_CACHE {
     """
     touch vep_cache
     touch vep_plugin_files.csv
-    
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         wget: \$(echo wget -V 2>&1 | grep "GNU Wget" | cut -d" " -f3 > versions.yml)

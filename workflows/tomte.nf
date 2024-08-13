@@ -61,7 +61,7 @@ workflow TOMTE {
 
     // Optional
     ch_vep_refs_download_unprocessed = params.vep_refs_download         ? Channel.fromPath(params.vep_refs_download)
-                                                                        : Channel.empty([]) 
+                                                                        : Channel.empty([])
 
     DOWNLOAD_REFERENCES(
         params.genome,
