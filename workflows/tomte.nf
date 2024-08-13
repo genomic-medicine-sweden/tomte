@@ -13,6 +13,7 @@ include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pi
 //
 // SUBWORKFLOW: local
 //
+include { DOWNLOAD_REFERENCES     } from '../subworkflows/local/download_references'
 include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_references'
 include { ALIGNMENT               } from '../subworkflows/local/alignment'
 include { BAM_QC                  } from '../subworkflows/local/bam_qc'
@@ -59,6 +60,26 @@ workflow TOMTE {
     ch_foundin_header = Channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
 
     // Optional
+    ch_vep_refs_download_unprocessed = params.vep_refs_download         ? Channel.fromPath(params.vep_refs_download)
+                                                                        : Channel.empty([]) 
+
+    DOWNLOAD_REFERENCES(
+        params.genome,
+        params.gencode_annotation_version,
+        ch_vep_refs_download_unprocessed,
+        params.vep_cache_version
+    ).set { downloads }
+    ch_versions = ch_versions.mix(DOWNLOAD_REFERENCES.out.versions)
+
+    // Optional
+    ch_fasta                      = params.fasta                        ? Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                        : downloads.fasta.map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                        : downloads.gtf.map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
+                                                                        : Channel.empty().mix(downloads.vep_cache)
+    ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
+                                                                        : Channel.empty().mix(downloads.vep_plugin)
     ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                         : Channel.empty()
     ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()
@@ -79,24 +100,25 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_subsample_bed              = params.subsample_bed                ? Channel.fromPath(params.subsample_bed).collect()
                                                                         : Channel.empty()
-    ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
-                                                                        : Channel.empty()
-    ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files).collect()
-                                                                        : Channel.value([])
-
 
     // Read and store paths in the vep_plugin_files file
-    ch_vep_extra_files_unsplit.splitCsv ( header:true )
-        .map { row ->
-            f = file(row.vep_files[0])
-            if(f.isFile() || f.isDirectory()){
-                return [f]
+    ch_vep_extra_files_unsplit.splitCsv(header: true)
+    .flatMap { row ->
+        row.vep_files.split(',').collect { file(it.trim()) }
+    }
+    .map { f ->
+        if (params.skip_download_vep) {
+            if(f.isFile() || f.isDirectory()) {
+                return f
             } else {
                 error("\nVep database file ${f} does not exist.")
             }
+        } else {
+            return f
         }
-        .collect()
-        .set {ch_vep_extra_files}
+    }
+    .collect()
+    .set { ch_vep_extra_files }
 
     PREPARE_REFERENCES(
         ch_fasta,
@@ -108,6 +130,7 @@ workflow TOMTE {
         ch_salmon_index,
         ch_sequence_dict
     ).set { ch_references }
+    ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions.first())
 
     FASTQC (
         ch_samplesheet
