@@ -21,6 +21,7 @@ lint:
     - lib/NfcoreTemplate.groovy
     - docs/README.md
     - pyproject.toml
+    - .prettierignore
   multiqc_config:
     - report_comment
   nextflow_config:
