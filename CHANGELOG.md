@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- Fasta, gtf, vep cache and plugins can now be downloaded automatically by the pipeline if they are not provided by the user [#144](https://github.com/genomic-medicine-sweden/tomte/pull/144)
-- Added `--gencode_annotation_version`, the version of the gencode reference version to download if fasta or gtf is not provided
-- Added the possibility to provide `--vep_refs_download`, a comma separated csv determining the vep references that should be downloaded (excluding gnomad ones) alongside with a switch `--skip_download_vep` for the vep reference download in general and `--skip_download_gnomad` for gnomad in particular[#149](https://github.com/genomic-medicine-sweden/tomte/pull/144)
+- Fasta, gtf, vep cache and plugins can now be downloaded automatically by the pipeline if they are not provided by the user [#149](https://github.com/genomic-medicine-sweden/tomte/pull/149)
+- Added `--gencode_annotation_version`, the version of the gencode reference version to download if fasta or gtf is not provided [#149](https://github.com/genomic-medicine-sweden/tomte/pull/149)
+- Added the possibility to provide `--vep_refs_download`, a comma separated csv determining the vep references that should be downloaded (excluding gnomad ones) alongside with a switch `--skip_download_vep` for the vep reference download in general and `--skip_download_gnomad` for gnomad in particular [#149](https://github.com/genomic-medicine-sweden/tomte/pull/149)
 
 ### `Fixed`
 
