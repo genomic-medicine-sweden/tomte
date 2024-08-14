@@ -25,9 +25,9 @@ process WGET_DOWNLOAD {
 
     if [[ $filename == *.tar.gz ]]; then
         tar -xzf $filename && mv \$(tar -tf $filename | head -1 | cut -f1 -d"/") $meta
+    else
+        mv $filename $meta
     fi
-
-    mv $filename $meta
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
