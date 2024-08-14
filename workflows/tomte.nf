@@ -54,8 +54,6 @@ workflow TOMTE {
     // Mandatory
     ch_samples        = ch_samplesheet.map { meta, fastqs -> meta }
     ch_case_info      = ch_samples.toList().map { create_case_channel(it) }
-    ch_fasta          = Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
-    ch_gtf            = Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
     ch_platform       = Channel.from(params.platform).collect()
     ch_foundin_header = Channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
 
