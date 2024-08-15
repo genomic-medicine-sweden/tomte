@@ -104,15 +104,15 @@ workflow TOMTE {
     .flatMap { row ->
         row.vep_files.split(',').collect { file(it.trim()) }
     }
-    .map { f ->
+    .map { path ->
         if (params.skip_download_vep) {
-            if(f.isFile() || f.isDirectory()) {
-                return f
+            if(path.isFile() || path.isDirectory()) {
+                return path
             } else {
-                error("\nVep database file ${f} does not exist.")
+                error("\nVep database file ${path} does not exist.")
             }
         } else {
-            return f
+            return path
         }
     }
     .collect()
