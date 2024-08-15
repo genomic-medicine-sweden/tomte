@@ -3,6 +3,18 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# X.X.X - [XXXX-XX-XX]
+
+### `Added`
+
+### `Fixed`
+
+- Input to BootstrapAnn is now supplied in a single channel. Previously they were supplied in separate channels, which could cause mix-ups if more than one sample was supplied [#151](https://github.com/genomic-medicine-sweden/tomte/pull/151)
+
+### `Parameters`
+
+### `Changed`
+
 ## 2.1.0 - Elf [2024-06-26]
 
 ### `Added`
