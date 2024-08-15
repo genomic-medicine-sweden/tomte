@@ -8,8 +8,7 @@ process BOOTSTRAPANN {
         'biocontainers/pydamage:0.70--pyhdfd78af_0' }"
 
     input:
-    tuple val(meta), path(vcf), path(tbi)
-    tuple val(meta2), path(csv)
+    tuple val(meta), path(vcf), path(tbi), path(csv)
 
     output:
     tuple val(meta), path("*.vcf"), emit: vcf

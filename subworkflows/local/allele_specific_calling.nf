@@ -50,8 +50,7 @@ workflow ALLELE_SPECIFIC_CALLING {
         )
 
         BOOTSTRAPANN(
-            ch_ind_vcf_tbi,
-            GATK4_ASEREADCOUNTER.out.csv
+            ch_ind_vcf_tbi.join(GATK4_ASEREADCOUNTER.out.csv),
         )
 
         TABIX_BGZIPTABIX(BOOTSTRAPANN.out.vcf)

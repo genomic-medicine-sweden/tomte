@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Input to BootstrapAnn is now supplied in a single channel. Previously they were supplied in separate channels, which could cause mix-ups if more than one sample was supplied [#151](https://github.com/genomic-medicine-sweden/tomte/pull/151)
+
 ### `Parameters`
 
 | Old parameter | New parameter                  |
