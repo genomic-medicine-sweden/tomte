@@ -24,7 +24,7 @@ process WGET_DOWNLOAD {
     wget $path_wget
 
     if [[ $filename == *.tar.gz ]]; then
-        tar -xzf $filename && mv \$(tar -tf $filename | head -1 | cut -f1 -d"/") $meta
+        tar -xzf $filename
     else
         mv $filename $meta
     fi
