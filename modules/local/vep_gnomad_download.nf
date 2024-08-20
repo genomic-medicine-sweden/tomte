@@ -12,7 +12,7 @@ process VEP_GNOMAD_DOWNLOAD {
     val vep_cache_version
 
     output:
-    tuple path("vcf.gz"), path("vcf.gz.tbi"), emit: gnomad_vcf_tbi
+    tuple path("*.vcf.gz"), path("*.vcf.gz.tbi"), emit: gnomad_vcf_tbi
     path "versions.yml"  , emit: versions
 
     when:
