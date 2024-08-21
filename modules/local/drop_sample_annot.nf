@@ -28,14 +28,16 @@ process DROP_SAMPLE_ANNOT {
     def single_end = "${single_ends}".replace("[","").replace("]","").replace(",","")
     def strandedness = "${strandednesses}".replace("[","").replace("]","").replace(",","")
     def drop_group = "${drop_group_samples_ae},${drop_group_samples_as}".replace(" ","").replace("[","").replace("]","")
+    def reference_count_file = ref_gene_counts ? "--ref_count_file ${ref_gene_counts}" : ''
+    def reference_annotation = ref_annot ? "--ref_annot ${ref_annot}" : ''
     """
     $baseDir/bin/drop_sample_annot.py \\
         --bam ${bam} \\
         --samples $id \\
         --strandedness $strandedness \\
         --single_end $single_end \\
-        --ref_count_file ${ref_gene_counts} \\
-        --ref_annot ${ref_annot} \\
+        $reference_count_file \\
+        $reference_annotation \\
         --drop_group_sample $drop_group \\
         --output sample_annotation.tsv
 

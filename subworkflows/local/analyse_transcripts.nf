@@ -49,8 +49,8 @@ workflow ANALYSE_TRANSCRIPTS {
 
         DROP_SAMPLE_ANNOT(
             ch_bam_files_annot,
-            ch_ref_drop_count_file,
-            ch_ref_drop_annot_file,
+            ch_ref_drop_count_file.ifEmpty([]),
+            ch_ref_drop_annot_file.ifEmpty([]),
             drop_group_samples_ae,
             drop_group_samples_as
         )
@@ -63,8 +63,8 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_gtf,
             DROP_SAMPLE_ANNOT.out.drop_annot,
             ch_bam_bai_files,
-            ch_ref_drop_count_file,
-            ch_ref_drop_splice_folder,
+            ch_ref_drop_count_file.ifEmpty([]),
+            ch_ref_drop_splice_folder.ifEmpty([]),
             genome,
             drop_group_samples_ae,
             drop_group_samples_as,
@@ -79,8 +79,8 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_gtf,
             DROP_SAMPLE_ANNOT.out.drop_annot,
             ch_bam_bai_files,
-            ch_ref_drop_count_file,
-            ch_ref_drop_splice_folder,
+            ch_ref_drop_count_file.ifEmpty([]),
+            ch_ref_drop_splice_folder.ifEmpty([]),
             genome,
             drop_group_samples_as,
             drop_group_samples_ae,
