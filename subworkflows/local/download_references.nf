@@ -33,7 +33,7 @@ workflow DOWNLOAD_REFERENCES {
         WGET_DOWNLOAD(ch_vep_refs_download.filter{ it != null })
         VEP_GNOMAD_DOWNLOAD(ch_genome, ch_vep_cache_version)
 
-        BUILD_VEP_CACHE(WGET_DOWNLOAD.out.downloaded_file.collect(),VEP_GNOMAD_DOWNLOAD.out.gnomad_vcf_tbi.flatten())
+        BUILD_VEP_CACHE(WGET_DOWNLOAD.out.downloaded_file.collect(),VEP_GNOMAD_DOWNLOAD.out.gnomad_vcf_tbi.flatten().collect())
 
         ch_versions = ch_versions.mix(FASTA_DOWNLOAD.out.versions)
         ch_versions = ch_versions.mix(GTF_DOWNLOAD.out.versions)

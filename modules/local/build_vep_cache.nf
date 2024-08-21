@@ -20,7 +20,6 @@ process BUILD_VEP_CACHE {
     task.ext.when == null || task.ext.when
 
     script:
-    def all_vep_reference_files = vep_reference_files + gnomad_files
     """
     # Create file listing all vep plugins to use. Note that file extension must be .csv
 
@@ -28,7 +27,7 @@ process BUILD_VEP_CACHE {
     mkdir vep_cache
     mkdir vep_cache/vep_plugins
 
-    for file_path in ${all_vep_reference_files}; do
+    for file_path in ${vep_reference_files} ${gnomad_files}; do
         file_name=\$(basename "\$file_path")
         if [ -d "\${file_path}" ]; then
             # If it's a directory, copy it to vep_cache
