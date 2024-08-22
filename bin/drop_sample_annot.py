@@ -42,8 +42,6 @@ def write_sample_annotation_to_tsv(
             sa_dict: dict = {}.fromkeys(SAMPLE_ANNOTATION_COLUMNS, "NA")
             sa_dict["RNA_ID"] = id
             sa_dict["DROP_GROUP"] = drop_group_sample
-            sa_dict["GENE_COUNTS_FILE"] = "NA"
-            sa_dict["GENE_ANNOTATION"] = "NA"
             sa_dict["STRAND"] = is_stranded(strandedness[index])
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
             sa_dict["RNA_BAM_FILE"] = bam[index]
@@ -82,6 +80,7 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
                 "At least 30 samples are required for Aberrant Splicing and 50 for Aberrant expression"
             )
             print(f"Only {df_samples.shape[0]} samples were provided by the user")
+        df_samples.fillna("NA", inplace=True)
         df_samples.to_csv(out_file, index=False, sep="\t")
     else:
         df_reference: DataFrame = read_csv(ref_annot, sep="\t")
@@ -135,8 +134,9 @@ def parse_args(argv=None):
     parser.add_argument(
         "--ref_count_file",
         type=str,
+        default="None",
         help="A tsv file of gene counts for reference samples.",
-        required=True,
+        required=False,
     )
     parser.add_argument(
         "--ref_annot",
