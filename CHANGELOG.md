@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# X.X.X - [XXXX-XX-XX]
+## 2.2.0 - TioDeNadal [2024-08-23]
 
 ### `Added`
 
@@ -27,6 +27,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 :::note Parameter has been updated if both old and new parameter information is present. Parameter has been added if just thenew parameter information is present. Parameter has been removed if new parameter information isn't present. :::
 
 ### `Changed`
+
+- Updated modules bcftools/annotate, bcftools/mpileup, bcftools/view, cat/fastq, ensemblvep/filtervep, fastp, fastqc, gatk4/haplotypecaller, gatk4/splitncigarreads, gunzip, multiqc, picard/collectrnaseqmetrics, samtools/index, star/align, star/genomegenerate, stringtie/stringtie, tabix/bgziptabix, tabix/tabix/ and untar [#153](https://github.com/genomic-medicine-sweden/tomte/pull/153)
+
+| Tool                            | Old version | New version |
+| ------------------------------- | ----------- | ----------- |
+| gunzip                          | 20.04       | 22.04       |
+| multiqc                         | 1.22.3      | 1.24.1      |
+| picard/collectinsertsizemetrics | 3.1.1       | 3.2.0       |
+| tabix/bgziptabix                | 1.19.1      | 1.20        |
+| tabix/tabix                     | 1.19.1      | 1.20        |
+| untar                           | 20.04       | 22.04       |
 
 ## 2.1.0 - Elf [2024-06-26]
 
