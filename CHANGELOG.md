@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- Updated modules bcftools/annotate, bcftools/mpileup, bcftools/view, cat/fastq, ensemblvep/filtervep, fastp, fastqc, gatk4/haplotypecaller, gatk4/splitncigarreads, gunzip, multiqc, picard/collectrnaseqmetrics, samtools/index, star/align, star/genomegenerate, stringtie/stringtie, tabix/bgziptabix, tabix/tabix/ and untar [#152](https://github.com/genomic-medicine-sweden/tomte/pull/152)
+- Updated modules bcftools/annotate, bcftools/mpileup, bcftools/view, cat/fastq, ensemblvep/filtervep, fastp, fastqc, gatk4/haplotypecaller, gatk4/splitncigarreads, gunzip, multiqc, picard/collectrnaseqmetrics, samtools/index, star/align, star/genomegenerate, stringtie/stringtie, tabix/bgziptabix, tabix/tabix/ and untar [#153](https://github.com/genomic-medicine-sweden/tomte/pull/153)
 
 | Tool                            | Old version | New version |
 | ------------------------------- | ----------- | ----------- |
