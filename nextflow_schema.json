@@ -228,6 +228,7 @@
                 },
                 "skip_subsample_region": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac",
                     "fa_icon": "fas fa-toggle-off"
                 },
