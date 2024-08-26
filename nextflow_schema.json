@@ -233,6 +233,7 @@
                 },
                 "skip_downsample": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.",
                     "fa_icon": "fas fa-toggle-off"
                 },
@@ -281,26 +282,31 @@
                 },
                 "skip_build_tracks": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip building splice junction tracks for IGV.",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_stringtie": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip analysis with StringTie",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_vep": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip Ensembl Variant Effect Predictor",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_drop_ae": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip DROP Aberrant Expression module ",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_drop_as": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip DROP Aberrant Splicing module",
                     "fa_icon": "fas fa-toggle-off"
                 },
