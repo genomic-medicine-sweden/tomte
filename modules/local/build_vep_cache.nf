@@ -48,7 +48,7 @@ process BUILD_VEP_CACHE {
 
     stub:
     """
-    touch vep_cache
+    mkdir vep_cache
     touch vep_plugin_files.csv
 
     cat <<-END_VERSIONS > versions.yml
