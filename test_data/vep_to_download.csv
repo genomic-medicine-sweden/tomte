@@ -1,0 +1,4 @@
+name,path_for_wget
+clinvar_20240806.vcf.gz,ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/weekly/clinvar.vcf.gz
+clinvar_20240806.vcf.gz.tbi,ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/weekly/clinvar.vcf.gz.tbi
+homo_sapiens_merged,https://ftp.ensembl.org/pub/release-110/variation/indexed_vep_cache/homo_sapiens_merged_vep_110_GRCh38.tar.gz

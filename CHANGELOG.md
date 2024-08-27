@@ -3,6 +3,45 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.2.0 - TioDeNadal [2024-08-27]
+
+### `Added`
+
+- Fasta, gtf, vep cache and plugins can now be downloaded automatically by the pipeline if they are not provided by the user [#149](https://github.com/genomic-medicine-sweden/tomte/pull/149)
+- Added `--gencode_annotation_version`, the version of the gencode reference version to download if fasta or gtf is not provided [#149](https://github.com/genomic-medicine-sweden/tomte/pull/149)
+- Added the possibility to provide `--vep_refs_download`, a comma separated csv determining the vep references that should be downloaded (excluding gnomad ones) alongside with a switch `--skip_download_vep` for the vep reference download in general and `--skip_download_gnomad` for gnomad in particular [#149](https://github.com/genomic-medicine-sweden/tomte/pull/149)
+
+### `Fixed`
+
+- Input to BootstrapAnn is now supplied in a single channel. Previously they were supplied in separate channels, which could cause mix-ups if more than one sample was supplied [#151](https://github.com/genomic-medicine-sweden/tomte/pull/151)
+
+### `Parameters`
+
+| Old parameter | New parameter                  |
+| ------------- | ------------------------------ |
+|               | `--gencode_annotation_version` |
+|               | `--vep_refs_download`          |
+|               | `--skip_download_vep`          |
+|               | `--skip_download_gnomad`       |
+
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
+
+### `Changed`
+
+- Updated modules bcftools/annotate, bcftools/mpileup, bcftools/view, cat/fastq, ensemblvep/filtervep, fastp, fastqc, gatk4/haplotypecaller, gatk4/splitncigarreads, gunzip, multiqc, picard/collectrnaseqmetrics, samtools/index, star/align, star/genomegenerate, stringtie/stringtie, tabix/bgziptabix, tabix/tabix and untar [#153](https://github.com/genomic-medicine-sweden/tomte/pull/153)
+
+| Tool                            | Old version | New version |
+| ------------------------------- | ----------- | ----------- |
+| gunzip                          | 20.04       | 22.04       |
+| multiqc                         | 1.22.3      | 1.24.1      |
+| picard/collectinsertsizemetrics | 3.1.1       | 3.2.0       |
+| tabix/bgziptabix                | 1.19.1      | 1.20        |
+| tabix/tabix                     | 1.19.1      | 1.20        |
+| untar                           | 20.04       | 22.04       |
+
 ## 2.1.0 - Elf [2024-06-26]
 
 ### `Added`
