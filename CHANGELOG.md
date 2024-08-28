@@ -3,6 +3,20 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.2.1 - Scrooge [2024-08-28]
+
+### `Fixed`
+
+- After an update, MultiQC was not outputing data for RnaSeqMetrics so an earlier version will be used [#156](https://github.com/genomic-medicine-sweden/tomte/pull/156)
+
+### `Changed`
+
+- Downgraded multiqc version [#156](https://github.com/genomic-medicine-sweden/tomte/pull/156)
+
+| Tool    | Old version | New version |
+| ------- | ----------- | ----------- |
+| multiqc | 1.24.1      | 1.21        |
+
 ## 2.2.0 - TioDeNadal [2024-08-27]
 
 ### `Added`
