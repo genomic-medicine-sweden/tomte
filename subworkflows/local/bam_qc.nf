@@ -26,6 +26,8 @@ workflow BAM_QC {
             ch_bam
         )
 
+        PICARD_COLLECTRNASEQMETRICS.out.metrics.view()
+
         ch_versions = ch_versions.mix(PICARD_COLLECTRNASEQMETRICS.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTINSERTSIZEMETRICS.out.versions.first())
 
