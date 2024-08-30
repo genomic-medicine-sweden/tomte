@@ -7,7 +7,7 @@ process DROP_SAMPLE_ANNOT {
         exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
     }
 
-    container "docker.io/clinicalgenomics/drop:1.3.3"
+    container "docker.io/clinicalgenomics/drop:1.4.0"
 
     input:
     tuple val(ids), val(single_ends), val(strandednesses), path(bam), path(bai)

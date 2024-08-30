@@ -3,6 +3,24 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## X.X.X - [XXXX-XX-XX]
+
+### `Added`
+
+- Functionality to create DROP databases and to add samples to existing ones [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
+
+### `Fixed`
+
+### `Parameters`
+
+### `Changed`
+
+- Updated modules using drop drop_config_runAE, drop_config_runAS, drop_sample_annot, and drop_filter_results [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
+
+| Tool | Old version | New version |
+| ---- | ----------- | ----------- |
+| DROP | 1.3.3       | 1.4.0       |
+
 ## 2.2.1 - Scrooge [2024-08-28]
 
 ### `Fixed`
