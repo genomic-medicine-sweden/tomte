@@ -94,7 +94,7 @@
                 },
                 "gencode_annotation_version": {
                     "type": "integer",
-                    "default": 37,
+                    "default": 46,
                     "description": "Name of Genomes gencode reference version to download if fasta or gtf is not provided.",
                     "fa_icon": "fas fa-book",
                     "help_text": "If fasta or gtf is not provided the gencode version specified will be downloaded. Combine with `--save_reference` to save gtf and/or fasta for future runs."
