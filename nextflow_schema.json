@@ -159,10 +159,10 @@
                 },
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": 110,
+                    "default": 112,
                     "description": "Specifies version of vep cache to use.",
                     "fa_icon": "fas fa-folder-open",
-                    "enum": [107, 110]
+                    "enum": [107, 110, 112]
                 },
                 "vep_plugin_files": {
                     "type": "string",

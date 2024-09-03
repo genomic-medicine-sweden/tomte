@@ -209,7 +209,7 @@ The mandatory and optional parameters for each category are tabulated below.
 
 <sup>1</sup> If it is not provided by the user, the default value is false<br />
 <sup>2</sup> VEP cache and plugins can be automatically downloaded by the pipeline by setting `--skip_download_vep false`, `--skip_download_gnomad false` and providing a lcsv with a list of files to download `--vep_refs_download` as done [here](https://github.com/genomic-medicine-sweden/tomte/blob/dev/test_data/vep_to_download.csv). VEP caches can also be downloaded [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#cache). VEP plugins may also be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter. See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
-<sup>3</sup> If it is not provided by the user, the default value is 110, supported values are 107 and 110
+<sup>3</sup> If it is not provided by the user, the default value is 112, supported values are 107, 110, and 112
 <sup>4</sup> If it is not provided by the user, the default value true
 
 #### 6. Stringtie & gffcompare
