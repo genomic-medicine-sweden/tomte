@@ -30,10 +30,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Downgraded multiqc version [#156](https://github.com/genomic-medicine-sweden/tomte/pull/156)
+- Updated modules ensemblvep/filtervep, ensemblvep/vep [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
+- Updated gencode version from 37 to 46 [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
 
-| Tool    | Old version | New version |
-| ------- | ----------- | ----------- |
-| multiqc | 1.24.1      | 1.21        |
+| Tool                 | Old version | New version |
+| -------------------- | ----------- | ----------- |
+| multiqc              | 1.24.1      | 1.21        |
+| ensemblvep/filtervep | 110         | 112         |
+| ensemblvep/vep       | 110         | 112         |
 
 ## 2.2.0 - TioDeNadal [2024-08-27]
 

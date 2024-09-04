@@ -94,7 +94,7 @@
                 },
                 "gencode_annotation_version": {
                     "type": "integer",
-                    "default": 37,
+                    "default": 46,
                     "description": "Name of Genomes gencode reference version to download if fasta or gtf is not provided.",
                     "fa_icon": "fas fa-book",
                     "help_text": "If fasta or gtf is not provided the gencode version specified will be downloaded. Combine with `--save_reference` to save gtf and/or fasta for future runs."
@@ -159,10 +159,10 @@
                 },
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": 110,
+                    "default": 112,
                     "description": "Specifies version of vep cache to use.",
                     "fa_icon": "fas fa-folder-open",
-                    "enum": [107, 110]
+                    "enum": [107, 110, 112]
                 },
                 "vep_plugin_files": {
                     "type": "string",
