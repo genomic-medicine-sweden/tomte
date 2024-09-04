@@ -19,7 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated gencode version from 37 to 46 [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
 - Updated modules using drop drop_config_runAE, drop_config_runAS, drop_sample_annot, and drop_filter_results [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
 
-
 | Tool                 | Old version | New version |
 | -------------------- | ----------- | ----------- |
 | ensemblvep/filtervep | 110         | 112         |
