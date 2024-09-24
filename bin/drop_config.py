@@ -100,7 +100,7 @@ def update_config(
     config_copy: Dict[str, Any] = deepcopy(CONFIG_YAML)
 
     config_copy["genome"] = genome_name
-    config_copy["root"] = "output"
+    config_copy["root"] = str(Path.cwd() / "output")
     config_copy["htmlOutputPath"] = "output/html"
     config_copy["sampleAnnotation"] = "sample_annotation.tsv"
     config_copy["geneAnnotation"][gtf_without_ext] = str(gtf)

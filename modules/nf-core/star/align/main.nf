@@ -1,6 +1,8 @@
 process STAR_ALIGN {
     tag "$meta.id"
-    label 'process_high'
+    label 'process_high_mem'
+
+    maxForks 2
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?

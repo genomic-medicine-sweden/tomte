@@ -7,10 +7,10 @@ process DROP_SAMPLE_ANNOT {
         exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
     }
 
-    container "docker.io/clinicalgenomics/drop:1.3.3"
+    container "docker.io/clinicalgenomics/drop:1.4.0"
 
     input:
-    tuple val(ids), val(single_ends), val(strandednesses), path(bam), path(bai)
+    tuple val(ids), val(single_ends), val(strandednesses), val(sex), path(bam), path(bai)
     path(ref_gene_counts)
     path(ref_annot)
     val(drop_group_samples_ae)
@@ -26,6 +26,7 @@ process DROP_SAMPLE_ANNOT {
     script:
     def id = "${ids}".replace("[","").replace("]","").replace(",","")
     def single_end = "${single_ends}".replace("[","").replace("]","").replace(",","")
+    def sex = "${sex}".replace("[","").replace("]","").replace(",","")
     def strandedness = "${strandednesses}".replace("[","").replace("]","").replace(",","")
     def drop_group = "${drop_group_samples_ae},${drop_group_samples_as}".replace(" ","").replace("[","").replace("]","")
     def reference_count_file = ref_gene_counts ? "--ref_count_file ${ref_gene_counts}" : ''
@@ -36,6 +37,7 @@ process DROP_SAMPLE_ANNOT {
         --samples $id \\
         --strandedness $strandedness \\
         --single_end $single_end \\
+        --sex $sex \\
         $reference_count_file \\
         $reference_annotation \\
         --drop_group_sample $drop_group \\

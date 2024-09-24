@@ -47,7 +47,14 @@
                 "meta": ["strandedness"],
                 "enum": ["unstranded", "forward", "reverse"],
                 "errorMessage": "Sample strandness valid input is unstranded,forward or reverse"
+            },
+            "sex": {
+                "type": "string",
+                "meta": ["sex"],
+                "enum": ["M", "F"],
+                "errorMessage": "Sample sex should be either M or F"
             }
+
         },
         "required": ["case", "sample", "fastq_1", "strandedness"]
     }

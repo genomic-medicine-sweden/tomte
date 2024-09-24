@@ -18,9 +18,9 @@ SAMPLE_ANNOTATION_COLUMNS = [
     "SPLICE_COUNTS_DIR",
     "STRAND",
     "HPO_TERMS",
-    "GENE_COUNTS_FILE",
     "GENE_ANNOTATION",
     "GENOME",
+    "SEX",
 ]
 
 
@@ -29,6 +29,7 @@ def write_sample_annotation_to_tsv(
     samples: str,
     strandedness: str,
     single_end: str,
+    sex: str,
     drop_group_sample: str,
     out_file: str,
 ):
@@ -44,6 +45,7 @@ def write_sample_annotation_to_tsv(
             sa_dict["DROP_GROUP"] = drop_group_sample
             sa_dict["STRAND"] = is_stranded(strandedness[index])
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
+            sa_dict["SEX"] = sex[index]
             sa_dict["RNA_BAM_FILE"] = bam[index]
             writer.writerow(sa_dict)
 
@@ -80,6 +82,8 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
                 "At least 30 samples are required for Aberrant Splicing and 50 for Aberrant expression"
             )
             print(f"Only {df_samples.shape[0]} samples were provided by the user")
+        df_samples["COUNT_MODE"] = "IntersectionStrict"
+        df_samples["COUNT_OVERLAPS"] = True
         df_samples.fillna("NA", inplace=True)
         df_samples.to_csv(out_file, index=False, sep="\t")
     else:
@@ -125,6 +129,9 @@ def parse_args(argv=None):
         "--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True
     )
     parser.add_argument(
+        "--sex", type=str, nargs="+", help="Sex of samples", required=True
+    )
+    parser.add_argument(
         "--single_end",
         type=str,
         nargs="+",
@@ -165,6 +172,7 @@ def main():
         samples=args.samples,
         strandedness=args.strandedness,
         single_end=args.single_end,
+        sex=args.sex,
         drop_group_sample=args.drop_group_sample,
         out_file="drop_annotation_given_samples.tsv",
     )

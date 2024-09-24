@@ -41,7 +41,7 @@ workflow ANALYSE_TRANSCRIPTS {
 
         ch_bam_ds_bai
             .map { meta, bam, bai ->
-            [ meta.id, meta.single_end, meta.strandedness, bam, bai ]
+            [ meta.id, meta.single_end, meta.strandedness, meta.sex, bam, bai ]
             }
             .collect(flat:false)
             .map { it.transpose() }
