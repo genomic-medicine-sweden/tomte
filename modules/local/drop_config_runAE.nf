@@ -63,7 +63,7 @@ process DROP_CONFIG_RUN_AE {
 
     if [[ "${skip_export_counts_drop}" == "false" ]]; then
         snakemake exportCounts --cores 1
-        mkdir exported_counts
+        mkdir -p exported_counts
         cp sample_annotation.tsv exported_counts/.
         cp output/processed_results/exported_counts/*/geneCounts.tsv.gz exported_counts/.
     fi
