@@ -28,7 +28,7 @@ process DROP_CONFIG_RUN_AE {
     path('output')                  , emit: drop_ae_out
     path('OUTRIDER_results_all.Rds'), emit: drop_ae_rds
     path('gene_name_mapping*')      , emit: drop_gene_name
-    path('exported_counts')       , emit: gene_counts_ae, optional: true
+    path('exported_counts')         , emit: gene_counts_ae, optional: true
     path "versions.yml"             , emit: versions
 
     when:
