@@ -311,6 +311,12 @@
                     "description": "Skip DROP Aberrant Splicing module",
                     "fa_icon": "fas fa-toggle-off"
                 },
+                "skip_export_counts_drop": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-toggle-on",
+                    "default": true,
+                    "description": "Skip export counts for DROP. It will export information from those modules run. Read usage for further information."
+                },
                 "drop_group_samples_ae": {
                     "type": "string",
                     "default": "outrider",

@@ -6,7 +6,7 @@ import yaml
 from typing import Dict, Any
 from copy import deepcopy
 
-SCRIPT_VERSION = "v1.0"
+SCRIPT_VERSION = "v2.1"
 CONFIG_YAML = {
     "projectTitle": "DROP: Detection of RNA Outliers Pipeline",
     "root": None,
@@ -86,6 +86,7 @@ def update_config(
     gtf: Path,
     genome_assembly: str,
     drop_group_samples: str,
+    drop_other_group_samples: str,
     padjcutoff: float,
     zscorecutoff: float,
     drop_module: str,
@@ -99,13 +100,14 @@ def update_config(
     config_copy: Dict[str, Any] = deepcopy(CONFIG_YAML)
 
     config_copy["genome"] = genome_name
-    config_copy["root"] = "output"
+    config_copy["root"] = str(Path.cwd() / "output")
     config_copy["htmlOutputPath"] = "output/html"
     config_copy["sampleAnnotation"] = "sample_annotation.tsv"
     config_copy["geneAnnotation"][gtf_without_ext] = str(gtf)
     config_copy["geneAnnotation"].pop("gtf", None)
     config_copy["exportCounts"]["geneAnnotations"] = [gtf_without_ext]
     config_copy["genomeAssembly"] = genome_assembly
+    config_copy["exportCounts"]["excludeGroups"] = [drop_other_group_samples]
 
     # Export counts
     if drop_module == "AE":
@@ -166,6 +168,12 @@ def parse_args(argv=None):
         required=True,
     )
     parser.add_argument(
+        "--drop_other_group_samples",
+        type=str,
+        help="Specify the drop group to exclude in exportCounts",
+        required=True,
+    )
+    parser.add_argument(
         "--padjcutoff",
         type=float,
         help="Specify adjusted p-value cut-off",
@@ -200,6 +208,7 @@ def main():
         gtf=args.gtf,
         genome_assembly=args.genome_assembly,
         drop_group_samples=args.drop_group_samples,
+        drop_other_group_samples=args.drop_other_group_samples,
         padjcutoff=args.padjcutoff,
         zscorecutoff=args.zscorecutoff,
         drop_module=args.drop_module,
