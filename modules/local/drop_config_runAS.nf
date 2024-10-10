@@ -80,7 +80,9 @@ process DROP_CONFIG_RUN_AS {
     touch FRASER_results_fraser--.tsv
     touch gene_name_mapping_.tsv
     mkdir output
-    mkdir exported_counts
+    if [[ !skip_export_counts_drop ]]; then
+        mkdir exported_counts
+    fi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
