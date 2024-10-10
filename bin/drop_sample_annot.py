@@ -67,8 +67,6 @@ def is_stranded(strandedness: str) -> str:
 
 def count_mode(sample_count_mode: str) -> str:
     """Logical funciton to determine if count mode is given or default "IntersectionStrict" should be used"""
-    print("Hello")
-    print(sample_count_mode)
     if isna(sample_count_mode) or sample_count_mode == "" or sample_count_mode == "NA":
         return "IntersectionStrict"
     else:
@@ -77,8 +75,6 @@ def count_mode(sample_count_mode: str) -> str:
 
 def count_overlaps(sample_count_overlap: str) -> str:
     """Logical funciton to determine if count overlap is given or default "TRUE" should be used"""
-    print("Hello")
-    print(sample_count_overlap)
     if (
         isna(sample_count_overlap)
         or sample_count_overlap == ""

@@ -22,7 +22,6 @@ include { CALL_VARIANTS           } from '../subworkflows/local/call_variants'
 include { ALLELE_SPECIFIC_CALLING } from '../subworkflows/local/allele_specific_calling'
 include { ANNOTATE_SNV            } from '../subworkflows/local/annotate_snv'
 include { IGV_TRACKS              } from '../subworkflows/local/igv_tracks'
-//include { BUILD_DROP_DATABASE     } from '../subworkflows/local/drop_database'
 include { methodsDescriptionText  } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
 
 //
