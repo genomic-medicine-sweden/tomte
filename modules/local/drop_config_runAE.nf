@@ -60,7 +60,7 @@ process DROP_CONFIG_RUN_AE {
 
     snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime $args
 
-    if [[ !skip_export_counts_drop ]]; then
+    if [[ $skip_export_counts_drop == false ]]; then
         snakemake exportCounts --cores 1
         mkdir -p exported_counts
         cp sample_annotation.tsv exported_counts/.
@@ -83,7 +83,7 @@ process DROP_CONFIG_RUN_AE {
     touch OUTRIDER_results_all.Rds
     touch gene_name_mapping_.tsv
     mkdir output
-    if [[ !skip_export_counts_drop ]]; then
+    if [[ $skip_export_counts_drop == false ]]; then
         mkdir exported_counts
     fi
 
