@@ -66,7 +66,7 @@ def is_stranded(strandedness: str) -> str:
 
 
 def count_mode(sample_count_mode: str) -> str:
-    """Logical funciton to determine if count mode is given or default "IntersectionStrict" should be used"""
+    """Logical function to determine if count mode is given or default "IntersectionStrict" should be used"""
     if isna(sample_count_mode) or sample_count_mode == "" or sample_count_mode == "NA":
         return "IntersectionStrict"
     else:
