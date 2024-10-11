@@ -28,6 +28,7 @@ workflow ANALYSE_TRANSCRIPTS {
         ch_gene_panel_clinical_filter // channel:   [optional]  [ path(tsv) ]
         case_info                     // channel:   [optional]  [ val(case_id) ]
         skip_drop_ae                  // parameter: [mandatory] default: 'false'
+        skip_export_counts_drop       // parameter: [mandatory] default: 'true'
 
     main:
         ch_versions = Channel.empty()
@@ -36,13 +37,20 @@ workflow ANALYSE_TRANSCRIPTS {
         // Generates count files for samples and merges them with reference count file
 
         // Generates sample annotation
-        star_samples = gene_counts.map{ meta, cnt_file -> meta }.collect()
         ch_bam_files = ch_bam_ds_bai.collect{it[1]}
+
+        ch_bam_ds_bai
+            .map { meta, bam, bai ->
+            [ meta.id, meta.single_end, meta.strandedness, bam, bai ]
+            }
+            .collect(flat:false)
+            .map { it.transpose() }
+        .set { ch_bam_files_annot }
+
         DROP_SAMPLE_ANNOT(
-            ch_bam_files,
-            star_samples,
-            ch_ref_drop_count_file,
-            ch_ref_drop_annot_file,
+            ch_bam_files_annot,
+            ch_ref_drop_count_file.ifEmpty([]),
+            ch_ref_drop_annot_file.ifEmpty([]),
             drop_group_samples_ae,
             drop_group_samples_as
         )
@@ -55,12 +63,14 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_gtf,
             DROP_SAMPLE_ANNOT.out.drop_annot,
             ch_bam_bai_files,
-            ch_ref_drop_count_file,
-            ch_ref_drop_splice_folder,
+            ch_ref_drop_count_file.ifEmpty([]),
+            ch_ref_drop_splice_folder.ifEmpty([]),
             genome,
             drop_group_samples_ae,
+            drop_group_samples_as,
             drop_padjcutoff_ae,
-            drop_zscorecutoff
+            drop_zscorecutoff,
+            skip_export_counts_drop
         )
 
         // Generates  config file and runs Aberrant splicing module
@@ -69,11 +79,13 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_gtf,
             DROP_SAMPLE_ANNOT.out.drop_annot,
             ch_bam_bai_files,
-            ch_ref_drop_count_file,
-            ch_ref_drop_splice_folder,
+            ch_ref_drop_count_file.ifEmpty([]),
+            ch_ref_drop_splice_folder.ifEmpty([]),
             genome,
             drop_group_samples_as,
-            drop_padjcutoff_as
+            drop_group_samples_ae,
+            drop_padjcutoff_as,
+            skip_export_counts_drop
         )
 
         ch_out_drop_ae_rds       = DROP_CONFIG_RUN_AE.out.drop_ae_rds       ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()

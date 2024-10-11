@@ -176,7 +176,8 @@ workflow TOMTE {
         params.drop_zscorecutoff,
         ch_gene_panel_clinical_filter,
         ch_case_info,
-        params.skip_drop_ae
+        params.skip_drop_ae,
+        params.skip_export_counts_drop
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
 

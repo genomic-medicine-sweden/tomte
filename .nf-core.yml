@@ -1,5 +1,5 @@
 lint:
-  files_exist: false
+  files_exist:
     - assets/nf-core-tomte_logo_light.png
     - docs/images/nf-core-tomte_logo_light.png
     - docs/images/nf-core-tomte_logo_dark.png
@@ -8,7 +8,7 @@ lint:
     - docs/images/tomte_pipeline_metromap.png
     - conf/modules.config
     - .github/ISSUE_TEMPLATE/config.yml
-  files_unchanged: false
+  files_unchanged:
     - assets/sendmail_template.txt
     - .github/CONTRIBUTING.md
     - .github/ISSUE_TEMPLATE/bug_report.yml
