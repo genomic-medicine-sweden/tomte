@@ -29,20 +29,6 @@ jobs:
         NXF_VER:
           - "24.04.2"
           - "latest-everything"
-        profile:
-          - "conda"
-          - "docker"
-          - "singularity"
-        test_name:
-          - "test"
-        isMaster:
-          - ${{ github.base_ref == 'master' }}
-        # Exclude conda and singularity on dev
-        exclude:
-          - isMaster: false
-            profile: "conda"
-          - isMaster: false
-            profile: "singularity"
         parameters:
           - "-profile test"
           - "-profile test --skip_subsample_region true --skip_downsample true --skip_build_tracks true --skip_stringtie true --skip_vep true --skip_drop_ae true --skip_drop_as true"
