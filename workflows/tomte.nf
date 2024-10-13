@@ -11,12 +11,6 @@ include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pi
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
 
 //
-// SUBWORKFLOW: nf-core
-//
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-
-//
 // SUBWORKFLOW: local
 //
 include { DOWNLOAD_REFERENCES     } from '../subworkflows/local/download_references'
