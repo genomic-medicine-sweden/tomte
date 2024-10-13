@@ -1,7 +1,7 @@
-# genomic-medicine-sweden/tomte
+# ![tomte](docs/images/tomte_logo_light.png#gh-light-mode-only) ![tomte](docs/images/tomte_logo_dark.png#gh-dark-mode-only)
 
 [![GitHub Actions CI Status](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/ci.yml/badge.svg)](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/ci.yml)
-[![GitHub Actions Linting Status](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/linting.yml/badge.svg)](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![GitHub Actions Linting Status](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/linting.yml/badge.svg)](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.10828946-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.10828946)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A524.04.2-23aa62.svg)](https://www.nextflow.io/)
@@ -12,45 +12,61 @@
 
 ## Introduction
 
-**genomic-medicine-sweden/tomte** is a bioinformatics pipeline that ...
+**genomic-medicine-sweden/tomte** is a bioinformatics best-practice analysis pipeline to analyse RNAseq from raredisease patients.
 
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
+The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
-<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
+## Pipeline summary
 
-1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+<p align="center">
+     <img title="tomte workflow" src="docs/images/tomte_pipeline_metromap.png">
+</p>
+
+1. Trim reads ([`FASTP`](https://github.com/OpenGene/fastp))
+2. Transcript quantification ([`Salmon`](https://salmon.readthedocs.io/en/latest/))
+3. Align reads to the genome ([`STAR`](https://github.com/alexdobin/STAR))
+4. Output junction tracks
+5. Output bigwig ([`UCSC wigToBigWig`](https://genome.ucsc.edu/goldenPath/help/bigWig.html))
+6. Choice to subsample overrepresented regions ([`Samtools`](https://github.com/samtools/samtools/))
+7. Choice to downsample number of reads ([`Samtools`](https://github.com/samtools/samtools/))
+8. Detection of aberrant expression ([`DROP`](https://github.com/gagneurlab/drop/))
+9. Detection of aberrant splicing ([`DROP`](https://github.com/gagneurlab/drop/))
+10. Filter aberrant expression and aberrant splicing results
+11. Guided transcript assembly ([`StringTie`](https://ccb.jhu.edu/software/stringtie/))
+12. Filtering results of guided transcript assembly ([`GffCompare`](https://github.com/gpertea/gffcompare))
+13. To Call SNVs either path a or b can be followed. Path A will run by default
+    a. Call SNVs
+    1. ([`BCFtools Mpileups`](https://samtools.github.io/bcftools/bcftools.html#mpileup))
+14. b. Call SNVs
+    1. Split cigar reads ([`SplitN Cigar Reads`](https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads))
+    2. Haplotype caller ([`Haplotype Caller`](https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller))
+    3. Variant filtration ([`Variant Filtration`](https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration))
+    4. BCFtools statistics ([`BCFtools stats`](https://samtools.github.io/bcftools/bcftools.html#stats))
+15. Allele Specific Read Counter ([`ASEReadCounter`](https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter))
+16. Assess allelic imbalance ([`BootstrapAnn`](https://github.com/J35P312/BootstrapAnn#bootstrapann))
+17. Annotation ([`VEP`](https://github.com/Ensembl/ensembl-vep))
+18. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
+19. Present QCs ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
-
 First, prepare a samplesheet with your input data that looks as follows:
 
 `samplesheet.csv`:
 
 ```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+case,sample,fastq_1,fastq_2,strandedness
+case_id,sample_id,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,reverse
 ```
 
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
+Each row represents a pair of fastq files (paired end).
 
 -->
 
 Now, you can run the pipeline using:
-
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
 ```bash
 nextflow run genomic-medicine-sweden/tomte \
@@ -62,24 +78,29 @@ nextflow run genomic-medicine-sweden/tomte \
 > [!WARNING]
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
 
+For more details and further functionality, please refer to the [usage documentation](https://github.com/genomic-medicine-sweden/tomte/blob/master/docs/usage.md) and the [parameter documentation](https://github.com/genomic-medicine-sweden/tomte/blob/master/docs/parameters.md).
+
+## Pipeline output
+
+For more details about the output files and reports, please refer to the [output documentation](https://github.com/genomic-medicine-sweden/tomte/blob/master/docs/output.md).
+
 ## Credits
 
-genomic-medicine-sweden/tomte was originally written by lucpen.
+genomic-medicine-sweden/tomte was written by Clinical Genomics Stockholm, Sweden, with major contributions from [Lucía Peña-Pérez](https://github.com/Lucpen), [Anders Jemt](https://github.com/jemten), and [Jesper Eisfeldt](https://github.com/J35P312).
 
-We thank the following people for their extensive assistance in the development of this pipeline:
+Additional contributors were [Ramprasad Neethiraj](https://github.com/ramprasadn), [Esmee ten Berk de Boer](https://github.com/Esmeetbdb), [Vadym Ivanchuk](https://github.com/ivadym), and [Mei Wu](https://github.com/projectoriented).
 
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+We thank the nf-core community for their extensive assistance in the development of this pipeline.
 
 ## Contributions and Support
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
+For further information or help, don't hesitate to get in touch by opening an [issue](https://github.com/genomic-medicine-sweden/tomte/issues).
+
 ## Citations
 
-<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use genomic-medicine-sweden/tomte for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
-
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
+If you use genomic-medicine-sweden/tomte for your analysis, please cite it using the following doi: [10.5281/zenodo.10828946](https://doi.org/10.5281/zenodo.10828946)
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 

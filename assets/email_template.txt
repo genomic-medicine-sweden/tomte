@@ -1,10 +1,19 @@
+----------------------------------------------------
+   _____ __  __  _____            _                  _
+  / ____|  \\/  |/ ____|          | |                | |
+ | |  __| \\  / | (___    ______  | |_ ___  _ __ ___ | |_ ___
+ | | |_ | |\\/| |\\___ \\  |______| | __/ _ \\| '_ ` _ \\| __/ _ \
+ | |__| | |  | |____) |          | || (_) | | | | | | ||  __/
+  \\_____|_|  |_|_____/            \\__\\___/|_| |_| |_|\\__\\___|
+ tomte v${version}
+----------------------------------------------------
 Run Name: $runName
 
 <% if (success){
-    out << "## genomic-medicine-sweden/tomte execution completed successfully! ##"
+    out << "## tomte execution completed successfully! ##"
 } else {
     out << """####################################################
-## genomic-medicine-sweden/tomte execution completed unsuccessfully! ##
+## tomte execution completed unsuccessfully! ##
 ####################################################
 The exit status of the task that caused the workflow execution to fail was: $exitStatus.
 The full error message was:

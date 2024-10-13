@@ -1,0 +1,21 @@
+Changes in module 'nf-core/salmon/quant'
+--- modules/nf-core/salmon/quant/main.nf
++++ modules/nf-core/salmon/quant/main.nf
+@@ -19,6 +19,7 @@
+     tuple val(meta), path("${prefix}")              , emit: results
+     tuple val(meta), path("*info.json")             , emit: json_info, optional: true
+     tuple val(meta), path("*lib_format_counts.json"), emit: lib_format_counts, optional: true
++    tuple val(meta), path("${prefix}_quant.sf")     , emit: quant, optional: true
+     path  "versions.yml"                            , emit: versions
+ 
+     when:
+@@ -70,6 +71,7 @@
+ 
+     if [ -f $prefix/aux_info/meta_info.json ]; then
+         cp $prefix/aux_info/meta_info.json "${prefix}_meta_info.json"
++        cp $prefix/quant.sf "${prefix}_quant.sf"
+     fi
+     if [ -f $prefix/lib_format_counts.json ]; then
+         cp $prefix/lib_format_counts.json "${prefix}_lib_format_counts.json"
+
+************************************************************

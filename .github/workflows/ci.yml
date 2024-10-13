@@ -43,6 +43,9 @@ jobs:
             profile: "conda"
           - isMaster: false
             profile: "singularity"
+        parameters:
+          - "-profile test,docker"
+          - "-profile test,docker --skip_subsample_region true --skip_downsample true --skip_build_tracks true --skip_stringtie true --skip_vep true --skip_drop_ae true --skip_drop_as true"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
