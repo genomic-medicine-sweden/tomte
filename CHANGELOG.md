@@ -13,11 +13,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Parameters`
 
+| Old parameter                    | New parameter       |
+| -------------------------------- | ------------------- |
+| `--minimap2_read_mapping_preset` |                     |
+| `--genome`                       |                     |
+| `--igenomes_ignore`              |                     |
+| `--max_cpus`                     |                     |
+| `--max_memory`                   |                     |
+| `--max_time`                     |                     |
+| `--validationShowHiddenParams`   |                     |
+| `--validationSkipDuplicateCheck` |                     |
+| `--validationS3PathCheck`        |                     |
+| `--monochromeLogs`               | `--monochrome_logs` |
+
 ### `Changed`
 
 - Updated modules ensemblvep/filtervep, ensemblvep/vep [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
 - Updated gencode version from 37 to 46 [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
 - Updated modules using drop drop_config_runAE, drop_config_runAS, drop_sample_annot, and drop_filter_results [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
+- Updated nf-core/tools template to v3.0.2 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
 
 | Tool                 | Old version | New version |
 | -------------------- | ----------- | ----------- |
