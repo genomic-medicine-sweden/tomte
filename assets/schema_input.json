@@ -15,7 +15,6 @@
             },
             "sample": {
                 "type": "string",
-                "exists": true,
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id", "sample"]
