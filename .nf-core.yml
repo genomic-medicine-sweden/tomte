@@ -1,3 +1,4 @@
+bump_version: null
 lint:
   files_exist:
     - assets/nf-core-tomte_logo_light.png
@@ -21,16 +22,23 @@ lint:
     - lib/NfcoreTemplate.groovy
     - docs/README.md
     - pyproject.toml
+  modules_config: false
   multiqc_config:
     - report_comment
   nextflow_config:
     - manifest.name
     - manifest.homePage
-  modules_config: false
-nf_core_version: 2.14.1
+nf_core_version: 3.0.2
+org_path: null
 repository_type: pipeline
 template:
   author: lucpen
   description: Analyzing RNAseq data
+  force: false
+  is_nfcore: false
   name: tomte
-  prefix: genomic-medicine-sweden
+  org: genomic-medicine-sweden
+  outdir: .
+  skip_features: null
+  version: 2.2.1
+update: null
