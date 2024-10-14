@@ -15,9 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Old parameter                    | New parameter       |
 | -------------------------------- | ------------------- |
-| `--minimap2_read_mapping_preset` |                     |
-| `--genome`                       |                     |
-| `--igenomes_ignore`              |                     |
 | `--max_cpus`                     |                     |
 | `--max_memory`                   |                     |
 | `--max_time`                     |                     |
