@@ -21,8 +21,9 @@ SAMPLE_ANNOTATION_COLUMNS = [
     "GENE_COUNTS_FILE",
     "GENE_ANNOTATION",
     "GENOME",
-    "SEX",
 ]
+
+OPTIONAL_SEX_COLUMN = "SEX"
 
 
 def write_sample_annotation_to_tsv(
@@ -30,12 +31,14 @@ def write_sample_annotation_to_tsv(
     samples: str,
     strandedness: str,
     single_end: str,
-    sex: str,
+    sex: str | None,
     drop_group_sample: str,
     out_file: str,
 ):
     """Write the Sample Annotation tsv file."""
     with open(out_file, "w") as tsv_file:
+        if sex is not None:
+            SAMPLE_ANNOTATION_COLUMNS.append(OPTIONAL_SEX_COLUMN)
         writer = csv.DictWriter(
             tsv_file, fieldnames=SAMPLE_ANNOTATION_COLUMNS, delimiter="\t"
         )
@@ -46,7 +49,8 @@ def write_sample_annotation_to_tsv(
             sa_dict["DROP_GROUP"] = drop_group_sample
             sa_dict["STRAND"] = is_stranded(strandedness[index])
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
-            sa_dict["SEX"] = sex[index]
+            if sex is not None:
+                sa_dict["SEX"] = sex[index]
             sa_dict["RNA_BAM_FILE"] = bam[index]
             writer.writerow(sa_dict)
 
@@ -151,9 +155,7 @@ def parse_args(argv=None):
     parser.add_argument(
         "--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True
     )
-    parser.add_argument(
-        "--sex", type=str, nargs="+", help="Sex of samples", required=True
-    )
+    parser.add_argument("--sex", type=str, nargs="+", help="Sex of samples")
     parser.add_argument(
         "--single_end",
         type=str,

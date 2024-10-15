@@ -41,7 +41,10 @@ workflow ANALYSE_TRANSCRIPTS {
 
         ch_bam_ds_bai
             .map { meta, bam, bai ->
-            [ meta.id, meta.single_end, meta.strandedness, meta.sex, bam, bai ]
+                def output = [ meta.id, meta.single_end, meta.strandedness ]
+                output << (meta.containsKey('sex') ? meta.sex : null)
+                output += [bam, bai]
+                return output
             }
             .collect(flat:false)
             .map { it.transpose() }

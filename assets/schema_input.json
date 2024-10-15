@@ -50,8 +50,8 @@
             "sex": {
                 "type": "string",
                 "meta": ["sex"],
-                "enum": ["M", "F"],
-                "errorMessage": "Sample sex should be either M or F"
+                "enum": ["M", "F", "NA"],
+                "errorMessage": "The valid input for sample sex is M, F or NA"
             }
         },
         "required": ["case", "sample", "fastq_1", "strandedness"]
