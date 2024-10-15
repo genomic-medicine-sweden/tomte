@@ -21,9 +21,8 @@ SAMPLE_ANNOTATION_COLUMNS = [
     "GENE_COUNTS_FILE",
     "GENE_ANNOTATION",
     "GENOME",
+    "SEX",
 ]
-
-OPTIONAL_SEX_COLUMN = "SEX"
 
 
 def write_sample_annotation_to_tsv(
@@ -31,14 +30,12 @@ def write_sample_annotation_to_tsv(
     samples: str,
     strandedness: str,
     single_end: str,
-    sex: str | None,
+    sex: str,
     drop_group_sample: str,
     out_file: str,
 ):
     """Write the Sample Annotation tsv file."""
     with open(out_file, "w") as tsv_file:
-        if sex is not None:
-            SAMPLE_ANNOTATION_COLUMNS.append(OPTIONAL_SEX_COLUMN)
         writer = csv.DictWriter(
             tsv_file, fieldnames=SAMPLE_ANNOTATION_COLUMNS, delimiter="\t"
         )
@@ -48,9 +45,8 @@ def write_sample_annotation_to_tsv(
             sa_dict["RNA_ID"] = id
             sa_dict["DROP_GROUP"] = drop_group_sample
             sa_dict["STRAND"] = is_stranded(strandedness[index])
+            sa_dict["SEX"] = sex[index]
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
-            if sex is not None:
-                sa_dict["SEX"] = sex[index]
             sa_dict["RNA_BAM_FILE"] = bam[index]
             writer.writerow(sa_dict)
 
@@ -98,6 +94,11 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
     provided for the reference samples, if one is provided, checking for duplicate sample IDs
     """
     df_samples: DataFrame = read_csv("drop_annotation_given_samples.tsv", sep="\t")
+
+    # Remove sex column if no non-NA values are provided
+    if df_samples["SEX"].count() == 0:
+        df_samples.drop(columns=["SEX"], inplace=True)
+
     if ref_annot == "None" or ref_count_file == "None":
         print(
             "No reference samples were provided by the user see usage of --ref_count_file and --ref_annot if you want to provide reference samples"
@@ -155,7 +156,9 @@ def parse_args(argv=None):
     parser.add_argument(
         "--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True
     )
-    parser.add_argument("--sex", type=str, nargs="+", help="Sex of samples")
+    parser.add_argument(
+        "--sex", type=str, nargs="+", help="Sex of samples", required=True
+    )
     parser.add_argument(
         "--single_end",
         type=str,

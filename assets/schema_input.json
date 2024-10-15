@@ -54,6 +54,6 @@
                 "errorMessage": "The valid input for sample sex is M, F or NA"
             }
         },
-        "required": ["case", "sample", "fastq_1", "strandedness"]
+        "required": ["case", "sample", "fastq_1", "strandedness", "sex"]
     }
 }
