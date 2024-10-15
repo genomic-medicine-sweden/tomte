@@ -40,15 +40,12 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
     cd exported_counts/
 
     awk -F'\t' 'NR==1 {for(i=1; i<=NF; i++) if(\$i=="RNA_BAM_FILE") rna_col=i} NR>1 {\$rna_col="NA"} 1' OFS='\t' sample_annotation.tsv > sampleAnnotation.tsv
-    
     if ($as_run) ;then
         awk -F'\t' 'NR==1 {for(i=1; i<=NF; i++) if(\$i=="SPLICE_COUNTS_DIR") rna_col=i} NR>1 {\$rna_col="exported_counts"} 1' OFS='\t' sampleAnnotation.tsv > tmpfile && mv tmpfile sampleAnnotation.tsv
     fi
-    
     if ($ae_run) ;then
         awk -F'\t' 'NR==1 {for(i=1; i<=NF; i++) if(\$i=="GENE_COUNTS_FILE") rna_col=i} NR>1 {\$rna_col="exported_counts/geneCounts.tsv.gz"} 1' OFS='\t' sampleAnnotation.tsv > tmpfile && mv tmpfile sampleAnnotation.tsv
     fi
-    
     awk -v gene_annot="${gtf_no_extension}" -F'\t' 'NR==1 {for (i=1; i<=NF; i++) if (\$i=="GENE_ANNOTATION") rna_col=i} NR>1 {if (\$rna_col == "NA") \$rna_col = gene_annot} 1' OFS='\t' sampleAnnotation.tsv > tmpfile && mv tmpfile sampleAnnotation.tsv
     rm sample_annotation.tsv
 
