@@ -190,9 +190,11 @@ The mandatory and optional parameters for each category are tabulated below.
 | --------- | -------------------------------- |
 |           | variant_caller<sup>1</sup>       |
 |           | bcftools_caller_mode<sup>2</sup> |
+|           | skip_variant_calling<sup>3</sup> |
 
 <sup>1</sup> If it is not provided by the user, the default value is bcftools<br />
-<sup>2</sup> If it is not provided by the user, the default value is multiallelic
+<sup>2</sup> If it is not provided by the user, the default value is multiallelic<br />
+<sup>3</sup> If it is not provided by the user, the default value is false
 
 #### 5. SNV annotation (ensembl VEP)
 
@@ -284,7 +286,7 @@ To build your own database you will need at least 50 for aberrant expression, if
 - `--skip_drop_ae false` if you want to get a database for aberrant expression
 - `--skip_subsample_region false` if you have sequenced any material with overrepresented regions (such as hemoglobin in whole blood) we recommend to remove it by setting this parameter to false and providing a bed with the overrepresented region with `--subsample_bed`
 - `--skip_downsample false` if you have very deeply sequenced samples, we recommend to downsample, the default is 60M read pairs
-- `--skip_build_tracks true`, `--skip_stringtie true`, `--skip_vep true` as most users will be interested in getting the database rather than other downstream results
+- `--skip_build_tracks true`, `--skip_stringtie true`, `--skip_variant_calling`, `--skip_vep true` as most users will be interested in getting the database rather than other downstream results
 
 Running DROP with many samples requires a lot of time and a lot of memory, that is why we recommend to subsample overrepresented regions and downsample if you have deeply sequenced samples. If your run fails for either of this reasons, try to relaunch it from the work directory where DROP was run so that DROP continues from the point where it failed (if you restart the pipeline with `-resume` it will begin from the start and it will likely fail in the same way).
 
