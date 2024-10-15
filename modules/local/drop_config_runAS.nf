@@ -27,7 +27,7 @@ process DROP_CONFIG_RUN_AS {
     path('output')                  , emit: drop_as_out
     path('FRASER_results_fraser--*'), emit: drop_as_tsv
     path('gene_name_mapping*')      , emit: drop_gene_name
-    path('exported_counts')         , emit: gene_counts_as, optional: true
+    path('exported_counts_as')      , emit: gene_counts_as, optional: true
     path "versions.yml"             , emit: versions
 
     when:
@@ -59,9 +59,9 @@ process DROP_CONFIG_RUN_AS {
 
     if [[ $skip_export_counts_drop == false ]]; then
         snakemake exportCounts --cores 1
-        mkdir -p exported_counts
-        cp sample_annotation.tsv exported_counts/.
-        cp output/processed_results/exported_counts/*/*.gz exported_counts/.
+        mkdir -p exported_counts_as
+        cp sample_annotation.tsv exported_counts_as/.
+        cp output/processed_results/exported_counts/*/*.gz exported_counts_as/.
     fi
 
     cp output/html/AberrantSplicing/FRASER_results_fraser--*.tsv .
@@ -81,7 +81,13 @@ process DROP_CONFIG_RUN_AS {
     touch gene_name_mapping_.tsv
     mkdir output
     if [[ $skip_export_counts_drop == false ]]; then
-        mkdir exported_counts
+        mkdir exported_counts_as
+        touch exported_counts_as/k_j_counts.tsv.gz
+        touch exported_counts_as/k_theta_counts.tsv.gz
+        touch exported_counts_as/n_psi3_counts.tsv.gz
+        touch exported_counts_as/n_psi5_counts.tsv.gz
+        touch exported_counts_as/n_theta_counts.tsv.gz
+        touch exported_counts_as/sample_annotation.tsv
     fi
 
     cat <<-END_VERSIONS > versions.yml
