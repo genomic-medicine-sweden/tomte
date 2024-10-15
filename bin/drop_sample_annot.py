@@ -2,7 +2,7 @@
 
 import argparse
 import csv
-from pandas import read_csv, DataFrame, concat
+from pandas import read_csv, DataFrame, concat, isna
 import os
 
 SCRIPT_VERSION = "v1.1"
@@ -58,13 +58,33 @@ def is_paired_end(single_end: str) -> bool:
 
 
 def is_stranded(strandedness: str) -> str:
-    """Logical funciton to determine if a sample is paired end"""
+    """Logical funciton to determine sample strandness"""
     if strandedness.lower() == "reverse":
         return "reverse"
     elif strandedness.lower() == "forward":
         return "yes"
     else:
         return "no"
+
+
+def count_mode(sample_count_mode: str) -> str:
+    """Logical function to determine if count mode is given or default "IntersectionStrict" should be used"""
+    if isna(sample_count_mode) or sample_count_mode == "" or sample_count_mode == "NA":
+        return "IntersectionStrict"
+    else:
+        return sample_count_mode
+
+
+def count_overlaps(sample_count_overlap: str) -> str:
+    """Logical funciton to determine if count overlap is given or default "TRUE" should be used"""
+    if (
+        isna(sample_count_overlap)
+        or sample_count_overlap == ""
+        or sample_count_overlap == "NA"
+    ):
+        return True
+    else:
+        return sample_count_overlap
 
 
 def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str):
@@ -85,6 +105,8 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
         df_samples["COUNT_MODE"] = "IntersectionStrict"
         df_samples["COUNT_OVERLAPS"] = True
         df_samples.fillna("NA", inplace=True)
+        df_samples["COUNT_MODE"] = "IntersectionStrict"
+        df_samples["COUNT_OVERLAPS"] = True
         df_samples.to_csv(out_file, index=False, sep="\t")
     else:
         df_reference: DataFrame = read_csv(ref_annot, sep="\t")
@@ -93,8 +115,10 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
             df_reference["SPLICE_COUNTS_DIR"].str.rstrip("/").apply(os.path.basename)
         )
         df_reference["DROP_GROUP"] = df_reference["DROP_GROUP"].str.replace(" ", "")
-        df_samples["COUNT_OVERLAPS"] = df_reference["COUNT_OVERLAPS"].iloc[0]
-        df_samples["COUNT_MODE"] = df_reference["COUNT_MODE"].iloc[0]
+        df_samples["COUNT_OVERLAPS"] = count_overlaps(
+            df_reference["COUNT_OVERLAPS"].iloc[0]
+        )
+        df_samples["COUNT_MODE"] = count_mode(df_reference["COUNT_MODE"].iloc[0])
         df_samples["HPO_TERMS"] = df_reference["HPO_TERMS"].iloc[0]
         for id in df_samples["RNA_ID"]:
             df_reference = df_reference[

@@ -123,6 +123,8 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 In genomic-medicine-sweden/tomte, references can be supplied using parameters. We have also introduced the possiblility of using the `--igenomes_base` parameter to point to a path where genome specific reference files are placed (fasta, fai, gtf, star_index, salmon_index, subsample_bed). To make sure that the names of the reference files match those in your directory, check [igenomes.config](https://github.com/genomic-medicine-sweden/tomte/blob/master/conf/igenomes.config).
 
+If no references are provided by the user the pipeline will automatically download a fasta and a gtf file. The user can select the desired genome and gencode version using `--genome` and `--genome_annotation_version`. If the user also wants to download vep cache and vep plugins references they will have to set `--skip_download_vep false`. The user will have to provide a comma separated file containing the plugins they want to download `--vep_refs_download`, this file should NOT contain the path to gnomad database. If the user also wants to download the gnomad database they will have to set `--skip_download_gnomad false`, bare in mind that about ~900GB of data will be downloaded, so storage space and time are needed. The data will then be processed and its size significantly reduced to under 40GB.
+
 Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can call SNVs either with BCFtools or with GATK. You also have the option to turn off sections of the pipeline if you do not want to run them. For example, drop aberrant expression module can be turned off by setting `--skip_drop_ae true`. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, if you are not running DROP aberrant splicing, you do not need to provide `--reference_drop_splice_folder`.
 
 genomic-medicine-sweden/tomte consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
@@ -145,21 +147,24 @@ The mandatory and optional parameters for each category are tabulated below.
 
 | Mandatory | Optional                       |
 | --------- | ------------------------------ |
-| fasta     | fasta_fai<sup>1</sup>          |
-| gtf       | sequence_dict<sup>1</sup>      |
-|           | salmon_index<sup>1</sup>       |
-|           | star_index<sup>1</sup>         |
-|           | transcript_fasta<sup>1</sup>   |
-|           | genome<sup>2</sup>             |
-|           | platform<sup>3</sup>           |
-|           | min_trimmed_length<sup>4</sup> |
-|           | star_two_pass_mode<sup>4</sup> |
+|           | fasta<sup>1</sup>              |
+|           | gtf<sup>1</sup>                |
+|           | fasta_fai<sup>2</sup>          |
+|           | sequence_dict<sup>2</sup>      |
+|           | salmon_index<sup>2</sup>       |
+|           | star_index<sup>2</sup>         |
+|           | transcript_fasta<sup>2</sup>   |
+|           | genome<sup>3</sup>             |
+|           | platform<sup>4</sup>           |
+|           | min_trimmed_length<sup>5</sup> |
+|           | star_two_pass_mode<sup>6</sup> |
 
-<sup>1</sup> If the parameter is not provided by the user, it will be generated from the fasta and gtf files.<br />
-<sup>2</sup> If it is not provided by the user, the default value is GRCh38.<br />
-<sup>3</sup> If it is not provided by the user, the default value is illumina.<br />
-<sup>4</sup> If it is not provided by the user, the default value is 40.<br />
-<sup>5</sup> If it is not provided by the user, the default value is Basic.
+<sup>1</sup> If the parameter is not provided by the user, it will be downloaded.<br />
+<sup>2</sup> If the parameter is not provided by the user, it will be generated from the fasta and gtf files.<br />
+<sup>3</sup> If it is not provided by the user, the default value is GRCh38.<br />
+<sup>4</sup> If it is not provided by the user, the default value is illumina.<br />
+<sup>5</sup> If it is not provided by the user, the default value is 40.<br />
+<sup>6</sup> If it is not provided by the user, the default value is Basic.
 
 ##### 2. Junction track and bigwig
 
@@ -191,16 +196,21 @@ The mandatory and optional parameters for each category are tabulated below.
 
 #### 5. SNV annotation (ensembl VEP)
 
-| Mandatory                    | Optional                   |
-| ---------------------------- | -------------------------- |
-| vep_plugin_files<sup>1</sup> | skip_vep<sup>2</sup>       |
-|                              | vep_cache<sup>3</sup>      |
-|                              | vep_cache_version          |
-|                              | gene_panel_clinical_filter |
+| Mandatory | Optional                         |
+| --------- | -------------------------------- |
+|           | skip_vep<sup>1</sup>             |
+|           | vep_plugin_files<sup>2</sup>     |
+|           | vep_cache<sup>2</sup>            |
+|           | vep_cache_version<sup>3</sup>    |
+|           | skip_download_vep<sup>4</sup>    |
+|           | skip_download_gnomad<sup>4</sup> |
+|           | vep_refs_download                |
+|           | gene_panel_clinical_filter       |
 
-<sup>1</sup> VEP caches can be downloaded [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#cache). VEP plugins may be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter. See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
-<sup>2</sup> If it is not provided by the user, the default value is false<br />
-<sup>3</sup> If it is not provided by the user, the default value is 110, supported values are 107 and 110 <br />
+<sup>1</sup> If it is not provided by the user, the default value is false<br />
+<sup>2</sup> VEP cache and plugins can be automatically downloaded by the pipeline by setting `--skip_download_vep false`, `--skip_download_gnomad false` and providing a lcsv with a list of files to download `--vep_refs_download` as done [here](https://github.com/genomic-medicine-sweden/tomte/blob/dev/test_data/vep_to_download.csv). VEP caches can also be downloaded [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#cache). VEP plugins may also be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter. See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
+<sup>3</sup> If it is not provided by the user, the default value is 112, supported values are 107, 110, and 112
+<sup>4</sup> If it is not provided by the user, the default value true
 
 #### 6. Stringtie & gffcompare
 
@@ -272,11 +282,11 @@ To build your own database you will need at least 50 for aberrant expression, if
 - `--skip_export_counts_drop false` this switch will ensure that a folder called export_counts is created
 - `--skip_drop_as false` if you want to get a database for aberrant splicing
 - `--skip_drop_ae false` if you want to get a database for aberrant expression
-- `--skip_subsample_region false` if you have sequenced any material with overrrepresented regions (such as hemoglobin in whole blood) we recommend to remove it by setting this parameter to false and providing a bed with thet overrepresented region with `--subsample_bed`
+- `--skip_subsample_region false` if you have sequenced any material with overrepresented regions (such as hemoglobin in whole blood) we recommend to remove it by setting this parameter to false and providing a bed with the overrepresented region with `--subsample_bed`
 - `--skip_downsample false` if you have very deeply sequenced samples, we recommend to downsample, the default is 60M read pairs
 - `--skip_build_tracks true`, `--skip_stringtie true`, `--skip_vep true` as most users will be interested in getting the database rather than other downstream results
 
-Running DROP with many samples requires a lot of time and a lot of memory, that is why we recommend to subsample overrepresented regions and downsampled if you have deeply sequenced samples. If your run fails for either of this reasons, try to relaunched it from the work directory where DROP was run so that DROP continues from the point where it failed (if you restart the pipeline with `-resume` it will begin from the start and it will likely fail in the same way).
+Running DROP with many samples requires a lot of time and a lot of memory, that is why we recommend to subsample overrepresented regions and downsample if you have deeply sequenced samples. If your run fails for either of this reasons, try to relaunch it from the work directory where DROP was run so that DROP continues from the point where it failed (if you restart the pipeline with `-resume` it will begin from the start and it will likely fail in the same way).
 
 To restart DROP, start by finding the work directory where it was run. You can do so by opening the execution trace file in the pipeline_info folder and looking at the hash of the processes with name `TOMTE:ANALYSE_TRANSCRIPTS:DROP_CONFIG_RUN_AE` and `TOMTE:ANALYSE_TRANSCRIPTS:DROP_CONFIG_RUN_AS`. The work directory used to run the pipeline followed by the hash should be enough information to find the folder where DROP was run. Tomte should have set everything up in that directory so go into it and restart the run by running from the container created by Tomte the script `.command.sh`. If you want to run it with slurm remember to add a header with number of cores, time...
 
@@ -317,9 +327,9 @@ The above pipeline run specified with a params file in yaml format:
 nextflow run genomic-medicine-sweden/tomte -profile docker -params-file params.yaml
 ```
 
-with `params.yaml` containing:
+with:
 
-```yaml
+```yaml title="params.yaml"
 input: './samplesheet.csv'
 outdir: './results/'
 genome: 'GRCh37'
@@ -430,14 +440,6 @@ In most cases, you will only need to create a custom config as a one-off but if 
 See the main [Nextflow documentation](https://www.nextflow.io/docs/latest/config.html) for more information about creating your own configuration files.
 
 If you have any questions or issues please send us a message on [Slack](https://nf-co.re/join/slack) on the [`#configs` channel](https://nfcore.slack.com/channels/configs).
-
-## Azure Resource Requests
-
-To be used with the `azurebatch` profile by specifying the `-profile azurebatch`.
-We recommend providing a compute `params.vm_type` of `Standard_D16_v3` VMs by default but these options can be changed if required.
-
-Note that the choice of VM size depends on your quota and the overall workload during the analysis.
-For a thorough list, please refer the [Azure Sizes for virtual machines in Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/sizes).
 
 ## Running in the background
 

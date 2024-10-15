@@ -29,7 +29,7 @@ process DROP_CONFIG_RUN_AE {
     path('output')                  , emit: drop_ae_out
     path('OUTRIDER_results_all.Rds'), emit: drop_ae_rds
     path('gene_name_mapping*')      , emit: drop_gene_name
-    path('geneCounts.tsv.gz')       , emit: gene_counts_ae, optional: true
+    path('exported_counts')         , emit: gene_counts_ae, optional: true
     path "versions.yml"             , emit: versions
 
     when:
@@ -61,7 +61,7 @@ process DROP_CONFIG_RUN_AE {
 
     snakemake aberrantExpression --cores ${task.cpus} --rerun-triggers mtime $args
 
-    if [[ "${skip_export_counts_drop}" == "false" ]]; then
+    if [[ $skip_export_counts_drop == false ]]; then
         snakemake exportCounts --cores 1
         mkdir -p exported_counts
         cp sample_annotation.tsv exported_counts/.
@@ -84,7 +84,9 @@ process DROP_CONFIG_RUN_AE {
     touch OUTRIDER_results_all.Rds
     touch gene_name_mapping_.tsv
     mkdir output
-    mkdir exported_counts
+    if [[ $skip_export_counts_drop == false ]]; then
+        mkdir exported_counts
+    fi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -1,10 +1,10 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/genomic-medicine-sweden/tomte/master/nextflow_schema.json",
     "title": "genomic-medicine-sweden/tomte pipeline parameters",
     "description": "Pipeline to analyse RNAseq from raredisease patients",
     "type": "object",
-    "definitions": {
+    "$defs": {
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -27,7 +27,8 @@
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
+                    "fa_icon": "fas fa-folder-open",
+                    "default": "results"
                 },
                 "email": {
                     "type": "string",
@@ -57,10 +58,10 @@
             "properties": {
                 "genome": {
                     "type": "string",
-                    "description": "Name of iGenomes reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive.",
+                    "description": "Name of genome reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive.",
                     "fa_icon": "fas fa-book",
                     "enum": ["hg19", "GRCh37", "hg38", "GRCh38"],
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.",
+                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use `--igenomes_base` to provide a path, or you want to automatically download all required files, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.",
                     "default": "GRCh38"
                 },
                 "fasta": {
@@ -70,7 +71,7 @@
                     "mimetype": "text/plain",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
-                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a STAR index available this will be generated for you automatically. Combine with `--save_reference` to save STAR index for future runs.",
+                    "help_text": "If none provided, will be downloaded from gencode according to `--genome` and `--gencode_annotation_version`.",
                     "fa_icon": "far fa-file-code"
                 },
                 "fai": {
@@ -89,7 +90,14 @@
                     "pattern": "^\\S+\\.gtf(\\.gz)?$",
                     "description": "Path to GTF annotation file.",
                     "fa_icon": "fas fa-code-branch",
-                    "help_text": "This parameter is *mandatory* if `--genome` is not specified."
+                    "help_text": "If none provided, will be downloaded from gencode according to `--genome` and `--gencode_annotation_version`."
+                },
+                "gencode_annotation_version": {
+                    "type": "integer",
+                    "default": 46,
+                    "description": "Name of Genomes gencode reference version to download if fasta or gtf is not provided.",
+                    "fa_icon": "fas fa-book",
+                    "help_text": "If fasta or gtf is not provided the gencode version specified will be downloaded. Combine with `--save_reference` to save gtf and/or fasta for future runs."
                 },
                 "igenomes_ignore": {
                     "type": "boolean",
@@ -97,6 +105,14 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
+                },
+                "igenomes_base": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "The base path to the igenomes reference files",
+                    "fa_icon": "fas fa-ban",
+                    "hidden": true,
+                    "default": "s3://ngi-igenomes/igenomes/"
                 },
                 "platform": {
                     "type": "string",
@@ -109,7 +125,8 @@
                     "type": "boolean",
                     "description": "If generated by the pipeline save the required indices/references in the results directory.",
                     "help_text": "The saved references can be used for future pipeline runs, reducing processing times.",
-                    "fa_icon": "fas fa-save"
+                    "fa_icon": "fas fa-save",
+                    "default": true
                 },
                 "sequence_dict": {
                     "type": "string",
@@ -150,10 +167,10 @@
                 },
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": 110,
+                    "default": 112,
                     "description": "Specifies version of vep cache to use.",
                     "fa_icon": "fas fa-folder-open",
-                    "enum": [107, 110]
+                    "enum": [107, 110, 112]
                 },
                 "vep_plugin_files": {
                     "type": "string",
@@ -165,9 +182,26 @@
                     "pattern": "^\\S+\\.csv$",
                     "mimetype": "text/csv",
                     "schema": "assets/vep_plugin_files_schema.json"
+                },
+                "skip_download_vep": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "fas fa-toggle-on",
+                    "description": "Skip vep cache download."
+                },
+                "skip_download_gnomad": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Skip gnomad reference download for vep.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "vep_refs_download": {
+                    "type": "string",
+                    "description": "Path to comma separated csv with paths to vep references to download, see example in test_data/vep_to_download.csv",
+                    "fa_icon": "fas fa-file-csv",
+                    "format": "file-path"
                 }
-            },
-            "required": ["fasta", "gtf"]
+            }
         },
         "trimming_options": {
             "title": "Trimming options",
@@ -202,11 +236,13 @@
                 },
                 "skip_subsample_region": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_downsample": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.",
                     "fa_icon": "fas fa-toggle-off"
                 },
@@ -255,26 +291,31 @@
                 },
                 "skip_build_tracks": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip building splice junction tracks for IGV.",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_stringtie": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip analysis with StringTie",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_vep": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip Ensembl Variant Effect Predictor",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_drop_ae": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip DROP Aberrant Expression module ",
                     "fa_icon": "fas fa-toggle-off"
                 },
                 "skip_drop_as": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip DROP Aberrant Splicing module",
                     "fa_icon": "fas fa-toggle-off"
                 },
@@ -388,41 +429,6 @@
                 }
             }
         },
-        "max_job_request_options": {
-            "title": "Max job request options",
-            "type": "object",
-            "fa_icon": "fab fa-acquisitions-incorporated",
-            "description": "Set the top limit for requested resources for any single job.",
-            "help_text": "If you are running on a smaller system, a pipeline step requesting more resources than are available may cause the Nextflow to stop the run with an error. These options allow you to cap the maximum resources requested by any single job so that the pipeline will run on your system.\n\nNote that you can not _increase_ the resources requested by any job using these options. For that you will need your own configuration file. See [the nf-core website](https://nf-co.re/usage/configuration) for details.",
-            "properties": {
-                "max_cpus": {
-                    "type": "integer",
-                    "description": "Maximum number of CPUs that can be requested for any single job.",
-                    "default": 16,
-                    "fa_icon": "fas fa-microchip",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
-                },
-                "max_memory": {
-                    "type": "string",
-                    "description": "Maximum amount of memory that can be requested for any single job.",
-                    "default": "128.GB",
-                    "fa_icon": "fas fa-memory",
-                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
-                },
-                "max_time": {
-                    "type": "string",
-                    "description": "Maximum amount of time that can be requested for any single job.",
-                    "default": "240.h",
-                    "fa_icon": "far fa-clock",
-                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
-                }
-            }
-        },
         "generic_options": {
             "title": "Generic options",
             "type": "object",
@@ -430,12 +436,6 @@
             "description": "Less common options for the pipeline, typically set in a config file.",
             "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
             "properties": {
-                "help": {
-                    "type": "boolean",
-                    "description": "Display help text.",
-                    "fa_icon": "fas fa-question-circle",
-                    "hidden": true
-                },
                 "version": {
                     "type": "boolean",
                     "description": "Display version and exit.",
@@ -511,27 +511,6 @@
                     "fa_icon": "fas fa-check-square",
                     "hidden": true
                 },
-                "validationShowHiddenParams": {
-                    "type": "boolean",
-                    "fa_icon": "far fa-eye-slash",
-                    "description": "Show all params when using `--help`",
-                    "hidden": true,
-                    "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
-                },
-                "validationFailUnrecognisedParams": {
-                    "type": "boolean",
-                    "fa_icon": "far fa-check-circle",
-                    "description": "Validation of parameters fails when an unrecognised parameter is found.",
-                    "hidden": true,
-                    "help_text": "By default, when an unrecognised parameter is found, it returns a warinig."
-                },
-                "validationLenientMode": {
-                    "type": "boolean",
-                    "fa_icon": "far fa-check-circle",
-                    "description": "Validation of parameters in lenient more.",
-                    "hidden": true,
-                    "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
-                },
                 "pipelines_testdata_base_path": {
                     "type": "string",
                     "fa_icon": "far fa-check-circle",
@@ -544,28 +523,25 @@
     },
     "allOf": [
         {
-            "$ref": "#/definitions/input_output_options"
+            "$ref": "#/$defs/input_output_options"
         },
         {
-            "$ref": "#/definitions/reference_genome_options"
+            "$ref": "#/$defs/reference_genome_options"
         },
         {
-            "$ref": "#/definitions/trimming_options"
+            "$ref": "#/$defs/trimming_options"
         },
         {
-            "$ref": "#/definitions/alignment_options"
+            "$ref": "#/$defs/alignment_options"
         },
         {
-            "$ref": "#/definitions/variant_calling"
+            "$ref": "#/$defs/variant_calling"
         },
         {
-            "$ref": "#/definitions/institutional_config_options"
+            "$ref": "#/$defs/institutional_config_options"
         },
         {
-            "$ref": "#/definitions/max_job_request_options"
-        },
-        {
-            "$ref": "#/definitions/generic_options"
+            "$ref": "#/$defs/generic_options"
         }
     ]
 }

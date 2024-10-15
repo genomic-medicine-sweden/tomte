@@ -8,7 +8,6 @@ process DROP_CONFIG_RUN_AS {
     }
 
     container "docker.io/clinicalgenomics/drop:1.4.0"
-    //container "docker.io/clinicalgenomics/drop:1.3.3"
 
     input:
     tuple val(meta), path(fasta), path(fai)
@@ -58,7 +57,7 @@ process DROP_CONFIG_RUN_AS {
 
     snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime $args
 
-    if [[ "${skip_export_counts_drop}" == "false" ]]; then
+    if [[ $skip_export_counts_drop == false ]]; then
         snakemake exportCounts --cores 1
         mkdir -p exported_counts
         cp sample_annotation.tsv exported_counts/.
@@ -81,7 +80,9 @@ process DROP_CONFIG_RUN_AS {
     touch FRASER_results_fraser--.tsv
     touch gene_name_mapping_.tsv
     mkdir output
-    mkdir exported_counts
+    if [[ $skip_export_counts_drop == false ]]; then
+        mkdir exported_counts
+    fi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

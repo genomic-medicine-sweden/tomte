@@ -3,9 +3,62 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# X.X.X - [XXXX-XX-XX]
+## X.X.X - [XXXX-XX-XX]
 
 ### `Added`
+
+- Functionality to create DROP databases and to add samples to existing ones [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
+
+### `Fixed`
+
+### `Parameters`
+
+| Old parameter                    | New parameter       |
+| -------------------------------- | ------------------- |
+| `--max_cpus`                     |                     |
+| `--max_memory`                   |                     |
+| `--max_time`                     |                     |
+| `--validationShowHiddenParams`   |                     |
+| `--validationSkipDuplicateCheck` |                     |
+| `--validationS3PathCheck`        |                     |
+| `--monochromeLogs`               | `--monochrome_logs` |
+
+### `Changed`
+
+- Updated modules ensemblvep/filtervep, ensemblvep/vep [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
+- Updated gencode version from 37 to 46 [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
+- Updated modules using drop drop_config_runAE, drop_config_runAS, drop_sample_annot, and drop_filter_results [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
+- Updated nf-core/tools template to v3.0.2 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
+- Updated multiqc version to 1.25.1 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
+
+| Tool                 | Old version | New version |
+| -------------------- | ----------- | ----------- |
+| ensemblvep/filtervep | 110         | 112         |
+| ensemblvep/vep       | 110         | 112         |
+| DROP                 | 1.3.3       | 1.4.0       |
+| multiqc              | 1.21        | 1.25.1      |
+
+## 2.2.1 - Scrooge [2024-08-28]
+
+### `Fixed`
+
+- After an update, MultiQC was not outputing data for RnaSeqMetrics so an earlier version will be used [#156](https://github.com/genomic-medicine-sweden/tomte/pull/156)
+
+### `Changed`
+
+- Downgraded multiqc version [#156](https://github.com/genomic-medicine-sweden/tomte/pull/156)
+
+| Tool    | Old version | New version |
+| ------- | ----------- | ----------- |
+| multiqc | 1.24.1      | 1.21        |
+
+## 2.2.0 - TioDeNadal [2024-08-27]
+
+### `Added`
+
+- Fasta, gtf, vep cache and plugins can now be downloaded automatically by the pipeline if they are not provided by the user [#149](https://github.com/genomic-medicine-sweden/tomte/pull/149)
+- Added `--gencode_annotation_version`, the version of the gencode reference version to download if fasta or gtf is not provided [#149](https://github.com/genomic-medicine-sweden/tomte/pull/149)
+- Added the possibility to provide `--vep_refs_download`, a comma separated csv determining the vep references that should be downloaded (excluding gnomad ones) alongside with a switch `--skip_download_vep` for the vep reference download in general and `--skip_download_gnomad` for gnomad in particular [#149](https://github.com/genomic-medicine-sweden/tomte/pull/149)
 
 ### `Fixed`
 
@@ -13,7 +66,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Parameters`
 
+| Old parameter | New parameter                  |
+| ------------- | ------------------------------ |
+|               | `--gencode_annotation_version` |
+|               | `--vep_refs_download`          |
+|               | `--skip_download_vep`          |
+|               | `--skip_download_gnomad`       |
+
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
+
 ### `Changed`
+
+- Updated modules bcftools/annotate, bcftools/mpileup, bcftools/view, cat/fastq, ensemblvep/filtervep, fastp, fastqc, gatk4/haplotypecaller, gatk4/splitncigarreads, gunzip, multiqc, picard/collectrnaseqmetrics, samtools/index, star/align, star/genomegenerate, stringtie/stringtie, tabix/bgziptabix, tabix/tabix and untar [#153](https://github.com/genomic-medicine-sweden/tomte/pull/153)
+
+| Tool                            | Old version | New version |
+| ------------------------------- | ----------- | ----------- |
+| gunzip                          | 20.04       | 22.04       |
+| multiqc                         | 1.22.3      | 1.24.1      |
+| picard/collectinsertsizemetrics | 3.1.1       | 3.2.0       |
+| tabix/bgziptabix                | 1.19.1      | 1.20        |
+| tabix/tabix                     | 1.19.1      | 1.20        |
+| untar                           | 20.04       | 22.04       |
 
 ## 2.1.0 - Elf [2024-06-26]
 

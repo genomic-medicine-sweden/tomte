@@ -7,7 +7,7 @@ process DROP_FILTER_RESULTS {
         exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
     }
 
-    container "docker.io/clinicalgenomics/drop:1.3.3"
+    container "docker.io/clinicalgenomics/drop:1.4.0"
 
     input:
     val(case_info)
