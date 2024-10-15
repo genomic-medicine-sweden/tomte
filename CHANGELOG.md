@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Allow supplying sex info to DROP through samplesheet
+
 ### `Parameters`
 
 | Old parameter                    | New parameter       |

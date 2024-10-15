@@ -53,7 +53,6 @@
                 "enum": ["M", "F"],
                 "errorMessage": "Sample sex should be either M or F"
             }
-
         },
         "required": ["case", "sample", "fastq_1", "strandedness"]
     }
