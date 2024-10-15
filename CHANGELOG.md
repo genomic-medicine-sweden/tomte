@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Functionality to create DROP databases and to add samples to existing ones [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
-- A switch `--skip_variant_calling` for variant calling [#168](https://github.com/genomic-medicine-sweden/tomte/pull/168)
+- A switch `--skip_variant_calling` for variant calling [#169](https://github.com/genomic-medicine-sweden/tomte/pull/169)
 
 ### `Fixed`
 
