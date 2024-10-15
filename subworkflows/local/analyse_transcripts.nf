@@ -90,7 +90,7 @@ workflow ANALYSE_TRANSCRIPTS {
         )
 
         // Generates a folder with exported_counts if required
-        DROP_PUT_TOGETHER_EXPORTED_COUNTS( 
+        DROP_PUT_TOGETHER_EXPORTED_COUNTS(
             DROP_CONFIG_RUN_AE.out.gene_counts_ae.ifEmpty([]),
             DROP_CONFIG_RUN_AS.out.gene_counts_as.ifEmpty([]),
             ch_gtf

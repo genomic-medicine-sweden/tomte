@@ -52,7 +52,7 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
     "${task.process}":
         gawk: \$(awk -Wversion | sed '1!d; s/.*Awk //; s/,.*//')
     END_VERSIONS
-    
+
     """
 
     stub:
