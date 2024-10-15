@@ -273,6 +273,12 @@
             "default": "",
             "fa_icon": "fas fa-filter",
             "properties": {
+                "skip_variant_calling": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip variant calling for all samples.",
+                    "fa_icon": "fas fa-toggle-off"
+                },
                 "variant_caller": {
                     "type": "string",
                     "default": "bcftools",
