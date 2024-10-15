@@ -8,7 +8,6 @@ process DROP_CONFIG_RUN_AE {
     }
 
     container "docker.io/clinicalgenomics/drop:1.4.0"
-    // container "docker.io/clinicalgenomics/drop:1.3.3"
 
     input:
     tuple val(meta), path(fasta), path(fai)

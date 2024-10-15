@@ -18,6 +18,7 @@ SAMPLE_ANNOTATION_COLUMNS = [
     "SPLICE_COUNTS_DIR",
     "STRAND",
     "HPO_TERMS",
+    "GENE_COUNTS_FILE",
     "GENE_ANNOTATION",
     "GENOME",
     "SEX",
@@ -102,8 +103,6 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
                 "At least 30 samples are required for Aberrant Splicing and 50 for Aberrant expression"
             )
             print(f"Only {df_samples.shape[0]} samples were provided by the user")
-        df_samples["COUNT_MODE"] = "IntersectionStrict"
-        df_samples["COUNT_OVERLAPS"] = True
         df_samples.fillna("NA", inplace=True)
         df_samples["COUNT_MODE"] = "IntersectionStrict"
         df_samples["COUNT_OVERLAPS"] = True
