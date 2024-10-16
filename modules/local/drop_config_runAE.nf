@@ -84,7 +84,7 @@ process DROP_CONFIG_RUN_AE {
     touch gene_name_mapping_.tsv
     mkdir output
     if [[ $skip_export_counts_drop == false ]]; then
-        mkdir exported_counts_ae
+        mkdir -p exported_counts_ae
         touch exported_counts_ae/sample_annotation.tsv
         touch exported_counts_ae/geneCounts.tsv.gz
     fi

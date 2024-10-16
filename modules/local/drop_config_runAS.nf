@@ -81,7 +81,7 @@ process DROP_CONFIG_RUN_AS {
     touch gene_name_mapping_.tsv
     mkdir output
     if [[ $skip_export_counts_drop == false ]]; then
-        mkdir exported_counts_as
+        mkdir -p exported_counts_as
         touch exported_counts_as/k_j_counts.tsv.gz
         touch exported_counts_as/k_theta_counts.tsv.gz
         touch exported_counts_as/n_psi3_counts.tsv.gz
