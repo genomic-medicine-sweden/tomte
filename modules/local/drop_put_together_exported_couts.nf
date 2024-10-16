@@ -27,7 +27,7 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
     def gtf_no_extension = gtf.baseName
 
     """
-    #!/bin/bash
+
     mkdir -p exported_counts
     if [[ "$ae_run" == "true" ]];then
         cp ${exported_counts_ae}/* exported_counts/.
@@ -37,29 +37,17 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
         cp ${exported_counts_as}/* exported_counts/.
     fi
 
-    cd exported_counts/
+    mv exported_counts/sample_annotation.tsv .
 
-    awk -F'\t' 'NR==1 {for(i=1; i<=NF; i++) if(\$i=="RNA_BAM_FILE") rna_col=i} NR>1 {\$rna_col="NA"} 1' OFS='\t' sample_annotation.tsv > sampleAnnotation.tsv
-    awk -v gene_annot="${gtf_no_extension}" -F'\t' 'NR==1 {for (i=1; i<=NF; i++) if (\$i=="GENE_ANNOTATION") rna_col=i} NR>1 {if (\$rna_col == "NA") \$rna_col = gene_annot} 1' OFS='\t' sampleAnnotation.tsv > tmpfile && mv tmpfile sampleAnnotation.tsv
-
-    if [[ "$as_run" == "true" && "$ae_run" == "true" ]]; then
-        awk -F'\t' 'NR==1 {for(i=1; i<=NF; i++) if(\$i=="SPLICE_COUNTS_DIR") rna_col=i} NR>1 {\$rna_col="exported_counts"} 1' OFS='\t' sampleAnnotation.tsv > tmpfile && mv tmpfile sampleAnnotation.tsv
-        awk -F'\t' 'NR==1 {for(i=1; i<=NF; i++) if(\$i=="GENE_COUNTS_FILE") rna_col=i} NR>1 {\$rna_col="exported_counts/geneCounts.tsv.gz"} 1' OFS='\t' sampleAnnotation.tsv > tmpfile && mv tmpfile sampleAnnotation.tsv
-    elif [[ "$as_run" == "true" && "$ae_run" == "false" ]]; then
-        awk -F'\t' 'NR==1 {for(i=1; i<=NF; i++) if(\$i=="SPLICE_COUNTS_DIR") rna_col=i} NR>1 {\$rna_col="exported_counts"} 1' OFS='\t' sampleAnnotation.tsv > tmpfile && mv tmpfile sampleAnnotation.tsv
-        awk -F'\t' 'NR==1 {for(i=1; i<=NF; i++) if(\$i=="GENE_COUNTS_FILE") rna_col=i} NR>1 {\$rna_col="NA"} 1' OFS='\t' sampleAnnotation.tsv > tmpfile && mv tmpfile sampleAnnotation.tsv
-    elif [[ "$as_run" == "false" && "$ae_run" == "true" ]]; then
-        awk -F'\t' 'NR==1 {for(i=1; i<=NF; i++) if(\$i=="SPLICE_COUNTS_DIR") rna_col=i} NR>1 {\$rna_col="NA"} 1' OFS='\t' sampleAnnotation.tsv > tmpfile && mv tmpfile sampleAnnotation.tsv
-        awk -F'\t' 'NR==1 {for(i=1; i<=NF; i++) if(\$i=="GENE_COUNTS_FILE") rna_col=i} NR>1 {\$rna_col="exported_counts/geneCounts.tsv.gz"} 1' OFS='\t' sampleAnnotation.tsv > tmpfile && mv tmpfile sampleAnnotation.tsv
-    fi
-
-    rm sample_annotation.tsv
-
-    cd ..
+    $baseDir/bin/drop_sample_annot_exported_counts.py \\
+        --sample_annot "sample_annotation.tsv" \\
+        --ae_run $ae_run \\
+        --as_run $as_run \\
+        --gtf $gtf_no_extension
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        gawk: \$(awk -Wversion | sed '1!d; s/.*Awk //; s/,.*//')
+        drop_sample_annotation_exported_counts: \$(\$baseDir/bin/drop_sample_annotation_exported_counts.py --version )
     END_VERSIONS
 
     """
@@ -70,7 +58,7 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        gawk: \$(awk -Wversion | sed '1!d; s/.*Awk //; s/,.*//')
+        drop_sample_annotation_exported_counts: \$(\$baseDir/bin/drop_sample_annotation_exported_counts.py --version )
     END_VERSIONS
     """
 }
