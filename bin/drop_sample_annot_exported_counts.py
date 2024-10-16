@@ -7,10 +7,10 @@ from pandas import read_csv, DataFrame
 SCRIPT_VERSION = "v1.0"
 
 
-def modify_gene_counts_df(df: DataFrame, col_name: str, run: bool, value_in: str):
+def modify_gene_counts_df(df: DataFrame, col_name: str, run: str, value_in: str):
     """Modifies column col_name in df if run is true to make all
     rows equal value_in. If run is false it will make all rows NA"""
-    if run:
+    if run == "true":
         df[col_name] = value_in
     else:
         df[col_name] = "NA"
@@ -18,7 +18,7 @@ def modify_gene_counts_df(df: DataFrame, col_name: str, run: bool, value_in: str
 
 
 def modify_and_write_sample_annotation(
-    sample_annot: str, ae_run: bool, as_run: bool, gtf: str
+    sample_annot: str, ae_run: str, as_run: str, gtf: str
 ):
     """
     Modifies and writes Sample Annotation produced by DROP to make one
@@ -56,13 +56,13 @@ def parse_args(argv=None):
     )
     parser.add_argument(
         "--ae_run",
-        type=bool,
+        type=str,
         help="Was aberrant expression run?",
         required=True,
     )
     parser.add_argument(
         "--as_run",
-        type=bool,
+        type=str,
         help="Was aberrant splicing run?",
         required=True,
     )
