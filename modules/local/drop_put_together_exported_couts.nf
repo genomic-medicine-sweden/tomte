@@ -29,11 +29,11 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
     """
     #!/bin/bash
     mkdir -p exported_counts
-    if ($ae_run) ;then
+    if [[ "$ae_run" == "true" ]];then
         cp ${exported_counts_ae}/* exported_counts/.
     fi
 
-    if ($as_run) ;then
+    if [[ "$as_run" == "true" ]];then
         cp ${exported_counts_as}/* exported_counts/.
     fi
 
