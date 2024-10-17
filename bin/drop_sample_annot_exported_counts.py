@@ -3,8 +3,12 @@
 import argparse
 import csv
 from pandas import read_csv, DataFrame
+from pathlib import Path
 
 SCRIPT_VERSION = "v1.0"
+GENE_COUNTS_PATH = Path("exported_counts/geneCounts.tsv.gz")
+SPLICE_COUNTS_DIR = Path("exported_counts")
+OUTPUT_FILE = Path("exported_counts/sampleAnnotation.tsv")
 
 
 def modify_gene_counts_df(df: DataFrame, col_name: str, run: str, value_in: str):
@@ -31,15 +35,15 @@ def modify_and_write_sample_annotation(
         df=df_samples,
         col_name="GENE_COUNTS_FILE",
         run=ae_run,
-        value_in="exported_counts/geneCounts.tsv.gz",
+        value_in=str(GENE_COUNTS_PATH),
     )
     df_samples = modify_gene_counts_df(
         df=df_samples,
         col_name="SPLICE_COUNTS_DIR",
         run=as_run,
-        value_in="exported_counts",
+        value_in=str(SPLICE_COUNTS_DIR),
     )
-    df_samples.to_csv("exported_counts/sampleAnnotation.tsv", index=False, sep="\t")
+    df_samples.to_csv(OUTPUT_FILE, index=False, sep="\t")
 
 
 def parse_args(argv=None):
