@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Functionality to create DROP databases and to add samples to existing ones [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
 - A switch `--skip_variant_calling` for variant calling [#169](https://github.com/genomic-medicine-sweden/tomte/pull/169)
 - Functionality to output DROP databases in references folder with a working sample annotation sheet [#172](https://github.com/genomic-medicine-sweden/tomte/pull/172)
-- Added mandatory sex info col to samplesheet, used in DROP
+- Added optional sex info col to samplesheet, used in DROP
 
 ### `Fixed`
 
