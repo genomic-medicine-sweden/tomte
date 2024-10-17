@@ -21,6 +21,7 @@ SAMPLE_ANNOTATION_COLUMNS = [
     "GENE_COUNTS_FILE",
     "GENE_ANNOTATION",
     "GENOME",
+    "SEX",
 ]
 
 
@@ -29,6 +30,7 @@ def write_sample_annotation_to_tsv(
     samples: str,
     strandedness: str,
     single_end: str,
+    sex: str,
     drop_group_sample: str,
     out_file: str,
 ):
@@ -43,6 +45,7 @@ def write_sample_annotation_to_tsv(
             sa_dict["RNA_ID"] = id
             sa_dict["DROP_GROUP"] = drop_group_sample
             sa_dict["STRAND"] = is_stranded(strandedness[index])
+            sa_dict["SEX"] = sex[index]
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
             sa_dict["RNA_BAM_FILE"] = bam[index]
             writer.writerow(sa_dict)
@@ -91,6 +94,11 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
     provided for the reference samples, if one is provided, checking for duplicate sample IDs
     """
     df_samples: DataFrame = read_csv("drop_annotation_given_samples.tsv", sep="\t")
+
+    # Remove sex column if no non-NA values are provided
+    if df_samples["SEX"].count() == 0:
+        df_samples.drop(columns=["SEX"], inplace=True)
+
     if ref_annot == "None" or ref_count_file == "None":
         print(
             "No reference samples were provided by the user see usage of --ref_count_file and --ref_annot if you want to provide reference samples"
@@ -149,6 +157,9 @@ def parse_args(argv=None):
         "--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True
     )
     parser.add_argument(
+        "--sex", type=str, nargs="+", help="Sex of samples", required=True
+    )
+    parser.add_argument(
         "--single_end",
         type=str,
         nargs="+",
@@ -189,6 +200,7 @@ def main():
         samples=args.samples,
         strandedness=args.strandedness,
         single_end=args.single_end,
+        sex=args.sex,
         drop_group_sample=args.drop_group_sample,
         out_file="drop_annotation_given_samples.tsv",
     )
