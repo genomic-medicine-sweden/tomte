@@ -35,7 +35,7 @@ process DROP_FILTER_RESULTS {
     def out_drop_as_tsv = out_drop_as_tsv_in ? "--out_drop_as_tsv ${out_drop_as_tsv_in}" : ''
 
     """
-    $baseDir/bin/drop_filter_results.py \\
+    drop_filter_results.py \\
         --samples $ids \\
         $gene_panel_filter \\
         $drop_ae_rds \\
@@ -45,7 +45,7 @@ process DROP_FILTER_RESULTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_filter_results: \$(\$baseDir/bin/drop_filter_results --version )
+        drop_filter_results: \$(drop_filter_results.py --version)
     END_VERSIONS
     """
 
@@ -58,7 +58,7 @@ process DROP_FILTER_RESULTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_filter_results: \$(\$baseDir/bin/drop_filter_results --version )
+        drop_filter_results: \$(drop_filter_results.py --version)
     END_VERSIONS
     """
 }
