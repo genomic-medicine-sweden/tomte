@@ -88,7 +88,7 @@ For more details about the output files and reports, please refer to the [output
 
 genomic-medicine-sweden/tomte was written by Clinical Genomics Stockholm, Sweden, with major contributions from [Lucía Peña-Pérez](https://github.com/Lucpen), [Anders Jemt](https://github.com/jemten), and [Jesper Eisfeldt](https://github.com/J35P312).
 
-Additional contributors were [Ramprasad Neethiraj](https://github.com/ramprasadn), [Esmee ten Berk de Boer](https://github.com/Esmeetbdb), [Vadym Ivanchuk](https://github.com/ivadym), and [Mei Wu](https://github.com/projectoriented).
+Additional contributors were [Ramprasad Neethiraj](https://github.com/ramprasadn), [Felix Lenner](https://github.com/fellen31), [Jakob Willforss](https://github.com/Jakob37),[Esmee ten Berk de Boer](https://github.com/Esmeetbdb), [Vadym Ivanchuk](https://github.com/ivadym), and [Mei Wu](https://github.com/projectoriented).
 
 We thank the nf-core community for their extensive assistance in the development of this pipeline.
 
