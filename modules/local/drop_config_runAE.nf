@@ -47,7 +47,7 @@ process DROP_CONFIG_RUN_AE {
 
     drop init
 
-    $baseDir/bin/drop_config.py \\
+    drop_config.py \\
         --genome_fasta ${fasta} \\
         --gtf ${gtf} \\
         --drop_module AE \\
@@ -72,8 +72,8 @@ process DROP_CONFIG_RUN_AE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_config: \$(\$baseDir/bin/drop_config.py --version )
-        drop: v\$(echo \$(drop --version) |  sed -n 's/drop, version //p')
+        drop_config: \$(drop_config.py --version)
+        drop: \$(echo \$(drop --version) |  sed -n 's/drop, version //p')
     END_VERSIONS
     """
 
@@ -91,8 +91,8 @@ process DROP_CONFIG_RUN_AE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_config: \$(\$baseDir/bin/drop_config.py --version )
-        drop: v\$(echo \$(drop --version) |  sed -n 's/drop, version //p')
+        drop_config: \$(drop_config.py --version)
+        drop: \$(echo \$(drop --version) |  sed -n 's/drop, version //p')
     END_VERSIONS
     """
 }

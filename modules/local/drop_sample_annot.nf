@@ -32,7 +32,7 @@ process DROP_SAMPLE_ANNOT {
     def reference_count_file = ref_gene_counts ? "--ref_count_file ${ref_gene_counts}" : ''
     def reference_annotation = ref_annot ? "--ref_annot ${ref_annot}" : ''
     """
-    $baseDir/bin/drop_sample_annot.py \\
+    drop_sample_annot.py \\
         --bam ${bam} \\
         --samples $id \\
         --strandedness $strandedness \\
@@ -45,7 +45,7 @@ process DROP_SAMPLE_ANNOT {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_sample_annot: \$(\$baseDir/bin/drop_sample_annot --version )
+        drop_sample_annot: \$(drop_sample_annot.py --version)
     END_VERSIONS
     """
 
@@ -55,7 +55,7 @@ process DROP_SAMPLE_ANNOT {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_sample_annot: \$(\$baseDir/bin/drop_sample_annot --version )
+        drop_sample_annot: \$(drop_sample_annot.py --version)
     END_VERSIONS
     """
 }
