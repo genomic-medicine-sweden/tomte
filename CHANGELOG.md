@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-- Versions for all modules involving drop will now be outputed in version.yml and mulitqc file [#174](https://github.com/genomic-medicine-sweden/tomte/pull/174)
+- Versions for all modules involving drop will now be outputed in version.yml and multiqc file [#174](https://github.com/genomic-medicine-sweden/tomte/pull/174)
 
 ### `Parameters`
 

@@ -69,7 +69,7 @@ process DROP_CONFIG_RUN_AS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_config: \$(drop_config.py --version )
+        drop_config: \$(drop_config.py --version)
         drop: \$(echo \$(drop --version) |  sed -n 's/drop, version //p')
     END_VERSIONS
     """
@@ -92,7 +92,7 @@ process DROP_CONFIG_RUN_AS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_config: \$(drop_config.py --version )
+        drop_config: \$(drop_config.py --version)
         drop: \$(echo \$(drop --version) |  sed -n 's/drop, version //p')
     END_VERSIONS
     """
