@@ -1,5 +1,5 @@
 process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
-    tag "DROP_put_together_exported_couts"
+    tag "DROP_put_together_exported_counts"
     label 'process_low'
 
     // Exit if running this module with -profile conda / -profile mamba
@@ -39,7 +39,7 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
 
     mv exported_counts/sample_annotation.tsv .
 
-    $baseDir/bin/drop_sample_annot_exported_counts.py \\
+    drop_sample_annot_exported_counts.py \\
         --sample_annot "sample_annotation.tsv" \\
         --ae_run $ae_run \\
         --as_run $as_run \\
@@ -47,7 +47,7 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_sample_annotation_exported_counts: \$(\$baseDir/bin/drop_sample_annotation_exported_counts.py --version )
+        drop_sample_annotation_exported_counts: \$(drop_sample_annotation_exported_counts.py --version)
     END_VERSIONS
 
     """
@@ -58,7 +58,7 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_sample_annotation_exported_counts: \$(\$baseDir/bin/drop_sample_annotation_exported_counts.py --version )
+        drop_sample_annotation_exported_counts: \$(drop_sample_annotation_exported_counts.py --version)
     END_VERSIONS
     """
 }
