@@ -2,12 +2,13 @@
 // ANALYSE TRANSCRITPS
 //
 
-include { STRINGTIE_STRINGTIE } from '../../modules/nf-core/stringtie/stringtie/main'
-include { GFFCOMPARE          } from '../../modules/nf-core/gffcompare/main'
-include { DROP_SAMPLE_ANNOT   } from '../../modules/local/drop_sample_annot'
-include { DROP_CONFIG_RUN_AE  } from '../../modules/local/drop_config_runAE'
-include { DROP_CONFIG_RUN_AS  } from '../../modules/local/drop_config_runAS'
-include { DROP_FILTER_RESULTS } from '../../modules/local/drop_filter_results'
+include { STRINGTIE_STRINGTIE               } from '../../modules/nf-core/stringtie/stringtie/main'
+include { GFFCOMPARE                        } from '../../modules/nf-core/gffcompare/main'
+include { DROP_SAMPLE_ANNOT                 } from '../../modules/local/drop_sample_annot'
+include { DROP_CONFIG_RUN_AE                } from '../../modules/local/drop_config_runAE'
+include { DROP_CONFIG_RUN_AS                } from '../../modules/local/drop_config_runAS'
+include { DROP_FILTER_RESULTS               } from '../../modules/local/drop_filter_results'
+include { DROP_PUT_TOGETHER_EXPORTED_COUNTS } from '../../modules/local/drop_put_together_exported_couts.nf'
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
@@ -86,6 +87,13 @@ workflow ANALYSE_TRANSCRIPTS {
             drop_group_samples_ae,
             drop_padjcutoff_as,
             skip_export_counts_drop
+        )
+
+        // Generates a folder with exported_counts if required
+        DROP_PUT_TOGETHER_EXPORTED_COUNTS(
+            DROP_CONFIG_RUN_AE.out.gene_counts_ae.ifEmpty([]),
+            DROP_CONFIG_RUN_AS.out.gene_counts_as.ifEmpty([]),
+            ch_gtf
         )
 
         ch_out_drop_ae_rds       = DROP_CONFIG_RUN_AE.out.drop_ae_rds       ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()
