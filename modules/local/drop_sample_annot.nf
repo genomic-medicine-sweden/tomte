@@ -43,7 +43,7 @@ process DROP_SAMPLE_ANNOT {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_sample_annot: \$(drop_sample_annot --version )
+        drop_sample_annot: \$(drop_sample_annot.py --version )
     END_VERSIONS
     """
 
