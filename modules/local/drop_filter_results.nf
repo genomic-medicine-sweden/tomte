@@ -58,7 +58,7 @@ process DROP_FILTER_RESULTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        drop_filter_results: \$(drop_filter_results --version )
+        drop_filter_results: \$(drop_filter_results.py --version )
     END_VERSIONS
     """
 }

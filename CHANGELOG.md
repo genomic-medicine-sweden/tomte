@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Functionality to output DROP databases in references folder with a working sample annotation sheet [#172](https://github.com/genomic-medicine-sweden/tomte/pull/172)
 
 ### `Fixed`
+- Versions for all modules involving drop will now be outputed in version.yml and mulitqc file [#174](https://github.com/genomic-medicine-sweden/tomte/pull/174)
 
 ### `Parameters`
 
