@@ -51,9 +51,10 @@
                 "type": "string",
                 "meta": ["sex"],
                 "enum": ["M", "F", "NA"],
+                "default": "NA",
                 "errorMessage": "The valid input for sample sex is M, F or NA"
             }
         },
-        "required": ["case", "sample", "fastq_1", "strandedness", "sex"]
+        "required": ["case", "sample", "fastq_1", "strandedness"]
     }
 }
