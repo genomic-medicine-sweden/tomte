@@ -289,6 +289,12 @@
                     "enum": ["consensus", "multiallelic"],
                     "help_text": "Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied."
                 },
+                "skip_variant_calling": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip variant calling for all samples.",
+                    "fa_icon": "fas fa-toggle-off"
+                },
                 "skip_build_tracks": {
                     "type": "boolean",
                     "default": false,
