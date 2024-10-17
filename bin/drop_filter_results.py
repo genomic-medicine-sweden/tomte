@@ -5,7 +5,7 @@ from re import match, split
 import pyreadr
 from pandas import DataFrame, concat, read_csv
 
-SCRIPT_VERSION = "v1.3"
+SCRIPT_VERSION = "1.3"
 GENE_PANEL_HEADER = ["chromosome", "gene_start", "gene_stop", "hgnc_id", "hgnc_symbol"]
 GENE_PANEL_COLUMNS_TO_KEEP = ["hgnc_symbol", "hgnc_id"]
 
