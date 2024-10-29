@@ -19,7 +19,7 @@ workflow CALL_VARIANTS {
         ch_fai             // channel:   [mandatory] [ val(meta),  path(fai) ]
         ch_dict            // channel:   [mandatory] [ val(meta), path(dict) ]
         variant_caller     // parameter: [mandatory] default: 'bcftools'
-        ch_foundin_header  // channel:   [mandatory] [ path(header) ]
+        ch_found_in_header  // channel:   [mandatory] [ path(header) ]
         ch_genome_chrsizes // channel:   [mandatory] [ path(chrsizes) ]
 
     main:
@@ -88,7 +88,7 @@ workflow CALL_VARIANTS {
 
         BCFTOOLS_ANNOTATE(
             in_bcftools_annot,
-            ch_foundin_header
+            ch_found_in_header
         )
         ch_vcf_tbi = BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi)
 
