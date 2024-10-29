@@ -81,10 +81,11 @@ workflow CALL_VARIANTS {
         ch_bed_in_annot = ADD_VARCALLER_TO_BED.out.gz.collect()
         ch_tbi_in_annot = ADD_VARCALLER_TO_BED.out.tbi.collect()
 
+        bed_with_tbi = ch_bed_in_annot.join(ch_tbi_in_annot)
+        in_bcftools_annot = REMOVE_DUPLICATES.out.vcf.join(REMOVE_DUPLICATES.out.tbi).join(bed_with_tbi)
+
         BCFTOOLS_ANNOTATE(
-            REMOVE_DUPLICATES.out.vcf.join(REMOVE_DUPLICATES.out.tbi),
-            ch_bed_in_annot,
-            ch_tbi_in_annot,
+            in_bcftools_annot,
             ch_foundin_header
         )
         ch_vcf_tbi = BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi)

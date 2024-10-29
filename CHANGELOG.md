@@ -36,13 +36,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated modules using drop drop_config_runAE, drop_config_runAS, drop_sample_annot, and drop_filter_results [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
 - Updated nf-core/tools template to v3.0.2 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
 - Updated multiqc version to 1.25.1 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
+- Updated modules [#176](https://github.com/genomic-medicine-sweden/tomte/pull/176)
 
-| Tool                 | Old version | New version |
-| -------------------- | ----------- | ----------- |
-| ensemblvep/filtervep | 110         | 112         |
-| ensemblvep/vep       | 110         | 112         |
-| DROP                 | 1.3.3       | 1.4.0       |
-| multiqc              | 1.21        | 1.25.1      |
+| Tool                           | Old version | New version |
+| ------------------------------ | ----------- | ----------- |
+| ensemblvep/filtervep           | 110         | 112         |
+| ensemblvep/vep                 | 110         | 112         |
+| DROP                           | 1.3.3       | 1.4.0       |
+| multiqc                        | 1.21        | 1.25.1      |
+| ensemblvep/filtervep           | 112         | 113         |
+| ensemblvep/vep                 | 112         | 113         |
+| picard/collectinsertsizemtrics | 3.2.0       | 3.3.0       |
+| salmon/index                   | 1.10.1      | 1.10.3      |
+| salmon/quant                   | 1.10.1      | 1.10.3      |
+| samtools/faidx                 | 1.20        | 1.21        |
+| samtools/index                 | 1.20        | 1.21        |
+| samtools/view                  | 1.20        | 1.21        |
+| stringtie/stringtie            | 2.2.1       | 2.2.3       |
+
 
 ## 2.2.1 - Scrooge [2024-08-28]
 
