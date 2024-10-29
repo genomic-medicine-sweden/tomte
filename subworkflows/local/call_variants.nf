@@ -19,7 +19,7 @@ workflow CALL_VARIANTS {
         ch_fai             // channel:   [mandatory] [ val(meta),  path(fai) ]
         ch_dict            // channel:   [mandatory] [ val(meta), path(dict) ]
         variant_caller     // parameter: [mandatory] default: 'bcftools'
-        ch_foundin_header  // channel:   [mandatory] [ path(header) ]
+        ch_found_in_header  // channel:   [mandatory] [ path(header) ]
         ch_genome_chrsizes // channel:   [mandatory] [ path(chrsizes) ]
 
     main:
@@ -81,11 +81,14 @@ workflow CALL_VARIANTS {
         ch_bed_in_annot = ADD_VARCALLER_TO_BED.out.gz.collect()
         ch_tbi_in_annot = ADD_VARCALLER_TO_BED.out.tbi.collect()
 
+        in_bcftools_annot = REMOVE_DUPLICATES.out.vcf
+            .join(REMOVE_DUPLICATES.out.tbi)
+            .join(ch_bed_in_annot)
+            .join(ch_tbi_in_annot)
+
         BCFTOOLS_ANNOTATE(
-            REMOVE_DUPLICATES.out.vcf.join(REMOVE_DUPLICATES.out.tbi),
-            ch_bed_in_annot,
-            ch_tbi_in_annot,
-            ch_foundin_header
+            in_bcftools_annot,
+            ch_found_in_header
         )
         ch_vcf_tbi = BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi)
 

@@ -36,13 +36,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated modules using drop drop_config_runAE, drop_config_runAS, drop_sample_annot, and drop_filter_results [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
 - Updated nf-core/tools template to v3.0.2 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
 - Updated multiqc version to 1.25.1 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
+- Updated modules bcftools/annotate, bcftools/merge, bcftools/mpileup, bcftools/norm, bcftools/stats, bcftools/view, cat/fastq, ensemblvep/filtervep, ensemblvep/vep, fastp, gatk4/asereadcounter, gatk4/bedtointervallist, gatk4/createsequencedictionary, gatk4/haplotypecaller, gatk4/splitncigarreads, gatk4/variantfiltration, gawk, gffcompare, gunzip, picard/collectinsertsizemetrics, picard/collectrnaseqmetrics, salmon/index, salmon/quant, samtools/faidx, samtools/index, samtools/view, star/align, star/genomegenerate, stringtie/stringtie, tabix/bgziptabix, tabix/tabix, ucsc/wigtobigwig, untar [#177](https://github.com/genomic-medicine-sweden/tomte/pull/177)
 
-| Tool                 | Old version | New version |
-| -------------------- | ----------- | ----------- |
-| ensemblvep/filtervep | 110         | 112         |
-| ensemblvep/vep       | 110         | 112         |
-| DROP                 | 1.3.3       | 1.4.0       |
-| multiqc              | 1.21        | 1.25.1      |
+| Tool                           | Old version | New version |
+| ------------------------------ | ----------- | ----------- |
+| ensemblvep/filtervep           | 110         | 113         |
+| ensemblvep/vep                 | 110         | 113         |
+| DROP                           | 1.3.3       | 1.4.0       |
+| multiqc                        | 1.21        | 1.25.1      |
+| cat/fastq                      | 8.30        | 9.5         |
+| picard/collectinsertsizemtrics | 3.2.0       | 3.3.0       |
+| salmon/index                   | 1.10.1      | 1.10.3      |
+| salmon/quant                   | 1.10.1      | 1.10.3      |
+| samtools/faidx                 | 1.20        | 1.21        |
+| samtools/index                 | 1.20        | 1.21        |
+| samtools/view                  | 1.20        | 1.21        |
+| star/align                     | 2.7.10a     | 2.7.11b     |
+| star/genomegenerate            | 2.7.10a     | 2.7.11b     |
+| stringtie/stringtie            | 2.2.1       | 2.2.3       |
 
 ## 2.2.1 - Scrooge [2024-08-28]
 
