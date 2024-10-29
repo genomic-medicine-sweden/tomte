@@ -45,7 +45,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | DROP                           | 1.3.3       | 1.4.0       |
 | multiqc                        | 1.21        | 1.25.1      |
 | cat/fastq                      | 8.30        | 9.5         |
-| ensemblvep/vep                 | 112         | 113         |
 | picard/collectinsertsizemtrics | 3.2.0       | 3.3.0       |
 | salmon/index                   | 1.10.1      | 1.10.3      |
 | salmon/quant                   | 1.10.1      | 1.10.3      |
