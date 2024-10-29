@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated modules using drop drop_config_runAE, drop_config_runAS, drop_sample_annot, and drop_filter_results [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
 - Updated nf-core/tools template to v3.0.2 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
 - Updated multiqc version to 1.25.1 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
-- Updated modules [#176](https://github.com/genomic-medicine-sweden/tomte/pull/176)
+- Updated modules [#177](https://github.com/genomic-medicine-sweden/tomte/pull/177)
 
 | Tool                           | Old version | New version |
 | ------------------------------ | ----------- | ----------- |
@@ -53,7 +53,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | samtools/index                 | 1.20        | 1.21        |
 | samtools/view                  | 1.20        | 1.21        |
 | stringtie/stringtie            | 2.2.1       | 2.2.3       |
-
 
 ## 2.2.1 - Scrooge [2024-08-28]
 
