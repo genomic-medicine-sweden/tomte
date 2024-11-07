@@ -23,6 +23,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 </p>
 
 TrancriptOMe Total Evaluation (TOMTE):
+
 1. Trim reads ([`FASTP`](https://github.com/OpenGene/fastp))
 2. Transcript quantification ([`Salmon`](https://salmon.readthedocs.io/en/latest/))
 3. Align reads to the genome ([`STAR`](https://github.com/alexdobin/STAR))

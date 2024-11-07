@@ -15,11 +15,11 @@ Table of contents:
     - [Samplesheet](#samplesheet)
     - [Reference files and parameters](#reference-files-and-parameters)
       - [Alignment and pseudo quantification](#1-alignment)
-      - [Junction track and bigwig generation](#2-junction-track-and-bigwig) 
+      - [Junction track and bigwig generation](#2-junction-track-and-bigwig)
       - [Region subsampling](#3-subsample-region)
       - [Variant calling](#4-variant-calling---snv)
       - [SNV annotation](#5-snv-annotation-ensembl-vep)
-      - [Stringtie & gffcompare](#6-stringtie-&-gffcompare)
+      - [Stringtie & gffcompare](#6-stringtie-and-gffcompare)
       - [DROP](#7-drop)
         - [Preparing DROP input](#preparing-input-for-drop)
   - [Run the pipeline](#run-the-pipeline)
@@ -216,7 +216,7 @@ The mandatory and optional parameters for each category are tabulated below.
 <sup>3</sup> If it is not provided by the user, the default value is 112, supported values are 107, 110, and 112
 <sup>4</sup> If it is not provided by the user, the default value true
 
-#### 6. Stringtie & gffcompare
+#### 6. Stringtie and gffcompare
 
 | Mandatory | Optional                   |
 | --------- | -------------------------- |
