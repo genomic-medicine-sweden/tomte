@@ -110,7 +110,7 @@ Outputs both junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### DROP
 
-[`DROP`](https://github.com/gagneurlab/drop/) is a pipleine that detects aberrant expression, aberrant splicing, and monoallelic expression. For the time being, aberrant expression and aberrant splicing modules are run. Afterwards another script is run to filter results.
+[`DROP`](https://github.com/gagneurlab/drop/) is a pipeline that detects aberrant expression, aberrant splicing, and monoallelic expression. For the time being, aberrant expression and aberrant splicing modules are run. Afterwards another script is run to filter results.
 
 <details markdown="1">
 <summary>Output files</summary>
