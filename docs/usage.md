@@ -15,10 +15,12 @@ Table of contents:
     - [Samplesheet](#samplesheet)
     - [Reference files and parameters](#reference-files-and-parameters)
       - [Alignment and pseudo quantification](#1-alignment)
-      - [Region subsampling](#2-subsample-region)
-      - [Variant calling](#3-variant-calling---snv)
-      - [SNV annotation](#4-snv-annotation-ensembl-vep)
-      - [DROP](#5-drop)
+      - [Junction track and bigwig generation](#2-junction-track-and-bigwig) 
+      - [Region subsampling](#3-subsample-region)
+      - [Variant calling](#4-variant-calling---snv)
+      - [SNV annotation](#5-snv-annotation-ensembl-vep)
+      - [Stringtie & gffcompare](#6-stringtie-&-gffcompare)
+      - [DROP](#7-drop)
         - [Preparing DROP input](#preparing-input-for-drop)
   - [Run the pipeline](#run-the-pipeline)
     - [Direct input in CLI](#direct-input-in-cli)
@@ -273,22 +275,22 @@ DROP - aberrant splicing
 
 ##### Preparing input for DROP
 
-If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference counts, splice counts and a sample sheet. The sample sheet should contain the columns as those in the [test sample annotation](../test_data/drop_data/sampleAnnotation.tsv), you do not need to include the samples you are running through the pipeline in the sample sheet.
+If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference counts, splice counts, and a sample sheet. The sample sheet should contain the columns as those in the [test sample annotation](../test_data/drop_data/sampleAnnotation.tsv), you can also add an optional sex column. You do not need to include the samples you are running through the pipeline in the sample sheet.
 
 ###### Preparing your DROP control database
 
 You have several options on how to create such a database. You can either build it or download it from one of the [available databases](https://github.com/gagneurlab/drop#datasets).
 
-To build your own database you will need at least 50 for aberrant expression, if you only run aberrant splicing 30 samples will suffice but DROP authors recommend to have at least around 100 for both modules. You can use Tomte to build your own database, to do so we recommend to run with the following parameters:
+To build your own database you will need at least 50 samples for aberrant expression, if you only run aberrant splicing 30 samples will suffice but DROP authors recommend to have at least around 100 for both modules. You can use Tomte to build your own database, to do so we recommend to run with the following parameters:
 
-- `--skip_export_counts_drop false` this switch will ensure that a folder called export_counts is created
+- `--skip_export_counts_drop false` this switch will ensure that a folder in references called export_counts is created
 - `--skip_drop_as false` if you want to get a database for aberrant splicing
 - `--skip_drop_ae false` if you want to get a database for aberrant expression
 - `--skip_subsample_region false` if you have sequenced any material with overrepresented regions (such as hemoglobin in whole blood) we recommend to remove it by setting this parameter to false and providing a bed with the overrepresented region with `--subsample_bed`
-- `--skip_downsample false` if you have very deeply sequenced samples, we recommend to downsample, the default is 60M read pairs
-- `--skip_build_tracks true`, `--skip_stringtie true`, `--skip_variant_calling`, `--skip_vep true` as most users will be interested in getting the database rather than other downstream results
+- `--skip_downsample false` if you have very deeply sequenced samples, we recommend to downsample, the default is 60M read pairs (or 120M reads).
+- `--skip_build_tracks true`, `--skip_stringtie true`, `--skip_variant_calling`, `--skip_vep true` as most users will be interested in getting the database rather than other downstream results, which will require a considerable amount of resources given the number of samples run.
 
-Running DROP with many samples requires a lot of time and a lot of memory, that is why we recommend to subsample overrepresented regions and downsample if you have deeply sequenced samples. If your run fails for either of this reasons, try to relaunch it from the work directory where DROP was run so that DROP continues from the point where it failed (if you restart the pipeline with `-resume` it will begin from the start and it will likely fail in the same way).
+Running DROP with many samples requires a lot of time and a lot of memory, that is why we recommend to subsample overrepresented regions and downsample if you have deeply sequenced samples. If your run fails, we recommend increasing memory without increasing the number of cores. If it fails for and has been running for a while, try to relaunch it from the work directory where DROP was run so that DROP continues from the point where it failed (if you restart the pipeline with `-resume` it will begin from the start).
 
 To restart DROP, start by finding the work directory where it was run. You can do so by opening the execution trace file in the pipeline_info folder and looking at the hash of the processes with name `TOMTE:ANALYSE_TRANSCRIPTS:DROP_CONFIG_RUN_AE` and `TOMTE:ANALYSE_TRANSCRIPTS:DROP_CONFIG_RUN_AS`. The work directory used to run the pipeline followed by the hash should be enough information to find the folder where DROP was run. Tomte should have set everything up in that directory so go into it and restart the run by running from the container created by Tomte the script `.command.sh`. If you want to run it with slurm remember to add a header with number of cores, time...
 

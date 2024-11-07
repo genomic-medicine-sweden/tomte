@@ -110,7 +110,7 @@ Outputs both junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### DROP
 
-[`DROP`](https://github.com/gagneurlab/drop/) is a pipleine that detects aberrant expression, aberrant spliceing, and monoallelic expression. For the time being, aberrant expression and aberrant splicing modules are run. Afterwards another script is run to filter results.
+[`DROP`](https://github.com/gagneurlab/drop/) is a pipleine that detects aberrant expression, aberrant splicing, and monoallelic expression. For the time being, aberrant expression and aberrant splicing modules are run. Afterwards another script is run to filter results.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -120,6 +120,22 @@ Outputs both junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
   - `OUTRIDER_provided_samples_top_hits_filtered.tsv`: filters OUTRIDER_provided_samples_top_hits according to genes provided by gene_panel_clinical_filter.
   - `FRASER_provided_samples_top_hits.tsv`: provides the aberrant spliced events reported by FRASER.
   - `FRASER_provided_samples_top_hits_filtered.tsv`: filters FRASER_provided_samples_top_hits according to genes provided by gene_panel_clinical_filter.
+
+</details>
+
+If you set `--skip_export_counts_drop false` to build your own database you will additionaly get:
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `references/exported_counts`
+  - `sampleAnnotation.tsv`: sample annotation for DROP
+  - `geneCounts.tsv.gz`: gene count database for DROP
+  - `n_theta_counts.tsv.gz`: splice count database for DROP
+  - `n_psi5_counts.tsv.gz`: splice count database for DROP
+  - `n_psi3_counts.tsv.gz`: splice count database for DROP
+  - `k_theta_counts.tsv.gz`: splice count database for DROP
+  - `k_j_counts.tsv.gz`: splice count database for DROP
 
 </details>
 
