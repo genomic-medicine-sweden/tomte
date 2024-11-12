@@ -11,9 +11,8 @@ process ADD_VARCALLER_TO_BED {
     tuple val(meta), path(chromsizes)
 
     output:
-    path("*.gz")        , emit: gz
-    path("*.tbi")       , emit: tbi
-    path  "versions.yml", emit: versions
+    tuple val(meta), path("*.gz"), path("*.tbi"), emit: gz_tbi
+    path  "versions.yml" ,                        emit: versions
 
     when:
     task.ext.when == null || task.ext.when

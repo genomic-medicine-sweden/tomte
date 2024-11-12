@@ -83,7 +83,7 @@ workflow ALLELE_SPECIFIC_CALLING {
         BCFTOOLS_MERGE( ch_case_vcf.multiple,
             ch_fasta,
             ch_fai,
-            []
+            [[],[]]
         )
 
         RENAME_FILES( ch_case_vcf.single)
