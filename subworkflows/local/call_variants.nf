@@ -58,6 +58,7 @@ workflow CALL_VARIANTS {
                 ch_vcf = ch_vcf.mix(BCFTOOLS_MPILEUP.out.vcf)
                 ch_tbi = ch_tbi.mix(BCFTOOLS_MPILEUP.out.tbi)
                 ch_stats = ch_stats.mix(BCFTOOLS_MPILEUP.out.stats)
+
                 ch_versions = ch_versions.mix(BCFTOOLS_MPILEUP.out.versions.first())
 
                 break
@@ -89,7 +90,6 @@ workflow CALL_VARIANTS {
         )
         ch_vcf_tbi = BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi)
 
-        ch_versions = ch_versions.mix( BCFTOOLS_MPILEUP.out.versions.first() )
         ch_versions = ch_versions.mix( SPLIT_MULTIALLELICS.out.versions.first() )
         ch_versions = ch_versions.mix( REMOVE_DUPLICATES.out.versions.first() )
         ch_versions = ch_versions.mix( ADD_VARCALLER_TO_BED.out.versions.first() )
