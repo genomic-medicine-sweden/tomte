@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated nf-core/tools template to v3.0.2 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
 - Updated multiqc version to 1.25.1 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
 - Updated modules bcftools/annotate, bcftools/merge, bcftools/mpileup, bcftools/norm, bcftools/stats, bcftools/view, cat/fastq, ensemblvep/filtervep, ensemblvep/vep, fastp, gatk4/asereadcounter, gatk4/bedtointervallist, gatk4/createsequencedictionary, gatk4/haplotypecaller, gatk4/splitncigarreads, gatk4/variantfiltration, gawk, gffcompare, gunzip, picard/collectinsertsizemetrics, picard/collectrnaseqmetrics, salmon/index, salmon/quant, samtools/faidx, samtools/index, samtools/view, star/align, star/genomegenerate, stringtie/stringtie, tabix/bgziptabix, tabix/tabix, ucsc/wigtobigwig, untar [#177](https://github.com/genomic-medicine-sweden/tomte/pull/177)
-- Changed how variants are caller is added to the vcf, it is now done using the local module add_found_in_tag [#184](https://github.com/genomic-medicine-sweden/tomte/pull/184)
+- Changed how variant caller is added to the vcf, it is now done using the local module add_found_in_tag [#184](https://github.com/genomic-medicine-sweden/tomte/pull/184)
 
 | Tool                           | Old version | New version |
 | ------------------------------ | ----------- | ----------- |
