@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - Versions for all modules involving drop will now be outputed in version.yml and multiqc file [#174](https://github.com/genomic-medicine-sweden/tomte/pull/174)
-  Fixed bug when running variant calling with gatk [[#182](https://github.com/genomic-medicine-sweden/tomte/pull/182)]
+- Fixed bug when running variant calling with gatk [[#182](https://github.com/genomic-medicine-sweden/tomte/pull/182)]
 
 ### `Parameters`
 
@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated nf-core/tools template to v3.0.2 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
 - Updated multiqc version to 1.25.1 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
 - Updated modules bcftools/annotate, bcftools/merge, bcftools/mpileup, bcftools/norm, bcftools/stats, bcftools/view, cat/fastq, ensemblvep/filtervep, ensemblvep/vep, fastp, gatk4/asereadcounter, gatk4/bedtointervallist, gatk4/createsequencedictionary, gatk4/haplotypecaller, gatk4/splitncigarreads, gatk4/variantfiltration, gawk, gffcompare, gunzip, picard/collectinsertsizemetrics, picard/collectrnaseqmetrics, salmon/index, salmon/quant, samtools/faidx, samtools/index, samtools/view, star/align, star/genomegenerate, stringtie/stringtie, tabix/bgziptabix, tabix/tabix, ucsc/wigtobigwig, untar [#177](https://github.com/genomic-medicine-sweden/tomte/pull/177)
+- How variants are called is added to the vcf using the local module add_found_in_tag [#183](https://github.com/genomic-medicine-sweden/tomte/pull/183)
 
 | Tool                           | Old version | New version |
 | ------------------------------ | ----------- | ----------- |

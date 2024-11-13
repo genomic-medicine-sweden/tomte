@@ -174,8 +174,7 @@ workflow TOMTE {
         ch_references.fai,
         ch_references.sequence_dict,
         params.variant_caller,
-        ch_foundin_header,
-        ch_references.chrom_sizes
+        ch_foundin_header
     )
     ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
 
