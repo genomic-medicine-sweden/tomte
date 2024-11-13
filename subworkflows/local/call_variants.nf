@@ -18,7 +18,6 @@ workflow CALL_VARIANTS {
         ch_fai             // channel:   [mandatory] [ val(meta),  path(fai) ]
         ch_dict            // channel:   [mandatory] [ val(meta), path(dict) ]
         variant_caller     // parameter: [mandatory] default: 'bcftools'
-        ch_found_in_header  // channel:   [mandatory] [ path(header) ]
 
     main:
 
