@@ -5,11 +5,6 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
-                    "bcftools/annotate": {
-                        "branch": "master",
-                        "git_sha": "cb08035150685b11d890d90c9534d4f16869eaec",
-                        "installed_by": ["modules"]
-                    },
                     "bcftools/merge": {
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",

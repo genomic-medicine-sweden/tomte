@@ -42,7 +42,6 @@ workflow TOMTE {
     ch_samples        = ch_samplesheet.map { meta, fastqs -> meta }
     ch_case_info      = ch_samples.toList().map { create_case_channel(it) }
     ch_platform       = Channel.from(params.platform).collect()
-    ch_foundin_header = Channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
 
     // Optional
     ch_vep_refs_download_unprocessed = params.vep_refs_download         ? Channel.fromPath(params.vep_refs_download)
@@ -173,9 +172,7 @@ workflow TOMTE {
         ch_references.fasta,
         ch_references.fai,
         ch_references.sequence_dict,
-        params.variant_caller,
-        ch_foundin_header,
-        ch_references.chrom_sizes
+        params.variant_caller
     )
     ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
 
