@@ -15,10 +15,12 @@ Table of contents:
     - [Samplesheet](#samplesheet)
     - [Reference files and parameters](#reference-files-and-parameters)
       - [Alignment and pseudo quantification](#1-alignment)
-      - [Region subsampling](#2-subsample-region)
-      - [Variant calling](#3-variant-calling---snv)
-      - [SNV annotation](#4-snv-annotation-ensembl-vep)
-      - [DROP](#5-drop)
+      - [Junction track and bigwig generation](#2-junction-track-and-bigwig)
+      - [Region subsampling](#3-subsample-region)
+      - [Variant calling](#4-variant-calling---snv)
+      - [SNV annotation](#5-snv-annotation-ensembl-vep)
+      - [Stringtie & gffcompare](#6-stringtie-and-gffcompare)
+      - [DROP](#7-drop)
         - [Preparing DROP input](#preparing-input-for-drop)
   - [Run the pipeline](#run-the-pipeline)
     - [Direct input in CLI](#direct-input-in-cli)
@@ -190,9 +192,11 @@ The mandatory and optional parameters for each category are tabulated below.
 | --------- | -------------------------------- |
 |           | variant_caller<sup>1</sup>       |
 |           | bcftools_caller_mode<sup>2</sup> |
+|           | skip_variant_calling<sup>3</sup> |
 
 <sup>1</sup> If it is not provided by the user, the default value is bcftools<br />
-<sup>2</sup> If it is not provided by the user, the default value is multiallelic
+<sup>2</sup> If it is not provided by the user, the default value is multiallelic<br />
+<sup>3</sup> If it is not provided by the user, the default value is false
 
 #### 5. SNV annotation (ensembl VEP)
 
@@ -209,10 +213,10 @@ The mandatory and optional parameters for each category are tabulated below.
 
 <sup>1</sup> If it is not provided by the user, the default value is false<br />
 <sup>2</sup> VEP cache and plugins can be automatically downloaded by the pipeline by setting `--skip_download_vep false`, `--skip_download_gnomad false` and providing a lcsv with a list of files to download `--vep_refs_download` as done [here](https://github.com/genomic-medicine-sweden/tomte/blob/dev/test_data/vep_to_download.csv). VEP caches can also be downloaded [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#cache). VEP plugins may also be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter. See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
-<sup>3</sup> If it is not provided by the user, the default value is 110, supported values are 107 and 110
+<sup>3</sup> If it is not provided by the user, the default value is 112, supported values are 107, 110, and 112
 <sup>4</sup> If it is not provided by the user, the default value true
 
-#### 6. Stringtie & gffcompare
+#### 6. Stringtie and gffcompare
 
 | Mandatory | Optional                   |
 | --------- | -------------------------- |
@@ -225,16 +229,17 @@ The mandatory and optional parameters for each category are tabulated below.
 
 DROP - aberrant expression
 
-| Mandatory                             | Optional                          |
-| ------------------------------------- | --------------------------------- |
-| reference_drop_annot_file<sup>1</sup> | skip_drop_ae<sup>2</sup>          |
-| reference_drop_count_file             | drop_group_samples_ae<sup>3</sup> |
-| fasta                                 | drop_padjcutoff_ae<sup>4</sup>    |
-| gtf                                   | drop_zscorecutoff<sup>5</sup>     |
-|                                       | gene_panel_clinical_filter        |
-|                                       | skip_downsample<sup>6</sup>       |
-|                                       | num_reads<sup>7</sup>             |
-|                                       | genome<sup>8</sup>                |
+| Mandatory                             | Optional                            |
+| ------------------------------------- | ----------------------------------- |
+| reference_drop_annot_file<sup>1</sup> | skip_drop_ae<sup>2</sup>            |
+| reference_drop_count_file             | drop_group_samples_ae<sup>3</sup>   |
+| fasta                                 | drop_padjcutoff_ae<sup>4</sup>      |
+| gtf                                   | drop_zscorecutoff<sup>5</sup>       |
+|                                       | gene_panel_clinical_filter          |
+|                                       | skip_downsample<sup>6</sup>         |
+|                                       | num_reads<sup>7</sup>               |
+|                                       | genome<sup>8</sup>                  |
+|                                       | skip_export_counts_drop<sup>9</sup> |
 
 <sup>1</sup> To get more information on how to format it, see below<br />
 <sup>2</sup> If it is not provided by the user, the default value is false<br />
@@ -244,18 +249,20 @@ DROP - aberrant expression
 <sup>6</sup> If it is not provided by the user, the default value is false<br />
 <sup>7</sup> If it is not provided by the user, the default value is 120000000<br />
 <sup>8</sup> If it is not provided by the user, the default value is GRCh38
+<sup>9</sup> If it is not provided by the user, the default value is true<br />
 
 DROP - aberrant splicing
 
-| Mandatory                             | Optional                          |
-| ------------------------------------- | --------------------------------- |
-| reference_drop_annot_file<sup>1</sup> | skip_drop_as<sup>2</sup>          |
-| reference_drop_splice_folder          | drop_group_samples_as<sup>3</sup> |
-|                                       | drop_padjcutoff_as<sup>4</sup>    |
-|                                       | gene_panel_clinical_filter        |
-|                                       | skip_downsample<sup>5</sup>       |
-|                                       | num_reads<sup>6</sup>             |
-|                                       | genome<sup>7</sup>                |
+| Mandatory                             | Optional                            |
+| ------------------------------------- | ----------------------------------- |
+| reference_drop_annot_file<sup>1</sup> | skip_drop_as<sup>2</sup>            |
+| reference_drop_splice_folder          | drop_group_samples_as<sup>3</sup>   |
+|                                       | drop_padjcutoff_as<sup>4</sup>      |
+|                                       | gene_panel_clinical_filter          |
+|                                       | skip_downsample<sup>5</sup>         |
+|                                       | num_reads<sup>6</sup>               |
+|                                       | genome<sup>7</sup>                  |
+|                                       | skip_export_counts_drop<sup>8</sup> |
 
 <sup>1</sup> To get more information on how to format it, see below<br />
 <sup>2</sup> If it is not provided by the user, the default value is false<br />
@@ -264,16 +271,32 @@ DROP - aberrant splicing
 <sup>5</sup> If it is not provided by the user, the default value is false<br />
 <sup>6</sup> If it is not provided by the user, the default value is 120000000<br />
 <sup>7</sup> If it is not provided by the user, the default value is GRCh38
+<sup>8</sup> If it is not provided by the user, the default value is true<br />
 
 ##### Preparing input for DROP
 
-If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference counts, splice counts and a sample sheet. The sample sheet should contain the columns as those in the [test sample annotation](../test_data/drop_data/sampleAnnotation.tsv), you do not need to include the samples you are running through the pipeline in the sample sheet.
+If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference counts, splice counts, and a sample sheet. The sample sheet should contain the columns as those in the [test sample annotation](../test_data/drop_data/sampleAnnotation.tsv), you can also add an optional sex column. You do not need to include the samples you are running through the pipeline in the sample sheet.
 
-To obtain the gene counts and splice counts you will have to download the counts from one of the [available databases](https://github.com/gagneurlab/drop#datasets) or run drop locally with your own samples. If you choose the second option, you should start by runnig the module(s) you want to export counts for. Afterwards, you need to run the exportCounts module. Make sure that your config has only the modules you want to export and have already run as <run: true> , that only existing groups are mentioned in the config, and that exportCounts excludGroups is null or contains a group of samples you want to exclude. Finally, run:
+###### Preparing your DROP control database
 
-```console
-snakemake exportCounts --cores 1
-```
+You have several options on how to create such a database. You can either build it or download it from one of the [available databases](https://github.com/gagneurlab/drop#datasets).
+
+To build your own database you will need at least 50 samples for aberrant expression, if you only run aberrant splicing 30 samples will suffice but DROP authors recommend to have at least around 100 for both modules. You can use Tomte to build your own database, to do so we recommend to run with the following parameters:
+
+- `--skip_export_counts_drop false` this switch will ensure that a folder in references called export_counts is created
+- `--skip_drop_as false` if you want to get a database for aberrant splicing
+- `--skip_drop_ae false` if you want to get a database for aberrant expression
+- `--skip_subsample_region false` if you have sequenced any material with overrepresented regions (such as hemoglobin in whole blood) we recommend to remove it by setting this parameter to false and providing a bed with the overrepresented region with `--subsample_bed`
+- `--skip_downsample false` if you have very deeply sequenced samples, we recommend to downsample, the default is 60M read pairs (or 120M reads).
+- `--skip_build_tracks true`, `--skip_stringtie true`, `--skip_variant_calling`, `--skip_vep true` as most users will be interested in getting the database rather than other downstream results, which will require a considerable amount of resources given the number of samples run.
+
+Running DROP with many samples requires a lot of time and a lot of memory, that is why we recommend to subsample overrepresented regions and downsample if you have deeply sequenced samples. If your run fails, we recommend increasing memory without increasing the number of cores. If it fails and has been running for a while, try to relaunch it from the work directory where DROP was run so that DROP continues from the point where it failed (if you restart the pipeline with `-resume` it will begin from the start).
+
+To restart DROP, start by finding the work directory where it was run. You can do so by opening the execution trace file in the pipeline_info folder and looking at the hash of the processes with name `TOMTE:ANALYSE_TRANSCRIPTS:DROP_CONFIG_RUN_AE` and `TOMTE:ANALYSE_TRANSCRIPTS:DROP_CONFIG_RUN_AS`. The work directory used to run the pipeline followed by the hash should be enough information to find the folder where DROP was run. Tomte should have set everything up in that directory so go into it and restart the run by running from the container created by Tomte the script `.command.sh`. If you want to run it with slurm remember to add a header with number of cores, time...
+
+If you want to add samples to an existing database, follow the same steps described above, making sure that you also provide the database you want to add samples to by using `--reference_drop_annot_file` and `--reference_drop_count_file` and/or `--reference_drop_splice_folder`. In this case scenerio, make sure that you have used the same references for the database as for the new set of samples.
+
+If you prefer to run DROP locally outside from Tomte follow instructions given by the [authors of DROP](https://github.com/gagneurlab/drop)
 
 ## Running the pipeline
 
@@ -308,9 +331,9 @@ The above pipeline run specified with a params file in yaml format:
 nextflow run genomic-medicine-sweden/tomte -profile docker -params-file params.yaml
 ```
 
-with `params.yaml` containing:
+with:
 
-```yaml
+```yaml title="params.yaml"
 input: './samplesheet.csv'
 outdir: './results/'
 genome: 'GRCh37'
@@ -421,14 +444,6 @@ In most cases, you will only need to create a custom config as a one-off but if 
 See the main [Nextflow documentation](https://www.nextflow.io/docs/latest/config.html) for more information about creating your own configuration files.
 
 If you have any questions or issues please send us a message on [Slack](https://nf-co.re/join/slack) on the [`#configs` channel](https://nfcore.slack.com/channels/configs).
-
-## Azure Resource Requests
-
-To be used with the `azurebatch` profile by specifying the `-profile azurebatch`.
-We recommend providing a compute `params.vm_type` of `Standard_D16_v3` VMs by default but these options can be changed if required.
-
-Note that the choice of VM size depends on your quota and the overall workload during the analysis.
-For a thorough list, please refer the [Azure Sizes for virtual machines in Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/sizes).
 
 ## Running in the background
 

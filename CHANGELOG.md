@@ -3,6 +3,61 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.0 - Three Kings [2024-11-18]
+
+### `Added`
+
+- Functionality to create DROP databases and to add samples to existing ones [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
+- A switch `--skip_variant_calling` for variant calling [#169](https://github.com/genomic-medicine-sweden/tomte/pull/169)
+- Functionality to output DROP databases in references folder with a working sample annotation sheet [#172](https://github.com/genomic-medicine-sweden/tomte/pull/172)
+- Added optional sex info col to samplesheet, used in DROP[#168](https://github.com/genomic-medicine-sweden/tomte/pull/168)
+- Added more documentation regarding DROP [#178](https://github.com/genomic-medicine-sweden/tomte/pull/178)
+
+### `Fixed`
+
+- Versions for all modules involving drop will now be outputed in version.yml and multiqc file [#174](https://github.com/genomic-medicine-sweden/tomte/pull/174)
+- Fixed bug when running variant calling with gatk [#182](https://github.com/genomic-medicine-sweden/tomte/pull/182)
+
+### `Parameters`
+
+| Old parameter                    | New parameter            |
+| -------------------------------- | ------------------------ |
+| `--max_cpus`                     |                          |
+| `--max_memory`                   |                          |
+| `--max_time`                     |                          |
+| `--validationShowHiddenParams`   |                          |
+| `--validationSkipDuplicateCheck` |                          |
+| `--validationS3PathCheck`        |                          |
+| `--monochromeLogs`               | `--monochrome_logs`      |
+|                                  | `--skip_variant_calling` |
+
+### `Changed`
+
+- Updated modules ensemblvep/filtervep, ensemblvep/vep [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
+- Updated gencode version from 37 to 46 [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
+- Updated modules using drop drop_config_runAE, drop_config_runAS, drop_sample_annot, and drop_filter_results [#147](https://github.com/genomic-medicine-sweden/tomte/pull/147)
+- Updated nf-core/tools template to v3.0.2 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
+- Updated multiqc version to 1.25.1 [#167](https://github.com/genomic-medicine-sweden/tomte/pull/167)
+- Updated modules bcftools/annotate, bcftools/merge, bcftools/mpileup, bcftools/norm, bcftools/stats, bcftools/view, cat/fastq, ensemblvep/filtervep, ensemblvep/vep, fastp, gatk4/asereadcounter, gatk4/bedtointervallist, gatk4/createsequencedictionary, gatk4/haplotypecaller, gatk4/splitncigarreads, gatk4/variantfiltration, gawk, gffcompare, gunzip, picard/collectinsertsizemetrics, picard/collectrnaseqmetrics, salmon/index, salmon/quant, samtools/faidx, samtools/index, samtools/view, star/align, star/genomegenerate, stringtie/stringtie, tabix/bgziptabix, tabix/tabix, ucsc/wigtobigwig, untar [#177](https://github.com/genomic-medicine-sweden/tomte/pull/177)
+- Changed how variant caller is added to the vcf, it is now done using the local module add_found_in_tag [#184](https://github.com/genomic-medicine-sweden/tomte/pull/184)
+
+| Tool                           | Old version | New version |
+| ------------------------------ | ----------- | ----------- |
+| ensemblvep/filtervep           | 110         | 113         |
+| ensemblvep/vep                 | 110         | 113         |
+| DROP                           | 1.3.3       | 1.4.0       |
+| multiqc                        | 1.21        | 1.25.1      |
+| cat/fastq                      | 8.30        | 9.5         |
+| picard/collectinsertsizemtrics | 3.2.0       | 3.3.0       |
+| salmon/index                   | 1.10.1      | 1.10.3      |
+| salmon/quant                   | 1.10.1      | 1.10.3      |
+| samtools/faidx                 | 1.20        | 1.21        |
+| samtools/index                 | 1.20        | 1.21        |
+| samtools/view                  | 1.20        | 1.21        |
+| star/align                     | 2.7.10a     | 2.7.11b     |
+| star/genomegenerate            | 2.7.10a     | 2.7.11b     |
+| stringtie/stringtie            | 2.2.1       | 2.2.3       |
+
 ## 2.2.1 - Scrooge [2024-08-28]
 
 ### `Fixed`

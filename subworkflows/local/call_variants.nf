@@ -6,8 +6,7 @@
 include { BCFTOOLS_MPILEUP                     } from '../../modules/nf-core/bcftools/mpileup/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES   } from '../../modules/nf-core/bcftools/norm/main'
-include { ADD_VARCALLER_TO_BED                 } from '../../modules/local/add_varcallername_to_bed'
-include { BCFTOOLS_ANNOTATE                    } from '../../modules/nf-core/bcftools/annotate/main'
+include { ADD_FOUND_IN_TAG                     } from '../../modules/local/add_found_in_tag/main'
 
 // Subworkflows
 include { CALL_VARIANTS_GATK } from './call_variants_gatk.nf'
@@ -19,8 +18,6 @@ workflow CALL_VARIANTS {
         ch_fai             // channel:   [mandatory] [ val(meta),  path(fai) ]
         ch_dict            // channel:   [mandatory] [ val(meta), path(dict) ]
         variant_caller     // parameter: [mandatory] default: 'bcftools'
-        ch_foundin_header  // channel:   [mandatory] [ path(header) ]
-        ch_genome_chrsizes // channel:   [mandatory] [ path(chrsizes) ]
 
     main:
 
@@ -58,6 +55,7 @@ workflow CALL_VARIANTS {
                 ch_vcf = ch_vcf.mix(BCFTOOLS_MPILEUP.out.vcf)
                 ch_tbi = ch_tbi.mix(BCFTOOLS_MPILEUP.out.tbi)
                 ch_stats = ch_stats.mix(BCFTOOLS_MPILEUP.out.stats)
+
                 ch_versions = ch_versions.mix(BCFTOOLS_MPILEUP.out.versions.first())
 
                 break
@@ -72,33 +70,18 @@ workflow CALL_VARIANTS {
         ch_remove_dup_in = SPLIT_MULTIALLELICS.out.vcf.join(SPLIT_MULTIALLELICS.out.tbi)
         REMOVE_DUPLICATES(ch_remove_dup_in, ch_fasta)
 
-        ch_genome_chrsizes.flatten().map { chromsizes ->
-            return [[id:variant_caller], chromsizes]
-            }
-            .set { ch_varcallerinfo }
+        ADD_FOUND_IN_TAG(REMOVE_DUPLICATES.out.vcf.join(REMOVE_DUPLICATES.out.tbi), variant_caller)
 
-        ADD_VARCALLER_TO_BED(ch_varcallerinfo)
-        ch_bed_in_annot = ADD_VARCALLER_TO_BED.out.gz.collect()
-        ch_tbi_in_annot = ADD_VARCALLER_TO_BED.out.tbi.collect()
+        ch_vcf_tbi = ADD_FOUND_IN_TAG.out.vcf.join(ADD_FOUND_IN_TAG.out.tbi)
 
-        BCFTOOLS_ANNOTATE(
-            REMOVE_DUPLICATES.out.vcf.join(REMOVE_DUPLICATES.out.tbi),
-            ch_bed_in_annot,
-            ch_tbi_in_annot,
-            ch_foundin_header
-        )
-        ch_vcf_tbi = BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi)
-
-        ch_versions = ch_versions.mix( BCFTOOLS_MPILEUP.out.versions.first() )
         ch_versions = ch_versions.mix( SPLIT_MULTIALLELICS.out.versions.first() )
         ch_versions = ch_versions.mix( REMOVE_DUPLICATES.out.versions.first() )
-        ch_versions = ch_versions.mix( ADD_VARCALLER_TO_BED.out.versions.first() )
-        ch_versions = ch_versions.mix( BCFTOOLS_ANNOTATE.out.versions.first() )
+        ch_versions = ch_versions.mix( ADD_FOUND_IN_TAG.out.versions.first() )
 
     emit:
-        vcf      = BCFTOOLS_ANNOTATE.out.vcf // channel: [ val(meta), path(vcf) ]
-        tbi      = BCFTOOLS_ANNOTATE.out.tbi // channel: [ val(meta), path(tbi) ]
-        vcf_tbi  = ch_vcf_tbi                // channel: [ val(meta), path(vcf), path(tbi) ]
-        stats    = ch_stats                  // channel: [ val(meta), path(stats) ]
-        versions = ch_versions               // channel: [ path(versions.yml) ]
+        vcf      = ADD_FOUND_IN_TAG.out.vcf // channel: [ val(meta), path(vcf) ]
+        tbi      = ADD_FOUND_IN_TAG.out.tbi // channel: [ val(meta), path(tbi) ]
+        vcf_tbi  = ch_vcf_tbi               // channel: [ val(meta), path(vcf), path(tbi) ]
+        stats    = ch_stats                 // channel: [ val(meta), path(stats) ]
+        versions = ch_versions              // channel: [ path(versions.yml) ]
 }

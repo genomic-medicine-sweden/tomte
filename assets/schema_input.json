@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/genomic-medicine-sweden/tomte/master/assets/schema_input.json",
     "title": "genomic-medicine-sweden/tomte pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
@@ -15,7 +15,6 @@
             },
             "sample": {
                 "type": "string",
-                "exists": true,
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id", "sample"]
@@ -47,6 +46,13 @@
                 "meta": ["strandedness"],
                 "enum": ["unstranded", "forward", "reverse"],
                 "errorMessage": "Sample strandness valid input is unstranded,forward or reverse"
+            },
+            "sex": {
+                "type": "string",
+                "meta": ["sex"],
+                "enum": ["M", "F", "NA"],
+                "default": "NA",
+                "errorMessage": "The valid input for sample sex is M, F or NA"
             }
         },
         "required": ["case", "sample", "fastq_1", "strandedness"]
