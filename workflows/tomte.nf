@@ -5,10 +5,12 @@
 */
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+include { PEDDY                  } from '../modules/nf-core/peddy/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
+include { CREATE_PEDIGREE_FILE   } from '../modules/local/create_pedigree_file'
 
 //
 // SUBWORKFLOW: local
@@ -203,6 +205,16 @@ workflow TOMTE {
         ch_alignment.spl_junc
     )
     ch_versions = ch_versions.mix(IGV_TRACKS.out.versions)
+
+    if (!params.skip_peddy) {
+        ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+        ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
+        PEDDY (
+            CALL_VARIANTS.out.vcf_tbi,
+            ch_pedfile
+        )
+        ch_versions = ch_versions.mix(PEDDY.out.versions)
+    }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
