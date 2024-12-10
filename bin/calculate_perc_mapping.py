@@ -7,6 +7,8 @@ import csv
 from collections import defaultdict
 import json
 
+VERSION = "1.0.0"
+
 
 def main(
     hbs_path: Path,
@@ -92,6 +94,12 @@ def get_target_genes(hb_map_path: Path) -> Set[str]:
 def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Calculate percentage reads mapping to a group of genes"
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=VERSION,
+        help="Show program's version number and exit.",
     )
     parser.add_argument("--target_genes", required=True, help="TSV file with one header 'ensembl'")
     parser.add_argument("--gene_counts", required=True, help="htseq-lib like output")

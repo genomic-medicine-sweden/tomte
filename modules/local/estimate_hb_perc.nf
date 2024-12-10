@@ -25,10 +25,20 @@ process ESTIMATE_HB_PERC {
         --gene_counts "${gene_counts}" \\
         --strandedness "${meta.strandedness}" \\
         --out_json "${meta.sample}_perc_mapping.json"
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        calculate_perc_mapping: \$(calculate_perc_mapping.py -v)
+    END_VERSIONS
     """
 
     stub:
     """
     touch "${meta.sample}_perc_mapping.json"
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        calculate_perc_mapping: \$(calculate_perc_mapping.py -v)
+    END_VERSIONS
     """
 }
