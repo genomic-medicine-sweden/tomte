@@ -1,15 +1,22 @@
 process ESTIMATE_HB_PERC {
-
-    tag "${meta.sample}"
+    tag "estimate_hb_perc"
     label "process_low"
-    container "${params.containers.base}"
+
+    conda "conda-forge::python=3.8.3"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/python:3.8.3' :
+        'biocontainers/python:3.8.3' }"
 
     input:
     tuple val(meta), path(gene_counts)
     path hb_genes
 
     output:
-    path ("${meta.sample}_perc_mapping.json"), emit: tsv
+    tuple val(meta), path("${meta.sample}_perc_mapping.json"), emit: tsv
+    path("versions.yml"), emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
 
     script:
     """

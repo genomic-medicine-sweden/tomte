@@ -209,19 +209,16 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(IGV_TRACKS.out.versions)
 
-    if (!params.skip_peddy) {
-        ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
-        ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
-        PEDDY (
-            CALL_VARIANTS.out.vcf_tbi,
-            ch_pedfile
-        )
-        ch_versions = ch_versions.mix(PEDDY.out.versions)
-    }
+    ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+    ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
+    PEDDY (
+        CALL_VARIANTS.out.vcf_tbi,
+        ch_pedfile
+    )
+    ch_versions = ch_versions.mix(PEDDY.out.versions)
 
-    if (!params.skip_calculate_hb_frac) {
-        ESTIMATE_HB_PERC(ALIGNMENT.out.gene_counts, ch_hb_genes)
-    }
+    ESTIMATE_HB_PERC(ALIGNMENT.out.gene_counts, ch_hb_genes)
+    ch_versions = ch_versions.mix(ESTIMATE_HB_PERC.out.versions)
 
     /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
