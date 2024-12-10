@@ -24,8 +24,6 @@ process PEDDY {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    // FIXME: Needed to remove --plot to not crash on single samples
-    // How to do this in a nf-core conforming way?
     """
     peddy \\
         $args \\

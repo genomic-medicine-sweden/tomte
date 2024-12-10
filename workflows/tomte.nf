@@ -93,7 +93,7 @@ workflow TOMTE {
     // Read and store paths in the vep_plugin_files file
     ch_vep_extra_files_unsplit.splitCsv(header: true)
     .flatMap { row ->
-        row.vep_files.split(',').collect { file(it.trim()) }
+        row.vep_files.split(',').collect { path(it.trim()) }
     }
     .map { path ->
         if (params.skip_download_vep) {
@@ -217,9 +217,6 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(PEDDY.out.versions)
 
-    ALIGNMENT.out.gene_counts.view()
-    ch_hb_genes.view()
-
     ESTIMATE_HB_PERC(ALIGNMENT.out.gene_counts, ch_hb_genes)
     ch_versions = ch_versions.mix(ESTIMATE_HB_PERC.out.versions)
 
@@ -247,7 +244,7 @@ workflow TOMTE {
     ch_multiqc_config                     = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
     ch_multiqc_custom_config              = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
     ch_multiqc_logo                       = params.multiqc_logo ? Channel.fromPath(params.multiqc_logo, checkIfExists: true) : Channel.empty()
-    ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
+    ch_multiqc_custom_methods_description = params.multiqc_methods_description ? path(params.multiqc_methods_description, checkIfExists: true) : path("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
     ch_methods_description                = Channel.value(methodsDescriptionText(ch_multiqc_custom_methods_description))
     ch_multiqc_files                      = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files                      = ch_multiqc_files.mix(ch_collated_versions)
