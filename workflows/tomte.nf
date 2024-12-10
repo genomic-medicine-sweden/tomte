@@ -11,6 +11,7 @@ include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pi
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
 include { CREATE_PEDIGREE_FILE   } from '../modules/local/create_pedigree_file'
+include { ESTIMATE_HB_PERC       } from '../modules/local/estimate_hb_perc'
 
 //
 // SUBWORKFLOW: local
@@ -85,6 +86,8 @@ workflow TOMTE {
     ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                         : Channel.empty()
     ch_subsample_bed              = params.subsample_bed                ? Channel.fromPath(params.subsample_bed).collect()
+                                                                        : Channel.empty()
+    ch_hb_genes                   = params.hb_genes                     ? Channel.fromPath(params.hb_genes).collect() 
                                                                         : Channel.empty()
 
     // Read and store paths in the vep_plugin_files file
@@ -216,7 +219,11 @@ workflow TOMTE {
         ch_versions = ch_versions.mix(PEDDY.out.versions)
     }
 
-/*
+    if (!params.skip_calculate_hb_frac) {
+        ESTIMATE_HB_PERC(ALIGNMENT.out.gene_counts, ch_hb_genes)
+    }
+
+    /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     COLLECT SOFTWARE VERSIONS & MultiQC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
