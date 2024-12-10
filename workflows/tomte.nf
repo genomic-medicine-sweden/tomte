@@ -217,6 +217,9 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(PEDDY.out.versions)
 
+    ALIGNMENT.out.gene_counts.view()
+    ch_hb_genes.view()
+
     ESTIMATE_HB_PERC(ALIGNMENT.out.gene_counts, ch_hb_genes)
     ch_versions = ch_versions.mix(ESTIMATE_HB_PERC.out.versions)
 

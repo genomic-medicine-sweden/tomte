@@ -28,7 +28,7 @@ process ESTIMATE_HB_PERC {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        calculate_perc_mapping: \$(calculate_perc_mapping.py -v)
+        calculate_perc_mapping: \$(calculate_perc_mapping.py --version)
     END_VERSIONS
     """
 
@@ -38,7 +38,7 @@ process ESTIMATE_HB_PERC {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        calculate_perc_mapping: \$(calculate_perc_mapping.py -v)
+        calculate_perc_mapping: \$(calculate_perc_mapping.py --version)
     END_VERSIONS
     """
 }
