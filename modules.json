@@ -106,6 +106,12 @@
                         "git_sha": "cf17ca47590cc578dfb47db1c2a44ef86f89976d",
                         "installed_by": ["modules"]
                     },
+                    "peddy": {
+                        "branch": "master",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/peddy/peddy.diff"
+                    },
                     "picard/collectinsertsizemetrics": {
                         "branch": "master",
                         "git_sha": "49f4e50534fe4b64101e62ea41d5dc43b1324358",

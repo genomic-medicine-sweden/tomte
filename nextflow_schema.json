@@ -387,6 +387,33 @@
                 }
             }
         },
+        "qc_options": {
+            "title": "QC options",
+            "type": "object",
+            "fa_icon": "fas fa-dna",
+            "description": "QC related options",
+            "properties": {
+                "skip_peddy": {
+                    "type": "boolean",
+                    "description": "Do not calculate sex check using Peddy.",
+                    "fa_icon": "fas fa-toggle-off",
+                    "default": false
+                },
+                "skip_calculate_hb_frac": {
+                    "type": "boolean",
+                    "description": "Do not calculate hemoglobin fraction among reads.",
+                    "fa_icon": "fas fa-toggle-off",
+                    "default": false
+                },
+                "hb_genes": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Hemoglobin genes ensembl IDs",
+                    "help_text": "TSV-file with one column with the header 'ensembl' containing the target genes for which to calculate fraction mapping for.",
+                    "fa_icon": "far fa-file-code"
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -542,6 +569,9 @@
         },
         {
             "$ref": "#/$defs/variant_calling"
+        },
+        {
+            "$ref": "#/$defs/qc_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"

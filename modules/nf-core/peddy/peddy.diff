@@ -1,0 +1,19 @@
+Changes in module 'nf-core/peddy'
+'modules/nf-core/peddy/environment.yml' is unchanged
+'modules/nf-core/peddy/meta.yml' is unchanged
+Changes in 'peddy/main.nf':
+--- modules/nf-core/peddy/main.nf
++++ modules/nf-core/peddy/main.nf
+@@ -28,7 +28,6 @@
+     peddy \\
+         $args \\
+         --prefix $prefix \\
+-        --plot \\
+         -p $task.cpus \\
+         $vcf \\
+         $ped
+
+'modules/nf-core/peddy/tests/tags.yml' is unchanged
+'modules/nf-core/peddy/tests/main.nf.test' is unchanged
+'modules/nf-core/peddy/tests/main.nf.test.snap' is unchanged
+************************************************************

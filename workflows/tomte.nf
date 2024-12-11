@@ -5,6 +5,9 @@
 */
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+include { PEDDY                  } from '../modules/nf-core/peddy/main'
+include { CREATE_PEDIGREE_FILE   } from '../modules/local/create_pedigree_file'
+include { ESTIMATE_HB_PERC       } from '../modules/local/estimate_hb_perc'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -83,6 +86,8 @@ workflow TOMTE {
     ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                         : Channel.empty()
     ch_subsample_bed              = params.subsample_bed                ? Channel.fromPath(params.subsample_bed).collect()
+                                                                        : Channel.empty()
+    ch_hb_genes                   = params.hb_genes                     ? Channel.fromPath(params.hb_genes).collect()
                                                                         : Channel.empty()
 
     // Read and store paths in the vep_plugin_files file
@@ -204,7 +209,18 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(IGV_TRACKS.out.versions)
 
-/*
+    ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+    ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
+    PEDDY (
+        CALL_VARIANTS.out.vcf_tbi,
+        ch_pedfile
+    )
+    ch_versions = ch_versions.mix(PEDDY.out.versions)
+
+    ESTIMATE_HB_PERC(ALIGNMENT.out.gene_counts, ch_hb_genes)
+    ch_versions = ch_versions.mix(ESTIMATE_HB_PERC.out.versions)
+
+    /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     COLLECT SOFTWARE VERSIONS & MultiQC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
