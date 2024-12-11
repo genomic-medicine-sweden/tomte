@@ -12,12 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Parameters`
 
-| Old parameter                    | New parameter                 |
-| -------------------------------- | ----------------------------- |
-|                                  | `--skip_peddy`                |
-|                                  | `--skip_calculate_hb_frac`    |
-|                                  | `--hb_genes`                  |
-
+| Old parameter | New parameter              |
+| ------------- | -------------------------- |
+|               | `--skip_peddy`             |
+|               | `--skip_calculate_hb_frac` |
+|               | `--hb_genes`               |
 
 ## 3.0.0 - Three Kings [2024-11-18]
 
