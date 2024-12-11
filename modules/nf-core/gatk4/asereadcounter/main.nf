@@ -15,7 +15,7 @@ process GATK4_ASEREADCOUNTER {
     path intervals
 
     output:
-    tuple val(meta), path("*_ase.csv"), emit: csv
+    tuple val(meta), file("*_ase.csv"), emit: csv
     path "versions.yml"               , emit: versions
 
     when:

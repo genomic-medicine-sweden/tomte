@@ -36,7 +36,7 @@ process SAMTOOLS_INDEX {
 
     stub:
     def args = task.ext.args ?: ''
-    def extension = path(input).getExtension() == 'cram' ?
+    def extension = file(input).getExtension() == 'cram' ?
                     "crai" : args.contains("-c") ?  "csi" : "bai"
     """
     touch ${input}.${extension}
