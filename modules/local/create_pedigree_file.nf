@@ -14,7 +14,7 @@ process CREATE_PEDIGREE_FILE {
 
     script:
     outfile_text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\\t')
-    samples.each { sample -> 
+    samples.each { sample ->
         def sex_int = sample.sex == "M" ? "1" : sample.sex == "F" ? "2" : "0"
         outfile_text += "\\n" + [sample.case, sample.sample, '0', '0', sex_int, '0'].join('\\t')
     }
