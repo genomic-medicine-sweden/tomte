@@ -8,7 +8,7 @@ process CREATE_PEDIGREE_FILE {
         : 'biocontainers/python:3.8.3'}"
 
     input:
-    val samples
+    val meta
 
     output:
     path ("*.ped"), emit: ped
@@ -18,15 +18,10 @@ process CREATE_PEDIGREE_FILE {
     task.ext.when == null || task.ext.when
 
     script:
-    def case_name = samples[0].case
     outfile_text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\\t')
-    samples
-        .unique { it.sample }
-        .each { sample ->
-            outfile_text += "\\n" + [sample.case, sample.sample, 0, 0, sample.sex, "affected"].join('\\t')
-        }
+    outfile_text += "\\n" + [meta.case, meta.sample, '0', '0', meta.sex, '0'].join('\\t')
     """
-    echo -e "${outfile_text}" >${case_name}.ped
+    echo -e "${outfile_text}" > ${meta.sample}.ped
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -36,9 +31,8 @@ process CREATE_PEDIGREE_FILE {
     """
 
     stub:
-    def case_name = samples[0].case
     """
-    touch ${case_name}.ped
+    touch ${meta.sample}.ped
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
