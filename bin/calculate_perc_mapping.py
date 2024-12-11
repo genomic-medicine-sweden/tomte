@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 import argparse
+from collections import defaultdict
+import csv
+import json
 from pathlib import Path
 from typing import Optional, Set, Tuple, Dict
-import csv
-from collections import defaultdict
-import json
 
 VERSION = "1.0.0"
 
@@ -37,7 +37,7 @@ def main(
     metrics["target_genes_frac"] = metrics["target_genes_count"] / metrics["total_count"]
     metrics["per_target_gene_count"] = target_genes_counts
 
-    if verbose:
+    if verbose or out_json is None:
         print(json.dumps(metrics))
 
     if out_json is not None:
@@ -93,7 +93,7 @@ def get_target_genes(hb_map_path: Path) -> Set[str]:
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
-        description="Calculate percentage reads mapping to a group of genes"
+        description="Calculate percentage reads mapping to a group of genes and related metrics"
     )
     parser.add_argument(
         "--version",
@@ -101,7 +101,7 @@ def parse_arguments():
         version=VERSION,
         help="Show program's version number and exit.",
     )
-    parser.add_argument("--target_genes", required=True, help="TSV file with one header 'ensembl'")
+    parser.add_argument("--target_genes", required=True, help="TSV file with one expected header 'ensembl'")
     parser.add_argument("--gene_counts", required=True, help="htseq-lib like output")
     parser.add_argument(
         "--strandedness", required=True, help="forward, reverse or none", default=None

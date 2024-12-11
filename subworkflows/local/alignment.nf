@@ -77,18 +77,18 @@ workflow ALIGNMENT {
         ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
 
     emit:
-        merged_reads    = CAT_FASTQ.out.reads              // channel: [ val(meta), path(fastq) ]
-        fastp_report    = FASTP.out.json                   // channel: [ val(meta), path(json) ]
-        bam             = STAR_ALIGN.out.bam_sorted_aligned               // channel: [ val(meta), path(bam) ]
-        bam_bai         = ch_bam_bai                       // channel: [ val(meta), path(bam), path(bai) ]
-        bam_ds_bai      = ch_bam_bai_out                   // channel: [ val(meta), path(bam), path(bai) ]
-        gene_counts     = STAR_ALIGN.out.read_per_gene_tab // channel: [ val(meta), path(tsv) ]
-        spl_junc        = STAR_ALIGN.out.spl_junc_tab      // channel: [ val(meta), path(tsv) ]
-        star_log_final  = STAR_ALIGN.out.log_final         // channel: [ val(meta), path(log) ]
-        star_wig        = STAR_ALIGN.out.wig               // channel: [ val(meta), path(wig) ]
-        salmon_result   = SALMON_QUANT.out.results         // channel: [ val(meta), path(results) ]
-        salmon_info     = SALMON_QUANT.out.json_info       // channel: [ val(meta), path(json) ]
-        versions        = ch_versions                      // channel: [ path(versions.yml) ]
+        merged_reads    = CAT_FASTQ.out.reads                // channel: [ val(meta), path(fastq) ]
+        fastp_report    = FASTP.out.json                     // channel: [ val(meta), path(json) ]
+        bam             = STAR_ALIGN.out.bam_sorted_aligned  // channel: [ val(meta), path(bam) ]
+        bam_bai         = ch_bam_bai                         // channel: [ val(meta), path(bam), path(bai) ]
+        bam_ds_bai      = ch_bam_bai_out                     // channel: [ val(meta), path(bam), path(bai) ]
+        gene_counts     = STAR_ALIGN.out.read_per_gene_tab   // channel: [ val(meta), path(tsv) ]
+        spl_junc        = STAR_ALIGN.out.spl_junc_tab        // channel: [ val(meta), path(tsv) ]
+        star_log_final  = STAR_ALIGN.out.log_final           // channel: [ val(meta), path(log) ]
+        star_wig        = STAR_ALIGN.out.wig                 // channel: [ val(meta), path(wig) ]
+        salmon_result   = SALMON_QUANT.out.results           // channel: [ val(meta), path(results) ]
+        salmon_info     = SALMON_QUANT.out.json_info         // channel: [ val(meta), path(json) ]
+        versions        = ch_versions                        // channel: [ path(versions.yml) ]
 }
 
 

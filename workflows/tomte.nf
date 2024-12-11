@@ -6,12 +6,12 @@
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { PEDDY                  } from '../modules/nf-core/peddy/main'
+include { CREATE_PEDIGREE_FILE   } from '../modules/local/create_pedigree_file'
+include { ESTIMATE_HB_PERC       } from '../modules/local/estimate_hb_perc'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
-include { CREATE_PEDIGREE_FILE   } from '../modules/local/create_pedigree_file'
-include { ESTIMATE_HB_PERC       } from '../modules/local/estimate_hb_perc'
 
 //
 // SUBWORKFLOW: local
