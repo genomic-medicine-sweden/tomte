@@ -6,7 +6,7 @@ process CREATE_PEDIGREE_FILE {
     val samples
 
     output:
-    path ("*.ped"), emit: ped
+    path ("peddy.ped"), emit: ped
     path "versions.yml", emit: versions
 
     when:
@@ -19,7 +19,7 @@ process CREATE_PEDIGREE_FILE {
         outfile_text += "\\n" + [sample.case, sample.sample, '0', '0', sex_int, '0'].join('\\t')
     }
     """
-    echo -e "${outfile_text}" > ${samples.sample}.ped
+    echo -e "${outfile_text}" > peddy.ped
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -29,7 +29,7 @@ process CREATE_PEDIGREE_FILE {
 
     stub:
     """
-    touch all_pedigree.ped
+    touch peddy.ped
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
