@@ -209,7 +209,7 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(IGV_TRACKS.out.versions)
 
-    ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples).ped
+    ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
     ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
     PEDDY (
         CALL_VARIANTS.out.vcf_tbi,

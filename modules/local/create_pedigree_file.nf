@@ -3,7 +3,7 @@ process CREATE_PEDIGREE_FILE {
     label 'process_single'
 
     input:
-    val meta
+    val samples
 
     output:
     path ("*.ped"), emit: ped
@@ -14,10 +14,12 @@ process CREATE_PEDIGREE_FILE {
 
     script:
     outfile_text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\\t')
-    def sex_int = meta.sex == "M" ? "1" : meta.sex == "F" ? "2" : "0"
-    outfile_text += "\\n" + [meta.case, meta.sample, '0', '0', sex_int, '0'].join('\\t')
+    samples.each { sample -> 
+        def sex_int = sample.sex == "M" ? "1" : sample.sex == "F" ? "2" : "0"
+        outfile_text += "\\n" + [sample.case, sample.sample, '0', '0', sex_int, '0'].join('\\t')
+    }
     """
-    echo -e "${outfile_text}" > ${meta.sample}.ped
+    echo -e "${outfile_text}" > ${samples.sample}.ped
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -27,7 +29,7 @@ process CREATE_PEDIGREE_FILE {
 
     stub:
     """
-    touch ${meta.sample}.ped
+    touch all_pedigree.ped
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
