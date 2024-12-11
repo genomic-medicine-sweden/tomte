@@ -3,6 +3,22 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## TDB
+
+### `Added`
+
+- Optionally create Peddy output for single samples (useful for sex check)
+- Optionally calculate percentage mapping to hemoglobin genes (or any other set of genes provided)
+
+### `Parameters`
+
+| Old parameter                    | New parameter                 |
+| -------------------------------- | ----------------------------- |
+|                                  | `--skip_peddy`                |
+|                                  | `--skip_calculate_hb_frac`    |
+|                                  | `--hb_genes`                  |
+
+
 ## 3.0.0 - Three Kings [2024-11-18]
 
 ### `Added`
