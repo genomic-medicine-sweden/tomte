@@ -14,7 +14,8 @@ process CREATE_PEDIGREE_FILE {
 
     script:
     outfile_text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\\t')
-    outfile_text += "\\n" + [meta.case, meta.sample, '0', '0', meta.sex, '0'].join('\\t')
+    def sex_int = meta.sex == "M" ? "1" : meta.sex == "F" ? "2" : "0"
+    outfile_text += "\\n" + [meta.case, meta.sample, '0', '0', sex_int, '0'].join('\\t')
     """
     echo -e "${outfile_text}" > ${meta.sample}.ped
 
