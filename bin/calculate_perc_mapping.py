@@ -20,10 +20,8 @@ def main(
 
     target_genes = get_target_genes(hbs_path)
 
-    if strandedness not in ["forward", "reverse"] and strandedness is not None:
-        raise ValueError(
-            f"strandedness option should be forward, reverse or not assinged. Found: {strandedness}"
-        )
+    if strandedness not in {None, "forward", "reverse"}:
+       raise ValueError(f"Invalid strandedness: {strandedness}. Expected 'forward', 'reverse', or 'none'.")
 
     (nbr_genes, total_count, target_genes_counts) = summarize_gene_counts(
         gene_counts_path, target_genes, strandedness, verbose
