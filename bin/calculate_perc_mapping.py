@@ -20,10 +20,8 @@ def main(
 
     target_genes = get_target_genes(hbs_path)
 
-    if strandedness not in ["forward", "reverse"] and strandedness is not None:
-        raise ValueError(
-            f"strandedness option should be forward, reverse or not assinged. Found: {strandedness}"
-        )
+    if strandedness not in {None, "forward", "reverse"}:
+       raise ValueError(f"Invalid strandedness: {strandedness}. Expected 'forward', 'reverse', or 'none'.")
 
     (nbr_genes, total_count, target_genes_counts) = summarize_gene_counts(
         gene_counts_path, target_genes, strandedness, verbose
@@ -33,16 +31,16 @@ def main(
     metrics["nbr_genes"] = nbr_genes
     metrics["total_count"] = total_count
     metrics["average_count"] = total_count / nbr_genes
-    metrics["target_genes_count"] = sum(list(target_genes_counts.values()))
+    metrics["target_genes_count"] = sum(target_genes_counts.values())
     metrics["target_genes_frac"] = metrics["target_genes_count"] / metrics["total_count"]
     metrics["per_target_gene_count"] = target_genes_counts
 
     if verbose or out_json is None:
         print(json.dumps(metrics))
 
-    if out_json is not None:
+    if out_json:
         with out_json.open("w") as out_fh:
-            out_fh.write(json.dumps(metrics))
+            json.dump(metrics, out_fh)
 
 
 def summarize_gene_counts(
