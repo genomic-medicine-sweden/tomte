@@ -1,5 +1,5 @@
 process ESTIMATE_HB_PERC {
-    tag "estimate_hb_perc"
+    tag "${meta.id}"
     label "process_low"
 
     conda "conda-forge::python=3.8.3"
