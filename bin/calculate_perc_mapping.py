@@ -38,9 +38,9 @@ def main(
     if verbose or out_json is None:
         print(json.dumps(metrics))
 
-    if out_json is not None:
+    if out_json:
         with out_json.open("w") as out_fh:
-            out_fh.write(json.dumps(metrics))
+            json.dump(metrics, out_fh)
 
 
 def summarize_gene_counts(
