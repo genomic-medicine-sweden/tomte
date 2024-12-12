@@ -25,7 +25,8 @@ process CREATE_PEDIGREE_FILE {
     for(int i = 0; i<samples.size(); i++) {
         def sample_name =  samples[i].sample
         if (!samples_list.contains(sample_name)) {
-            outfile_text += "\\n" + [samples[i].case, sample_name, samples[i].paternal, samples[i].maternal, samples[i].sex, samples[i].phenotype].join('\\t')
+            def sex_int = sample.sex == "M" ? "1" : sample.sex == "F" ? "2" : "0"
+            outfile_text += "\\n" + [samples[i].case, sample_name, samples[i].paternal, samples[i].maternal, sex_int, samples[i].phenotype].join('\\t')
             samples_list.add(sample_name)
         }
     }
