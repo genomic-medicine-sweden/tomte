@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- Optionally run Peddy for per-sample sex- and heterozygosity checks
-- Optionally calculate percentage mapping to hemoglobin genes (or any other set of genes provided)
+- Optionally run Peddy for per-sample sex- and heterozygosity checks [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
+- Optionally calculate percentage mapping to hemoglobin genes (or any other set of genes provided) [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
 
 ### `Parameters`
 
