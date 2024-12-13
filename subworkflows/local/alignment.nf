@@ -38,13 +38,13 @@ workflow ALIGNMENT {
 
         STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, ch_platform, false)
 
-        SAMTOOLS_INDEX( STAR_ALIGN.out.bam )
+        SAMTOOLS_INDEX( STAR_ALIGN.out.bam_sorted_aligned )
 
         ch_bam_bai = Channel.empty()
         ch_bam_bai_out = Channel.empty()
 
         if (!skip_subsample_region) {
-            RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam, subsample_bed, seed_frac)
+            RNA_SUBSAMPLE_REGION( STAR_ALIGN.out.bam_sorted_aligned, subsample_bed, seed_frac)
             ch_bam_bai = ch_bam_bai.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
             ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
             if (skip_downsample) {
@@ -55,9 +55,9 @@ workflow ALIGNMENT {
                 ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
             }
         } else {
-            ch_bam_bai = ch_bam_bai.mix(STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai))
+            ch_bam_bai = ch_bam_bai.mix(STAR_ALIGN.out.bam_sorted_aligned.join(SAMTOOLS_INDEX.out.bai))
             if (skip_downsample) {
-                ch_bam_bai_out = STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai)
+                ch_bam_bai_out = STAR_ALIGN.out.bam_sorted_aligned.join(SAMTOOLS_INDEX.out.bai)
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
                 ch_bam_bai_out = RNA_DOWNSAMPLE.out.bam_bai
@@ -65,7 +65,7 @@ workflow ALIGNMENT {
             }
         }
 
-        SAMTOOLS_VIEW( STAR_ALIGN.out.bam.join(SAMTOOLS_INDEX.out.bai), ch_genome_fasta, [] )
+        SAMTOOLS_VIEW( STAR_ALIGN.out.bam_sorted_aligned.join(SAMTOOLS_INDEX.out.bai), ch_genome_fasta, [] )
 
         SALMON_QUANT( FASTP.out.reads, salmon_index, ch_gtf.map{ meta, gtf ->  gtf  }, [], false, 'A')
 
@@ -77,18 +77,18 @@ workflow ALIGNMENT {
         ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
 
     emit:
-        merged_reads    = CAT_FASTQ.out.reads              // channel: [ val(meta), path(fastq) ]
-        fastp_report    = FASTP.out.json                   // channel: [ val(meta), path(json) ]
-        bam             = STAR_ALIGN.out.bam               // channel: [ val(meta), path(bam) ]
-        bam_bai         = ch_bam_bai                       // channel: [ val(meta), path(bam), path(bai) ]
-        bam_ds_bai      = ch_bam_bai_out                   // channel: [ val(meta), path(bam), path(bai) ]
-        gene_counts     = STAR_ALIGN.out.read_per_gene_tab // channel: [ val(meta), path(tsv) ]
-        spl_junc        = STAR_ALIGN.out.spl_junc_tab      // channel: [ val(meta), path(tsv) ]
-        star_log_final  = STAR_ALIGN.out.log_final         // channel: [ val(meta), path(log) ]
-        star_wig        = STAR_ALIGN.out.wig               // channel: [ val(meta), path(wig) ]
-        salmon_result   = SALMON_QUANT.out.results         // channel: [ val(meta), path(results) ]
-        salmon_info     = SALMON_QUANT.out.json_info       // channel: [ val(meta), path(json) ]
-        versions        = ch_versions                      // channel: [ path(versions.yml) ]
+        merged_reads    = CAT_FASTQ.out.reads                // channel: [ val(meta), path(fastq) ]
+        fastp_report    = FASTP.out.json                     // channel: [ val(meta), path(json) ]
+        bam             = STAR_ALIGN.out.bam_sorted_aligned  // channel: [ val(meta), path(bam) ]
+        bam_bai         = ch_bam_bai                         // channel: [ val(meta), path(bam), path(bai) ]
+        bam_ds_bai      = ch_bam_bai_out                     // channel: [ val(meta), path(bam), path(bai) ]
+        gene_counts     = STAR_ALIGN.out.read_per_gene_tab   // channel: [ val(meta), path(tsv) ]
+        spl_junc        = STAR_ALIGN.out.spl_junc_tab        // channel: [ val(meta), path(tsv) ]
+        star_log_final  = STAR_ALIGN.out.log_final           // channel: [ val(meta), path(log) ]
+        star_wig        = STAR_ALIGN.out.wig                 // channel: [ val(meta), path(wig) ]
+        salmon_result   = SALMON_QUANT.out.results           // channel: [ val(meta), path(results) ]
+        salmon_info     = SALMON_QUANT.out.json_info         // channel: [ val(meta), path(json) ]
+        versions        = ch_versions                        // channel: [ path(versions.yml) ]
 }
 
 

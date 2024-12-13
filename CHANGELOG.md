@@ -3,6 +3,21 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## TDB
+
+### `Added`
+
+- Optionally run Peddy for per-sample sex- and heterozygosity checks [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
+- Optionally calculate percentage mapping to hemoglobin genes (or any other set of genes provided) [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
+
+### `Parameters`
+
+| Old parameter | New parameter              |
+| ------------- | -------------------------- |
+|               | `--skip_peddy`             |
+|               | `--skip_calculate_hb_frac` |
+|               | `--hb_genes`               |
+
 ## 3.0.0 - Three Kings [2024-11-18]
 
 ### `Added`

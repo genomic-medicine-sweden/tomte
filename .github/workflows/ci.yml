@@ -45,7 +45,7 @@ jobs:
             profile: "singularity"
         parameters:
           - "docker"
-          - "docker --skip_subsample_region true --skip_downsample true --skip_build_tracks true --skip_stringtie true --skip_vep true --skip_drop_ae true --skip_drop_as true --skip_variant_calling true"
+          - "docker --skip_subsample_region true --skip_downsample true --skip_build_tracks true --skip_stringtie true --skip_vep true --skip_drop_ae true --skip_drop_as true --skip_variant_calling true --skip_peddy true --skip_calculate_hb_frac true"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
