@@ -56,7 +56,7 @@
                     },
                     {
                         "type": "string",
-                        "enum": ["M", "F", "NA","other"]
+                        "enum": ["M", "F", "NA", "other"]
                     }
                 ],
                 "default": "NA",
