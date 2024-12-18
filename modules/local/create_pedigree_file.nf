@@ -25,7 +25,7 @@ process CREATE_PEDIGREE_FILE {
     for(int i = 0; i<samples.size(); i++) {
         def sample_name =  samples[i].sample
         if (!samples_list.contains(sample_name)) {
-            def sex_int = samples[i].sex in ["M", "1"] ? "1" : samples[i].sex in ["F", "2"] ? "2" : "0"
+            def sex_int = samples[i].sex in ["M", 1] ? "1" : samples[i].sex in ["F", 2] ? "2" : "0"
             outfile_text += "\\n" + [samples[i].case, sample_name, samples[i].paternal, samples[i].maternal, sex_int, samples[i].phenotype].join('\\t')
             samples_list.add(sample_name)
         }
@@ -35,7 +35,7 @@ process CREATE_PEDIGREE_FILE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        create_pedigree_file: v1.0
+        create_pedigree_file: v1.1
         python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """
@@ -47,7 +47,7 @@ process CREATE_PEDIGREE_FILE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        create_pedigree_file: v1.0
+        create_pedigree_file: v1.1
         python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """
