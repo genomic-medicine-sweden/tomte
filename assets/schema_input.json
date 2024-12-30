@@ -41,6 +41,20 @@
                     }
                 ]
             },
+            "bam": {
+                "errorMessage": "BAM file cannot contain spaces and must have extension '.bam'",
+                "type": "string",
+                "pattern": "^\\S+\\.bam$",
+                "format": "file-path",
+                "exists": true
+            },
+            "bai": {
+                "errorMessage": "BAM index file cannot contain spaces and must have extension '.bai'",
+                "type": "string",
+                "pattern": "^\\S+\\.bai$",
+                "format": "file-path",
+                "exists": true
+            },
             "strandedness": {
                 "type": "string",
                 "meta": ["strandedness"],
@@ -63,6 +77,18 @@
                 "errorMessage": "The valid input for sample sex is M, F, NA, other, 0, 1 or 2"
             }
         },
-        "required": ["case", "sample", "fastq_1", "strandedness"]
+                "anyOf": [
+            {
+                "dependentRequired": {
+                    "lane": ["fastq_1"]
+                }
+            },
+            {
+                "dependentRequired": {
+                    "lane": ["bam"]
+                }
+            }
+        ],
+        "required": ["case", "sample", "strandedness"]
     }
 }

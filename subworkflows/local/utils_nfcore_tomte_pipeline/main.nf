@@ -72,45 +72,83 @@ workflow PIPELINE_INITIALISATION {
     // Create channel from input file provided through params.input
     //
 
-    Channel
+Channel
     .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
     .tap { ch_original_input }
-    .map { meta, fastq_1, fastq_2 -> meta.id }
+    .map { meta, fastq_1, fastq_2, bam, bai -> meta.id }
     .reduce([:]) { counts, sample -> // get counts of each sample in the samplesheet - for groupTuple
         counts[sample] = (counts[sample] ?: 0) + 1
         counts
     }
-    .combine ( ch_original_input )
-    .map { counts, meta, fastq_1, fastq_2 ->
-        if (!fastq_2) {
-            return [ meta + [ single_end:true, fq_pairs:counts[meta.id] ], [ fastq_1 ] ]
+    .combine(ch_original_input)
+    .map { counts, meta, fastq_1, fastq_2, bam, bai ->
+        def new_meta = meta + [fq_pairs: counts[meta.id]]
+        if (fastq_1) {
+            if (!fastq_2) {
+                [ new_meta + [single_end: true], [fastq_1] ]
+            } else {
+                [ new_meta + [single_end: false], [fastq_1, fastq_2] ]
+            }
+        } else if (bam) {
+            [ new_meta + [single_end: null, bam: bam, bai: bai], [] ]
         } else {
-            return [ meta + [ single_end:false, fq_pairs:counts[meta.id] ], [ fastq_1, fastq_2 ] ]
+            error "Sample ${meta.id} does not have FASTQ or BAM files specified."
         }
     }
-    .tap { ch_input_counts }
-    .map { meta, fastqs -> fastqs }
-    .reduce([:]) { counts, fastqs -> // get number of fastq sets in the run - for creating unique ID:s
-        counts[fastqs] = counts.size() + 1
-        return counts
+    .branch {
+        fastq: it[0].bam == null
+        bam:   it[0].bam != null
     }
-    .combine( ch_input_counts )
-    .map { lineno, meta, fastqs -> // append line number to sample id for unique set ids
-        new_meta = meta + [id:meta.id+"_id"+lineno[fastqs]]
-        return [ new_meta, fastqs ]
+    .set { ch_input_branch }
+
+def fastq_branch = ch_input_branch.fastq.map { it -> [it[0].id, it] }.groupTuple()
+def bam_branch = ch_input_branch.bam.map { it -> [it[0].id, it] }.groupTuple()
+
+fastq_branch
+    .map { id, items -> 
+        def meta = items[0][0]
+        def fastqs = items.collect { it[1] }.flatten()
+        [meta, fastqs]
     }
-    .tap { ch_samplesheet } // Output, the rest is just for validation
-    .map { meta, fastqs ->
-        return [ meta.sample, groupKey( meta + [id:meta.sample], meta.fq_pairs ), fastqs ]
+    .branch {
+        single_end: it[1].size() == 1
+        paired_end: it[1].size() == 2
+    }
+    .set { ch_fastq_branched }
+
+ch_fastq_branched.single_end
+    .map { meta, fastqs -> 
+        new_meta = meta + [single_end: true, id: meta.id + "_id1"]
+        [new_meta, fastqs]
+    }
+    .mix(
+        ch_fastq_branched.paired_end
+            .map { meta, fastqs -> 
+                new_meta = meta + [single_end: false, id: meta.id + "_id1"]
+                [new_meta, fastqs]
+            }
+    )
+    .mix(
+        bam_branch
+            .map { id, items -> 
+                def meta = items[0][0]
+                [meta, [meta.bam, meta.bai]]
+            }
+    )
+    .set { ch_samplesheet }
+
+ch_samplesheet
+    .map { meta, files ->
+        [meta.sample, groupKey(meta + [id: meta.sample], meta.fq_pairs ?: 1), files]
     }
     .groupTuple()
     .map {
         validateInputSamplesheet(it)
     }
 
-    emit:
-    samplesheet = ch_samplesheet
-    versions    = ch_versions
+emit:
+samplesheet = ch_samplesheet
+versions    = ch_versions
 }
 
 /*
@@ -176,16 +214,23 @@ def validateInputParameters() {
 // Validate channels from input samplesheet
 //
 def validateInputSamplesheet(input) {
-    def (metas, fastqs) = input[1..2]
-
-    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
-    def endedness_ok = metas.collect{ meta -> meta.single_end }.unique().size == 1
-    if (!endedness_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+    def (sample, meta, files) = input
+    if (meta[0].bam) {
+        // Validation for BAM files
+        if (files.flatten().size() != 2) {
+            error("BAM input for sample ${sample} should have both BAM and BAI files.")
+        }
+    } else {
+        // Validation for FASTQ files
+        def expectedNumber = meta[0].single_end ? 1 : 2
+        def sampleNumber = files.flatten().size()
+        if (expectedNumber != sampleNumber) {
+            error("Samplesheet contains incorrect number of fastq files for sample ${sample}. Expected ${expectedNumber}, got ${sampleNumber}.")
+        }
     }
-
-    return [ metas[0], fastqs ]
+    return [meta[0], files.flatten()]
 }
+
 //
 // Get attribute from genome config file e.g. fasta
 //

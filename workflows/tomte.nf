@@ -89,6 +89,7 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_hb_genes                   = params.hb_genes                     ? Channel.fromPath(params.hb_genes).collect()
                                                                         : Channel.empty()
+    ch_samplesheet.view()
 
     // Read and store paths in the vep_plugin_files file
     ch_vep_extra_files_unsplit.splitCsv(header: true)
