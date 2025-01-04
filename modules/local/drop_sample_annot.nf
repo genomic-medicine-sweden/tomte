@@ -25,9 +25,9 @@ process DROP_SAMPLE_ANNOT {
 
     script:
     def id = "${ids}".replace("[","").replace("]","").replace(",","")
-    def single_end = "${single_ends}".replace("[","").replace("]","").replace(",","")
+    def single_end = "${single_ends}".replace("[","").replace("]","").replace(",","").replaceAll("null", "NA")
     def sex_drop = "${sex}".replace("[","").replace("]","").replace(",","").replace("1","M").replace("2","F").replace("0","NA").replace("other","NA")
-    def strandedness = "${strandednesses}".replace("[","").replace("]","").replace(",","")
+    def strandedness = "${strandednesses}".replace("[","").replace("]","").replace(",","").replaceAll("null", "NA")
     def drop_group = "${drop_group_samples_ae},${drop_group_samples_as}".replace(" ","").replace("[","").replace("]","")
     def reference_count_file = ref_gene_counts ? "--ref_count_file ${ref_gene_counts}" : ''
     def reference_annotation = ref_annot ? "--ref_annot ${ref_annot}" : ''
