@@ -121,14 +121,26 @@ workflow TOMTE {
     ).set { ch_references }
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions.first())
 
+    // Prepare input 
+    ch_samplesheet
+        .branch {
+            fastq: it[1].any { it.toString().endsWith('.fastq.gz') || it.toString().endsWith('.fq.gz') }
+            bam:   it[1].any { it.toString().endsWith('.bam') }
+        }
+        .set { ch_input_branch }
+    
+    ch_bam_reads = ch_input_branch.bam
+    ch_fastq_reads = ch_input_branch.fastq
+
     FASTQC (
-        ch_samplesheet
+        ch_fastq_reads
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     ALIGNMENT(
-        ch_samplesheet,
+        ch_fastq_reads,
+        ch_bam_reads,
         ch_references.star_index,
         ch_references.gtf,
         ch_platform,

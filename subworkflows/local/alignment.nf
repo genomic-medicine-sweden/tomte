@@ -13,7 +13,8 @@ include { SAMTOOLS_VIEW        } from '../../modules/nf-core/samtools/view/main'
 
 workflow ALIGNMENT {
     take:
-        reads                 // channel:   [mandatory] [ val(meta), [path(reads)]  ]
+        ch_fastq_reads        // channel:   [optional] [ val(meta), [path(reads)]  ]
+        ch_bam_bai_reads      // channel:   [optional] [ val(meta), [path(bam) path(bai)]  ]
         star_index            // channel:   [mandatory] [ val(meta), path(star_index) ]
         ch_gtf                // channel:   [mandatory] [ val(meta), path(gtf) ]
         ch_platform           // channel:   [mandatory] [ val(platform) ]
@@ -27,22 +28,8 @@ workflow ALIGNMENT {
 
     main:
         ch_versions = Channel.empty()
-
-        reads
-            .branch {
-                fastq: it[1].any { it.toString().endsWith('.fastq.gz') || it.toString().endsWith('.fq.gz') }
-                bam:   it[1].any { it.toString().endsWith('.bam') }
-            }
-            .set { ch_input_branch }
-        
-        ch_bam_reads = ch_input_branch.bam
-        ch_fastq_reads = ch_input_branch.fastq
-
-        ch_input_branch.fastq.subscribe { println "Fastq branch: $it" }
-        ch_input_branch.bam.subscribe { println "Bam branch: $it" }
-
+    
         ch_fastq = branchFastqToSingleAndMulti(ch_fastq_reads)
-
 
         CAT_FASTQ(ch_fastq.multiple_fq)
             .reads.mix(ch_fastq.single_fq)
@@ -52,9 +39,13 @@ workflow ALIGNMENT {
 
         STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, ch_platform, false)
 
+        ch_bam_reads = ch_bam_bai_reads.map { meta, bambai -> [ meta, bambai[0] ] }
+        ch_bai_reads = ch_bam_bai_reads.map { meta, bambai -> [ meta, bambai[1] ] }
+
         ch_bam_aligned=ch_bam_reads.mix(STAR_ALIGN.out.bam_sorted_aligned)
 
-        SAMTOOLS_INDEX( ch_bam_aligned )
+        SAMTOOLS_INDEX( STAR_ALIGN.out.bam_sorted_aligned )
+        ch_bai = ch_bai_reads.mix(SAMTOOLS_INDEX.out.bai)
 
         ch_bam_bai = Channel.empty()
         ch_bam_bai_out = Channel.empty()
@@ -71,9 +62,9 @@ workflow ALIGNMENT {
                 ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
             }
         } else {
-            ch_bam_bai = ch_bam_bai.mix(ch_bam_aligned.join(SAMTOOLS_INDEX.out.bai))
+            ch_bam_bai = ch_bam_bai.mix(ch_bam_aligned.join(ch_bai))
             if (skip_downsample) {
-                ch_bam_bai_out = ch_bam_aligned.join(SAMTOOLS_INDEX.out.bai)
+                ch_bam_bai_out = ch_bam_aligned.join(ch_bai)
             } else {
                 RNA_DOWNSAMPLE( ch_bam_bai, num_reads)
                 ch_bam_bai_out = RNA_DOWNSAMPLE.out.bam_bai
@@ -81,7 +72,7 @@ workflow ALIGNMENT {
             }
         }
 
-        SAMTOOLS_VIEW( ch_bam_aligned.join(SAMTOOLS_INDEX.out.bai), ch_genome_fasta, [] )
+        SAMTOOLS_VIEW( ch_bam_aligned.join(ch_bai), ch_genome_fasta, [] )
 
         SALMON_QUANT( FASTP.out.reads, salmon_index, ch_gtf.map{ meta, gtf ->  gtf  }, [], false, 'A')
 
