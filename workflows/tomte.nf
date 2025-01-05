@@ -121,14 +121,14 @@ workflow TOMTE {
     ).set { ch_references }
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions.first())
 
-    // Prepare input 
+    // Prepare input
     ch_samplesheet
         .branch {
             fastq: it[1].any { it.toString().endsWith('.fastq.gz') || it.toString().endsWith('.fq.gz') }
             bam:   it[1].any { it.toString().endsWith('.bam') }
         }
         .set { ch_input_branch }
-    
+
     ch_bam_reads = ch_input_branch.bam
     ch_fastq_reads = ch_input_branch.fastq
 

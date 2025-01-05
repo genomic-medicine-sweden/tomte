@@ -77,7 +77,7 @@
                 "errorMessage": "The valid input for sample sex is M, F, NA, other, 0, 1 or 2"
             }
         },
-                "anyOf": [
+        "anyOf": [
             {
                 "dependentRequired": {
                     "lane": ["fastq_1"]

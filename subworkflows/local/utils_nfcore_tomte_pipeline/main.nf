@@ -105,7 +105,7 @@ def fastq_branch = ch_input_branch.fastq.map { it -> [it[0].id, it] }.groupTuple
 def bam_branch = ch_input_branch.bam.map { it -> [it[0].id, it] }.groupTuple()
 
 fastq_branch
-    .map { id, items -> 
+    .map { id, items ->
         def meta = items[0][0]
         def fastqs = items.collect { it[1] }.flatten()
         [meta, fastqs]
@@ -117,20 +117,20 @@ fastq_branch
     .set { ch_fastq_branched }
 
 ch_fastq_branched.single_end
-    .map { meta, fastqs -> 
+    .map { meta, fastqs ->
         new_meta = meta + [single_end: true, id: meta.id + "_id1"]
         [new_meta, fastqs]
     }
     .mix(
         ch_fastq_branched.paired_end
-            .map { meta, fastqs -> 
+            .map { meta, fastqs ->
                 new_meta = meta + [single_end: false, id: meta.id + "_id1"]
                 [new_meta, fastqs]
             }
     )
     .mix(
         bam_branch
-            .map { id, items -> 
+            .map { id, items ->
                 def meta = items[0][0]
                 [meta, [meta.bam, meta.bai]]
             }
