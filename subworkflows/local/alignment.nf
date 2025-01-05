@@ -28,7 +28,7 @@ workflow ALIGNMENT {
 
     main:
         ch_versions = Channel.empty()
-    
+
         ch_fastq = branchFastqToSingleAndMulti(ch_fastq_reads)
 
         CAT_FASTQ(ch_fastq.multiple_fq)
