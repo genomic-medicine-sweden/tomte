@@ -72,49 +72,48 @@ workflow PIPELINE_INITIALISATION {
     // Create channel from input file provided through params.input
     //
 
-Channel
-    .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-    .tap { ch_original_input }
-    .map { meta, fastq_1, fastq_2, bam, bai -> meta.id }
-    .reduce([:]) { counts, sample ->
-        counts[sample] = (counts[sample] ?: 0) + 1
-        counts
-    }
-    .combine ( ch_original_input )
-    .map { counts, meta, fastq_1, fastq_2, bam, bai ->
-        if (bam) {
-            return [ meta + [ single_end:false, fq_pairs:counts[meta.id], is_bam:true ], [ bam, bai ] ]
-        } else if (!fastq_2) {
-            return [ meta + [ single_end:true, fq_pairs:counts[meta.id], is_bam:false ], [ fastq_1 ] ]
-        } else {
-            return [ meta + [ single_end:false, fq_pairs:counts[meta.id], is_bam:false ], [ fastq_1, fastq_2 ] ]
+    Channel
+        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+        .tap { ch_original_input }
+       .map { meta, fastq_1, fastq_2, bam, bai -> meta.id }
+        .reduce([:]) { counts, sample ->
+            counts[sample] = (counts[sample] ?: 0) + 1
+            counts
         }
-    }
-    .tap { ch_input_counts }
-    .map { meta, files -> [meta.id, files] }
-    .reduce([:]) { counts, id_files ->
-        counts[id_files[0]] = (counts[id_files[0]] ?: [:])
-        counts[id_files[0]][id_files[1]] = counts[id_files[0]].size() + 1
-        return counts
-    }
-    .combine( ch_input_counts )
-    .map { lineno, meta, files ->
-        new_meta = meta + [id:meta.id+"_id"+lineno[meta.id][files]]
-        return [ new_meta, files ]
-    }
-    .tap { ch_samplesheet }
-    .map { meta, files ->
-        return [ meta.sample, groupKey( meta + [id:meta.sample], meta.fq_pairs ), files ]
-    }
-    .groupTuple()
-    .map {
-        validateInputSamplesheet(it)
-    }
+        .combine ( ch_original_input )
+        .map { counts, meta, fastq_1, fastq_2, bam, bai ->
+            if (bam) {
+                return [ meta + [ single_end:false, fq_pairs:counts[meta.id], is_bam:true ], [ bam, bai ] ]
+            } else if (!fastq_2) {
+                return [ meta + [ single_end:true, fq_pairs:counts[meta.id], is_bam:false ], [ fastq_1 ] ]
+            } else {
+                return [ meta + [ single_end:false, fq_pairs:counts[meta.id], is_bam:false ], [ fastq_1, fastq_2 ] ]
+            }
+        }
+        .tap { ch_input_counts }
+        .map { meta, files -> [meta.id, files] }
+        .reduce([:]) { counts, id_files ->
+            counts[id_files[0]] = (counts[id_files[0]] ?: [:])
+            counts[id_files[0]][id_files[1]] = counts[id_files[0]].size() + 1
+            return counts
+        }
+        .combine( ch_input_counts )
+        .map { lineno, meta, files ->
+            new_meta = meta.is_bam ? meta : meta + [id:meta.id+"_id"+lineno[meta.id][files]]
+            return [ new_meta, files ]
+        }
+        .tap { ch_samplesheet }
+        .map { meta, files ->
+            return [ meta.sample, groupKey( meta + [id:meta.sample], meta.fq_pairs ), files ]
+        }
+        .groupTuple()
+        .map {
+            validateInputSamplesheet(it)
+        }
 
-ch_samplesheet.view()
-emit:
-samplesheet = ch_samplesheet
-versions    = ch_versions
+    emit:
+    samplesheet = ch_samplesheet
+    versions    = ch_versions
 }
 
 /*

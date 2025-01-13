@@ -102,15 +102,15 @@ A samplesheet is used to pass the information about the sample(s), such as the p
 
 genomic-medicine-sweden/tomte will requires the information given bellow.
 
-| Fields         | Description                                                                                                                                                                            | Mandatory?                    |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `case`         | Case ID, for the analysis used when generating a family VCF.                                                                                                                           | Mandatory                     |
-| `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). | Mandatory                     |
-| `fastq_1`      | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Provide either fastq_1 or bam |
-| `fastq_2`      | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Provide either fastq_2 or bai |
-| `strandedness` | Sample strandness                                                                                                                                                                      | Mandatory                     |
-| `bam`          | Full path to BAM file.                                                                                                                                                                 | Provide either fastq_1 or bam |
-| `bai`          | Full path to BAM index file.                                                                                                                                                           | Provide either fastq_2 or bai |
+| Fields         | Description                                                                                                                                                                            | Mandatory?                         |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `case`         | Case ID, for the analysis used when generating a family VCF.                                                                                                                           | Mandatory                          |
+| `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). | Mandatory                          |
+| `fastq_1`      | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Provide either fastq_1 or bam      |
+| `fastq_2`      | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Only if paired fastqs are provided |
+| `strandedness` | Sample strandness                                                                                                                                                                      | Mandatory                          |
+| `bam`          | Full path to BAM file.                                                                                                                                                                 | Provide either fastq_1 or bam      |
+| `bai`          | Full path to BAM index file.                                                                                                                                                           | Only when bam is provided          |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
