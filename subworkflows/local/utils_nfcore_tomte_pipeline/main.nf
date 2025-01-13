@@ -75,7 +75,7 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
-       .map { meta, fastq_1, fastq_2, bam, bai -> meta.id }
+        .map { meta, fastq_1, fastq_2, bam, bai -> meta.id }
         .reduce([:]) { counts, sample ->
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
