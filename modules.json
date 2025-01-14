@@ -133,6 +133,11 @@
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/salmon/quant/salmon-quant.diff"
                     },
+                    "samtools/convert": {
+                        "branch": "master",
+                        "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
+                        "installed_by": ["modules"]
+                    },
                     "samtools/faidx": {
                         "branch": "master",
                         "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",

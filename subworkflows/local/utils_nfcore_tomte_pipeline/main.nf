@@ -75,19 +75,19 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
-        .map { meta, fastq_1, fastq_2, bam, bai -> meta.id }
+        .map { meta, fastq_1, fastq_2, bam_cram, bai_crai -> meta.id }
         .reduce([:]) { counts, sample ->
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
         }
         .combine ( ch_original_input )
-        .map { counts, meta, fastq_1, fastq_2, bam, bai ->
-            if (bam) {
-                return [ meta + [ single_end:false, fq_pairs:counts[meta.id], is_bam:true ], [ bam, bai ] ]
+        .map { counts, meta, fastq_1, fastq_2, bam_cram, bai_crai ->
+            if (bam_cram) {
+                return [ meta + [ single_end:false, fq_pairs:counts[meta.id], is_fastq:false ], [ bam_cram, bai_crai ] ]
             } else if (!fastq_2) {
-                return [ meta + [ single_end:true, fq_pairs:counts[meta.id], is_bam:false ], [ fastq_1 ] ]
+                return [ meta + [ single_end:true, fq_pairs:counts[meta.id], is_fastq:true ], [ fastq_1 ] ]
             } else {
-                return [ meta + [ single_end:false, fq_pairs:counts[meta.id], is_bam:false ], [ fastq_1, fastq_2 ] ]
+                return [ meta + [ single_end:false, fq_pairs:counts[meta.id], is_fastq:true ], [ fastq_1, fastq_2 ] ]
             }
         }
         .tap { ch_input_counts }
@@ -99,7 +99,7 @@ workflow PIPELINE_INITIALISATION {
         }
         .combine( ch_input_counts )
         .map { lineno, meta, files ->
-            new_meta = meta.is_bam ? meta : meta + [id:meta.id+"_id"+lineno[meta.id][files]]
+            new_meta = meta.is_fastq ? meta + [id:meta.id+"_id"+lineno[meta.id][files]] : meta
             return [ new_meta, files ]
         }
         .tap { ch_samplesheet }

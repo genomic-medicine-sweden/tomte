@@ -3,15 +3,16 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { PEDDY                  } from '../modules/nf-core/peddy/main'
-include { CREATE_PEDIGREE_FILE   } from '../modules/local/create_pedigree_file'
-include { ESTIMATE_HB_PERC       } from '../modules/local/estimate_hb_perc'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
+include { FASTQC                          } from '../modules/nf-core/fastqc/main'
+include { MULTIQC                         } from '../modules/nf-core/multiqc/main'
+include { PEDDY                           } from '../modules/nf-core/peddy/main'
+include { CREATE_PEDIGREE_FILE            } from '../modules/local/create_pedigree_file'
+include { ESTIMATE_HB_PERC                } from '../modules/local/estimate_hb_perc'
+include { paramsSummaryMap                } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML          } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText          } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
+include { SAMTOOLS_CONVERT as CRAM_TO_BAM } from '../modules/nf-core/samtools/convert/main'
 
 //
 // SUBWORKFLOW: local
@@ -125,11 +126,17 @@ workflow TOMTE {
     ch_samplesheet
         .branch {
             fastq: it[1].any { it.toString().endsWith('.fastq.gz') || it.toString().endsWith('.fq.gz') }
+            cram:  it[1].any { it.toString().endsWith('.cram') }
             bam:   it[1].any { it.toString().endsWith('.bam') }
         }
         .set { ch_input_branch }
+    ch_cram_reads = ch_input_branch.cram.map{ meta, cram_crai -> [meta, cram_crai[0], cram_crai[1]] }
 
-    ch_bam_reads = ch_input_branch.bam
+    // Convet cram to bam
+    CRAM_TO_BAM(ch_cram_reads, ch_references.fasta, ch_references.fai)
+    ch_bam_from_cram = CRAM_TO_BAM.out.bam.join(CRAM_TO_BAM.out.bai).map{ meta, bam, bai -> [meta, [bam, bai]]}
+
+    ch_bam_reads = ch_input_branch.bam.mix(ch_bam_from_cram)
     ch_fastq_reads = ch_input_branch.fastq
 
     FASTQC (

@@ -41,17 +41,17 @@
                     }
                 ]
             },
-            "bam": {
-                "errorMessage": "BAM file cannot contain spaces and must have extension '.bam'",
+            "bam_cram": {
+                "errorMessage": "BAM/CRAM file cannot contain spaces and must have extension '.bam' or '.cram'",
                 "type": "string",
-                "pattern": "^\\S+\\.bam$",
+                "pattern": "^\\S+(\\.bam$|\\.cram$)",
                 "format": "file-path",
                 "exists": true
             },
-            "bai": {
-                "errorMessage": "BAM index file cannot contain spaces and must have extension '.bai'",
+            "bai_crai": {
+                "errorMessage": "BAM/CRAM index file cannot contain spaces and must have extension '.bai' or '.crai'",
                 "type": "string",
-                "pattern": "^\\S+\\.bai$",
+                "pattern": "^\\S+(\\.bai$|\\.crai$)",
                 "format": "file-path",
                 "exists": true
             },
