@@ -32,6 +32,7 @@ process DROP_SAMPLE_ANNOT {
     def reference_count_file = ref_gene_counts ? "--ref_count_file ${ref_gene_counts}" : ''
     def reference_annotation = ref_annot ? "--ref_annot ${ref_annot}" : ''
     """
+    # Single_end values are only provided if you start from fastq 
     SINGLE_ENDS=(${single_end})
     BAMS=(${bam.join(' ')})
 
