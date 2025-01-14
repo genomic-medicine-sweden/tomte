@@ -191,7 +191,7 @@ def validateInputSamplesheet(input) {
                 error("BAM/CRAM input for sample ${metas.sample} should have both BAM/CRAM and BAI/CRAI files.")
             }
         }
-        
+
         return [ metas[0], files ]
 }
 
