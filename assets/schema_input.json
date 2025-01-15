@@ -80,12 +80,12 @@
         "anyOf": [
             {
                 "dependentRequired": {
-                    "lane": ["fastq_1"]
+                    "case": ["fastq_1"]
                 }
             },
             {
                 "dependentRequired": {
-                    "lane": ["bam_cram"]
+                    "case": ["bam_cram"]
                 }
             }
         ],
