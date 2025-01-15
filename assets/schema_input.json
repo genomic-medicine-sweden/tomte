@@ -41,6 +41,20 @@
                     }
                 ]
             },
+            "bam_cram": {
+                "errorMessage": "BAM/CRAM file cannot contain spaces and must have extension '.bam' or '.cram'",
+                "type": "string",
+                "pattern": "^\\S+(\\.bam$|\\.cram$)",
+                "format": "file-path",
+                "exists": true
+            },
+            "bai_crai": {
+                "errorMessage": "BAM/CRAM index file cannot contain spaces and must have extension '.bai' or '.crai'",
+                "type": "string",
+                "pattern": "^\\S+(\\.bai$|\\.crai$)",
+                "format": "file-path",
+                "exists": true
+            },
             "strandedness": {
                 "type": "string",
                 "meta": ["strandedness"],
@@ -63,6 +77,18 @@
                 "errorMessage": "The valid input for sample sex is M, F, NA, other, 0, 1 or 2"
             }
         },
-        "required": ["case", "sample", "fastq_1", "strandedness"]
+        "anyOf": [
+            {
+                "dependentRequired": {
+                    "case": ["fastq_1"]
+                }
+            },
+            {
+                "dependentRequired": {
+                    "case": ["bam_cram"]
+                }
+            }
+        ],
+        "required": ["case", "sample", "strandedness"]
     }
 }

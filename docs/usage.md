@@ -98,28 +98,44 @@ Running the pipeline involves three steps:
 
 #### Samplesheet
 
-A samplesheet is used to pass the information about the sample(s), such as the path to the FASTQ files and other meta data (sex, phenotype, etc.,) to the pipeline in csv format.
+A samplesheet is used to pass the information about the sample(s), such as the path to the FASTQ/BAM/CRAM files and other meta data (sex, phenotype, etc.,) to the pipeline in csv format.
 
 genomic-medicine-sweden/tomte will requires the information given bellow.
 
-| Fields         | Description                                                                                                                                                                            |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `case`         | Case ID, for the analysis used when generating a family VCF.                                                                                                                           |
-| `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1`      | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `fastq_2`      | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `strandedness` | Sample strandness                                                                                                                                                                      |
+| Fields         | Description                                                                                                                                                                            | Mandatory?                         |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `case`         | Case ID, for the analysis used when generating a family VCF.                                                                                                                           | Mandatory                          |
+| `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). | Mandatory                          |
+| `strandedness` | Sample strandness                                                                                                                                                                      | Mandatory                          |
+| `fastq_1`      | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Provide either fastq_1 or bam/cram |
+| `fastq_2`      | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Only if paired fastqs are provided |
+| `bam_cram`     | Full path to BAM/CRAM file.                                                                                                                                                            | Provide either fastq_1 or bam/cram |
+| `bai_crai`     | Full path to BAM/CRAM index file.                                                                                                                                                      | Only when bam/cram is provided     |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
-| case  | sample       | fastq_1                          | fastq_2                          | strandedness |
-| ----- | ------------ | -------------------------------- | -------------------------------- | ------------ |
-| fam_1 | CONTROL_REP1 | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz | reverse      |
-| fam_1 | CONTROL_REP2 | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz | reverse      |
-| fam_1 | PATIENT_1    | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz | reverse      |
-| fam_1 | PATIENT_1    | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz | reverse      |
+| case  | sample       | strandedness | fastq_1                          | fastq_2                          |
+| ----- | ------------ | ------------ | -------------------------------- | -------------------------------- |
+| fam_1 | CONTROL_REP1 | reverse      | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz |
+| fam_1 | CONTROL_REP2 | reverse      | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz |
+| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz |
+| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz |
 
-If you would like to see more examples of what a typical samplesheet looks like for a duo, follow this links, [sample_sheet](https://github.com/genomic-medicine-sweden/tomte/blob/master/test_data/samplesheet_chr21.csv)
+Here is an example of a samplesheet where BAM files are provided:
+
+| case  | sample       | strandedness | fastq_1 | fastq_2 | bam_cram     | bai_crai         |
+| ----- | ------------ | ------------ | ------- | ------- | ------------ | ---------------- |
+| fam_1 | CONTROL_REP1 | reverse      |         |         | AEG588A1.bam | AEG588A1.bam.bai |
+| fam_1 | CONTROL_REP2 | reverse      |         |         | AEG588A2.bam | AEG588A2.bam.bai |
+
+Here is an example of a samplesheet where CRAM files are provided:
+
+| case  | sample       | strandedness | fastq_1 | fastq_2 | bam_cram      | bai_crai           |
+| ----- | ------------ | ------------ | ------- | ------- | ------------- | ------------------ |
+| fam_1 | CONTROL_REP1 | reverse      |         |         | AEG588A1.cram | AEG588A1.cram.crai |
+| fam_1 | CONTROL_REP2 | reverse      |         |         | AEG588A2.cram | AEG588A2.cram.crai |
+
+If you would like to see more examples of what a typical samplesheet looks like for a trio, follow this link, [sample_sheet](https://github.com/genomic-medicine-sweden/tomte/blob/master/test_data/samplesheet_chr21.csv)
 
 #### Reference files and parameters
 
