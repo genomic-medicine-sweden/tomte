@@ -58,7 +58,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 #### Salmon
 
 [`Salmon`](https://salmon.readthedocs.io/en/latest/) quantifies reads.
-Note that as Salmon has been setup to start from fastq files, it will not run if the pipeline starts from bam files.
+Note that as Salmon has been setup to start from fastq files, it will not run if the pipeline starts from bam/cram files.
 
 <details markdown="1">
 <summary>Output files</summary>

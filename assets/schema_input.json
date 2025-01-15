@@ -85,7 +85,7 @@
             },
             {
                 "dependentRequired": {
-                    "lane": ["bam"]
+                    "lane": ["bam_cram"]
                 }
             }
         ],

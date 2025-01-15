@@ -192,7 +192,7 @@ def validateInputSamplesheet(input) {
             }
         }
 
-        return [ metas[0], files ]
+    return [ metas[0], files ]
 }
 
 //

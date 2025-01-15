@@ -98,7 +98,7 @@ Running the pipeline involves three steps:
 
 #### Samplesheet
 
-A samplesheet is used to pass the information about the sample(s), such as the path to the FASTQ/BAM files and other meta data (sex, phenotype, etc.,) to the pipeline in csv format.
+A samplesheet is used to pass the information about the sample(s), such as the path to the FASTQ/BAM/CRAM files and other meta data (sex, phenotype, etc.,) to the pipeline in csv format.
 
 genomic-medicine-sweden/tomte will requires the information given bellow.
 
