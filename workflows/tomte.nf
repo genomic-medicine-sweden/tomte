@@ -42,10 +42,14 @@ workflow TOMTE {
     ch_versions      = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
+
     // Mandatory
     ch_samples        = ch_samplesheet.map { meta, fastqs -> meta }
     ch_case_info      = ch_samples.toList().map { create_case_channel(it) }
     ch_platform       = Channel.from(params.platform).collect()
+
+    ch_samplesheet.view { it -> "ch_samplesheet ${it}" }
+    ch_case_info.view { it -> "ch_case_info ${it}" }
 
     // Optional
     ch_vep_refs_download_unprocessed = params.vep_refs_download         ? Channel.fromPath(params.vep_refs_download)
