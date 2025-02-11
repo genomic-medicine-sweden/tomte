@@ -295,6 +295,7 @@ workflow TOMTE {
     fraser_results   = ANALYSE_TRANSCRIPTS.out.drop_ae_out
     outrider_results = ANALYSE_TRANSCRIPTS.out.drop_as_out
     bigwig           = IGV_TRACKS.out.bw
+    ped              = PEDDY.out.ped
     versions         = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
