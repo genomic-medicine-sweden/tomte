@@ -288,15 +288,17 @@ workflow TOMTE {
         []
     )
 
+    // FIXME: Comment annotate
     emit: 
-    multiqc_report   = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    vcf_tbi          = CALL_VARIANTS.out.vcf_tbi
-    junction_bed     = IGV_TRACKS.out.bed
-    fraser_results   = ANALYSE_TRANSCRIPTS.out.drop_ae_out
-    outrider_results = ANALYSE_TRANSCRIPTS.out.drop_as_out
-    bigwig           = IGV_TRACKS.out.bw
-    ped              = PEDDY.out.ped
-    versions         = ch_versions                 // channel: [ path(versions.yml) ]
+    multiqc_report         = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    vcf_tbi                = CALL_VARIANTS.out.vcf_tbi
+    junction_bed           = IGV_TRACKS.out.bed
+    drop_ae_out_clinical   = ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical
+    drop_ae_out_research   = ANALYSE_TRANSCRIPTS.out.drop_ae_out_research
+    drop_as_out_clinical   = ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical
+    drop_as_out_research   = ANALYSE_TRANSCRIPTS.out.drop_as_out_research    bigwig           = IGV_TRACKS.out.bw
+    ped                    = PEDDY.out.ped
+    versions               = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
 /*
