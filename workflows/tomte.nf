@@ -288,9 +288,14 @@ workflow TOMTE {
         []
     )
 
-    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
-
+    emit: 
+    multiqc_report   = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    vcf_tbi          = CALL_VARIANTS.out.vcf_tbi
+    junction_bed     = IGV_TRACKS.out.bed
+    fraser_results   = ANALYSE_TRANSCRIPTS.out.drop_ae_out
+    outrider_results = ANALYSE_TRANSCRIPTS.out.drop_as_out
+    bigwig           = IGV_TRACKS.out.bw
+    versions         = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
 /*
