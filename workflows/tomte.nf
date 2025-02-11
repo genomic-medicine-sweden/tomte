@@ -299,6 +299,8 @@ workflow TOMTE {
     drop_as_out_research   = ANALYSE_TRANSCRIPTS.out.drop_as_out_research
     bigwig                 = IGV_TRACKS.out.bw
     ped                    = PEDDY.out.ped
+    multiqc_data           = MULTIQC.out.data
+    hb_estimates           = ESTIMATE_HB_PERC.out.tsv
     versions               = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
