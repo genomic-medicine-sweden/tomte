@@ -305,6 +305,7 @@ workflow TOMTE {
     ped                    = ch_pedfile
     multiqc_data           = MULTIQC.out.data
     hb_estimates           = ESTIMATE_HB_PERC.out.tsv
+    bam_bai                = ALIGNMENT.out.bam_bai
     versions               = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
