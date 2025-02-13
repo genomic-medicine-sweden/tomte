@@ -21,8 +21,8 @@ def get_top_hits(
     df_id: DataFrame = df_results_family_aberrant_expression[
         df_results_family_aberrant_expression["sampleID"] == sample_id
     ]
-    if sum(df_id["aberrant"] == "True") >= 20:
-        return df_id
+    if sum(df_id["aberrant"]) >= 20:
+        return df_id[df_id["aberrant"]].reset_index()
     df_id = df_id.sort_values(by=["pValue"]).reset_index()
     return df_id[:20]
 
