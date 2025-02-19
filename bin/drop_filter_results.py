@@ -16,15 +16,28 @@ def get_top_hits(
     """
     Filter results to get only those with the id provided.
     If there are <= 20 hits it will output all of them.
-    If there are less than 20 hits, it will output the 20 with the lowest p-value.
+    If there are less than 20 hits, it will output those marked as aberrant
+    and fill up to 20 using those with lowest p-value.
     """
     df_id: DataFrame = df_results_family_aberrant_expression[
         df_results_family_aberrant_expression["sampleID"] == sample_id
     ]
-    if sum(df_id["aberrant"]) >= 20:
-        return df_id[df_id["aberrant"]].reset_index()
-    df_id = df_id.sort_values(by=["pValue"]).reset_index()
-    return df_id[:20]
+
+    df_aberrant = df_id[df_id["aberrant"]]
+    df_non_aberrant = df_id[~df_id["aberrant"]]
+
+    min_return_count = 20
+
+    if len(df_aberrant) >= min_return_count:
+        return df_aberrant.reset_index()
+    
+    additional_needed = min_return_count - len(df_aberrant)
+
+    df_non_aberrant = df_non_aberrant.sort_values(by="pValue")
+    df_additional_to_return = df_non_aberrant.iloc[:additional_needed]
+    df_combined_to_return = concat([df_aberrant, df_additional_to_return])
+
+    return df_combined_to_return.reset_index()
 
 
 def annotate_with_drop_gene_name(
