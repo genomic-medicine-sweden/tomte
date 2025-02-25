@@ -58,11 +58,14 @@ workflow ANALYSE_TRANSCRIPTS {
 
 
         // Generates  config file and runs Aberrant expression module
-        ch_bai_files = ch_bam_ds_bai.collect{ it[2] }.toList()
-        ch_bam_bai_files = ch_bam_files.toList().combine(ch_bai_files)
+        ch_bam_files_sorted = ch_bam_files.toList().map { list ->
+            list.sort { a, b -> a.getName() <=> b.getName() }
+        }
+        ch_bai_files_sorted = ch_bam_ds_bai.collect{ it[2] }.toList().map { list -> 
+            list.sort { a, b -> a.getName() <=> b.getName() }
+        }
+        ch_bam_bai_files = ch_bam_files_sorted.combine(ch_bai_files_sorted)
 
-        ch_bam_files.view { it -> "ch_bam_files ${it}" }
-        ch_bai_files.view { it -> "ch_bai_files ${it}" }
         ch_bam_bai_files.view { it -> "ch_bam_bai_files ${it}" }
 
 
