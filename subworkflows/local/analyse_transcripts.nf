@@ -56,13 +56,21 @@ workflow ANALYSE_TRANSCRIPTS {
             drop_group_samples_as
         )
 
+
         // Generates  config file and runs Aberrant expression module
         ch_bai_files = ch_bam_ds_bai.collect{ it[2] }.toList()
         ch_bam_bai_files = ch_bam_files.toList().combine(ch_bai_files)
+
+        ch_bam_files.view { it -> "ch_bam_files ${it}" }
+        ch_bai_files.view { it -> "ch_bai_files ${it}" }
+        ch_bam_bai_files.view { it -> "ch_bam_bai_files ${it}" }
+
+
         DROP_CONFIG_RUN_AE(
             ch_fasta_fai,
             ch_gtf,
             DROP_SAMPLE_ANNOT.out.drop_annot,
+            ch_bam_bai_files,
             ch_ref_drop_count_file.ifEmpty([]),
             ch_ref_drop_splice_folder.ifEmpty([]),
             genome,
@@ -78,6 +86,7 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_fasta_fai,
             ch_gtf,
             DROP_SAMPLE_ANNOT.out.drop_annot,
+            ch_bam_bai_files,
             ch_ref_drop_count_file.ifEmpty([]),
             ch_ref_drop_splice_folder.ifEmpty([]),
             genome,

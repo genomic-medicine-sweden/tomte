@@ -13,6 +13,7 @@ process DROP_CONFIG_RUN_AE {
     tuple val(meta), path(fasta), path(fai)
     tuple val(meta2), path(gtf)
     path sample_annotation
+    tuple path(bam), path(bai)
     path ref_drop_count_file
     path ref_splice_folder
     val(genome)

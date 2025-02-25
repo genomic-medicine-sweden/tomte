@@ -46,8 +46,6 @@ workflow CALL_VARIANTS {
 
             case 'bcftools':
 
-                ch_bam_bai.view { it -> "ch_bam_bai ${it}" }
-                ch_fasta.view { it -> "ch_fasta ${it}" }
                 BCFTOOLS_MPILEUP(
                     ch_bam_bai.map{ meta, bam, bai -> [ meta, bam, [] ]},
                     ch_fasta,
