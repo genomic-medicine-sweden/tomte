@@ -57,7 +57,9 @@ workflow ANALYSE_TRANSCRIPTS {
         )
 
 
-        // Generates  config file and runs Aberrant expression module
+        // Generates config file and runs Aberrant expression module
+
+        // Sort bam and bai files for stable order and 
         ch_bam_files_sorted = ch_bam_files.toList().map { list ->
             list.sort { a, b -> a.getName() <=> b.getName() }
         }
@@ -84,7 +86,7 @@ workflow ANALYSE_TRANSCRIPTS {
             skip_export_counts_drop
         )
 
-        // Generates  config file and runs Aberrant splicing module
+        // Generates config file and runs Aberrant splicing module
         DROP_CONFIG_RUN_AS(
             ch_fasta_fai,
             ch_gtf,
