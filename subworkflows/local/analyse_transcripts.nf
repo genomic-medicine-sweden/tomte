@@ -68,8 +68,6 @@ workflow ANALYSE_TRANSCRIPTS {
         }
         ch_bam_bai_files = ch_bam_files_sorted.combine(ch_bai_files_sorted)
 
-        ch_bam_bai_files.view { it -> "ch_bam_bai_files ${it}" }
-
 
         DROP_CONFIG_RUN_AE(
             ch_fasta_fai,
