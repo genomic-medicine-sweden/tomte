@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/genomic-medicine-sweden/tomte/master/nextflow_schema.json",
     "title": "genomic-medicine-sweden/tomte pipeline parameters",
-    "description": "Pipeline to analyse RNAseq from raredisease patients",
+    "description": "Analyzing RNAseq data",
     "type": "object",
     "$defs": {
         "input_output_options": {
@@ -20,15 +20,14 @@
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with three mandatory columns (case, sample, strandedness), followed by fastq_1 (mandatory unless bam_cram and bai_crai are filled in), fastq_2 (optional), bam_cram (mandatory if fastq_1 is not given), bai_crai columns (mandatory if bam_cram is given), one optional (sex), and a header row.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open",
-                    "default": "results"
+                    "fa_icon": "fas fa-folder-open"
                 },
                 "email": {
                     "type": "string",
@@ -41,12 +40,6 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
-                },
-                "save_mapped_as_cram": {
-                    "type": "boolean",
-                    "description": "Do you want to save bam as cram",
-                    "fa_icon": "far fa-file-archive",
-                    "default": true
                 }
             }
         },
@@ -58,11 +51,9 @@
             "properties": {
                 "genome": {
                     "type": "string",
-                    "description": "Name of genome reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive.",
+                    "description": "Name of iGenomes reference.",
                     "fa_icon": "fas fa-book",
-                    "enum": ["hg19", "GRCh37", "hg38", "GRCh38"],
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use `--igenomes_base` to provide a path, or you want to automatically download all required files, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.",
-                    "default": "GRCh38"
+                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
                 },
                 "fasta": {
                     "type": "string",
@@ -71,33 +62,8 @@
                     "mimetype": "text/plain",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
-                    "help_text": "If none provided, will be downloaded from gencode according to `--genome` and `--gencode_annotation_version`.",
+                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
-                },
-                "fai": {
-                    "type": "string",
-                    "format": "file-path",
-                    "help_text": "If none provided, will be generated automatically from the FASTA reference",
-                    "description": "Path to FASTA genome index file.",
-                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
-                    "fa_icon": "far fa-file-code",
-                    "hidden": true
-                },
-                "gtf": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.gtf(\\.gz)?$",
-                    "description": "Path to GTF annotation file.",
-                    "fa_icon": "fas fa-code-branch",
-                    "help_text": "If none provided, will be downloaded from gencode according to `--genome` and `--gencode_annotation_version`."
-                },
-                "gencode_annotation_version": {
-                    "type": "integer",
-                    "default": 46,
-                    "description": "Name of Genomes gencode reference version to download if fasta or gtf is not provided.",
-                    "fa_icon": "fas fa-book",
-                    "help_text": "If fasta or gtf is not provided the gencode version specified will be downloaded. Combine with `--save_reference` to save gtf and/or fasta for future runs."
                 },
                 "igenomes_ignore": {
                     "type": "boolean",
@@ -113,304 +79,6 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "default": "s3://ngi-igenomes/igenomes/"
-                },
-                "platform": {
-                    "type": "string",
-                    "default": "illumina",
-                    "description": "Specifies which platform was used for sequencing.",
-                    "fa_icon": "fas fa-book",
-                    "enum": ["illumina"]
-                },
-                "save_reference": {
-                    "type": "boolean",
-                    "description": "If generated by the pipeline save the required indices/references in the results directory.",
-                    "help_text": "The saved references can be used for future pipeline runs, reducing processing times.",
-                    "fa_icon": "fas fa-save",
-                    "default": true
-                },
-                "sequence_dict": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-chart-bar",
-                    "pattern": "^\\S+\\.dict$",
-                    "description": "Genome dictionary file",
-                    "hidden": true
-                },
-                "star_index": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory or tar.gz archive for pre-built STAR index.",
-                    "help_text": "Path to directory or tar.gz archive with pre-built STAR index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option \"--save_reference\"."
-                },
-                "salmon_index": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory or tar.gz archive for pre-built Salmon index.",
-                    "help_text": "Path to directory or tar.gz archive with pre-built Salmon index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option \"--save_reference\"."
-                },
-                "transcript_fasta": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
-                    "description": "Path to transcript FASTA file.",
-                    "help_text": "Path to transcript FASTA file.  If not given one will be created from the given fasta and gtf file.",
-                    "fa_icon": "far fa-file-code"
-                },
-                "vep_cache": {
-                    "type": "string",
-                    "description": "Path to vep's cache directory.",
-                    "help_text": "If no directory path is passed, vcf files will not be annotated by vep.",
-                    "fa_icon": "fas fa-folder-open"
-                },
-                "vep_cache_version": {
-                    "type": "integer",
-                    "default": 112,
-                    "description": "Specifies version of vep cache to use.",
-                    "fa_icon": "fas fa-folder-open",
-                    "enum": [107, 110, 112]
-                },
-                "vep_plugin_files": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "file-path",
-                    "description": "Databases used by both named and custom plugins to annotate variants.",
-                    "fa_icon": "fas fa-file-csv",
-                    "help_text": "Path to a file containing the absolute paths to databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.",
-                    "pattern": "^\\S+\\.csv$",
-                    "mimetype": "text/csv",
-                    "schema": "assets/vep_plugin_files_schema.json"
-                },
-                "skip_download_vep": {
-                    "type": "boolean",
-                    "default": true,
-                    "fa_icon": "fas fa-toggle-on",
-                    "description": "Skip vep cache download."
-                },
-                "skip_download_gnomad": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Skip gnomad reference download for vep.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "vep_refs_download": {
-                    "type": "string",
-                    "description": "Path to comma separated csv with paths to vep references to download, see example in test_data/vep_to_download.csv",
-                    "fa_icon": "fas fa-file-csv",
-                    "format": "file-path"
-                }
-            }
-        },
-        "trimming_options": {
-            "title": "Trimming options",
-            "type": "object",
-            "description": "Options related to trimming of fastq files",
-            "default": "",
-            "fa_icon": "fas fa-cut",
-            "properties": {
-                "min_trimmed_length": {
-                    "type": "integer",
-                    "default": 40,
-                    "description": "Discard trimmed reads shorter than this",
-                    "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp.  ",
-                    "fa_icon": "fas fa-less-than"
-                }
-            }
-        },
-        "alignment_options": {
-            "title": "Alignment options",
-            "type": "object",
-            "description": "Options related to alignment",
-            "default": "",
-            "fa_icon": "fas fa-align-justify",
-            "properties": {
-                "star_two_pass_mode": {
-                    "type": "string",
-                    "default": "Basic",
-                    "description": "Set two pass mode for STAR",
-                    "help_text": "Two pass mode for alignment with STAR. Default is 'Basic' but 'None' can be used to speed up alignment ",
-                    "enum": ["Basic", "None"],
-                    "fa_icon": "fas fa-tachometer-alt"
-                },
-                "skip_subsample_region": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac",
-                    "fa_icon": "fas fa-toggle-off"
-                },
-                "skip_downsample": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.",
-                    "fa_icon": "fas fa-toggle-off"
-                },
-                "subsample_bed": {
-                    "type": "string",
-                    "format": "file-path",
-                    "fa_icon": "far fa-file-code",
-                    "description": "Bed with regions to subsample"
-                },
-                "seed_frac": {
-                    "type": "number",
-                    "default": 0.001,
-                    "description": "-s INT.FRAC is equivalent to --subsample-seed INT --subsample 0.FRAC in samtools view",
-                    "fa_icon": "fas fa-percent"
-                },
-                "num_reads": {
-                    "type": "integer",
-                    "default": 120000000,
-                    "description": "Number of reads to downsample RNAseq sample to",
-                    "fa_icon": "fas fa-list-ol"
-                }
-            }
-        },
-        "variant_calling": {
-            "title": "Variant calling",
-            "type": "object",
-            "description": "Options related to variant calling",
-            "default": "",
-            "fa_icon": "fas fa-filter",
-            "properties": {
-                "variant_caller": {
-                    "type": "string",
-                    "default": "bcftools",
-                    "fa_icon": "fab fa-algolia",
-                    "description": "Program to use for variant calling",
-                    "enum": ["bcftools", "gatk"],
-                    "help_text": "The pipeline can use either bcftools mpileup/call or GATK haplotypecaller for calling SNV/INDELS on the RNAseq data."
-                },
-                "bcftools_caller_mode": {
-                    "type": "string",
-                    "fa_icon": "fab fa-algolia",
-                    "default": "multiallelic",
-                    "description": "Run bcftools call in either consensus or multiallelic mode",
-                    "enum": ["consensus", "multiallelic"],
-                    "help_text": "Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied."
-                },
-                "skip_variant_calling": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Skip variant calling for all samples.",
-                    "fa_icon": "fas fa-toggle-off"
-                },
-                "skip_build_tracks": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Skip building splice junction tracks for IGV.",
-                    "fa_icon": "fas fa-toggle-off"
-                },
-                "skip_stringtie": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Skip analysis with StringTie",
-                    "fa_icon": "fas fa-toggle-off"
-                },
-                "skip_vep": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Skip Ensembl Variant Effect Predictor",
-                    "fa_icon": "fas fa-toggle-off"
-                },
-                "skip_drop_ae": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Skip DROP Aberrant Expression module ",
-                    "fa_icon": "fas fa-toggle-off"
-                },
-                "skip_drop_as": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Skip DROP Aberrant Splicing module",
-                    "fa_icon": "fas fa-toggle-off"
-                },
-                "skip_export_counts_drop": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-toggle-on",
-                    "default": true,
-                    "description": "Skip export counts for DROP. It will export information from those modules run. Read usage for further information."
-                },
-                "drop_group_samples_ae": {
-                    "type": "string",
-                    "default": "outrider",
-                    "description": "DROP group to run when AE only one allowed. Make sure it matches your reference annotation file.",
-                    "fa_icon": "fas fa-list-ol"
-                },
-                "drop_group_samples_as": {
-                    "type": "string",
-                    "default": "fraser",
-                    "description": "DROP group to run when AS only one allowed. Make sure it matches your reference annotation file.",
-                    "fa_icon": "fas fa-list-ol"
-                },
-                "drop_padjcutoff_ae": {
-                    "type": "number",
-                    "default": 0.05,
-                    "description": "Adjusted p-value cut-off for DROP Aberrant Expression module",
-                    "fa_icon": "fas fa-less-than-equal"
-                },
-                "drop_padjcutoff_as": {
-                    "type": "number",
-                    "default": 0.1,
-                    "description": "Adjusted p-value cut-off for DROP Aberrant Splicing module",
-                    "fa_icon": "fas fa-less-than-equal"
-                },
-                "drop_zscorecutoff": {
-                    "type": "number",
-                    "default": 0,
-                    "description": "Z-score cut-off for DROP Aberrant Expression module",
-                    "fa_icon": "fas fa-greater-than-equal"
-                },
-                "reference_drop_annot_file": {
-                    "type": "string",
-                    "description": "Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP.",
-                    "fa_icon": "fas fa-file",
-                    "format": "file-path",
-                    "mimetype": "tsv"
-                },
-                "reference_drop_count_file": {
-                    "type": "string",
-                    "description": "If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to use as controls",
-                    "fa_icon": "fas fa-file",
-                    "format": "file-path",
-                    "mimetype": "tsv"
-                },
-                "reference_drop_splice_folder": {
-                    "type": "string",
-                    "description": "If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside folder must be tsv.gz",
-                    "fa_icon": "fas fa-folder-open"
-                },
-                "gene_panel_clinical_filter": {
-                    "type": "string",
-                    "description": "tsv file containing genes on which results from drop and vep will be filtered to avoid incidental findings, columns should be chromosome, gene_start, gene_stop, hgnc_id, hgnc_symbol",
-                    "fa_icon": "fas fa-file"
-                }
-            }
-        },
-        "qc_options": {
-            "title": "QC options",
-            "type": "object",
-            "fa_icon": "fas fa-dna",
-            "description": "QC related options",
-            "properties": {
-                "skip_peddy": {
-                    "type": "boolean",
-                    "description": "Do not calculate sex check using Peddy.",
-                    "fa_icon": "fas fa-toggle-off",
-                    "default": false
-                },
-                "skip_calculate_hb_frac": {
-                    "type": "boolean",
-                    "description": "Do not calculate hemoglobin fraction among reads.",
-                    "fa_icon": "fas fa-toggle-off",
-                    "default": false
-                },
-                "hb_genes": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Hemoglobin genes ensembl IDs",
-                    "help_text": "TSV-file with one column with the header 'ensembl' containing the target genes for which to calculate fraction mapping for.",
-                    "fa_icon": "far fa-file-code"
                 }
             }
         },
@@ -548,7 +216,13 @@
                     "type": "string",
                     "fa_icon": "far fa-check-circle",
                     "description": "Base URL or local path to location of pipeline test dataset files",
-                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/raredisease",
+                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/",
+                    "hidden": true
+                },
+                "trace_report_suffix": {
+                    "type": "string",
+                    "fa_icon": "far calendar",
+                    "description": "Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.",
                     "hidden": true
                 }
             }
@@ -560,18 +234,6 @@
         },
         {
             "$ref": "#/$defs/reference_genome_options"
-        },
-        {
-            "$ref": "#/$defs/trimming_options"
-        },
-        {
-            "$ref": "#/$defs/alignment_options"
-        },
-        {
-            "$ref": "#/$defs/variant_calling"
-        },
-        {
-            "$ref": "#/$defs/qc_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"
