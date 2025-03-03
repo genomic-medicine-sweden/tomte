@@ -45,6 +45,7 @@ workflow ANALYSE_TRANSCRIPTS {
             [ meta.id, meta.single_end, meta.strandedness, meta.sex, bam, bai ]
             }
             .collect(flat:false)
+            .map { it.sort { a, b -> a[0] <=> b[0] } } // Sort on ID
             .map { it.transpose() }
         .set { ch_bam_files_annot }
 
