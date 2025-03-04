@@ -42,4 +42,3 @@ template:
   outdir: .
   skip_features: null
   version: 2.2.1
-update: null
