@@ -39,6 +39,10 @@ workflow TOMTE {
     ch_samplesheet // channel: samplesheet read in from --input
     main:
 
+    def prettyParams = params.collect { k, v -> "$k: $v" }.join('\n')
+    log.info "Tomte params:\n${prettyParams}"
+    log.info "publish_dir_mode: ${params.publish_dir_mode}"
+
     ch_versions      = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
