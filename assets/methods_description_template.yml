@@ -1,6 +1,6 @@
 id: "genomic-medicine-sweden/tomte-methods-description"
-description: "A best-practice analysis pipeline to analyse RNAseq data from rare disease patients."
-section_name: "tomte Methods Description"
+description: "A best-practice analysis pipeline to analyse germline RNAseq data."
+section_name: "genomic-medicine-sweden/tomte Methods Description"
 section_href: "https://github.com/genomic-medicine-sweden/tomte"
 plot_type: "html"
 ## TODO nf-core: Update the HTML below to your preferred methods description, e.g. add publication citation for this pipeline

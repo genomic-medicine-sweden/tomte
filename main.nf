@@ -24,27 +24,10 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_tomt
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.fasta                        = getGenomeAttribute('fasta')
-params.fai                          = getGenomeAttribute('fai')
-params.gtf                          = getGenomeAttribute('gtf')
-params.reference_drop_count_file    = getGenomeAttribute('reference_drop_count_file')
-params.reference_drop_splice_folder = getGenomeAttribute('reference_drop_splice_folder')
-params.reference_drop_annot_file    = getGenomeAttribute('reference_drop_annot_file')
-params.gene_panel_clinical_filter   = getGenomeAttribute('gene_panel_clinical_filter')
-params.sequence_dict                = getGenomeAttribute('sequence_dict')
-params.star_index                   = getGenomeAttribute('star_index')
-params.salmon_index                 = getGenomeAttribute('salmon_index')
-params.transcript_fasta             = getGenomeAttribute('transcript_fasta')
-params.vep_cache                    = getGenomeAttribute('vep_cache')
-params.vep_plugin_files             = getGenomeAttribute('vep_plugin_files')
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    OTHER PARAMETER VALUES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-params.subsample_bed                  = getGenomeAttribute('subsample_bed')
+// TODO nf-core: Remove this line if you don't need a FASTA file
+//   This is an example of how to use getGenomeAttribute() to fetch parameters
+//   from igenomes.config using `--genome`
+params.fasta = getGenomeAttribute('fasta')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
