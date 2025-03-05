@@ -24,9 +24,6 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_tomt
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// TODO nf-core: Remove this line if you don't need a FASTA file
-//   This is an example of how to use getGenomeAttribute() to fetch parameters
-//   from igenomes.config using `--genome`
 params.fasta                        = getGenomeAttribute('fasta')
 params.fai                          = getGenomeAttribute('fai')
 params.gtf                          = getGenomeAttribute('gtf')
@@ -40,6 +37,14 @@ params.salmon_index                 = getGenomeAttribute('salmon_index')
 params.transcript_fasta             = getGenomeAttribute('transcript_fasta')
 params.vep_cache                    = getGenomeAttribute('vep_cache')
 params.vep_plugin_files             = getGenomeAttribute('vep_plugin_files')
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    OTHER PARAMETER VALUES
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+params.subsample_bed                  = getGenomeAttribute('subsample_bed')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
