@@ -26,6 +26,7 @@ process CREATE_PEDIGREE_FILE {
         def sample_name =  samples[i].sample
         if (!samples_list.contains(sample_name)) {
             def sex_int = samples[i].sex in ["M", 1] ? "1" : samples[i].sex in ["F", 2] ? "2" : "0"
+            // If paternal or maternal ID is null, i.e. not in dataset, set it to "0"
             def paternal = samples[i].paternal ?: "0"
             def maternal = samples[i].maternal ?: "0"
             outfile_text += "\\n" + [samples[i].case, sample_name, paternal, maternal, sex_int, samples[i].phenotype].join('\\t')

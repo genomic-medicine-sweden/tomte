@@ -288,20 +288,19 @@ workflow TOMTE {
         []
     )
 
-    // FIXME: Comment annotate
     emit: 
     multiqc_report         = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    vcf_tbi                = CALL_VARIANTS.out.vcf_tbi
-    junction_bed           = IGV_TRACKS.out.bed
-    drop_ae_out_clinical   = ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical
-    drop_ae_out_research   = ANALYSE_TRANSCRIPTS.out.drop_ae_out_research
-    drop_as_out_clinical   = ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical
-    drop_as_out_research   = ANALYSE_TRANSCRIPTS.out.drop_as_out_research
-    bigwig                 = IGV_TRACKS.out.bw
-    ped                    = ch_pedfile
-    multiqc_data           = MULTIQC.out.data
-    hb_estimates           = ESTIMATE_HB_PERC.out.tsv
-    bam_bai                = ALIGNMENT.out.bam_bai
+    vcf_tbi                = CALL_VARIANTS.out.vcf_tbi   // channel: [ val(meta), path(vcf), path(tbi) ]
+    junction_bed           = IGV_TRACKS.out.bed          // channel: [ val(meta), path(bed.gz), path(tbi) ]
+    drop_ae_out_clinical   = ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical // channel: [ path(drop_AE_clinical.tsv) ]
+    drop_ae_out_research   = ANALYSE_TRANSCRIPTS.out.drop_ae_out_research // channel: [ path(drop_AE_research.tsv) ]
+    drop_as_out_clinical   = ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical // channel: [ path(drop_AS_clinical.tsv) ]
+    drop_as_out_research   = ANALYSE_TRANSCRIPTS.out.drop_as_out_research // channel: [ path(drop_AS_research.tsv) ]
+    bigwig                 = IGV_TRACKS.out.bw           // channel: [ val(meta), path(bw) ]
+    ped                    = ch_pedfile                  // channel: [ path(ped_file) ] 
+    multiqc_data           = MULTIQC.out.data            // channel: [ path(multiqc_data) ]
+    hb_estimates           = ESTIMATE_HB_PERC.out.json   // channel: [ val(meta), path(json) ]
+    bam_bai                = ALIGNMENT.out.bam_bai       // channel: [ val(meta), path(bam), path(bai) ]
     versions               = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
