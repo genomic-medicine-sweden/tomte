@@ -30,7 +30,7 @@ def get_top_hits(
 
     if len(df_aberrant) >= min_return_count:
         return df_aberrant.reset_index()
-    
+
     additional_needed = min_return_count - len(df_aberrant)
 
     df_non_aberrant = df_non_aberrant.sort_values(by="pValue")
