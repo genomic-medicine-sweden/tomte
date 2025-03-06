@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optionally run Peddy for per-sample sex- and heterozygosity checks [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
 - Optionally calculate percentage mapping to hemoglobin genes (or any other set of genes provided) [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
 - Added the option of providing sex as 0, 1, or 2 as in the raredisease pipeline [#192](https://github.com/genomic-medicine-sweden/tomte/pull/192)
+- Output channels to Tomte, allowing it to run as part of a larger pipeline.
 
 ### `Parameters`
 
@@ -30,6 +31,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool    | Old version | New version |
 | ------- | ----------- | ----------- |
 | multiqc | 1.25.1      | 1.27        |
+
+### `Fixed`
+
+- DROP expression outliers previously returned max 20 lowest p-value entries. Now it returns those classified as having aberrant expression first, and then fills up to 20 from those with lowest p-values.
+- GENCODE_DOWNLOAD stub crashes by removing double versions.yml write.
 
 ## 3.0.0 - Three Kings [2024-11-18]
 
