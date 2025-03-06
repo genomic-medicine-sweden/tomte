@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |               | `--skip_peddy`             |
 |               | `--skip_calculate_hb_frac` |
 |               | `--hb_genes`               |
+|               | `--trace_report_suffix`    |
+
+### `Changed`
+
+- Updated nf-core/tools template to v3.1.2 [#204](https://github.com/genomic-medicine-sweden/tomte/pull/204)
+- Updated nf-core/tools template to v3.2.0 [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
+- Updated multiqc module [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
+
+| Tool    | Old version | New version |
+| ------- | ----------- | ----------- |
+| multiqc | 1.25.1      | 1.27        |
 
 ## 3.0.0 - Three Kings [2024-11-18]
 

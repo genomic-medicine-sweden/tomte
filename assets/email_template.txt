@@ -10,10 +10,10 @@
 Run Name: $runName
 
 <% if (success){
-    out << "## tomte execution completed successfully! ##"
+    out << "## genomic-medicine-sweden/tomte execution completed successfully! ##"
 } else {
     out << """####################################################
-## tomte execution completed unsuccessfully! ##
+## genomic-medicine-sweden/tomte execution completed unsuccessfully! ##
 ####################################################
 The exit status of the task that caused the workflow execution to fail was: $exitStatus.
 The full error message was:
