@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - DROP expression outliers previously returned max 20 lowest p-value entries. Now it returns those classified as having aberrant expression first, and then fills up to 20 from those with lowest p-values.
 - GENCODE_DOWNLOAD stub crashes by removing double versions.yml write.
+- Default peddy parent ID to "0" if not present.
 
 ## 3.0.0 - Three Kings [2024-11-18]
 
