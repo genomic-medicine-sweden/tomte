@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optionally run Peddy for per-sample sex- and heterozygosity checks [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
 - Optionally calculate percentage mapping to hemoglobin genes (or any other set of genes provided) [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
 - Added the option of providing sex as 0, 1, or 2 as in the raredisease pipeline [#192](https://github.com/genomic-medicine-sweden/tomte/pull/192)
-- Nf-test for pipeline along with modules ensemblvep/download and ucsc/gtftogenepred which are dependencies for other modules' tests[#207](https://github.com/genomic-medicine-sweden/tomte/pull/207)
+- Nf-test for pipeline [#207](https://github.com/genomic-medicine-sweden/tomte/pull/207)
 
 ### `Parameters`
 
@@ -31,8 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool                | Old version | New version |
 | ------------------- | ----------- | ----------- |
 | multiqc             | 1.25.1      | 1.27        |
-| ensemblvep/download |             | 113.0       |
-| ucsc/gtftogenepred  |             | 447         |
 
 ## 3.0.0 - Three Kings [2024-11-18]
 
