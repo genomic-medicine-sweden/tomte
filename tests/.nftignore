@@ -1,0 +1,14 @@
+alignment/*.{cram,cram.crai,json,out,sf}
+alignment/**/*
+analyse_transcripts/*
+analyse_transcripts/drop/**
+annotate_vep/*.{html,vcf,vcf.gz,vcf.gz.tbi}
+bootstrapann/*.{vcf.gz,vcf.gz.tbi}
+bam_qc/*
+call_variants/*.{vcf.gz,vcf.gz.tbi}
+fastqc/*.{zip}
+multiqc/**.{html,json,log,txt}
+pipeline_info/**.{html,json,txt}
+references/salmon/*.{bin,log}
+references/star/*.{out}
+trimming/*.{html,log}

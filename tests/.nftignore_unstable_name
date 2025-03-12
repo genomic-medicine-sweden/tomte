@@ -1,0 +1,3 @@
+pipeline_info/*.{html,json,txt}
+analyse_transcripts/drop/AE/**
+analyse_transcripts/drop/AS/**
