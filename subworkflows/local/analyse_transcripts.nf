@@ -61,14 +61,18 @@ workflow ANALYSE_TRANSCRIPTS {
         // Generates config file and runs Aberrant expression module
 
         // Sort bam and bai files for stable order
-        ch_bam_files_sorted = ch_bam_files.toList().map { list ->
-            list.sort { a, b -> a.getName() <=> b.getName() }
-        }
-        ch_bai_files_sorted = ch_bam_ds_bai.collect{ it[2] }.toList().map { list ->
-            list.sort { a, b -> a.getName() <=> b.getName() }
-        }
-        ch_bam_bai_files = ch_bam_files_sorted.combine(ch_bai_files_sorted)
-
+        // ch_bam_files_sorted = ch_bam_files.toList().map { list ->
+        //     list.sort { a, b -> a.getName() <=> b.getName() }
+        // }
+        // ch_bai_files_sorted = ch_bam_ds_bai.collect{ it[2] }.toList().map { list ->
+        //     list.sort { a, b -> a.getName() <=> b.getName() }
+        // }
+        // ch_bam_bai_files = ch_bam_files_sorted.combine(ch_bai_files_sorted)
+        ch_bam_files_annot
+            .map { _id, _single_end, _strandedness, _sex, bam, bai ->
+                [ bam, bai ] 
+            }
+        .set{ ch_bam_bai_files }
 
         DROP_CONFIG_RUN_AE(
             ch_fasta_fai,
