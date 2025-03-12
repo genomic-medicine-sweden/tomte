@@ -36,7 +36,6 @@ jobs:
         tags:
           - "tomte"
         profile:
-          - "conda"
           - "docker"
           - "singularity"
         test_name:
