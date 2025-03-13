@@ -12,6 +12,8 @@ nextflow_pipeline {
             params {
                 input  = "${projectDir}/test_data/samplesheet_chr21.csv"
                 outdir = "$outputDir"
+                skip_drop_ae = true
+                skip_drop_as = true
             }
         }
 

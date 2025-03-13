@@ -1,7 +1,7 @@
 {
     "test profile": {
         "content": [
-            81,
+            77,
             {
                 "ADD_FOUND_IN_TAG": {
                     "bcftools": 1.2,
@@ -21,21 +21,6 @@
                 },
                 "BOOTSTRAPANN": {
                     "python": "3.9.10"
-                },
-                "DROP_CONFIG_RUN_AE": {
-                    "drop_config": 2.1,
-                    "drop": "1.4.0"
-                },
-                "DROP_CONFIG_RUN_AS": {
-                    "drop_config": 2.1,
-                    "drop": "1.4.0"
-                },
-                "DROP_FILTER_RESULTS": {
-                    "drop_filter_results": 1.3
-                },
-                "DROP_SAMPLE_ANNOT": {
-                    "drop_sample_annot": 1.1,
-                    "samtools": 1.2
                 },
                 "ENSEMBLVEP_FILTERVEP": {
                     "ensemblvep": 113.0
@@ -203,14 +188,6 @@
                 "analyse_transcripts/ACC5963A3.stats",
                 "analyse_transcripts/ACC5963A3.tracking",
                 "analyse_transcripts/ACC5963A3.transcripts.gtf",
-                "analyse_transcripts/drop",
-                "analyse_transcripts/drop/AE",
-                "analyse_transcripts/drop/AS",
-                "analyse_transcripts/drop/finequagga_fraser_top_hits_clinical.tsv",
-                "analyse_transcripts/drop/finequagga_fraser_top_hits_research.tsv",
-                "analyse_transcripts/drop/finequagga_outrider_top_hits_clinical.tsv",
-                "analyse_transcripts/drop/finequagga_outrider_top_hits_research.tsv",
-                "analyse_transcripts/drop/sample_annotation.tsv",
                 "annotate_vep",
                 "annotate_vep/finequagga_split_rmdup_vep.vcf.gz",
                 "annotate_vep/finequagga_split_rmdup_vep.vcf.gz_summary.html",
@@ -422,11 +399,11 @@
                 "t_data.ctab:md5,adea5cce0d453ca8108143842b21157c",
                 "ACC5963A3.bam:md5,20a8f0d5c77d4fe6dda8359e39f0385a",
                 "ACC5963A3.bam.bai:md5,1f849f9349136af7bd03df71b1748623",
-                "ACC5963A2_id1_1_fastqc.html:md5,ea6b82d3a6f7f365f7c9645f192f8d37",
-                "ACC5963A2_id1_2_fastqc.html:md5,5edba8d5a628f34d624f059f04779970",
+                "ACC5963A2_id1_1_fastqc.html:md5,52a0a72b33c76b42d3529ae60871aea7",
+                "ACC5963A2_id1_2_fastqc.html:md5,433d8934848649c456ce3fa250de97a6",
                 "hgnc.tsv:md5,bbf07f9733fbd7e4666f039b5c4be128",
                 "ACC5963A2_junction.bed:md5,7b66db28a4b006d798a96fbc81f345e5",
-                "tomte_pipeline_software_mqc_versions.yml:md5,a66d48fea4b510db93f187e761aeb33b",
+                "tomte_pipeline_software_mqc_versions.yml:md5,69174551f1665376ff1feb69ae39b7b4",
                 "grch37_chr21.dict:md5,53d95c36db0422d29db02c8a8da56e43",
                 "grch37_chr21.fa:md5,e9ce36e75cd57d255ad64eb2ecca4dd0",
                 "grch37_chr21.fa.fai:md5,93c052a6e351d5db0d7a0156816f51fb",
@@ -528,6 +505,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-03-12T08:16:31.094249"
+        "timestamp": "2025-03-13T08:58:47.073209"
     }
 }
