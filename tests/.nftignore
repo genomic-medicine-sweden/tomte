@@ -8,7 +8,7 @@ bam_qc/*
 call_variants/*.{vcf.gz,vcf.gz.tbi}
 fastqc/*.{zip}
 multiqc/**.{html,json,log,txt}
-pipeline_info/**.{html,json,txt}
+pipeline_info/**.{html,json,txt,yml}
 references/salmon/*.{bin,log}
 references/star/*.{out}
 trimming/*.{html,log}
