@@ -341,9 +341,6 @@
                 "multiqc/multiqc_data/star_gene_counts_Unstranded.txt",
                 "multiqc/multiqc_data/star_summary_table.txt",
                 "multiqc/multiqc_plots",
-                "multiqc/multiqc_plots/pdf",
-                "multiqc/multiqc_plots/png",
-                "multiqc/multiqc_plots/svg",
                 "multiqc/multiqc_report.html",
                 "pipeline_info",
                 "pipeline_info/tomte_pipeline_software_mqc_versions.yml",
@@ -539,6 +536,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-03-13T11:25:06.655542"
+        "timestamp": "2025-03-13T12:05:13.388444"
     }
 }
