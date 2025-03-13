@@ -6,7 +6,7 @@ nextflow_pipeline {
     tag "tomte"
 
     test("test profile") {
-        tag "samplesheet"
+        tag "tomte_skip"
 
         when {
             params {
@@ -14,6 +14,14 @@ nextflow_pipeline {
                 outdir = "$outputDir"
                 skip_drop_ae = true
                 skip_drop_as = true
+                skip_subsample_region = true
+                skip_downsample = true
+                skip_build_tracks = true
+                skip_stringtie = true
+                skip_vep = true
+                skip_variant_calling = true
+                skip_peddy = true
+                skip_calculate_hb_frac = true
             }
         }
 

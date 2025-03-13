@@ -34,7 +34,8 @@ jobs:
           - "24.04.2"
           - "latest-everything"
         tags:
-          - "tomte"
+          - "tomte_no_skip"
+          - "tomte_skip"
         profile:
           - "docker"
           - "singularity"
@@ -49,8 +50,7 @@ jobs:
           - isMaster: false
             profile: "singularity"
         parameters:
-          - "docker --skip_drop_ae true --skip_drop_as true"
-          - "docker --skip_subsample_region true --skip_downsample true --skip_build_tracks true --skip_stringtie true --skip_vep true --skip_variant_calling true --skip_peddy true --skip_calculate_hb_frac true"
+          - "docker"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
