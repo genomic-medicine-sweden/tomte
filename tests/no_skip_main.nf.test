@@ -1,0 +1,47 @@
+nextflow_pipeline {
+
+    name "Test pipeline GENOMICMEDICINESWEDEN_TOMTE"
+    script "../main.nf"
+    tag "pipeline"
+    tag "tomte"
+
+    test("test profile") {
+        tag "tomte_no_skip"
+
+        when {
+            params {
+                input  = "${projectDir}/test_data/samplesheet_chr21.csv"
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name      = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignoreFile:'tests/.nftignore_unstable_name')
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path      = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // bam_files: All bam files
+            def bam_files        = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+            // all_vcf_files: All vcf files - can have unstable variants and/or unstable headers
+            def all_vcf_files    = getAllFilesFromDir(params.outdir, include: ['**/*.vcf.gz'])
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/tomte_pipeline_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path,
+                    // All bam files
+                    bam_files.collect{ file -> [ file.getName(), bam(file.toString(), stringency: 'silent').getReadsMD5() ] },
+                    // All vcf files
+                    all_vcf_files.collect{ file -> [ file.getName(), path(file.toString()).vcf.summary ] },
+                ).match() }
+            )
+        }
+    }
+
+}
