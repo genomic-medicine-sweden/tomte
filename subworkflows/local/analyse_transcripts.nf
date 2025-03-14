@@ -70,7 +70,7 @@ workflow ANALYSE_TRANSCRIPTS {
         // ch_bam_bai_files = ch_bam_files_sorted.combine(ch_bai_files_sorted)
         ch_bam_files_annot
             .map { _id, _single_end, _strandedness, _sex, bam, bai ->
-                [ bam, bai ] 
+                [ bam, bai ]
             }
         .set{ ch_bam_bai_files }
 
