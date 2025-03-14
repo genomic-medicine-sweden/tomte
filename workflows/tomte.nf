@@ -120,7 +120,7 @@ workflow TOMTE {
         ch_salmon_index,
         ch_sequence_dict
     ).set { ch_references }
-    ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions.first())
+    ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
 
     // Prepare input
     ch_samplesheet
@@ -143,7 +143,7 @@ workflow TOMTE {
         ch_fastq_reads
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    ch_versions = ch_versions.mix(FASTQC.out.versions)
 
     ALIGNMENT(
         ch_fastq_reads,
