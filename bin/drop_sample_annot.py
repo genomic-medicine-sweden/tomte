@@ -111,9 +111,9 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
         df_reference["GENE_COUNTS_FILE"] = ref_count_file
         df_reference["SPLICE_COUNTS_DIR"] = (
             df_reference["SPLICE_COUNTS_DIR"]
-            .fillna("")
+            .fillna("NA")
             .str.rstrip("/")
-            .apply(lambda x: os.path.basename(x) if x != "" else x)
+            .apply(lambda x: os.path.basename(x) if x != "NA" else x)
         )
         df_reference["DROP_GROUP"] = df_reference["DROP_GROUP"].str.replace(" ", "")
         df_samples["COUNT_OVERLAPS"] = count_overlaps(df_reference["COUNT_OVERLAPS"].iloc[0])
