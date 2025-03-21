@@ -114,7 +114,7 @@
                     },
                     "picard/collectinsertsizemetrics": {
                         "branch": "master",
-                        "git_sha": "49f4e50534fe4b64101e62ea41d5dc43b1324358",
+                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
                         "installed_by": ["modules"]
                     },
                     "picard/collectrnaseqmetrics": {
