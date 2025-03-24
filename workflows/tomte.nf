@@ -19,7 +19,7 @@ include { SAMTOOLS_CONVERT as CRAM_TO_BAM } from '../modules/nf-core/samtools/co
 //
 include { DOWNLOAD_REFERENCES     } from '../subworkflows/local/download_references'
 include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_references'
-include { ALIGNMENT               } from '../subworkflows/local/alignment'
+include { ALIGNMENT               } from '../subworkflows/local/alignment/alignment'
 include { BAM_QC                  } from '../subworkflows/local/bam_qc'
 include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts'
 include { CALL_VARIANTS           } from '../subworkflows/local/call_variants'

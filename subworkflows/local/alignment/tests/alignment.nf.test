@@ -1,0 +1,102 @@
+nextflow_workflow {
+
+    name "Test Workflow ALIGNMENT"
+    script "../alignment.nf"
+    workflow "ALIGNMENT"
+    config "./nextflow.config"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'fasta' ],
+                    file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("GUNZIP", alias: "GUNZIP_GTF") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'gtf' ],
+                    file("${projectDir}/test_data/grch37_chr21.gtf.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("GUNZIP", alias: "GUNZIP_TRANSCRIPT") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'transcripts' ],
+                    file("${projectDir}/test_data/grch37_chr21_transcripts.fa.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("STAR_GENOMEGENERATE") {
+            script "../../../../modules/nf-core/star/genomegenerate/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                input[1] = GUNZIP_GTF.out.gunzip
+                """
+            }
+        }
+
+        run("SALMON_INDEX") {
+            script "../../../../modules/nf-core/salmon/index/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                    .map{ meta, fasta -> [ fasta ] }
+                input[1] = GUNZIP_TRANSCRIPT.out.gunzip
+                    .map{ meta, transcript -> [ transcript ] }
+                """
+            }
+        }
+    }
+
+    test("fastq") {
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ case:'finequagga', id:'ACC5963A2_id1', sample:'ACC5963A2', strandedness:'reverse', single_end:false, fq_pairs:1, is_fastq:true ],
+                    [ file("${projectDir}/test_data/ACC5963A1_sub_1.fastq.gz", checkIfExists: true),
+                    file("${projectDir}/test_data/ACC5963A1_sub_2.fastq.gz", checkIfExists: true)]
+                ])
+                input[1]  = Channel.of([[id:'null'], []])
+                input[2]  = STAR_GENOMEGENERATE.out.index
+                input[3]  = GUNZIP_GTF.out.gunzip
+                input[4]  = Channel.of(['illumina'])
+                input[5]  = Channel.of([file("${projectDir}/test_data/subsample.bed", checkIfExists: true)])
+                input[6]  = 0.001
+                input[7]  = 120000000
+                input[8]  = true
+                input[9]  = true
+                input[10] = SALMON_INDEX.out.index
+                input[11] = GUNZIP_FASTA.out.gunzip
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.bam_bai },
+                { assert workflow.out.bam_ds_bai }
+            )
+        }
+
+    }
+
+}
