@@ -45,7 +45,7 @@
                     "drop_filter_results": 1.4
                 },
                 "DROP_SAMPLE_ANNOT": {
-                    "drop_sample_annot": 1.1,
+                    "drop_sample_annot": 1.2,
                     "samtools": 1.2
                 },
                 "ENSEMBLVEP_FILTERVEP": {
