@@ -5,7 +5,7 @@ import csv
 from pandas import read_csv, DataFrame, concat, isna
 import os
 
-SCRIPT_VERSION = "1.1"
+SCRIPT_VERSION = "1.2"
 SAMPLE_ANNOTATION_COLUMNS = [
     "RNA_ID",
     "RNA_BAM_FILE",
