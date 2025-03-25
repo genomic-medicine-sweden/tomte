@@ -4,6 +4,7 @@ nextflow_workflow {
     script "../alignment.nf"
     workflow "ALIGNMENT"
     config "./nextflow.config"
+    tag "alignment"
 
     setup {
         run("GUNZIP", alias: "GUNZIP_FASTA") {
@@ -65,7 +66,7 @@ nextflow_workflow {
         }
     }
 
-    test("fastq") {
+    test("fastq_alignment") {
         when {
             workflow {
                 """
