@@ -145,8 +145,6 @@ workflow TOMTE {
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
     ch_versions = ch_versions.mix(FASTQC.out.versions)
 
-    ch_fastq_reads.dump(tag: 'foo')
-    ch_bam_reads.dump(tag: 'bam')
     ALIGNMENT(
         ch_fastq_reads,
         ch_bam_reads,

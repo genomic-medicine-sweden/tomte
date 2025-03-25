@@ -3,7 +3,7 @@
 //
 
 include { CAT_FASTQ            } from '../../../modules/nf-core/cat/fastq/main'
-include { FASTP                } from '../../../modules/nf-core/fastp/main.nf'
+include { FASTP                } from '../../../modules/nf-core/fastp/main'
 include { STAR_ALIGN           } from '../../../modules/nf-core/star/align/main'
 include { SAMTOOLS_INDEX       } from '../../../modules/nf-core/samtools/index/main'
 include { RNA_DOWNSAMPLE       } from '../../../modules/local/rna_downsample'
