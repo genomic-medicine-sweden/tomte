@@ -12,7 +12,7 @@ process ESTIMATE_HB_PERC {
     path hb_genes
 
     output:
-    tuple val(meta), path("${meta.sample}_perc_mapping.json"), emit: tsv
+    tuple val(meta), path("${meta.sample}_perc_mapping.json"), emit: json
     path("versions.yml"), emit: versions
 
     when:

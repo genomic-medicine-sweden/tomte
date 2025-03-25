@@ -60,15 +60,17 @@ workflow TOMTE {
     ch_versions = ch_versions.mix(DOWNLOAD_REFERENCES.out.versions)
 
     // Optional
-    ch_fasta                      = params.fasta                        ? Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                        : downloads.fasta.map {it -> [[id:it[0].simpleName], it]}.collect()
-    ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                        : downloads.gtf.map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_fasta                      = params.fasta                        ? Channel.fromPath(params.fasta).map {it -> [[id:it.getSimpleName()], it]}.collect()
+                                                                        : downloads.fasta.map {it -> [[id:it.getSimpleName()], it]}.collect()
+    ch_fasta.view()
+    ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it.getSimpleName()], it]}.collect()
+                                                                        : downloads.gtf.map {it -> [[id:it.getSimpleName()], it]}.collect()
+    ch_gtf.view()
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
                                                                         : Channel.empty().mix(downloads.vep_cache)
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
                                                                         : Channel.empty().mix(downloads.vep_plugin)
-    ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : Channel.empty()
     ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()
                                                                         : Channel.empty()
@@ -80,11 +82,11 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_salmon_index               = params.salmon_index                 ? Channel.fromPath(params.salmon_index)
                                                                         : Channel.empty()
-    ch_star_index                 = params.star_index                   ? Channel.fromPath(params.star_index).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_star_index                 = params.star_index                   ? Channel.fromPath(params.star_index).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : Channel.empty()
     ch_transcript_fasta           = params.transcript_fasta             ? Channel.fromPath(params.transcript_fasta)
                                                                         : Channel.empty()
-    ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it[0].simpleName], it] }.collect()
+    ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it.getSimpleName()], it] }.collect()
                                                                         : Channel.empty()
     ch_subsample_bed              = params.subsample_bed                ? Channel.fromPath(params.subsample_bed).collect()
                                                                         : Channel.empty()
@@ -288,9 +290,20 @@ workflow TOMTE {
         []
     )
 
-    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
-
+    emit:
+    multiqc_report         = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    vcf_tbi                = CALL_VARIANTS.out.vcf_tbi   // channel: [ val(meta), path(vcf), path(tbi) ]
+    junction_bed           = IGV_TRACKS.out.bed          // channel: [ val(meta), path(bed.gz), path(tbi) ]
+    drop_ae_out_clinical   = ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical // channel: [ path(drop_AE_clinical.tsv) ]
+    drop_ae_out_research   = ANALYSE_TRANSCRIPTS.out.drop_ae_out_research // channel: [ path(drop_AE_research.tsv) ]
+    drop_as_out_clinical   = ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical // channel: [ path(drop_AS_clinical.tsv) ]
+    drop_as_out_research   = ANALYSE_TRANSCRIPTS.out.drop_as_out_research // channel: [ path(drop_AS_research.tsv) ]
+    bigwig                 = IGV_TRACKS.out.bw           // channel: [ val(meta), path(bw) ]
+    ped                    = ch_pedfile                  // channel: [ path(ped_file) ]
+    multiqc_data           = MULTIQC.out.data            // channel: [ path(multiqc_data) ]
+    hb_estimates           = ESTIMATE_HB_PERC.out.json   // channel: [ val(meta), path(json) ]
+    bam_bai                = ALIGNMENT.out.bam_bai       // channel: [ val(meta), path(bam), path(bai) ]
+    versions               = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
 /*

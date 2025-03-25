@@ -45,6 +45,7 @@ workflow ANALYSE_TRANSCRIPTS {
             [ meta.id, meta.single_end, meta.strandedness, meta.sex, bam, bai ]
             }
             .collect(flat:false)
+            .map { it.sort { a, b -> a[0] <=> b[0] } } // Sort on ID
             .map { it.transpose() }
         .set { ch_bam_files_annot }
 
@@ -56,9 +57,12 @@ workflow ANALYSE_TRANSCRIPTS {
             drop_group_samples_as
         )
 
-        // Generates  config file and runs Aberrant expression module
-        ch_bai_files = ch_bam_ds_bai.collect{ it[2] }.toList()
-        ch_bam_bai_files = ch_bam_files.toList().combine(ch_bai_files)
+        ch_bam_files_annot
+            .map { _id, _single_end, _strandedness, _sex, bam, bai ->
+                [ bam, bai ]
+            }
+        .set{ ch_bam_bai_files }
+
         DROP_CONFIG_RUN_AE(
             ch_fasta_fai,
             ch_gtf,
@@ -74,7 +78,7 @@ workflow ANALYSE_TRANSCRIPTS {
             skip_export_counts_drop
         )
 
-        // Generates  config file and runs Aberrant splicing module
+        // Generates config file and runs Aberrant splicing module
         DROP_CONFIG_RUN_AS(
             ch_fasta_fai,
             ch_gtf,
