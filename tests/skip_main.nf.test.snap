@@ -183,7 +183,7 @@
                 "references/grch37_chr21.fa.fai.sizes",
                 "references/grch37_chr21.gtf",
                 "references/grch37_chr21.refflat",
-                "references/home_gffread_output.fa",
+                "references/grch37_chr21_gffread_output.fa",
                 "references/rrna.bed",
                 "references/rrna.bed.interval_list",
                 "references/rrna.gtf",
@@ -242,7 +242,7 @@
                 "grch37_chr21.fa.fai.sizes:md5,ffd90da532db7928daa1591d45dc26c4",
                 "grch37_chr21.gtf:md5,01924b6ce7016e41d5e2b22e478ca12f",
                 "grch37_chr21.refflat:md5,9c34a780a2505949c4c613dfc79f8d2d",
-                "home_gffread_output.fa:md5,7dbf3195d06f480fa5b2421004580bdd",
+                "grch37_chr21_gffread_output.fa:md5,7dbf3195d06f480fa5b2421004580bdd",
                 "rrna.bed:md5,1c99687a18201c904edc40fb03088787",
                 "rrna.bed.interval_list:md5,d12bf78e46ad4ce933d23bcd17950845",
                 "rrna.gtf:md5,f8f524389ae15f74f139fd93e5a1b5df",
@@ -287,6 +287,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-03-24T11:50:11.614993"
+        "timestamp": "2025-03-25T10:12:23.235559"
     }
 }

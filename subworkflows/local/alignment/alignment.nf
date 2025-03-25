@@ -1,5 +1,5 @@
 //
-// Allignment
+// Alignment
 //
 
 include { CAT_FASTQ            } from '../../../modules/nf-core/cat/fastq/main'

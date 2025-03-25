@@ -22,11 +22,14 @@ process CREATE_PEDIGREE_FILE {
     def out   = new File(case_name + ".ped")
     outfile_text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\\t')
     def samples_list = []
-    for(int i = 0; i<samples.size(); i++) {
+    for(int i = 0; i < samples.size(); i++) {
         def sample_name =  samples[i].sample
         if (!samples_list.contains(sample_name)) {
             def sex_int = samples[i].sex in ["M", 1] ? "1" : samples[i].sex in ["F", 2] ? "2" : "0"
-            outfile_text += "\\n" + [samples[i].case, sample_name, samples[i].paternal, samples[i].maternal, sex_int, samples[i].phenotype].join('\\t')
+            // If paternal or maternal ID is null, i.e. not in dataset, set it to "0"
+            def paternal = samples[i].paternal ?: "0"
+            def maternal = samples[i].maternal ?: "0"
+            outfile_text += "\\n" + [samples[i].case, sample_name, paternal, maternal, sex_int, samples[i].phenotype].join('\\t')
             samples_list.add(sample_name)
         }
     }
