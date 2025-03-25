@@ -43,11 +43,7 @@ workflow ALIGNMENT {
 
         ch_bam_from_star = STAR_ALIGN.out.bam_sorted_aligned
 
-        //ch_bam_2_process = ch_bam_from_star.mix(ch_bam_input_reads)
-
-        ch_bam_2_process = ch_bam_from_star.ifEmpty(ch_bam_input_reads)
-
-        ch_bam_2_process.dump(tag: 'ch_bam_2_process')
+        ch_bam_2_process = ch_bam_input_reads.ifEmpty(ch_bam_from_star)
 
         SAMTOOLS_INDEX( ch_bam_from_star )
         ch_bai = ch_bai_input_reads.mix(SAMTOOLS_INDEX.out.bai)

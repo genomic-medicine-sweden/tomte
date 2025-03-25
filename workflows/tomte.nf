@@ -62,10 +62,8 @@ workflow TOMTE {
     // Optional
     ch_fasta                      = params.fasta                        ? Channel.fromPath(params.fasta).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : downloads.fasta.map {it -> [[id:it.getSimpleName()], it]}.collect()
-    ch_fasta.view()
     ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : downloads.gtf.map {it -> [[id:it.getSimpleName()], it]}.collect()
-    ch_gtf.view()
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
                                                                         : Channel.empty().mix(downloads.vep_cache)
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
@@ -147,6 +145,8 @@ workflow TOMTE {
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
     ch_versions = ch_versions.mix(FASTQC.out.versions)
 
+    ch_fastq_reads.dump(tag: 'foo')
+    ch_bam_reads.dump(tag: 'bam')
     ALIGNMENT(
         ch_fastq_reads,
         ch_bam_reads,
