@@ -49,19 +49,52 @@
                 "versions.yml:md5,1533d93ad0c82b21db0a8c1d61e0acbb",
                 "versions.yml:md5,6fae393145021e4660c61ada0d720466",
                 "versions.yml:md5,bd1f6a0d8ee30d9ad14843e2abfcf9e3",
+                "versions.yml:md5,c6359df28f45236797d408fb562cef4d",
                 "versions.yml:md5,fc3cdfeb9650e6068242aa84be1e3db1"
             ],
             [
-                
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "case": "finequagga",
+                            "id": "ACC5963A2",
+                            "sample": "ACC5963A2",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        }
+                    },
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
+                ]
             ],
             [
-                
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "case": "finequagga",
+                            "id": "ACC5963A2",
+                            "sample": "ACC5963A2",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        }
+                    },
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
+                ]
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-03-25T14:38:13.266264"
+        "timestamp": "2025-03-26T09:08:15.678436"
     }
 }

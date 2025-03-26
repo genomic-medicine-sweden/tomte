@@ -1,7 +1,7 @@
 {
     "test profile": {
         "content": [
-            66,
+            81,
             {
                 "ADD_FOUND_IN_TAG": {
                     "bcftools": 1.2,
@@ -163,6 +163,8 @@
                 "alignment/ACC5963A2.SJ.out.tab",
                 "alignment/ACC5963A2.Signal.Unique.str1.out.wig",
                 "alignment/ACC5963A2.Signal.UniqueMultiple.str1.out.wig",
+                "alignment/ACC5963A2.cram",
+                "alignment/ACC5963A2.cram.crai",
                 "alignment/ACC5963A2/aux_info",
                 "alignment/ACC5963A2/aux_info/ambig_info.tsv",
                 "alignment/ACC5963A2/aux_info/exp_gc.gz",
@@ -180,6 +182,8 @@
                 "alignment/ACC5963A2/logs/salmon_quant.log",
                 "alignment/ACC5963A2/quant.genes.sf",
                 "alignment/ACC5963A2/quant.sf",
+                "alignment/ACC5963A2_downsmapled.bam",
+                "alignment/ACC5963A2_downsmapled.bam.bai",
                 "alignment/ACC5963A2_lib_format_counts.json",
                 "alignment/ACC5963A2_meta_info.json",
                 "alignment/ACC5963A2_quant.sf",
@@ -204,6 +208,21 @@
                 "analyse_transcripts/ACC5963A1.stats",
                 "analyse_transcripts/ACC5963A1.tracking",
                 "analyse_transcripts/ACC5963A1.transcripts.gtf",
+                "analyse_transcripts/ACC5963A2.ACC5963A2.transcripts.gtf.refmap",
+                "analyse_transcripts/ACC5963A2.ACC5963A2.transcripts.gtf.tmap",
+                "analyse_transcripts/ACC5963A2.annotated.gtf",
+                "analyse_transcripts/ACC5963A2.ballgown",
+                "analyse_transcripts/ACC5963A2.ballgown/e2t.ctab",
+                "analyse_transcripts/ACC5963A2.ballgown/e_data.ctab",
+                "analyse_transcripts/ACC5963A2.ballgown/i2t.ctab",
+                "analyse_transcripts/ACC5963A2.ballgown/i_data.ctab",
+                "analyse_transcripts/ACC5963A2.ballgown/t_data.ctab",
+                "analyse_transcripts/ACC5963A2.coverage.gtf",
+                "analyse_transcripts/ACC5963A2.gene.abundance.txt",
+                "analyse_transcripts/ACC5963A2.loci",
+                "analyse_transcripts/ACC5963A2.stats",
+                "analyse_transcripts/ACC5963A2.tracking",
+                "analyse_transcripts/ACC5963A2.transcripts.gtf",
                 "analyse_transcripts/ACC5963A3.ACC5963A3.transcripts.gtf.refmap",
                 "analyse_transcripts/ACC5963A3.ACC5963A3.transcripts.gtf.tmap",
                 "analyse_transcripts/ACC5963A3.annotated.gtf",
@@ -239,6 +258,9 @@
                 "bam_qc/ACC5963A1.rna_metrics",
                 "bam_qc/ACC5963A1_insert_size.pdf",
                 "bam_qc/ACC5963A1_insert_size.txt",
+                "bam_qc/ACC5963A2.rna_metrics",
+                "bam_qc/ACC5963A2_insert_size.pdf",
+                "bam_qc/ACC5963A2_insert_size.txt",
                 "bam_qc/ACC5963A3.rna_metrics",
                 "bam_qc/ACC5963A3_insert_size.pdf",
                 "bam_qc/ACC5963A3_insert_size.txt",
@@ -248,6 +270,8 @@
                 "call_variants",
                 "call_variants/ACC5963A1_split_rmdup_info.vcf.gz",
                 "call_variants/ACC5963A1_split_rmdup_info.vcf.gz.tbi",
+                "call_variants/ACC5963A2_split_rmdup_info.vcf.gz",
+                "call_variants/ACC5963A2_split_rmdup_info.vcf.gz.tbi",
                 "call_variants/ACC5963A3_split_rmdup_info.vcf.gz",
                 "call_variants/ACC5963A3_split_rmdup_info.vcf.gz.tbi",
                 "cram",
@@ -408,9 +432,16 @@
                 "ACC5963A2.SJ.out.tab:md5,dea5d6b61390b2e01699441ad0c56b05",
                 "ACC5963A2.Signal.Unique.str1.out.wig:md5,57216a6d909e526d0447c1967eae177c",
                 "ACC5963A2.Signal.UniqueMultiple.str1.out.wig:md5,0a82d7eba84b95ae25d135e994a44c28",
+                "ACC5963A2_downsmapled.bam:md5,ff663a11e7d781aeacfe017fcf2dcfe7",
+                "ACC5963A2_downsmapled.bam.bai:md5,444033ff1e2027388b27f2c164dcbd12",
                 "ACC5963A3.bam:md5,20a8f0d5c77d4fe6dda8359e39f0385a",
                 "ACC5963A3_downsmapled.bam:md5,8a226eab3576ab8ea697edeaca52f579",
                 "ACC5963A3_downsmapled.bam.bai:md5,6fcdd214aa790628abcf0e1e9b9dcde2",
+                "e2t.ctab:md5,3ba87d66102fe6b94aa9a407446eeee9",
+                "e_data.ctab:md5,6120ca51e6b8bb3c25fba75ac59da997",
+                "i2t.ctab:md5,37bfc663c6ab9bfd37a6425b4ea082eb",
+                "i_data.ctab:md5,a64ec517859ed296146a5497ec5cf645",
+                "t_data.ctab:md5,adea5cce0d453ca8108143842b21157c",
                 "e2t.ctab:md5,3ba87d66102fe6b94aa9a407446eeee9",
                 "e_data.ctab:md5,6120ca51e6b8bb3c25fba75ac59da997",
                 "i2t.ctab:md5,37bfc663c6ab9bfd37a6425b4ea082eb",
@@ -475,6 +506,10 @@
                     "87218b31373548955734d112cda151f"
                 ],
                 [
+                    "ACC5963A2_downsmapled.bam",
+                    "57dde27b0db993b675f26b78939cbd8a"
+                ],
+                [
                     "ACC5963A3.bam",
                     "87218b31373548955734d112cda151f"
                 ],
@@ -490,22 +525,26 @@
             [
                 [
                     "finequagga_split_rmdup_vep.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=2, variantCount=805, phased=false, phasedAutodetect=false]"
+                    "VcfFile [chromosomes=[chr21], sampleCount=3, variantCount=805, phased=false, phasedAutodetect=false]"
                 ],
                 [
                     "finequagga_vep_clinical.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=2, variantCount=113, phased=false, phasedAutodetect=false]"
+                    "VcfFile [chromosomes=[chr21], sampleCount=3, variantCount=113, phased=false, phasedAutodetect=false]"
                 ],
                 [
                     "finequagga_vep_research.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=2, variantCount=805, phased=false, phasedAutodetect=false]"
+                    "VcfFile [chromosomes=[chr21], sampleCount=3, variantCount=805, phased=false, phasedAutodetect=false]"
                 ],
                 [
                     "finequagga_split_rmdup.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=2, variantCount=805, phased=false, phasedAutodetect=false]"
+                    "VcfFile [chromosomes=[chr21], sampleCount=3, variantCount=805, phased=false, phasedAutodetect=false]"
                 ],
                 [
                     "ACC5963A1_split_rmdup_info.vcf.gz",
+                    "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
+                ],
+                [
+                    "ACC5963A2_split_rmdup_info.vcf.gz",
                     "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
                 ],
                 [
@@ -518,6 +557,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-03-25T16:03:20.654776"
+        "timestamp": "2025-03-26T08:53:10.248791"
     }
 }

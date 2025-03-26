@@ -1,7 +1,7 @@
 {
     "test profile": {
         "content": [
-            25,
+            28,
             {
                 "BEDTOINTERVALLIST": {
                     "gatk4": "4.5.0.0"
@@ -85,6 +85,8 @@
                 "alignment/ACC5963A2.SJ.out.tab",
                 "alignment/ACC5963A2.Signal.Unique.str1.out.wig",
                 "alignment/ACC5963A2.Signal.UniqueMultiple.str1.out.wig",
+                "alignment/ACC5963A2.cram",
+                "alignment/ACC5963A2.cram.crai",
                 "alignment/ACC5963A2/aux_info",
                 "alignment/ACC5963A2/aux_info/ambig_info.tsv",
                 "alignment/ACC5963A2/aux_info/exp_gc.gz",
@@ -112,6 +114,9 @@
                 "bam_qc/ACC5963A1.rna_metrics",
                 "bam_qc/ACC5963A1_insert_size.pdf",
                 "bam_qc/ACC5963A1_insert_size.txt",
+                "bam_qc/ACC5963A2.rna_metrics",
+                "bam_qc/ACC5963A2_insert_size.pdf",
+                "bam_qc/ACC5963A2_insert_size.txt",
                 "bam_qc/ACC5963A3.rna_metrics",
                 "bam_qc/ACC5963A3_insert_size.pdf",
                 "bam_qc/ACC5963A3_insert_size.txt",
@@ -304,6 +309,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-03-25T16:08:29.51856"
+        "timestamp": "2025-03-26T08:58:28.267271"
     }
 }
