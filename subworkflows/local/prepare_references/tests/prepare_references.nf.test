@@ -24,7 +24,7 @@ nextflow_workflow {
                 input[3] =  Channel.of([
                     [ id:'grch37_chr21'], file("${projectDir}/test_data/grch37_chr21.gtf.gz", checkIfExists: true)
                     ])
-                input[4] =  Channel.of([ 
+                input[4] =  Channel.of([
                     file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)
                     ])
                 input[5] =  Channel.empty()
