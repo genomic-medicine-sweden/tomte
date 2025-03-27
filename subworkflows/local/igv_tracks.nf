@@ -33,7 +33,7 @@ workflow IGV_TRACKS {
         )
         ch_versions = ch_versions.mix(JUNCTION_TRACK.out.versions.first())
 
-        // Bgzipping and creating tbi file for junction track
+        // Bgziping and creating tbi file for junction track
         TABIX_BGZIPTABIX(
             JUNCTION_TRACK.out.bed
         )

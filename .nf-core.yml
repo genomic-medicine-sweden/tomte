@@ -1,3 +1,4 @@
+bump_version: null
 lint:
   files_exist:
     - assets/nf-core-tomte_logo_light.png
@@ -27,8 +28,8 @@ lint:
   nextflow_config:
     - manifest.name
     - manifest.homePage
-  template_strings: false
-nf_core_version: 3.2.0
+nf_core_version: 3.0.2
+org_path: null
 repository_type: pipeline
 template:
   author: lucpen
@@ -38,4 +39,6 @@ template:
   name: tomte
   org: genomic-medicine-sweden
   outdir: .
+  skip_features: null
   version: 2.2.1
+update: null
