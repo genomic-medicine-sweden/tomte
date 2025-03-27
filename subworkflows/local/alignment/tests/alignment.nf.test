@@ -1,7 +1,7 @@
 nextflow_workflow {
 
     name "Test Workflow ALIGNMENT"
-    script "../alignment.nf"
+    script "../main.nf"
     workflow "ALIGNMENT"
     config "./nextflow.config"
     tag "alignment"
