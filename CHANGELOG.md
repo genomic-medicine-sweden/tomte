@@ -3,6 +3,43 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## X.X.X - TBD [XXXX-XX-XX]
+
+### `Added`
+
+- Added the option of starting from a bam or cram file [#193](https://github.com/genomic-medicine-sweden/tomte/pull/193)
+- Optionally run Peddy for per-sample sex- and heterozygosity checks [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
+- Optionally calculate percentage mapping to hemoglobin genes (or any other set of genes provided) [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
+- Added the option of providing sex as 0, 1, or 2 as in the raredisease pipeline [#192](https://github.com/genomic-medicine-sweden/tomte/pull/192)
+- Nf-test for pipeline [#207](https://github.com/genomic-medicine-sweden/tomte/pull/207)
+- Output channels to Tomte, allowing it to run as part of a larger pipeline [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+
+### `Parameters`
+
+| Old parameter | New parameter              |
+| ------------- | -------------------------- |
+|               | `--skip_peddy`             |
+|               | `--skip_calculate_hb_frac` |
+|               | `--hb_genes`               |
+|               | `--trace_report_suffix`    |
+
+### `Changed`
+
+- Updated nf-core/tools template to v3.1.2 [#204](https://github.com/genomic-medicine-sweden/tomte/pull/204)
+- Updated nf-core/tools template to v3.2.0 [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
+- Updated multiqc module [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
+- Updated gatk4/splitncigarreads module [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+
+| Tool                   | Old version | New version |
+| ---------------------- | ----------- | ----------- |
+| multiqc                | 1.25.1      | 1.27        |
+| gatk4/splitncigarreads | 4.5.0.0     | 4.6.1.0     |
+
+### `Fixed`
+
+- GENCODE_DOWNLOAD stub crashes by removing double versions.yml write. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+- Default peddy parent ID to "0" if not present. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+
 ## 3.0.1 - Snowman [2025-03-26]
 
 ### `Fixed`

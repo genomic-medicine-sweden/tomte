@@ -73,40 +73,43 @@ workflow PIPELINE_INITIALISATION {
     //
 
     Channel
-    .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-    .tap { ch_original_input }
-    .map { meta, fastq_1, fastq_2 -> meta.id }
-    .reduce([:]) { counts, sample -> // get counts of each sample in the samplesheet - for groupTuple
-        counts[sample] = (counts[sample] ?: 0) + 1
-        counts
-    }
-    .combine ( ch_original_input )
-    .map { counts, meta, fastq_1, fastq_2 ->
-        if (!fastq_2) {
-            return [ meta + [ single_end:true, fq_pairs:counts[meta.id] ], [ fastq_1 ] ]
-        } else {
-            return [ meta + [ single_end:false, fq_pairs:counts[meta.id] ], [ fastq_1, fastq_2 ] ]
+        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+        .tap { ch_original_input }
+        .map { meta, fastq_1, fastq_2, bam_cram, bai_crai -> meta.id }
+        .reduce([:]) { counts, sample ->
+            counts[sample] = (counts[sample] ?: 0) + 1
+            counts
         }
-    }
-    .tap { ch_input_counts }
-    .map { meta, fastqs -> fastqs }
-    .reduce([:]) { counts, fastqs -> // get number of fastq sets in the run - for creating unique ID:s
-        counts[fastqs] = counts.size() + 1
-        return counts
-    }
-    .combine( ch_input_counts )
-    .map { lineno, meta, fastqs -> // append line number to sample id for unique set ids
-        new_meta = meta + [id:meta.id+"_id"+lineno[fastqs]]
-        return [ new_meta, fastqs ]
-    }
-    .tap { ch_samplesheet } // Output, the rest is just for validation
-    .map { meta, fastqs ->
-        return [ meta.sample, groupKey( meta + [id:meta.sample], meta.fq_pairs ), fastqs ]
-    }
-    .groupTuple()
-    .map {
-        validateInputSamplesheet(it)
-    }
+        .combine ( ch_original_input )
+        .map { counts, meta, fastq_1, fastq_2, bam_cram, bai_crai ->
+            if (bam_cram) {
+                return [ meta + [ single_end:false, fq_pairs:counts[meta.id], is_fastq:false ], [ bam_cram, bai_crai ] ]
+            } else if (!fastq_2) {
+                return [ meta + [ single_end:true, fq_pairs:counts[meta.id], is_fastq:true ], [ fastq_1 ] ]
+            } else {
+                return [ meta + [ single_end:false, fq_pairs:counts[meta.id], is_fastq:true ], [ fastq_1, fastq_2 ] ]
+            }
+        }
+        .tap { ch_input_counts }
+        .map { meta, files -> [meta.id, files] }
+        .reduce([:]) { counts, id_files ->
+            counts[id_files[0]] = (counts[id_files[0]] ?: [:])
+            counts[id_files[0]][id_files[1]] = counts[id_files[0]].size() + 1
+            return counts
+        }
+        .combine( ch_input_counts )
+        .map { lineno, meta, files ->
+            new_meta = meta.is_fastq ? meta + [id:meta.id+"_id"+lineno[meta.id][files]] : meta
+            return [ new_meta, files ]
+        }
+        .tap { ch_samplesheet }
+        .map { meta, files ->
+            return [ meta.sample, groupKey( meta + [id:meta.sample], meta.fq_pairs ), files ]
+        }
+        .groupTuple()
+        .map {
+            validateInputSamplesheet(it)
+        }
 
     emit:
     samplesheet = ch_samplesheet
@@ -176,16 +179,22 @@ def validateInputParameters() {
 // Validate channels from input samplesheet
 //
 def validateInputSamplesheet(input) {
-    def (metas, fastqs) = input[1..2]
+    def (metas, files) = input[1..2]
+        if (metas[0].is_fastq) {
+            // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
+            def endedness_ok = metas.collect{ meta -> meta.single_end }.unique().size == 1
+            if (!endedness_ok) {
+                error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+            }
+        } else {
+            if (files.flatten().size() != 2) {
+                error("BAM/CRAM input for sample ${metas.sample} should have both BAM/CRAM and BAI/CRAI files.")
+            }
+        }
 
-    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
-    def endedness_ok = metas.collect{ meta -> meta.single_end }.unique().size == 1
-    if (!endedness_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
-    }
-
-    return [ metas[0], fastqs ]
+    return [ metas[0], files ]
 }
+
 //
 // Get attribute from genome config file e.g. fasta
 //
@@ -263,7 +272,7 @@ def toolBibliographyText() {
 }
 
 def methodsDescriptionText(mqc_methods_yaml) {
-    // Convert  to a named map so can be used as with familar NXF ${workflow} variable syntax in the MultiQC YML file
+    // Convert to a named map so can be used as with familar NXF ${workflow} variable syntax in the MultiQC YML file
     def meta = [:]
     meta.workflow = workflow.toMap()
     meta["manifest_map"] = workflow.manifest.toMap()

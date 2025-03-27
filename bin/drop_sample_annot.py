@@ -5,7 +5,7 @@ import csv
 from pandas import read_csv, DataFrame, concat, isna
 import os
 
-SCRIPT_VERSION = "1.1"
+SCRIPT_VERSION = "1.2"
 SAMPLE_ANNOTATION_COLUMNS = [
     "RNA_ID",
     "RNA_BAM_FILE",
@@ -36,9 +36,7 @@ def write_sample_annotation_to_tsv(
 ):
     """Write the Sample Annotation tsv file."""
     with open(out_file, "w") as tsv_file:
-        writer = csv.DictWriter(
-            tsv_file, fieldnames=SAMPLE_ANNOTATION_COLUMNS, delimiter="\t"
-        )
+        writer = csv.DictWriter(tsv_file, fieldnames=SAMPLE_ANNOTATION_COLUMNS, delimiter="\t")
         writer.writeheader()
         for index, id in enumerate(samples):
             sa_dict: dict = {}.fromkeys(SAMPLE_ANNOTATION_COLUMNS, "NA")
@@ -78,11 +76,7 @@ def count_mode(sample_count_mode: str) -> str:
 
 def count_overlaps(sample_count_overlap: str) -> str:
     """Logical funciton to determine if count overlap is given or default "TRUE" should be used"""
-    if (
-        isna(sample_count_overlap)
-        or sample_count_overlap == ""
-        or sample_count_overlap == "NA"
-    ):
+    if isna(sample_count_overlap) or sample_count_overlap == "" or sample_count_overlap == "NA":
         return True
     else:
         return sample_count_overlap
@@ -116,18 +110,17 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
         df_reference: DataFrame = read_csv(ref_annot, sep="\t")
         df_reference["GENE_COUNTS_FILE"] = ref_count_file
         df_reference["SPLICE_COUNTS_DIR"] = (
-            df_reference["SPLICE_COUNTS_DIR"].str.rstrip("/").apply(os.path.basename)
+            df_reference["SPLICE_COUNTS_DIR"]
+            .fillna("NA")
+            .str.rstrip("/")
+            .apply(lambda x: os.path.basename(x) if x != "NA" else x)
         )
         df_reference["DROP_GROUP"] = df_reference["DROP_GROUP"].str.replace(" ", "")
-        df_samples["COUNT_OVERLAPS"] = count_overlaps(
-            df_reference["COUNT_OVERLAPS"].iloc[0]
-        )
+        df_samples["COUNT_OVERLAPS"] = count_overlaps(df_reference["COUNT_OVERLAPS"].iloc[0])
         df_samples["COUNT_MODE"] = count_mode(df_reference["COUNT_MODE"].iloc[0])
         df_samples["HPO_TERMS"] = df_reference["HPO_TERMS"].iloc[0]
         for id in df_samples["RNA_ID"]:
-            df_reference = df_reference[
-                df_reference["RNA_ID"].str.contains(id) == False
-            ]
+            df_reference = df_reference[df_reference["RNA_ID"].str.contains(id) == False]
         df: DataFrame = concat([df_samples, df_reference]).reset_index(drop=True)
         df.fillna("NA", inplace=True)
         df.to_csv(out_file, index=False, sep="\t")
@@ -156,9 +149,7 @@ def parse_args(argv=None):
     parser.add_argument(
         "--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True
     )
-    parser.add_argument(
-        "--sex", type=str, nargs="+", help="Sex of samples", required=True
-    )
+    parser.add_argument("--sex", type=str, nargs="+", help="Sex of samples", required=True)
     parser.add_argument(
         "--single_end",
         type=str,
