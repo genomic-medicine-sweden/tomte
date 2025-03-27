@@ -1,0 +1,56 @@
+nextflow_workflow {
+
+    name "Test Workflow PREPARE_REFERENCES"
+    script "../main.nf"
+    workflow "PREPARE_REFERENCES"
+    config "./nextflow.config"
+    tag "prepare_references"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                // define parameters here. Example:
+                // outdir = "tests/results"
+            }
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] =  Channel.of([
+                    [ id:'grch37_chr21'], file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+                    ])
+                input[1] =  Channel.empty()
+                input[2] =  Channel.empty()
+                input[3] =  Channel.of([
+                    [ id:'grch37_chr21'], file("${projectDir}/test_data/grch37_chr21.gtf.gz", checkIfExists: true)
+                    ])
+                input[4] =  Channel.of([ 
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)
+                    ])
+                input[5] =  Channel.empty()
+                input[6] =  Channel.empty()
+                input[7] =  Channel.empty()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.versions,
+                    workflow.out.chrom_sizes,
+                    workflow.out.fasta_fai,
+                    workflow.out.gtf,
+                    workflow.out.sequence_dict,
+                    workflow.out.refflat,
+                    workflow.out.rrna_bed,
+                    workflow.out.interval_list,
+                    workflow.out.vep_cache,
+                ).match() }
+            )
+        }
+
+    }
+
+}
