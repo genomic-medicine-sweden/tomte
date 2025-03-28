@@ -2,21 +2,21 @@
 // Prepare reference files
 //
 
-include { GUNZIP as GUNZIP_FASTA                       } from '../../modules/nf-core/gunzip/main'
-include { GATK4_BEDTOINTERVALLIST as BEDTOINTERVALLIST } from '../../modules/nf-core/gatk4/bedtointervallist/main'
-include { GATK4_CREATESEQUENCEDICTIONARY as BUILD_DICT } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
-include { GUNZIP as GUNZIP_GTF                         } from '../../modules/nf-core/gunzip/main'
-include { GET_RRNA_TRANSCRIPTS                         } from '../../modules/local/get_rrna_transcripts'
-include { GTFTOGENEPRED_REFFLAT as GTF_TO_REFFLAT      } from '../../modules/local/gtftorefflat'
-include { GET_CHROM_SIZES                              } from '../../modules/local/get_chrom_sizes'
-include { GUNZIP as GUNZIP_TRFASTA                     } from '../../modules/nf-core/gunzip/main'
-include { GFFREAD                                      } from '../../modules/local/gffread'
-include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME      } from '../../modules/nf-core/samtools/faidx/main'
-include { UNTAR as UNTAR_STAR_INDEX                    } from '../../modules/nf-core/untar/main'
-include { STAR_GENOMEGENERATE as BUILD_STAR_GENOME     } from '../../modules/nf-core/star/genomegenerate/main'
-include { UNTAR as UNTAR_VEP_CACHE                     } from '../../modules/nf-core/untar/main'
-include { UNTAR as UNTAR_SALMON_INDEX                  } from '../../modules/nf-core/untar/main'
-include { SALMON_INDEX as SALMON_INDEX                 } from '../../modules/nf-core/salmon/index/main'
+include { GUNZIP as GUNZIP_FASTA                       } from '../../../modules/nf-core/gunzip/main'
+include { GATK4_BEDTOINTERVALLIST as BEDTOINTERVALLIST } from '../../../modules/nf-core/gatk4/bedtointervallist/main'
+include { GATK4_CREATESEQUENCEDICTIONARY as BUILD_DICT } from '../../../modules/nf-core/gatk4/createsequencedictionary/main'
+include { GUNZIP as GUNZIP_GTF                         } from '../../../modules/nf-core/gunzip/main'
+include { GET_RRNA_TRANSCRIPTS                         } from '../../../modules/local/get_rrna_transcripts'
+include { GTFTOGENEPRED_REFFLAT as GTF_TO_REFFLAT      } from '../../../modules/local/gtftorefflat'
+include { GET_CHROM_SIZES                              } from '../../../modules/local/get_chrom_sizes'
+include { GUNZIP as GUNZIP_TRFASTA                     } from '../../../modules/nf-core/gunzip/main'
+include { GFFREAD                                      } from '../../../modules/local/gffread'
+include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME      } from '../../../modules/nf-core/samtools/faidx/main'
+include { UNTAR as UNTAR_STAR_INDEX                    } from '../../../modules/nf-core/untar/main'
+include { STAR_GENOMEGENERATE as BUILD_STAR_GENOME     } from '../../../modules/nf-core/star/genomegenerate/main'
+include { UNTAR as UNTAR_VEP_CACHE                     } from '../../../modules/nf-core/untar/main'
+include { UNTAR as UNTAR_SALMON_INDEX                  } from '../../../modules/nf-core/untar/main'
+include { SALMON_INDEX as SALMON_INDEX                 } from '../../../modules/nf-core/salmon/index/main'
 
 workflow PREPARE_REFERENCES {
     take:
