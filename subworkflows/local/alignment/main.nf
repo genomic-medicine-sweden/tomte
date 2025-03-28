@@ -2,14 +2,14 @@
 // Alignment
 //
 
-include { CAT_FASTQ            } from '../../modules/nf-core/cat/fastq/main'
-include { FASTP                } from '../../modules/nf-core/fastp/main'
-include { STAR_ALIGN           } from '../../modules/nf-core/star/align/main'
-include { SAMTOOLS_INDEX       } from '../../modules/nf-core/samtools/index/main'
-include { RNA_DOWNSAMPLE       } from '../../modules/local/rna_downsample'
-include { RNA_SUBSAMPLE_REGION } from '../../modules/local/rna_subsample_region.nf'
-include { SALMON_QUANT         } from '../../modules/nf-core/salmon/quant/main'
-include { SAMTOOLS_VIEW        } from '../../modules/nf-core/samtools/view/main'
+include { CAT_FASTQ            } from '../../../modules/nf-core/cat/fastq/main'
+include { FASTP                } from '../../../modules/nf-core/fastp/main'
+include { STAR_ALIGN           } from '../../../modules/nf-core/star/align/main'
+include { SAMTOOLS_INDEX       } from '../../../modules/nf-core/samtools/index/main'
+include { RNA_DOWNSAMPLE       } from '../../../modules/local/rna_downsample'
+include { RNA_SUBSAMPLE_REGION } from '../../../modules/local/rna_subsample_region.nf'
+include { SALMON_QUANT         } from '../../../modules/nf-core/salmon/quant/main'
+include { SAMTOOLS_VIEW        } from '../../../modules/nf-core/samtools/view/main'
 
 workflow ALIGNMENT {
     take:
@@ -28,7 +28,6 @@ workflow ALIGNMENT {
 
     main:
         ch_versions = Channel.empty()
-
         ch_fastq = branchFastqToSingleAndMulti(ch_fastq_input_reads)
 
         CAT_FASTQ(ch_fastq.multiple_fq)
@@ -42,9 +41,11 @@ workflow ALIGNMENT {
         ch_bam_input_reads = ch_bam_bai_input_reads.map { meta, bambai -> [ meta, bambai[0] ] }
         ch_bai_input_reads = ch_bam_bai_input_reads.map { meta, bambai -> [ meta, bambai[1] ] }
 
-        ch_bam_2_process = ch_bam_input_reads.mix(STAR_ALIGN.out.bam_sorted_aligned)
+        ch_bam_from_star = STAR_ALIGN.out.bam_sorted_aligned
 
-        SAMTOOLS_INDEX( STAR_ALIGN.out.bam_sorted_aligned )
+        ch_bam_2_process = ch_bam_input_reads.mix(ch_bam_from_star)
+
+        SAMTOOLS_INDEX( ch_bam_from_star )
         ch_bai = ch_bai_input_reads.mix(SAMTOOLS_INDEX.out.bai)
 
         ch_bam_bai_not_downsamp = Channel.empty()
@@ -72,7 +73,7 @@ workflow ALIGNMENT {
             }
         }
 
-        SAMTOOLS_VIEW( ch_bam_2_process.join(ch_bai), ch_genome_fasta, [] )
+        SAMTOOLS_VIEW( ch_bam_2_process.join(ch_bai), ch_genome_fasta, [], 'crai' )
 
         SALMON_QUANT( FASTP.out.reads, salmon_index, ch_gtf.map{ meta, gtf ->  gtf  }, [], false, 'A')
 

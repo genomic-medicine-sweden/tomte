@@ -37,6 +37,7 @@ jobs:
           - "tomte_no_skip"
           - "tomte_skip"
           - "prepare_references"
+          - "alignment"
         profile:
           - "docker"
           - "singularity"
