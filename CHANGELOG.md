@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the option of providing sex as 0, 1, or 2 as in the raredisease pipeline [#192](https://github.com/genomic-medicine-sweden/tomte/pull/192)
 - Nf-test for pipeline [#207](https://github.com/genomic-medicine-sweden/tomte/pull/207)
 - Output channels to Tomte, allowing it to run as part of a larger pipeline [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+- Nf-test for alignment subworkflow [#209](https://github.com/genomic-medicine-sweden/tomte/pull/209)
 
 ### `Parameters`
 

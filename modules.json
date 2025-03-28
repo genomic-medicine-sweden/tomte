@@ -150,7 +150,7 @@
                     },
                     "samtools/view": {
                         "branch": "master",
-                        "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
+                        "git_sha": "e9bca09da225e5132d45a32bf830a434843bb5be",
                         "installed_by": ["modules"]
                     },
                     "star/align": {

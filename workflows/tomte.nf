@@ -19,7 +19,7 @@ include { SAMTOOLS_CONVERT as CRAM_TO_BAM } from '../modules/nf-core/samtools/co
 //
 include { DOWNLOAD_REFERENCES     } from '../subworkflows/local/download_references'
 include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_references'
-include { ALIGNMENT               } from '../subworkflows/local/alignment'
+include { ALIGNMENT               } from '../subworkflows/local/alignment/main'
 include { BAM_QC                  } from '../subworkflows/local/bam_qc'
 include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts'
 include { CALL_VARIANTS           } from '../subworkflows/local/call_variants'
@@ -62,10 +62,8 @@ workflow TOMTE {
     // Optional
     ch_fasta                      = params.fasta                        ? Channel.fromPath(params.fasta).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : downloads.fasta.map {it -> [[id:it.getSimpleName()], it]}.collect()
-    ch_fasta.view()
     ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : downloads.gtf.map {it -> [[id:it.getSimpleName()], it]}.collect()
-    ch_gtf.view()
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
                                                                         : Channel.empty().mix(downloads.vep_cache)
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
