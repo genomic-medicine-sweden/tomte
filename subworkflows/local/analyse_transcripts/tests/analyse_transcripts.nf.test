@@ -1,0 +1,105 @@
+nextflow_workflow {
+
+    name "Test Workflow ANALYSE_TRANSCRIPTS"
+    script "../main.nf"
+    workflow "ANALYSE_TRANSCRIPTS"
+    tag "analyse_transcripts"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'fasta' ],
+                    file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("SAMTOOLS_FAIDX") {
+            script "../../../../modules/nf-core/samtools/faidx/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                input[1] = [[],[]]
+                """
+            }
+        }
+
+        run("GUNZIP", alias: "GUNZIP_GTF") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'gtf' ],
+                    file("${projectDir}/test_data/grch37_chr21.gtf.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+    }
+
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                skip_drop_as = 'false'
+            }
+            workflow {
+                """
+                input[0]  = Channel.of([
+                    [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                    file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                    file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                    ])
+                input[1]  = Channel.of([
+                    [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                    file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                    file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                    ])
+                input[2]  = GUNZIP_GTF.out.gunzip
+                input[3]  = GUNZIP_FASTA.out.gunzip.join(SAMTOOLS_FAIDX.out.fai)
+                input[4]  = Channel.of([ file("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true) ])
+                input[5]  = Channel.of([ file("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true) ])
+                input[6]  = Channel.of([ file("${projectDir}/test_data/drop_data", checkIfExists: true) ])
+                input[7]  = 'GRCh37'
+                input[8]  = 'outrider'
+                input[9]  = 'fraser'
+                input[10] = 1
+                input[11] = 1
+                input[12] = 2.5
+                input[13] = Channel.of([ file("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true) ])
+                input[14] = 'finequagga'
+                input[15] = 'false'
+                input[16] = 'true'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                {assert workflow.success},
+                {assert snapshot(
+                    file(workflow.out.transcript_gtf.get(0).get(1)).name,
+                    file(workflow.out.abundance.get(0).get(1)).name,
+                    file(workflow.out.coverage_gtf.get(0).get(1)).name,
+                    file(workflow.out.annotated_gtf.get(0).get(1)).name,
+                    workflow.out.stats_gtf,
+                    workflow.out.annotation_drop,
+                    workflow.out.config_drop_ae.collect{ file(it).name },
+                    workflow.out.config_drop_as.collect{ file(it).name },
+                    workflow.out.drop_ae_out_clinical.collect{ file(it).name },
+                    workflow.out.drop_ae_out_research.collect{ file(it).name },
+                    workflow.out.drop_as_out_clinical.collect{ file(it).name },
+                    workflow.out.drop_as_out_research.collect{ file(it).name },
+                    workflow.out.versions,
+                ).match()} 
+            )
+        }
+
+    }
+
+}

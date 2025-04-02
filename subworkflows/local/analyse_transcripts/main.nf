@@ -2,21 +2,20 @@
 // ANALYSE TRANSCRITPS
 //
 
-include { STRINGTIE_STRINGTIE               } from '../../modules/nf-core/stringtie/stringtie/main'
-include { GFFCOMPARE                        } from '../../modules/nf-core/gffcompare/main'
-include { DROP_SAMPLE_ANNOT                 } from '../../modules/local/drop_sample_annot'
-include { DROP_CONFIG_RUN_AE                } from '../../modules/local/drop_config_runAE'
-include { DROP_CONFIG_RUN_AS                } from '../../modules/local/drop_config_runAS'
-include { DROP_FILTER_RESULTS               } from '../../modules/local/drop_filter_results'
-include { DROP_PUT_TOGETHER_EXPORTED_COUNTS } from '../../modules/local/drop_put_together_exported_couts.nf'
+include { STRINGTIE_STRINGTIE               } from '../../../modules/nf-core/stringtie/stringtie/main'
+include { GFFCOMPARE                        } from '../../../modules/nf-core/gffcompare/main'
+include { DROP_SAMPLE_ANNOT                 } from '../../../modules/local/drop_sample_annot'
+include { DROP_CONFIG_RUN_AE                } from '../../../modules/local/drop_config_runAE'
+include { DROP_CONFIG_RUN_AS                } from '../../../modules/local/drop_config_runAS'
+include { DROP_FILTER_RESULTS               } from '../../../modules/local/drop_filter_results'
+include { DROP_PUT_TOGETHER_EXPORTED_COUNTS } from '../../../modules/local/drop_put_together_exported_couts.nf'
 
 workflow ANALYSE_TRANSCRIPTS {
     take:
-        ch_bam_bai                    // channel:   [mandatory] [ val(meta), [ path(bam) ],[ path(bai) ] ]
-        ch_bam_ds_bai                 // channel:   [mandatory] [ val(meta), [ path(bam) ],[ path(bai) ] ]
+        ch_bam_bai                    // channel:   [mandatory] [ val(meta), [ path(bam) , path(bai) ] ]
+        ch_bam_ds_bai                 // channel:   [mandatory] [ val(meta), [ path(bam) , path(bai) ] ]
         ch_gtf                        // channel:   [mandatory] [ val(meta), [ path(gtf) ] ]
         ch_fasta_fai                  // channel:   [mandatory] [ val(meta), [ path(fasta), path(fai) ]
-        gene_counts                   // channel:   [optional]  [ val(meta), path(tsv) ]
         ch_ref_drop_count_file        // channel:   [optional]  [ path(tsv) ]
         ch_ref_drop_annot_file        // channel:   [optional]  [ path(tsv) ]
         ch_ref_drop_splice_folder     // channel:   [optional]  [ path(folder) ]
