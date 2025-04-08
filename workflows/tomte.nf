@@ -169,6 +169,7 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(BAM_QC.out.versions)
 
+
     ANALYSE_TRANSCRIPTS(
         ch_alignment.bam_bai,
         ch_alignment.bam_ds_bai,
