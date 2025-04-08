@@ -40,7 +40,7 @@ nextflow_workflow {
                 """
             }
         }
-        
+
         run("SAMTOOLS_CONVERT", alias: "CRAM_TO_BAM") {
         script "../../../../modules/nf-core/samtools/convert/main.nf"
         process {
@@ -55,7 +55,7 @@ nextflow_workflow {
             """
             }
         }
-    
+
     }
 
     test("Should run with two samples") {
@@ -177,7 +177,7 @@ nextflow_workflow {
                     workflow.out.drop_as_out_clinical.collect{ file(it).name },
                     workflow.out.drop_as_out_research.collect{ file(it).name },
                     workflow.out.versions,
-                ).match()} 
+                ).match()}
             )
         }
 
