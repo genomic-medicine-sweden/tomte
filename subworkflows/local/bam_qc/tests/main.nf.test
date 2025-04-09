@@ -1,0 +1,97 @@
+nextflow_workflow {
+
+    name "Test Workflow BAM_QC"
+    script "../main.nf"
+    workflow "BAM_QC"
+    config "./nextflow.config"
+    tag "bam_qc"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'fasta' ],
+                    file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("GUNZIP", alias: "GUNZIP_GTF") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'gtf' ],
+                    file("${projectDir}/test_data/grch37_chr21.gtf.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("GTFTOGENEPRED_REFFLAT", alias: "GTF_TO_REFFLAT") {
+            script "../../../../modules/local/gtftorefflat"
+            process {
+                """
+                input[0] = GUNZIP_GTF.out.gunzip.collect()
+                """
+            }
+        }
+
+        run("GET_RRNA_TRANSCRIPTS") {
+            script "../../../../modules/local/get_rrna_transcripts"
+            process {
+                """
+                input[0] = GUNZIP_GTF.out.gunzip.collect()
+                """
+            }
+        }
+
+        run("GATK4_CREATESEQUENCEDICTIONARY", alias: "BUILD_DICT") {
+            script "../../../../modules/nf-core/gatk4/createsequencedictionary/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                """
+            }
+        }
+
+        run("GATK4_BEDTOINTERVALLIST", alias:"BEDTOINTERVALLIST") {
+            script "../../../../modules/nf-core/gatk4/bedtointervallist/main"
+            process {
+                """
+                input[0] = GET_RRNA_TRANSCRIPTS.out.bed.map { it -> [ [id:it.name], it ] }
+                input[1] = BUILD_DICT.out.dict
+                """
+            }
+        }
+    }
+
+
+    test("Should run without failures") {
+
+        when {
+            workflow {
+                """
+                ch_bam = Channel.of([
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true)
+                    ])
+                input[0] = ch_bam
+                input[1] = GUNZIP_FASTA.out.gunzip.collect()
+                input[2] = GTF_TO_REFFLAT.out.refflat.collect()
+                input[3] = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

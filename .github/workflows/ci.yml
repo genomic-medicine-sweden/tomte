@@ -38,6 +38,7 @@ jobs:
           - "tomte_skip"
           - "prepare_references"
           - "alignment"
+          - "bam_qc"
         profile:
           - "docker"
           - "singularity"

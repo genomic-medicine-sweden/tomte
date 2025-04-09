@@ -1,0 +1,81 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": false
+                        },
+                        "ACC5963A1.rna_metrics:md5,75c3d02efa34c8b7f26805df3bf5417e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": false
+                        },
+                        "ACC5963A1_insert_size.txt:md5,14da0c9fa0c69cf155b98be052ad2da1"
+                    ]
+                ],
+                "2": [
+                    "versions.yml:md5,05c28410db2da889c4c244fd2d01161f",
+                    "versions.yml:md5,5d2ce8e71f24ac4d6da4df6278d2a255"
+                ],
+                "metrics_general_rna": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": false
+                        },
+                        "ACC5963A1.rna_metrics:md5,75c3d02efa34c8b7f26805df3bf5417e"
+                    ]
+                ],
+                "metrics_insert_size": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": false
+                        },
+                        "ACC5963A1_insert_size.txt:md5,14da0c9fa0c69cf155b98be052ad2da1"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,05c28410db2da889c4c244fd2d01161f",
+                    "versions.yml:md5,5d2ce8e71f24ac4d6da4df6278d2a255"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-09T16:36:43.215984"
+    }
+}
