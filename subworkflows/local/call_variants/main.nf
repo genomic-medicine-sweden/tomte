@@ -3,13 +3,13 @@
 //
 
 // Modules
-include { BCFTOOLS_MPILEUP                     } from '../../modules/nf-core/bcftools/mpileup/main'
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../modules/nf-core/bcftools/norm/main'
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES   } from '../../modules/nf-core/bcftools/norm/main'
-include { ADD_FOUND_IN_TAG                     } from '../../modules/local/add_found_in_tag/main'
+include { BCFTOOLS_MPILEUP                     } from '../../../modules/nf-core/bcftools/mpileup/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES   } from '../../../modules/nf-core/bcftools/norm/main'
+include { ADD_FOUND_IN_TAG                     } from '../../../modules/local/add_found_in_tag/main'
 
 // Subworkflows
-include { CALL_VARIANTS_GATK } from './call_variants_gatk.nf'
+include { CALL_VARIANTS_GATK } from '../call_variants_gatk.nf'
 
 workflow CALL_VARIANTS {
     take:

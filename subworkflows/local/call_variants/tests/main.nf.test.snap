@@ -1,0 +1,76 @@
+{
+    "gatk": {
+        "content": [
+            [
+                [
+                    "chr21\t9655186\t.\tT\tC\t78.32\t.\tAC=2;AF=1;AN=2;DP=2;ExcessHet=0;FS=0;MLEAC=1;MLEAF=0.5;MQ=60;QD=25.36;SOR=0.693;FOUND_IN=gatk\tGT:AD:DP:GQ:PL\t1/1:0,2:2:6:90,6,0",
+                    "chr21\t9655192\t.\tA\tG\t78.32\t.\tAC=2;AF=1;AN=2;DP=2;ExcessHet=0;FS=0;MLEAC=1;MLEAF=0.5;MQ=60;QD=28.73;SOR=0.693;FOUND_IN=gatk\tGT:AD:DP:GQ:PL\t1/1:0,2:2:6:90,6,0"
+                ]
+            ],
+            "ACC5963A1_split_rmdup_info.vcf.gz.tbi",
+            [
+                [
+                    {
+                        "case": "finequagga",
+                        "id": "ACC5963A1",
+                        "sample": "ACC5963A1",
+                        "strandedness": "reverse",
+                        "sex": "NA",
+                        "single_end": false,
+                        "fq_pairs": 1,
+                        "is_fastq": false
+                    },
+                    "ACC5963A1.bcftools_stats.txt:md5,09a5b7beb572c5754f44f2dea20024a2"
+                ]
+            ],
+            [
+                "versions.yml:md5,0aa84c73aee35f1d02fe6b4d1bdffde2",
+                "versions.yml:md5,4c5bc1efe43ee5d2522088d5e6547a9a",
+                "versions.yml:md5,59d806d3927eedb15e480b9e6a814326",
+                "versions.yml:md5,79a201dd2139b6ac9fbb55f5c9b3d2ca"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-09T12:22:31.759062"
+    },
+    "bcftools": {
+        "content": [
+            [
+                [
+                    "chr21\t9656524\t.\tA\tG\t7.30814\t.\tDP=3;VDB=0.18;SGB=-0.453602;MQ0F=0;AC=2;AN=2;DP4=0,0,2,0;MQ=20;FOUND_IN=bcftools\tGT:PL\t1/1:36,6,0",
+                    "chr21\t9656547\t.\tG\tA\t7.30814\t.\tDP=4;VDB=0.22;SGB=-0.453602;MQ0F=0;AC=2;AN=2;DP4=0,0,2,0;MQ=20;FOUND_IN=bcftools\tGT:PL\t1/1:36,6,0"
+                ]
+            ],
+            "ACC5963A1_split_rmdup_info.vcf.gz.tbi",
+            [
+                [
+                    {
+                        "case": "finequagga",
+                        "id": "ACC5963A1",
+                        "sample": "ACC5963A1",
+                        "strandedness": "reverse",
+                        "sex": "NA",
+                        "single_end": false,
+                        "fq_pairs": 1,
+                        "is_fastq": false
+                    },
+                    "ACC5963A1.bcftools_stats.txt:md5,3b763dea64d311e1689cf52a72b33e44"
+                ]
+            ],
+            [
+                "versions.yml:md5,4c5bc1efe43ee5d2522088d5e6547a9a",
+                "versions.yml:md5,59d806d3927eedb15e480b9e6a814326",
+                "versions.yml:md5,79a201dd2139b6ac9fbb55f5c9b3d2ca",
+                "versions.yml:md5,8454ade6be56bd4f547e2b9b836fd947"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-09T11:50:51.907023"
+    }
+}
