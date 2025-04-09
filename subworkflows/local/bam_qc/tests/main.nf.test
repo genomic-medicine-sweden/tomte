@@ -93,7 +93,7 @@ nextflow_workflow {
                 file(workflow.out.metrics_general_rna.get(0).get(1)).size(),
                 file(workflow.out.metrics_insert_size.get(0).get(1)).size(),
                 workflow.out.versions
-            ).match()} 
+            ).match()}
         }
 
     }
