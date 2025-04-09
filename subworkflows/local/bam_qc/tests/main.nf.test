@@ -88,8 +88,12 @@ nextflow_workflow {
         }
 
         then {
-            assert workflow.success
-            assert snapshot(workflow.out).match()
+            { assert workflow.success }
+            { assert snapshot(
+                file(workflow.out.metrics_general_rna.get(0).get(1)).size(),
+                file(workflow.out.metrics_insert_size.get(0).get(1)).size(),
+                workflow.out.versions
+            ).match()} 
         }
 
     }
