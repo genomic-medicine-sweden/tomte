@@ -21,7 +21,7 @@ include { DOWNLOAD_REFERENCES     } from '../subworkflows/local/download_referen
 include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_references/main'
 include { ALIGNMENT               } from '../subworkflows/local/alignment/main'
 include { BAM_QC                  } from '../subworkflows/local/bam_qc'
-include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts'
+include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts/main'
 include { CALL_VARIANTS           } from '../subworkflows/local/call_variants/main'
 include { ALLELE_SPECIFIC_CALLING } from '../subworkflows/local/allele_specific_calling'
 include { ANNOTATE_SNV            } from '../subworkflows/local/annotate_snv'
@@ -169,12 +169,12 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(BAM_QC.out.versions)
 
+
     ANALYSE_TRANSCRIPTS(
         ch_alignment.bam_bai,
         ch_alignment.bam_ds_bai,
         ch_references.gtf,
         ch_references.fasta_fai,
-        ch_alignment.gene_counts,
         ch_ref_drop_count_file,
         ch_ref_drop_annot_file,
         ch_ref_drop_splice_folder,

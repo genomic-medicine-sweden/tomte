@@ -39,6 +39,7 @@ jobs:
           - "prepare_references"
           - "alignment"
           - "call_variants"
+          - "analyse_transcripts"
         profile:
           - "docker"
           - "singularity"

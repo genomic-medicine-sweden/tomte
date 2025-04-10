@@ -1,0 +1,182 @@
+nextflow_workflow {
+
+    name "Test Workflow ANALYSE_TRANSCRIPTS"
+    script "../main.nf"
+    workflow "ANALYSE_TRANSCRIPTS"
+    tag "analyse_transcripts"
+    config "./nextflow.config"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'fasta' ],
+                    file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("SAMTOOLS_FAIDX") {
+            script "../../../../modules/nf-core/samtools/faidx/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                input[1] = [[],[]]
+                """
+            }
+        }
+
+        run("GUNZIP", alias: "GUNZIP_GTF") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'gtf' ],
+                    file("${projectDir}/test_data/grch37_chr21.gtf.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("SAMTOOLS_CONVERT", alias: "CRAM_TO_BAM") {
+        script "../../../../modules/nf-core/samtools/convert/main.nf"
+        process {
+            """
+            input[0] = Channel.of([
+                [ case:'finequagga', id:'ACC5963A3', sample:'ACC5963A3', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                file("${projectDir}/test_data/ACC5963A3.cram", checkIfExists: true),
+                file("${projectDir}/test_data/ACC5963A3.cram.crai", checkIfExists: true)
+                ])
+            input[1] = GUNZIP_FASTA.out.gunzip
+            input[2] = SAMTOOLS_FAIDX.out.fai
+            """
+            }
+        }
+
+    }
+
+    test("Should run with two samples") {
+
+        when {
+            params {
+                skip_drop_as = false
+                skip_drop_ae = false
+                skip_stringtie = false
+            }
+            workflow {
+                """
+                ch_cram_converted = CRAM_TO_BAM.out.bam.collect().join(CRAM_TO_BAM.out.bai.collect())
+                // Channel for the BAM sample
+                ch_bam = Channel.of([
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                    ])
+                ch_bam_files = ch_bam.mix(ch_cram_converted)
+                input[0] = ch_bam_files
+                input[1]  = input[0]
+                input[2]  = GUNZIP_GTF.out.gunzip.collect()
+                input[3]  = GUNZIP_FASTA.out.gunzip.join(SAMTOOLS_FAIDX.out.fai).collect()
+                input[4]  = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true).collect()
+                input[5]  = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true).collect()
+                input[6]  = channel.fromPath("${projectDir}/test_data/drop_data", checkIfExists: true).collect()
+                input[7]  = 'GRCh37'
+                input[8]  = 'outrider'
+                input[9]  = 'fraser'
+                input[10] = 1
+                input[11] = 1
+                input[12] = 2.5
+                input[13] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
+                input[14] = Channel.of([probands:['ACC5963A1','ACC5963A3'], id:'finequagga']).collect()
+                input[15] = params.skip_drop_ae
+                input[16] = params.skip_export_counts_drop
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    file(workflow.out.transcript_gtf.get(0).get(1)).name,
+                    file(workflow.out.abundance.get(0).get(1)).name,
+                    file(workflow.out.coverage_gtf.get(0).get(1)).name,
+                    file(workflow.out.annotated_gtf.get(0).get(1)).name,
+                    workflow.out.stats_gtf,
+                    workflow.out.annotation_drop,
+                    workflow.out.config_drop_ae.collect{ file(it).name },
+                    workflow.out.config_drop_as.collect{ file(it).name },
+                    workflow.out.drop_ae_out_clinical.collect{ file(it).name },
+                    workflow.out.drop_ae_out_research.collect{ file(it).name },
+                    workflow.out.drop_as_out_clinical.collect{ file(it).name },
+                    workflow.out.drop_as_out_research.collect{ file(it).name },
+                    workflow.out.versions,
+                ).match()}
+            )
+        }
+        options "-stub DROP_CONFIG_RUN_AS,DROP_CONFIG_RUN_AE,DROP_FILTER_RESULTS"
+    }
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                skip_drop_as = false
+                skip_drop_ae = true
+                skip_export_counts_drop = true
+                skip_stringtie = false
+            }
+            workflow {
+                """
+                input[0]  = Channel.of([
+                    [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                    file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                    file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                    ])
+                input[1]  = input[0]
+                input[2]  = GUNZIP_GTF.out.gunzip.collect()
+                input[3]  = GUNZIP_FASTA.out.gunzip.join(SAMTOOLS_FAIDX.out.fai).collect()
+                input[4]  = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true).collect()
+                input[5]  = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true).collect()
+                input[6]  = channel.fromPath("${projectDir}/test_data/drop_data", checkIfExists: true).collect()
+                input[7]  = 'GRCh37'
+                input[8]  = 'outrider'
+                input[9]  = 'fraser'
+                input[10] = 1
+                input[11] = 1
+                input[12] = 2.5
+                input[13] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
+                input[14] = Channel.of([probands:['ACC5963A1'], id:'finequagga']).collect()
+                input[15] = params.skip_drop_ae
+                input[16] = params.skip_export_counts_drop
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                {assert workflow.success},
+                {assert snapshot(
+                    file(workflow.out.transcript_gtf.get(0).get(1)).name,
+                    file(workflow.out.abundance.get(0).get(1)).name,
+                    file(workflow.out.coverage_gtf.get(0).get(1)).name,
+                    file(workflow.out.annotated_gtf.get(0).get(1)).name,
+                    workflow.out.stats_gtf,
+                    workflow.out.annotation_drop,
+                    workflow.out.config_drop_ae.collect{ file(it).name },
+                    workflow.out.config_drop_as.collect{ file(it).name },
+                    workflow.out.drop_ae_out_clinical.collect{ file(it).name },
+                    workflow.out.drop_ae_out_research.collect{ file(it).name },
+                    workflow.out.drop_as_out_clinical.collect{ file(it).name },
+                    workflow.out.drop_as_out_research.collect{ file(it).name },
+                    workflow.out.versions,
+                ).match()}
+            )
+        }
+
+    }
+
+}
