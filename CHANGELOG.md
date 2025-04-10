@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Output channels to Tomte, allowing it to run as part of a larger pipeline [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
 - Nf-test for alignment subworkflow [#209](https://github.com/genomic-medicine-sweden/tomte/pull/209)
 - Nf-test for prepare_references subworkflow [#214](https://github.com/genomic-medicine-sweden/tomte/pull/214)
+- Nf-test for analyse_transcripts subworkflow [#215](https://github.com/genomic-medicine-sweden/tomte/pull/215)
 - Nf-test for bam_qc subworkflow [#219](https://github.com/genomic-medicine-sweden/tomte/pull/219)
 
 ### `Parameters`
