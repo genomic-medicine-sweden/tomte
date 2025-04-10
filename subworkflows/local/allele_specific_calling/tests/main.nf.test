@@ -1,0 +1,147 @@
+nextflow_workflow {
+
+    name "Test Workflow ALLELE_SPECIFIC_CALLING"
+    script "../main.nf"
+    workflow "ALLELE_SPECIFIC_CALLING"
+    config "./nextflow.config"
+    tag "allele_specific_calling"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'fasta' ],
+                    file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("SAMTOOLS_FAIDX") {
+            script "../../../../modules/nf-core/samtools/faidx/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                input[1] = [[],[]]
+                """
+            }
+        }
+
+        run("GATK4_CREATESEQUENCEDICTIONARY", alias: "BUILD_DICT") {
+            script "../../../../modules/nf-core/gatk4/createsequencedictionary/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                """
+            }
+        }
+
+        run("SAMTOOLS_CONVERT", alias: "CRAM_TO_BAM") {
+            script "../../../../modules/nf-core/samtools/convert/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ case:'finequagga', id:'ACC5963A3', sample:'ACC5963A3', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                    file("${projectDir}/test_data/ACC5963A3.cram", checkIfExists: true),
+                    file("${projectDir}/test_data/ACC5963A3.cram.crai", checkIfExists: true)
+                    ])
+                input[1] = GUNZIP_FASTA.out.gunzip
+                input[2] = SAMTOOLS_FAIDX.out.fai
+                """
+            }
+        }
+
+    }
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                // define parameters here. Example:
+                // outdir = "tests/results"
+            }
+            workflow {
+                """
+                    input[0] = Channel.of([
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        file("${projectDir}/test_data/ACC5963A1_split_rmdup_info.vcf.gz", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1_split_rmdup_info.vcf.gz.tbi", checkIfExists: true)
+                        ])
+                    input[1] = Channel.of([
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                        ])
+                    input[2] = GUNZIP_FASTA.out.gunzip.collect()
+                    input[3] = SAMTOOLS_FAIDX.out.fai.collect()
+                    input[4] = BUILD_DICT.out.dict.collect()
+                    input[5] = Channel.of([probands:['ACC5963A1'], id:'finequagga']).collect()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
+                    file(workflow.out.tbi.get(0).get(1)).name,
+                    workflow.out.versions,
+                ).match()}
+            )
+        }
+
+    }
+
+    test("Should run with two samples") {
+
+        when {
+            params {
+                // define parameters here. Example:
+                // outdir = "tests/results"
+            }
+            workflow {
+                """
+                ch_cram_converted = CRAM_TO_BAM.out.bam.collect().join(CRAM_TO_BAM.out.bai.collect())
+                // Channel for the BAM sample
+                ch_bam = Channel.of([
+                    [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                    file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                    file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                    ])
+                ch_bam_files = ch_bam.mix(ch_cram_converted)
+
+                input[0] = Channel.of([
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        file("${projectDir}/test_data/ACC5963A1_split_rmdup_info.vcf.gz", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1_split_rmdup_info.vcf.gz.tbi", checkIfExists: true)
+                        ],
+                        [[ case:'finequagga', id:'ACC5963A3', sample:'ACC5963A3', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        file("${projectDir}/test_data/ACC5963A3_split_rmdup_info.vcf.gz", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A3_split_rmdup_info.vcf.gz.tbi", checkIfExists: true)
+                        ])
+                input[1] = ch_bam_files
+                input[2] = GUNZIP_FASTA.out.gunzip.collect()
+                input[3] = SAMTOOLS_FAIDX.out.fai.collect()
+                input[4] = BUILD_DICT.out.dict.collect()
+                input[5] = Channel.of([probands:['ACC5963A1','ACC5963A3'], id:'finequagga']).collect()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
+                    file(workflow.out.tbi.get(0).get(1)).name,
+                    workflow.out.versions,
+                ).match()}
+            )
+        }
+
+    }
+
+}
