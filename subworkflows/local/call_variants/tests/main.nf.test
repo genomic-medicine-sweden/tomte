@@ -63,8 +63,8 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.vcf.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
-                    workflow.out.vcf_tbi.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
+                    workflow.out.vcf.collect{path(it[1]).vcf.summary},
+                    workflow.out.vcf_tbi.collect{path(it[1]).vcf.summary},
                     file(workflow.out.tbi.get(0).get(1)).name,
                     workflow.out.stats,
                     workflow.out.versions,
@@ -97,8 +97,8 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.vcf.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
-                    workflow.out.vcf_tbi.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
+                    workflow.out.vcf.collect{path(it[1]).vcf.summary},
+                    workflow.out.vcf_tbi.collect{path(it[1]).vcf.summary},
                     file(workflow.out.tbi.get(0).get(1)).name,
                     workflow.out.stats,
                     workflow.out.versions,
