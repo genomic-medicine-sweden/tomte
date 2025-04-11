@@ -41,9 +41,9 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = Channel.of([
-                         [ probands:[ 'ACC5963A1' ], id:'finequagga' ],
-                         file("${projectDir}/test_data/ACC5963A1_split_rmdup_info.vcf.gz", checkIfExists: true)
-                         ])
+                        [ probands:[ 'ACC5963A1' ], id:'finequagga' ],
+                        file("${projectDir}/test_data/ACC5963A1_split_rmdup_info.vcf.gz", checkIfExists: true)
+                        ])
                 input[1] = 'GRCh37'
                 input[2] = 107
                 input[3] = UNTAR_VEP_CACHE.out.untar.map{meta, vep_cache -> vep_cache}.collect()
