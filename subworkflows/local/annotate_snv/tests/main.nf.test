@@ -61,8 +61,8 @@ nextflow_workflow {
                     workflow.out.tab_gz,
                     workflow.out.json_gz,
                     file(workflow.out.report.get(0)).name,
-                    workflow.out.ch_vcf_clin.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
-                    workflow.out.ch_vcf_research.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
+                    workflow.out.ch_vcf_clin.collect{path(it[1]).vcf.summary},
+                    workflow.out.ch_vcf_research.collect{path(it[1]).vcf.summary},
                     workflow.out.versions
                 ).match() }
             )

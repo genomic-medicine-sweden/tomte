@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nf-test for alignment subworkflow [#209](https://github.com/genomic-medicine-sweden/tomte/pull/209)
 - Nf-test for prepare_references subworkflow [#214](https://github.com/genomic-medicine-sweden/tomte/pull/214)
 - Nf-test for analyse_transcripts subworkflow [#215](https://github.com/genomic-medicine-sweden/tomte/pull/215)
-- Nf-test for annotate_snv subworkflow [#220](https://github.com/genomic-medicine-sweden/tomte/pull/220)
+- Nf-test for annotate_snv subworkflow [#221](https://github.com/genomic-medicine-sweden/tomte/pull/221)
 
 ### `Parameters`
 
