@@ -1,0 +1,33 @@
+{
+    "Should run without failures": {
+        "content": [
+            [
+                "",
+                "## METRICS CLASS\tpicard.analysis.RnaSeqMetrics",
+                "PF_BASES\tPF_ALIGNED_BASES\tRIBOSOMAL_BASES\tCODING_BASES\tUTR_BASES\tINTRONIC_BASES\tINTERGENIC_BASES\tIGNORED_READS\tCORRECT_STRAND_READS\tINCORRECT_STRAND_READS\tNUM_R1_TRANSCRIPT_STRAND_READS\tNUM_R2_TRANSCRIPT_STRAND_READS\tNUM_UNEXPLAINED_READS\tPCT_R1_TRANSCRIPT_STRAND_READS\tPCT_R2_TRANSCRIPT_STRAND_READS\tPCT_RIBOSOMAL_BASES\tPCT_CODING_BASES\tPCT_UTR_BASES\tPCT_INTRONIC_BASES\tPCT_INTERGENIC_BASES\tPCT_MRNA_BASES\tPCT_USABLE_BASES\tPCT_CORRECT_STRAND_READS\tMEDIAN_CV_COVERAGE\tMEDIAN_5PRIME_BIAS\tMEDIAN_3PRIME_BIAS\tMEDIAN_5PRIME_TO_3PRIME_BIAS\tSAMPLE\tLIBRARY\tREAD_GROUP",
+                "28847684\t28757338\t0\t11864324\t11589633\t3183988\t2119393\t0\t99381\t932\t439\t49414\t517\t0.008806\t0.991194\t0\t0.412567\t0.403015\t0.110719\t0.073699\t0.815582\t0.813027\t0.990709\t0.746386\t0.32766\t0.446037\t0.2773\t\t\t",
+                "",
+                "## HISTOGRAM\tjava.lang.Integer",
+                "normalized_position\tAll_Reads.normalized_coverage"
+            ],
+            [
+                "",
+                "## METRICS CLASS\tpicard.analysis.InsertSizeMetrics",
+                "MEDIAN_INSERT_SIZE\tMODE_INSERT_SIZE\tMEDIAN_ABSOLUTE_DEVIATION\tMIN_INSERT_SIZE\tMAX_INSERT_SIZE\tMEAN_INSERT_SIZE\tSTANDARD_DEVIATION\tREAD_PAIRS\tPAIR_ORIENTATION\tWIDTH_OF_10_PERCENT\tWIDTH_OF_20_PERCENT\tWIDTH_OF_30_PERCENT\tWIDTH_OF_40_PERCENT\tWIDTH_OF_50_PERCENT\tWIDTH_OF_60_PERCENT\tWIDTH_OF_70_PERCENT\tWIDTH_OF_80_PERCENT\tWIDTH_OF_90_PERCENT\tWIDTH_OF_95_PERCENT\tWIDTH_OF_99_PERCENT\tSAMPLE\tLIBRARY\tREAD_GROUP",
+                "170\t112\t53\t52\t665553\t171.760746\t86.703244\t104178\tFR\t25\t47\t67\t87\t107\t127\t269\t2301\t7805\t14105\t57899\t\t\t",
+                "",
+                "## HISTOGRAM\tjava.lang.Integer",
+                "insert_size\tAll_Reads.fr_count"
+            ],
+            [
+                "versions.yml:md5,05c28410db2da889c4c244fd2d01161f",
+                "versions.yml:md5,5d2ce8e71f24ac4d6da4df6278d2a255"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-11T11:30:43.633757"
+    }
+}

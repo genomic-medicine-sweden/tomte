@@ -2,8 +2,8 @@
 // BAM QC
 //
 
-include { PICARD_COLLECTRNASEQMETRICS     } from '../../modules/nf-core/picard/collectrnaseqmetrics/main'
-include { PICARD_COLLECTINSERTSIZEMETRICS } from '../../modules/nf-core/picard/collectinsertsizemetrics/main'
+include { PICARD_COLLECTRNASEQMETRICS     } from '../../../modules/nf-core/picard/collectrnaseqmetrics/main'
+include { PICARD_COLLECTINSERTSIZEMETRICS } from '../../../modules/nf-core/picard/collectinsertsizemetrics/main'
 
 workflow BAM_QC {
     take:

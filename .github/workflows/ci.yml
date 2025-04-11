@@ -40,6 +40,7 @@ jobs:
           - "alignment"
           - "call_variants"
           - "analyse_transcripts"
+          - "bam_qc"
         profile:
           - "docker"
           - "singularity"
