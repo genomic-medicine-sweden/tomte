@@ -58,10 +58,6 @@ nextflow_workflow {
     test("Should run without failures") {
 
         when {
-            params {
-                // define parameters here. Example:
-                // outdir = "tests/results"
-            }
             workflow {
                 """
                     input[0] = Channel.of([
@@ -86,6 +82,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
+                    workflow.out.vcf.collect{path(it[1]).vcf.summary},
                     workflow.out.vcf.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
                     file(workflow.out.tbi.get(0).get(1)).name,
                     workflow.out.versions,
@@ -98,10 +95,6 @@ nextflow_workflow {
     test("Should run with two samples") {
 
         when {
-            params {
-                // define parameters here. Example:
-                // outdir = "tests/results"
-            }
             workflow {
                 """
                 ch_cram_converted = CRAM_TO_BAM.out.bam.collect().join(CRAM_TO_BAM.out.bai.collect())
@@ -135,6 +128,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
+                    workflow.out.vcf.collect{path(it[1]).vcf.summary},
                     workflow.out.vcf.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
                     file(workflow.out.tbi.get(0).get(1)).name,
                     workflow.out.versions,
