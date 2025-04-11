@@ -2,18 +2,18 @@
 // Annotating SNVs
 //
 
-include { ENSEMBLVEP_VEP       } from '../../modules/nf-core/ensemblvep/vep/main'
-include { RENAME_FILES         } from '../../modules/local/rename_files'
-include { TABIX_BGZIPTABIX     } from '../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_TABIX          } from '../../modules/nf-core/tabix/tabix/main'
-include { GAWK                 } from '../../modules/nf-core/gawk/main'
-include { ENSEMBLVEP_FILTERVEP } from '../../modules/nf-core/ensemblvep/filtervep/main'
+include { ENSEMBLVEP_VEP       } from '../../../modules/nf-core/ensemblvep/vep/main'
+include { RENAME_FILES         } from '../../../modules/local/rename_files'
+include { TABIX_BGZIPTABIX     } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_TABIX          } from '../../../modules/nf-core/tabix/tabix/main'
+include { GAWK                 } from '../../../modules/nf-core/gawk/main'
+include { ENSEMBLVEP_FILTERVEP } from '../../../modules/nf-core/ensemblvep/filtervep/main'
 
 
 
 workflow ANNOTATE_SNV {
     take:
-    vcf                            // channel:   [mandatory] [ val(meta), path(vcf), path(tbi) ]
+    vcf                            // channel:   [mandatory] [ val(meta), path(vcf) ]
     val_vep_genome                 // parameter: [mandatory] 'GRCh37' or 'GRCh38'
     val_vep_cache_version          // parameter: [mandatory] default: 110
     ch_vep_cache                   // channel:   [mandatory] [ path(cache) ]

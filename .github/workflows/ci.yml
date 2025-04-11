@@ -42,6 +42,7 @@ jobs:
           - "analyse_transcripts"
           - "bam_qc"
           - "allele_specific_calling"
+          - "annotate_snv"
         profile:
           - "docker"
           - "singularity"
