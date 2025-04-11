@@ -39,6 +39,7 @@ jobs:
           - "prepare_references"
           - "alignment"
           - "analyse_transcripts"
+          - "igv_tracks"
         profile:
           - "docker"
           - "singularity"
