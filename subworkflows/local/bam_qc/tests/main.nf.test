@@ -82,7 +82,7 @@ nextflow_workflow {
                 input[0] = ch_bam
                 input[1] = GUNZIP_FASTA.out.gunzip.collect()
                 input[2] = GTF_TO_REFFLAT.out.refflat.collect()
-                input[3] = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
+                input[3] = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> interv }.collect()
                 """
             }
         }
@@ -90,8 +90,8 @@ nextflow_workflow {
         then {
             { assert workflow.success }
             { assert snapshot(
-                file(workflow.out.metrics_general_rna.get(0).get(1)).size(),
-                file(workflow.out.metrics_insert_size.get(0).get(1)).size(),
+                file(workflow.out.metrics_general_rna.get(0).get(1)).readLines()[4..10],
+                file(workflow.out.metrics_insert_size.get(0).get(1)).readLines()[4..10],
                 workflow.out.versions
             ).match()}
         }
