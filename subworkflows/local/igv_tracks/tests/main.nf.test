@@ -64,7 +64,7 @@ nextflow_workflow {
             script "../../../../modules/nf-core/fastp/main.nf"
             process {
                 """
-                input[0] = Channel.of([[case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:true], 
+                input[0] = Channel.of([[case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:true],
                     [file("${projectDir}/test_data/ACC5963A1_sub_1.fastq.gz", checkIfExists: true),
                     file("${projectDir}/test_data/ACC5963A1_sub_2.fastq.gz", checkIfExists: true)]
                     ])
