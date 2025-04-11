@@ -22,7 +22,7 @@ include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_referenc
 include { ALIGNMENT               } from '../subworkflows/local/alignment/main'
 include { BAM_QC                  } from '../subworkflows/local/bam_qc/main'
 include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts/main'
-include { CALL_VARIANTS           } from '../subworkflows/local/call_variants'
+include { CALL_VARIANTS           } from '../subworkflows/local/call_variants/main'
 include { ALLELE_SPECIFIC_CALLING } from '../subworkflows/local/allele_specific_calling'
 include { ANNOTATE_SNV            } from '../subworkflows/local/annotate_snv'
 include { IGV_TRACKS              } from '../subworkflows/local/igv_tracks'
