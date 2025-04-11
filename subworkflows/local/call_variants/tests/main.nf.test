@@ -1,0 +1,109 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_VARIANTS"
+    script "subworkflows/local/call_variants/main.nf"
+    workflow "CALL_VARIANTS"
+    config "./nextflow.config"
+    tag "call_variants"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+        script "../../../../modules/nf-core/gunzip/main.nf"
+        process {
+            """
+            input[0] = Channel.of([
+                [ id:'fasta' ],
+                file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+            ])
+            """
+            }
+        }
+
+        run("SAMTOOLS_FAIDX") {
+        script "../../../../modules/nf-core/samtools/faidx/main.nf"
+        process {
+            """
+            input[0] = GUNZIP_FASTA.out.gunzip
+            input[1] = [[],[]]
+            """
+            }
+        }
+
+        run("GATK4_CREATESEQUENCEDICTIONARY", alias: "BUILD_DICT") {
+        script "../../../../modules/nf-core/gatk4/createsequencedictionary/main.nf"
+        process {
+            """
+            input[0] = GUNZIP_FASTA.out.gunzip
+            """
+            }
+        }
+
+    }
+
+    test("bcftools") {
+        when {
+            workflow {
+                """
+                // Channel for the BAM sample
+                ch_bam = Channel.of([
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                    ])
+                input[0] = ch_bam
+                input[1] = GUNZIP_FASTA.out.gunzip.collect()
+                input[2] = SAMTOOLS_FAIDX.out.fai.collect()
+                input[3] = BUILD_DICT.out.dict.collect()
+                input[4] = 'bcftools'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf.collect{path(it[1]).vcf.summary},
+                    workflow.out.vcf_tbi.collect{path(it[1]).vcf.summary},
+                    file(workflow.out.tbi.get(0).get(1)).name,
+                    workflow.out.stats,
+                    workflow.out.versions,
+                ).match()}
+            )
+        }
+    }
+
+    test("gatk") {
+
+        when {
+            workflow {
+                """
+                // Channel for the BAM sample
+                ch_bam = Channel.of([
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                    ])
+                input[0] = ch_bam
+                input[1] = GUNZIP_FASTA.out.gunzip.collect()
+                input[2] = SAMTOOLS_FAIDX.out.fai.collect()
+                input[3] = BUILD_DICT.out.dict.collect()
+                input[4] = 'gatk'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf.collect{path(it[1]).vcf.summary},
+                    workflow.out.vcf_tbi.collect{path(it[1]).vcf.summary},
+                    file(workflow.out.tbi.get(0).get(1)).name,
+                    workflow.out.stats,
+                    workflow.out.versions,
+                ).match()}
+            )
+        }
+    }
+}
