@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nf-test for analyse_transcripts subworkflow [#215](https://github.com/genomic-medicine-sweden/tomte/pull/215)
 - Nf-test for call_variants subworkflow [#218](https://github.com/genomic-medicine-sweden/tomte/pull/218)
 - Nf-test for bam_qc subworkflow [#219](https://github.com/genomic-medicine-sweden/tomte/pull/219)
+- Nf-test for analyse_transcripts subworkflow allele_specific_calling [#220](https://github.com/genomic-medicine-sweden/tomte/pull/220)
 
 ### `Parameters`
 

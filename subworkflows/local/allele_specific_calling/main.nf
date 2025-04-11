@@ -1,16 +1,16 @@
 //
 // Allele specific variant calling
 //
-include { BCFTOOLS_NORM                        } from '../../modules/nf-core/bcftools/norm/main'
-include { BCFTOOLS_VIEW                        } from '../../modules/nf-core/bcftools/view/main'
-include { GATK4_ASEREADCOUNTER                 } from '../../modules/nf-core/gatk4/asereadcounter/main'
-include { BOOTSTRAPANN                         } from '../../modules/local/bootstrapann'
-include { TABIX_BGZIPTABIX                     } from '../../modules/nf-core/tabix/bgziptabix/main'
-include { BCFTOOLS_MERGE                       } from '../../modules/nf-core/bcftools/merge/main'
-include { RENAME_FILES                         } from '../../modules/local/rename_files'
-include { TABIX_TABIX                          } from '../../modules/nf-core/tabix/tabix/main'
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../modules/nf-core/bcftools/norm/main'
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES   } from '../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_NORM                        } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_VIEW                        } from '../../../modules/nf-core/bcftools/view/main'
+include { GATK4_ASEREADCOUNTER                 } from '../../../modules/nf-core/gatk4/asereadcounter/main'
+include { BOOTSTRAPANN                         } from '../../../modules/local/bootstrapann'
+include { TABIX_BGZIPTABIX                     } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { BCFTOOLS_MERGE                       } from '../../../modules/nf-core/bcftools/merge/main'
+include { RENAME_FILES                         } from '../../../modules/local/rename_files'
+include { TABIX_TABIX                          } from '../../../modules/nf-core/tabix/tabix/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES   } from '../../../modules/nf-core/bcftools/norm/main'
 
 
 workflow ALLELE_SPECIFIC_CALLING {
