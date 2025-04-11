@@ -38,7 +38,9 @@ jobs:
           - "tomte_skip"
           - "prepare_references"
           - "alignment"
+          - "call_variants"
           - "analyse_transcripts"
+          - "bam_qc"
           - "allele_specific_calling"
         profile:
           - "docker"
