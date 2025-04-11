@@ -1,0 +1,76 @@
+{
+    "gatk": {
+        "content": [
+            [
+                "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=2502, phased=false, phasedAutodetect=false]"
+            ],
+            [
+                "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=2502, phased=false, phasedAutodetect=false]"
+            ],
+            "ACC5963A1_split_rmdup_info.vcf.gz.tbi",
+            [
+                [
+                    {
+                        "case": "finequagga",
+                        "id": "ACC5963A1",
+                        "sample": "ACC5963A1",
+                        "strandedness": "reverse",
+                        "sex": "NA",
+                        "single_end": false,
+                        "fq_pairs": 1,
+                        "is_fastq": false
+                    },
+                    "ACC5963A1.bcftools_stats.txt:md5,09a5b7beb572c5754f44f2dea20024a2"
+                ]
+            ],
+            [
+                "versions.yml:md5,0aa84c73aee35f1d02fe6b4d1bdffde2",
+                "versions.yml:md5,4c5bc1efe43ee5d2522088d5e6547a9a",
+                "versions.yml:md5,59d806d3927eedb15e480b9e6a814326",
+                "versions.yml:md5,79a201dd2139b6ac9fbb55f5c9b3d2ca"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-11T11:11:42.578799"
+    },
+    "bcftools": {
+        "content": [
+            [
+                "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
+            ],
+            [
+                "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
+            ],
+            "ACC5963A1_split_rmdup_info.vcf.gz.tbi",
+            [
+                [
+                    {
+                        "case": "finequagga",
+                        "id": "ACC5963A1",
+                        "sample": "ACC5963A1",
+                        "strandedness": "reverse",
+                        "sex": "NA",
+                        "single_end": false,
+                        "fq_pairs": 1,
+                        "is_fastq": false
+                    },
+                    "ACC5963A1.bcftools_stats.txt:md5,3b763dea64d311e1689cf52a72b33e44"
+                ]
+            ],
+            [
+                "versions.yml:md5,4c5bc1efe43ee5d2522088d5e6547a9a",
+                "versions.yml:md5,59d806d3927eedb15e480b9e6a814326",
+                "versions.yml:md5,79a201dd2139b6ac9fbb55f5c9b3d2ca",
+                "versions.yml:md5,8454ade6be56bd4f547e2b9b836fd947"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-11T11:10:14.823748"
+    }
+}
