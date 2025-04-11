@@ -1,0 +1,85 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        },
+                        "ACC5963A1.bw:md5,bd693d63017f2d313aa50d8befdf339a"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        },
+                        "ACC5963A1_junction.bed.gz:md5,af36db589fe4bf79ab49944ef10d0891",
+                        "ACC5963A1_junction.bed.gz.tbi:md5,30d9506483e03a1bc0fba299faba1a65"
+                    ]
+                ],
+                "2": [
+                    "versions.yml:md5,bee47b38ca50b02af137854aa57a8923",
+                    "versions.yml:md5,f4eb74ccf752488d150f4be9e1eb2142",
+                    "versions.yml:md5,f833e7c777ef6137704988f225419557"
+                ],
+                "bed": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        },
+                        "ACC5963A1_junction.bed.gz:md5,af36db589fe4bf79ab49944ef10d0891",
+                        "ACC5963A1_junction.bed.gz.tbi:md5,30d9506483e03a1bc0fba299faba1a65"
+                    ]
+                ],
+                "bw": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        },
+                        "ACC5963A1.bw:md5,bd693d63017f2d313aa50d8befdf339a"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,bee47b38ca50b02af137854aa57a8923",
+                    "versions.yml:md5,f4eb74ccf752488d150f4be9e1eb2142",
+                    "versions.yml:md5,f833e7c777ef6137704988f225419557"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-11T13:45:35.786534"
+    }
+}

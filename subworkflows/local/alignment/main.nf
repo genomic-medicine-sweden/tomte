@@ -33,7 +33,7 @@ workflow ALIGNMENT {
         CAT_FASTQ(ch_fastq.multiple_fq)
             .reads.mix(ch_fastq.single_fq)
             .set { ch_cat_fastq }
-
+        ch_cat_fastq.view()
         FASTP(ch_cat_fastq, [], false, false, false)
 
         STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, ch_platform, false)
