@@ -24,7 +24,7 @@ include { BAM_QC                  } from '../subworkflows/local/bam_qc'
 include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts/main'
 include { CALL_VARIANTS           } from '../subworkflows/local/call_variants'
 include { ALLELE_SPECIFIC_CALLING } from '../subworkflows/local/allele_specific_calling'
-include { ANNOTATE_SNV            } from '../subworkflows/local/annotate_snv'
+include { ANNOTATE_SNV            } from '../subworkflows/local/annotate_snv/main'
 include { IGV_TRACKS              } from '../subworkflows/local/igv_tracks'
 
 /*

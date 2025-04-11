@@ -1,0 +1,73 @@
+nextflow_workflow {
+
+    name "Test Workflow ANNOTATE_SNV"
+    script "../main.nf"
+    workflow "ANNOTATE_SNV"
+    config "./nextflow.config"
+    tag "annotate_snv"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'fasta' ],
+                    file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("UNTAR", alias: "UNTAR_VEP_CACHE") {
+            script "../../../../modules/nf-core/untar/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'vep_cache' ],
+                    file("https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+    }
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                skip_vep = false
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                         [ probands:[ 'ACC5963A1' ], id:'finequagga' ],
+                         file("${projectDir}/test_data/ACC5963A1_split_rmdup_info.vcf.gz", checkIfExists: true)
+                         ])
+                input[1] = 'GRCh37'
+                input[2] = 107
+                input[3] = UNTAR_VEP_CACHE.out.untar.map{meta, vep_cache -> vep_cache}.collect()
+                input[4] = GUNZIP_FASTA.out.gunzip.collect()
+                input[5] = channel.fromPath("https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_files.csv", checkIfExists: true)
+                input[6] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.tab_gz,
+                    workflow.out.json_gz,
+                    file(workflow.out.report.get(0)).name,
+                    workflow.out.ch_vcf_clin.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
+                    workflow.out.ch_vcf_research.collect{path(it[1]).vcf.getVariantsAsStrings(2)},
+                    workflow.out.versions
+                ).match() }
+            )
+        }
+
+    }
+
+}
