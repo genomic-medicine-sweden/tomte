@@ -44,6 +44,7 @@ jobs:
           - "bam_qc"
           - "allele_specific_calling"
           - "annotate_snv"
+          - "igv_tracks"
         profile:
           - "docker"
           - "singularity"
