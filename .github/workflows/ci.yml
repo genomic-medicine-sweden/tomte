@@ -36,6 +36,7 @@ jobs:
         tags:
           - "tomte_no_skip"
           - "tomte_skip"
+          - "download_references"
           - "prepare_references"
           - "alignment"
           - "call_variants"
