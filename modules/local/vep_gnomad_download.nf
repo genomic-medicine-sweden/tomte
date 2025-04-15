@@ -42,19 +42,21 @@ process VEP_GNOMAD_DOWNLOAD {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        wget: \$(echo wget -V 2>&1 | grep "GNU Wget" | cut -d" " -f3 > versions.yml)
+        wget: \$(echo wget -V 2>&1 | grep "GNU Wget" | cut -d" " -f3 )
         bcftools: \$(bcftools --version 2>&1 | head -n1 | sed 's/^.*bcftools //; s/ .*\$//')
         tabix: \$(echo \$(tabix -h 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
     END_VERSIONS
     """
 
     stub:
+    def gnomad_version2download = "${genome}".contains("38") ? "4.0": "2.1.1"
+    def base_gnomad_path="https://storage.googleapis.com/gcp-public-data--gnomad/release/${gnomad_version2download}/vcf/genomes/gnomad.genomes."
     """
     touch gnomad_v${gnomad_version2download}.vcf.gz
     touch gnomad_v${gnomad_version2download}.vcf.gz.tbi
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        wget: \$(echo wget -V 2>&1 | grep "GNU Wget" | cut -d" " -f3 > versions.yml)
+        wget: \$(echo wget -V 2>&1 | grep "GNU Wget" | cut -d" " -f3 )
         bcftools: \$(bcftools --version 2>&1 | head -n1 | sed 's/^.*bcftools //; s/ .*\$//')
         tabix: \$(echo \$(tabix -h 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
     END_VERSIONS

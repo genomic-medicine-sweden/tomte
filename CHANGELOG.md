@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nf-test for analyse_transcripts subworkflow allele_specific_calling [#220](https://github.com/genomic-medicine-sweden/tomte/pull/220)
 - Nf-test for annotate_snv subworkflow [#221](https://github.com/genomic-medicine-sweden/tomte/pull/221)
 - Nf-test for igv_tracks subworkflow [#222](https://github.com/genomic-medicine-sweden/tomte/pull/222)
+- Nf-test for download_references subworkflow [#223](https://github.com/genomic-medicine-sweden/tomte/pull/223)
 
 ### `Parameters`
 
@@ -48,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - DROP expression outliers previously returned max 20 lowest p-value entries. Now it returns those classified as having aberrant expression first, and then fills up to 20 from those with lowest p-values. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
 - GENCODE_DOWNLOAD stub crashes by removing double versions.yml write. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
 - Default peddy parent ID to "0" if not present. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+- BUILD_VEP_CACHE, VEP_GNOMAD_DOWNLOAD and WGET_DOWNLOAD stubs crash, fixed by removing double versions.yml write. [#223](https://github.com/genomic-medicine-sweden/tomte/pull/223)
 
 ## 3.0.1 - Snowman [2025-03-26]
 
