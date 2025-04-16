@@ -1,0 +1,34 @@
+nextflow_workflow {
+
+    name "Test Workflow DOWNLOAD_REFERENCES"
+    script "subworkflows/local/download_references/main.nf"
+    workflow "DOWNLOAD_REFERENCES"
+    config "./nextflow.config"
+    tag "download_references"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                skip_download_gnomad = false
+                skip_download_vep    = false
+            }
+            workflow {
+                """
+                input[0] = Channel.of('GRCh37')
+                input[1] = Channel.of(46)
+                input[2] = Channel.of([file("${projectDir}/test_data/vep_to_download_37.csv", checkIfExists: true)])
+                input[3] = Channel.of(112)
+
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+    options "-stub FASTA_DOWNLOAD,GTF_DOWNLOAD,WGET_DOWNLOAD,VEP_GNOMAD_DOWNLOAD"
+}

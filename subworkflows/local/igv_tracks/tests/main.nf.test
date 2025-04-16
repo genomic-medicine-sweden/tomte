@@ -1,0 +1,114 @@
+nextflow_workflow {
+
+    name "Test Workflow IGV_TRACKS"
+    script "../main.nf"
+    workflow "IGV_TRACKS"
+    config "./nextflow.config"
+    tag "igv_tracks"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'fasta' ],
+                    file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("GUNZIP", alias: "GUNZIP_GTF") {
+            script "../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'gtf' ],
+                    file("${projectDir}/test_data/grch37_chr21.gtf.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("SAMTOOLS_FAIDX") {
+            script "../../../../modules/nf-core/samtools/faidx/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                input[1] = [[],[]]
+                """
+            }
+        }
+
+        run("GET_CHROM_SIZES") {
+            script "../../../../modules/local/get_chrom_sizes"
+            process {
+                """
+                input[0] = SAMTOOLS_FAIDX.out.fai
+                """
+            }
+        }
+
+        run("STAR_GENOMEGENERATE") {
+            script "../../../../modules/nf-core/star/genomegenerate/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                input[1] = GUNZIP_GTF.out.gunzip
+                """
+            }
+        }
+
+        run("FASTP") {
+            script "../../../../modules/nf-core/fastp/main.nf"
+            process {
+                """
+                input[0] = Channel.of([[case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:true],
+                    [file("${projectDir}/test_data/ACC5963A1_sub_1.fastq.gz", checkIfExists: true),
+                    file("${projectDir}/test_data/ACC5963A1_sub_2.fastq.gz", checkIfExists: true)]
+                    ])
+                input[1] = []
+                input[2] = false
+                input[3] = false
+                input[4] = false
+                """
+            }
+        }
+
+        run("STAR_ALIGN") {
+            script "../../../../modules/nf-core/star/align/main.nf"
+            process {
+                """
+                input[0] = FASTP.out.reads
+                input[1] = STAR_GENOMEGENERATE.out.index
+                input[2] = GUNZIP_GTF.out.gunzip
+                input[3] = false
+                input[4] = 'illumina'
+                input[5] = false
+                """
+            }
+        }
+    }
+
+    test("Should run without failures") {
+
+        when {
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = STAR_ALIGN.out.wig
+                input[1] = GET_CHROM_SIZES.out.sizes.collect()
+                input[2] = STAR_ALIGN.out.spl_junc_tab
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}
