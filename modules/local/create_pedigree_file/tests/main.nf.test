@@ -6,7 +6,6 @@ nextflow_process {
     tag "modules_local"
     tag "modules"
     tag "create_pedigree_file"
-    
 
     test("Trio") {
 
