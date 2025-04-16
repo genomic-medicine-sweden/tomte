@@ -4,6 +4,7 @@ nextflow_workflow {
     script "../main.nf"
     workflow "ANNOTATE_SNV"
     config "./nextflow.config"
+    tag "subworkflow"
     tag "annotate_snv"
 
     setup {

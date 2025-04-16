@@ -4,6 +4,7 @@ nextflow_workflow {
     script "../main.nf"
     workflow "ANALYSE_TRANSCRIPTS"
     tag "analyse_transcripts"
+    tag "subworkflow"
     config "./nextflow.config"
 
     setup {

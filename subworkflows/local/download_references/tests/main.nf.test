@@ -4,6 +4,7 @@ nextflow_workflow {
     script "subworkflows/local/download_references/main.nf"
     workflow "DOWNLOAD_REFERENCES"
     config "./nextflow.config"
+    tag "subworkflow"
     tag "download_references"
 
     test("Should run without failures") {
