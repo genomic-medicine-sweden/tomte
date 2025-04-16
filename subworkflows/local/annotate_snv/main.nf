@@ -3,7 +3,7 @@
 //
 
 include { ENSEMBLVEP_VEP       } from '../../../modules/nf-core/ensemblvep/vep/main'
-include { RENAME_FILES         } from '../../../modules/local/rename_files'
+include { RENAME_FILES         } from '../../../modules/local/rename_files/main'
 include { TABIX_BGZIPTABIX     } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_TABIX          } from '../../../modules/nf-core/tabix/tabix/main'
 include { GAWK                 } from '../../../modules/nf-core/gawk/main'

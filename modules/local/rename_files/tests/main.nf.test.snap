@@ -1,0 +1,35 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test_rnaseq_new_name"
+                        },
+                        "test_rnaseq_new_name.fastq.gz:md5,3ddc504e56a3f96f7f4ce21a06c3dd92"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,7667d011157057e4eecbb73650100917"
+                ],
+                "output": [
+                    [
+                        {
+                            "id": "test_rnaseq_new_name"
+                        },
+                        "test_rnaseq_new_name.fastq.gz:md5,3ddc504e56a3f96f7f4ce21a06c3dd92"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,7667d011157057e4eecbb73650100917"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-16T14:46:58.212369"
+    }
+}

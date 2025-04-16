@@ -1,0 +1,8 @@
+Apr-15 14:07:50.040 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.2
+Apr-15 14:07:50.058 [main] INFO  com.askimed.nf.test.App - Arguments: [test, --tag, estimate_hb_perc, --profile, singularity, --update-snapshot, --clean-snapshot, --verbose, --debug]
+Apr-15 14:07:51.181 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 24.10.5
+Apr-15 14:07:51.196 [main] WARN  com.askimed.nf.test.commands.RunTestsCommand - No nf-test config file found.
+Apr-15 14:07:51.213 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 1 files from directory /home/lucia.penaperez/github/gms/tomte/modules/local/estimate_hb_perc/tests in 0.007 sec
+Apr-15 14:07:51.215 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 0 files containing tests.
+Apr-15 14:07:51.215 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: []
+Apr-15 14:07:51.218 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 0 tests to execute.

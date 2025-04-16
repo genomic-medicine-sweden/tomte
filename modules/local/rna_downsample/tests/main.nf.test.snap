@@ -1,0 +1,111 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": false
+                        },
+                        "ACC5963A1_downsmapled.bam:md5,482c74fe04c5ea9e78184711b5d68a84"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": false
+                        },
+                        "ACC5963A1_downsmapled.bam.bai:md5,5dbc44b47537cde7b94a586cec145481"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": false
+                        },
+                        "ACC5963A1_downsmapled.bam:md5,482c74fe04c5ea9e78184711b5d68a84",
+                        "ACC5963A1_downsmapled.bam.bai:md5,5dbc44b47537cde7b94a586cec145481"
+                    ]
+                ],
+                "3": [
+                    "versions.yml:md5,ccdfa6141346e338e096f7c990633462"
+                ],
+                "bai": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": false
+                        },
+                        "ACC5963A1_downsmapled.bam.bai:md5,5dbc44b47537cde7b94a586cec145481"
+                    ]
+                ],
+                "bam": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": false
+                        },
+                        "ACC5963A1_downsmapled.bam:md5,482c74fe04c5ea9e78184711b5d68a84"
+                    ]
+                ],
+                "bam_bai": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": false
+                        },
+                        "ACC5963A1_downsmapled.bam:md5,482c74fe04c5ea9e78184711b5d68a84",
+                        "ACC5963A1_downsmapled.bam.bai:md5,5dbc44b47537cde7b94a586cec145481"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,ccdfa6141346e338e096f7c990633462"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-16T10:41:23.151292"
+    }
+}

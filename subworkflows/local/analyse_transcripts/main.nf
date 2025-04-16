@@ -47,7 +47,7 @@ workflow ANALYSE_TRANSCRIPTS {
             .map { it.sort { a, b -> a[0] <=> b[0] } } // Sort on ID
             .map { it.transpose() }
         .set { ch_bam_files_annot }
-
+        ch_bam_files_annot.view()
         DROP_SAMPLE_ANNOT(
             ch_bam_files_annot,
             ch_ref_drop_count_file.ifEmpty([]),

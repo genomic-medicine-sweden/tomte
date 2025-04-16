@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nf-test for bam_qc subworkflow [#219](https://github.com/genomic-medicine-sweden/tomte/pull/219)
 - Nf-test for analyse_transcripts subworkflow allele_specific_calling [#220](https://github.com/genomic-medicine-sweden/tomte/pull/220)
 - Nf-test for annotate_snv subworkflow [#221](https://github.com/genomic-medicine-sweden/tomte/pull/221)
+- Nf-test for bootstrapann, create_pedigree_file, estimate_hb_perc, get_chrom_sizes, get_rrna_transcripts,junction_track, rename_files, rna_downsample, and rna_subsample_region modules [#224](https://github.com/genomic-medicine-sweden/tomte/pull/224)
 
 ### `Parameters`
 
