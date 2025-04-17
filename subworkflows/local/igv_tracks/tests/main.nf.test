@@ -4,6 +4,7 @@ nextflow_workflow {
     script "../main.nf"
     workflow "IGV_TRACKS"
     config "./nextflow.config"
+    tag "subworkflow"
     tag "igv_tracks"
 
     setup {
@@ -42,7 +43,7 @@ nextflow_workflow {
         }
 
         run("GET_CHROM_SIZES") {
-            script "../../../../modules/local/get_chrom_sizes"
+            script "../../../../modules/local/get_chrom_sizes/main.nf"
             process {
                 """
                 input[0] = SAMTOOLS_FAIDX.out.fai

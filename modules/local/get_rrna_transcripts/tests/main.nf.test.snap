@@ -1,0 +1,31 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    "rrna.gtf:md5,4badbbf7f1857664fb54616234c7fd86"
+                ],
+                "1": [
+                    "rrna.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "2": [
+                    "versions.yml:md5,2cf86a5a74d87d2bf026f99e89e624cf"
+                ],
+                "bed": [
+                    "rrna.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "rrnagtf": [
+                    "rrna.gtf:md5,4badbbf7f1857664fb54616234c7fd86"
+                ],
+                "versions": [
+                    "versions.yml:md5,2cf86a5a74d87d2bf026f99e89e624cf"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-15T16:28:48.240325"
+    }
+}

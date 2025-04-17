@@ -1,0 +1,82 @@
+nextflow_process {
+
+    name "Test Process ESTIMATE_HB_PERC"
+    script "../main.nf"
+    process "ESTIMATE_HB_PERC"
+    config "./nextflow.config"
+    tag "modules_local"
+    tag "modules"
+    tag "estimate_hb_perc"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+            script "../../../nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'fasta' ],
+                    file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("GUNZIP", alias: "GUNZIP_GTF") {
+            script "../../../nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'gtf' ],
+                    file("${projectDir}/test_data/grch37_chr21.gtf.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("STAR_GENOMEGENERATE") {
+            script "../../../nf-core/star/genomegenerate/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                input[1] = GUNZIP_GTF.out.gunzip
+                """
+            }
+        }
+
+        run("STAR_ALIGN") {
+            script "../../../nf-core/star/align/main.nf"
+            process {
+                """
+                input[0] = input[0] = Channel.of([[case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:true],
+                    [file("${projectDir}/test_data/ACC5963A1_sub_1.fastq.gz", checkIfExists: true),
+                    file("${projectDir}/test_data/ACC5963A1_sub_2.fastq.gz", checkIfExists: true)]
+                    ])
+                input[1] = STAR_GENOMEGENERATE.out.index
+                input[2] = GUNZIP_GTF.out.gunzip
+                input[3] = false
+                input[4] = 'illumina'
+                input[5] = false
+                """
+            }
+        }
+    }
+
+    test("Should run without failures") {
+
+        when {
+            process {
+                """
+                input[0] = STAR_ALIGN.out.read_per_gene_tab
+                input[1] = Channel.of([file("${projectDir}/test_data/subsample.bed", checkIfExists: true)])
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}

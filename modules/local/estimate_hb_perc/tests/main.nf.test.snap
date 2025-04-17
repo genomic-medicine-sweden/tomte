@@ -1,0 +1,49 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        },
+                        "ACC5963A1_perc_mapping.json:md5,7ddc835f55ee6f4daaec94456b7ad812"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,b877b52a91b9f0a47f954b5f27c8d5b1"
+                ],
+                "json": [
+                    [
+                        {
+                            "case": "finequagga",
+                            "id": "ACC5963A1",
+                            "sample": "ACC5963A1",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        },
+                        "ACC5963A1_perc_mapping.json:md5,7ddc835f55ee6f4daaec94456b7ad812"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,b877b52a91b9f0a47f954b5f27c8d5b1"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-15T14:54:34.289923"
+    }
+}

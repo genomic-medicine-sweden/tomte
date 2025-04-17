@@ -4,6 +4,7 @@ nextflow_workflow {
     script "../main.nf"
     workflow "BAM_QC"
     config "./nextflow.config"
+    tag "subworkflow"
     tag "bam_qc"
 
     setup {

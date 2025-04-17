@@ -1,0 +1,25 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    "genome.fasta.fai.sizes:md5,a57c401f27ae5133823fb09fb21c8a3c"
+                ],
+                "1": [
+                    "versions.yml:md5,5e54f71eb8c46f4afb44c4626e8a4c0a"
+                ],
+                "sizes": [
+                    "genome.fasta.fai.sizes:md5,a57c401f27ae5133823fb09fb21c8a3c"
+                ],
+                "versions": [
+                    "versions.yml:md5,5e54f71eb8c46f4afb44c4626e8a4c0a"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-15T16:22:07.505881"
+    }
+}

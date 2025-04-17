@@ -4,6 +4,7 @@ nextflow_workflow {
     script "../main.nf"
     workflow "ALLELE_SPECIFIC_CALLING"
     config "./nextflow.config"
+    tag "subworkflow"
     tag "allele_specific_calling"
 
     setup {

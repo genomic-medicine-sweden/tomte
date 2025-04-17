@@ -4,6 +4,7 @@ nextflow_workflow {
     script "../main.nf"
     workflow "ALIGNMENT"
     config "./nextflow.config"
+    tag "subworkflow"
     tag "alignment"
 
     setup {
