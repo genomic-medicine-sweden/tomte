@@ -1,0 +1,33 @@
+nextflow_process {
+
+    name "Test Process GET_RRNA_TRANSCRIPTS"
+    script "../main.nf"
+    process "GET_RRNA_TRANSCRIPTS"
+    tag "modules_local"
+    tag "modules"
+    tag "get_rrna_transcripts"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                modules_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+            }
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ], // meta map
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.gtf', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}

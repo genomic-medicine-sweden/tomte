@@ -1,0 +1,71 @@
+nextflow_process {
+
+    name "Test Process CREATE_PEDIGREE_FILE"
+    script "../main.nf"
+    process "CREATE_PEDIGREE_FILE"
+    tag "modules_local"
+    tag "modules"
+    tag "create_pedigree_file"
+
+    test("Trio") {
+
+        when {
+            process {
+                """
+                input[0] =  [
+                    [case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', paternal:'ACC5963A2', maternal:'ACC5963A3', sex:'M', single_end:false, fq_pairs:1, is_fastq:false],
+                    [case:'finequagga', id:'ACC5963A2', sample:'ACC5963A2', strandedness:'reverse', paternal:'0', maternal:'0', sex:'M', single_end:false, fq_pairs:1, is_fastq:true],
+                    [case:'finequagga', id:'ACC5963A3', sample:'ACC5963A3', strandedness:'reverse', paternal:'0', maternal:'0', sex:'F', single_end:false, fq_pairs:1, is_fastq:false]
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+    test("Single sample") {
+
+        when {
+            process {
+                """
+                input[0] =  [
+                    [case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', paternal:'ACC5963A2', maternal:'ACC5963A3', sex:'M', single_end:false, fq_pairs:1, is_fastq:false],
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+    test("No parents or sex") {
+
+        when {
+            process {
+                """
+                input[0] =  [
+                    [case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', paternal:'0', maternal:'0', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false],
+                    [case:'finequagga', id:'ACC5963A2', sample:'ACC5963A2', strandedness:'reverse', paternal:'0', maternal:'0', sex:'NA', single_end:false, fq_pairs:1, is_fastq:true],
+                    [case:'finequagga', id:'ACC5963A3', sample:'ACC5963A3', strandedness:'reverse', paternal:'0', maternal:'0', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false]
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}

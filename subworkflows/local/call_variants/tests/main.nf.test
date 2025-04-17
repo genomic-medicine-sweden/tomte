@@ -4,6 +4,7 @@ nextflow_workflow {
     script "subworkflows/local/call_variants/main.nf"
     workflow "CALL_VARIANTS"
     config "./nextflow.config"
+    tag "subworkflow"
     tag "call_variants"
 
     setup {

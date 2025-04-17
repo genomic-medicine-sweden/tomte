@@ -1,0 +1,70 @@
+nextflow_process {
+
+    name "Test Process JUNCTION_TRACK"
+    script "../main.nf"
+    process "JUNCTION_TRACK"
+    config "./nextflow.config"
+    tag "modules_local"
+    tag "modules"
+    tag "junction_track"
+
+    setup {
+        run("STAR_GENOMEGENERATE") {
+            script "../../../nf-core/star/genomegenerate/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                        [ id:'test_fasta' ],
+                        [ file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true) ]
+                    ])
+                    input[1] = Channel.of([
+                        [ id:'test_gtf' ],
+                        [ file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true) ]
+                    ])
+                """
+            }
+        }
+
+        run("STAR_ALIGN") {
+            script "../../../nf-core/star/align/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'test', single_end:true ], // meta map
+                    [ file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/fastq/test_rnaseq_1.fastq.gz', checkIfExists: true) ]
+                ])
+                input[1] = STAR_GENOMEGENERATE.out.index
+                input[2] = Channel.of([
+                    [ id:'test_gtf' ],
+                    [ file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true) ]
+                ])
+                input[3] = false
+                input[4] = 'illumina'
+                input[5] = false
+                """
+            }
+        }
+    }
+
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                modules_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+            }
+            process {
+                """
+                input[0] = STAR_ALIGN.out.spl_junc_tab
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}

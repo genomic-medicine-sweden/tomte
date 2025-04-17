@@ -1,0 +1,33 @@
+nextflow_process {
+
+    name "Test Process RENAME_FILES"
+    script "modules/local/rename_files/main.nf"
+    process "RENAME_FILES"
+    tag "modules_local"
+    tag "modules"
+    tag "rename_files"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                modules_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+            }
+            process {
+                """
+                input[0] = Channel.of([
+                        [ id:'test_rnaseq_new_name' ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/fastq/test_rnaseq_1.fastq.gz', checkIfExists: true)
+                    ])
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}
