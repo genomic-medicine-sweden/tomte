@@ -10,9 +10,6 @@ nextflow_process {
     test("Trio") {
 
         when {
-            params {
-                skip_peddy = false
-            }
             process {
                 """
                 input[0] =  [
@@ -34,9 +31,6 @@ nextflow_process {
     test("Single sample") {
 
         when {
-            params {
-                skip_peddy = false
-            }
             process {
                 """
                 input[0] =  [
@@ -56,9 +50,6 @@ nextflow_process {
     test("No parents or sex") {
 
         when {
-            params {
-                skip_peddy = false
-            }
             process {
                 """
                 input[0] =  [
