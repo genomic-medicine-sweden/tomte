@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nf-test for igv_tracks subworkflow [#222](https://github.com/genomic-medicine-sweden/tomte/pull/222)
 - Nf-test for download_references subworkflow [#223](https://github.com/genomic-medicine-sweden/tomte/pull/223)
 - Nf-test for bootstrapann, create_pedigree_file, estimate_hb_perc, get_chrom_sizes, get_rrna_transcripts,junction_track, rename_files, rna_downsample, and rna_subsample_region modules [#224](https://github.com/genomic-medicine-sweden/tomte/pull/224)
+- Nf-test for all drop modules [#225](https://github.com/genomic-medicine-sweden/tomte/pull/225)
 
 ### `Parameters`
 
