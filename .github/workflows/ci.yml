@@ -45,6 +45,7 @@ jobs:
           - "allele_specific_calling"
           - "annotate_snv"
           - "igv_tracks"
+          - "modules_local"
         profile:
           - "docker"
           - "singularity"
