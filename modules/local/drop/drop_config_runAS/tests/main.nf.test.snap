@@ -1,0 +1,26 @@
+{
+    "Should run without failures": {
+        "content": [
+            [
+                "config.yaml"
+            ],
+            [
+                "gene_name_mapping_grch37_chr21.tsv:md5,2403f42b96755d9f8bf566ac04f590ce"
+            ],
+            [
+                "output"
+            ],
+            [
+                "FRASER_results_fraser--grch37_chr21.tsv"
+            ],
+            [
+                "versions.yml:md5,23ff4da7b53e5b375d67430636296c76"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-17T09:56:33.704885"
+    }
+}
