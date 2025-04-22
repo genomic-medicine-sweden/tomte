@@ -7,7 +7,7 @@ include { GATK4_BEDTOINTERVALLIST as BEDTOINTERVALLIST } from '../../../modules/
 include { GATK4_CREATESEQUENCEDICTIONARY as BUILD_DICT } from '../../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GUNZIP as GUNZIP_GTF                         } from '../../../modules/nf-core/gunzip/main'
 include { GET_RRNA_TRANSCRIPTS                         } from '../../../modules/local/get_rrna_transcripts/main'
-include { GTFTOGENEPRED_REFFLAT as GTF_TO_REFFLAT      } from '../../../modules/local/gtftorefflat'
+include { UCSC_GTFTOGENEPRED                           } from '../../../modules/nf-core/ucsc/gtftogenepred'
 include { GET_CHROM_SIZES                              } from '../../../modules/local/get_chrom_sizes/main'
 include { GUNZIP as GUNZIP_TRFASTA                     } from '../../../modules/nf-core/gunzip/main'
 include { GFFREAD                                      } from '../../../modules/nf-core/gffread'
@@ -63,7 +63,7 @@ workflow PREPARE_REFERENCES {
         ch_star_final = ch_star_mixed.mix(BUILD_STAR_GENOME.out.index.collect())
 
         // Convert gtf to refflat for picard
-        GTF_TO_REFFLAT(ch_gtf_final)
+        UCSC_GTFTOGENEPRED(ch_gtf_final)
 
         // Get rRNA transcripts and convert to interval_list format
         GET_RRNA_TRANSCRIPTS(ch_gtf_final)
@@ -103,7 +103,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GUNZIP_TRFASTA.out.versions)
         ch_versions = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
         ch_versions = ch_versions.mix(BUILD_STAR_GENOME.out.versions)
-        ch_versions = ch_versions.mix(GTF_TO_REFFLAT.out.versions)
+        ch_versions = ch_versions.mix(UCSC_GTFTOGENEPRED.out.versions)
         ch_versions = ch_versions.mix(GET_RRNA_TRANSCRIPTS.out.versions)
         ch_versions = ch_versions.mix(BEDTOINTERVALLIST.out.versions)
         ch_versions = ch_versions.mix(GFFREAD.out.versions)
@@ -120,7 +120,7 @@ workflow PREPARE_REFERENCES {
         sequence_dict = ch_dict                                // channel: [ val(meta), path(dict) ]
         star_index    = ch_star_final.collect()                // channel: [ val(meta), path(star_index) ]
         salmon_index  = ch_salmon_final.collect()              // channel: [ path(salmon_index) ]
-        refflat       = GTF_TO_REFFLAT.out.refflat.collect()   // channel: [ path(refflat) ]
+        refflat       = UCSC_GTFTOGENEPRED.out.refflat.map{ meta, refflat -> [refflat] }.collect()   // channel: [ path(refflat) ]
         rrna_bed      = GET_RRNA_TRANSCRIPTS.out.bed.collect() // channel: [ path(bed) ]
         interval_list = ch_interval                            // channel: [ path(interval) ]
         vep_cache     = ch_final_vep.collect()                 // channel: [ path(cache) ]
