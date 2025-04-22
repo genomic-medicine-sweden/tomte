@@ -48,9 +48,9 @@ nextflow_process {
         process {
             """
             input[0] = Channel.of([
-                        ['ACC5963A1'], [false], ['reverse'], ['NA'],
-                        [file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true)],
-                        [file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)]
+                        'ACC5963A1', false, 'reverse', 'NA',
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
                     ])
             input[1] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
             input[2] = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true)
@@ -94,8 +94,6 @@ nextflow_process {
                     process.out.drop_gene_name,
                     process.out.drop_ae_rds.collect{ file(it).name },
                     process.out.drop_ae_out.collect{ file(it).name },
-                    //process.out.drop_ae_out_clinical.collect{ file(it).name },
-                    //process.out.drop_ae_out_research.collect{ file(it).name },
                     process.out.versions,
                 ).match()}
             )
