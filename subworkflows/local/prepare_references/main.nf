@@ -10,7 +10,7 @@ include { GET_RRNA_TRANSCRIPTS                         } from '../../../modules/
 include { GTFTOGENEPRED_REFFLAT as GTF_TO_REFFLAT      } from '../../../modules/local/gtftorefflat'
 include { GET_CHROM_SIZES                              } from '../../../modules/local/get_chrom_sizes/main'
 include { GUNZIP as GUNZIP_TRFASTA                     } from '../../../modules/nf-core/gunzip/main'
-include { GFFREAD                                      } from '../../../modules/local/gffread'
+include { GFFREAD                                      } from '../../../modules/nf-core/gffread'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME      } from '../../../modules/nf-core/samtools/faidx/main'
 include { UNTAR as UNTAR_STAR_INDEX                    } from '../../../modules/nf-core/untar/main'
 include { STAR_GENOMEGENERATE as BUILD_STAR_GENOME     } from '../../../modules/nf-core/star/genomegenerate/main'
@@ -70,15 +70,17 @@ workflow PREPARE_REFERENCES {
         BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map { it -> [ [id:it.name], it ] }, ch_dict )
         ch_interval = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
 
-        // Preparing transcript fasta
+        // Prepare fasta fai
         ch_fasta_fai = ch_fasta_final.join(ch_fai).collect()
-        GFFREAD(ch_gtf_final, ch_fasta_fai)
+
+        // Preparing transcript fasta
+        GFFREAD(ch_gtf_final, ch_fasta_final.map{ meta, fasta -> [fasta] })
 
         // Gunzip transcript fasta if necessary
         GUNZIP_TRFASTA ( ch_transcript_fasta_input.map { it -> [[:], it] } )
         ch_transcript_fasta_mix = branchChannelToCompressedAndUncompressed(ch_transcript_fasta_input)
         ch_transcript_fasta_mixed = ch_transcript_fasta_mix.uncompressed.mix(GUNZIP_TRFASTA.out.gunzip.map{meta, index -> index}.collect())
-        ch_transcript_fasta_final = ch_transcript_fasta_mixed.mix(GFFREAD.out.tr_fasta.collect())
+        ch_transcript_fasta_final = ch_transcript_fasta_mixed.mix(GFFREAD.out.gffread_fasta.collect())
 
         // If no salmon index, create it
         SALMON_INDEX(ch_fasta_final.map{ meta, fasta -> [ fasta ] }, ch_transcript_fasta_final)
