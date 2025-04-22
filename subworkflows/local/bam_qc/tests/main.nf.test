@@ -82,7 +82,7 @@ nextflow_workflow {
                     ])
                 input[0] = ch_bam
                 input[1] = GUNZIP_FASTA.out.gunzip.collect()
-                input[2] = UCSC_GTFTOGENEPRED.out.refflat.map{ meta, refflat -> [refflat] }.collect()
+                input[2] = UCSC_GTFTOGENEPRED.out.refflat.map{ meta, refflat -> refflat }.collect()
                 input[3] = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> interv }.collect()
                 """
             }

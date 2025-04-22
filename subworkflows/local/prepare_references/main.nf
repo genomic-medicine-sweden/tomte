@@ -74,13 +74,13 @@ workflow PREPARE_REFERENCES {
         ch_fasta_fai = ch_fasta_final.join(ch_fai).collect()
 
         // Preparing transcript fasta
-        GFFREAD(ch_gtf_final, ch_fasta_final.map{ meta, fasta -> [fasta] })
+        GFFREAD(ch_gtf_final, ch_fasta_final.map{ meta, fasta -> fasta })
 
         // Gunzip transcript fasta if necessary
         GUNZIP_TRFASTA ( ch_transcript_fasta_input.map { it -> [[:], it] } )
         ch_transcript_fasta_mix = branchChannelToCompressedAndUncompressed(ch_transcript_fasta_input)
         ch_transcript_fasta_mixed = ch_transcript_fasta_mix.uncompressed.mix(GUNZIP_TRFASTA.out.gunzip.map{meta, index -> index}.collect())
-        ch_transcript_fasta_final = ch_transcript_fasta_mixed.mix(GFFREAD.out.gffread_fasta.map{ meta, gffread_fa -> [gffread_fa] }.collect())
+        ch_transcript_fasta_final = ch_transcript_fasta_mixed.mix(GFFREAD.out.gffread_fasta.map{ meta, gffread_fa -> gffread_fa }.collect())
 
         // If no salmon index, create it
         SALMON_INDEX(ch_fasta_final.map{ meta, fasta -> [ fasta ] }, ch_transcript_fasta_final)
@@ -120,8 +120,8 @@ workflow PREPARE_REFERENCES {
         sequence_dict = ch_dict                                // channel: [ val(meta), path(dict) ]
         star_index    = ch_star_final.collect()                // channel: [ val(meta), path(star_index) ]
         salmon_index  = ch_salmon_final.collect()              // channel: [ path(salmon_index) ]
-        refflat       = UCSC_GTFTOGENEPRED.out.refflat.
-            map{ meta, refflat -> [refflat] }.collect()        // channel: [ path(refflat) ]
+        refflat       = UCSC_GTFTOGENEPRED.out.refflat
+            .map{ meta, refflat -> refflat }.collect()        // channel: [ path(refflat) ]
         rrna_bed      = GET_RRNA_TRANSCRIPTS.out.bed.collect() // channel: [ path(bed) ]
         interval_list = ch_interval                            // channel: [ path(interval) ]
         vep_cache     = ch_final_vep.collect()                 // channel: [ path(cache) ]
