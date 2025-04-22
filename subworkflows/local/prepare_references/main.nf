@@ -80,7 +80,7 @@ workflow PREPARE_REFERENCES {
         GUNZIP_TRFASTA ( ch_transcript_fasta_input.map { it -> [[:], it] } )
         ch_transcript_fasta_mix = branchChannelToCompressedAndUncompressed(ch_transcript_fasta_input)
         ch_transcript_fasta_mixed = ch_transcript_fasta_mix.uncompressed.mix(GUNZIP_TRFASTA.out.gunzip.map{meta, index -> index}.collect())
-        ch_transcript_fasta_final = ch_transcript_fasta_mixed.mix(GFFREAD.out.gffread_fasta.collect())
+        ch_transcript_fasta_final = ch_transcript_fasta_mixed.mix(GFFREAD.out.gffread_fasta.map{ meta, gffread_fa -> [gffread_fa] }.collect())
 
         // If no salmon index, create it
         SALMON_INDEX(ch_fasta_final.map{ meta, fasta -> [ fasta ] }, ch_transcript_fasta_final)
