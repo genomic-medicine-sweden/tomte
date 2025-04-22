@@ -27,10 +27,7 @@
                     "get_rrna_transcripts": "v1.0"
                 },
                 "GFFREAD": {
-                    "gffread": "0.12.1"
-                },
-                "GTF_TO_REFFLAT": {
-                    "ucsc": 377
+                    "gffread": "0.12.7"
                 },
                 "GUNZIP_FASTA": {
                     "gunzip": 1.1
@@ -63,6 +60,9 @@
                     "star": "2.7.11b",
                     "samtools": 1.2,
                     "gawk": "5.1.0"
+                },
+                "UCSC_GTFTOGENEPRED": {
+                    "ucsc": 447
                 },
                 "UNTAR_VEP_CACHE": {
                     "untar": 1.34
@@ -189,13 +189,13 @@
                 "pipeline_info",
                 "pipeline_info/tomte_pipeline_software_mqc_versions.yml",
                 "references",
+                "references/gffread_output.fasta",
                 "references/grch37_chr21.dict",
                 "references/grch37_chr21.fa",
                 "references/grch37_chr21.fa.fai",
                 "references/grch37_chr21.fa.fai.sizes",
                 "references/grch37_chr21.gtf",
                 "references/grch37_chr21.refflat",
-                "references/grch37_chr21_gffread_output.fa",
                 "references/rrna.bed",
                 "references/rrna.bed.interval_list",
                 "references/rrna.gtf",
@@ -250,13 +250,13 @@
                 "ACC5963A3.bam:md5,20a8f0d5c77d4fe6dda8359e39f0385a",
                 "ACC5963A3.bam:md5,20a8f0d5c77d4fe6dda8359e39f0385a",
                 "ACC5963A3.bam.bai:md5,1f849f9349136af7bd03df71b1748623",
+                "gffread_output.fasta:md5,7dbf3195d06f480fa5b2421004580bdd",
                 "grch37_chr21.dict:md5,53d95c36db0422d29db02c8a8da56e43",
                 "grch37_chr21.fa:md5,e9ce36e75cd57d255ad64eb2ecca4dd0",
                 "grch37_chr21.fa.fai:md5,93c052a6e351d5db0d7a0156816f51fb",
                 "grch37_chr21.fa.fai.sizes:md5,ffd90da532db7928daa1591d45dc26c4",
                 "grch37_chr21.gtf:md5,01924b6ce7016e41d5e2b22e478ca12f",
                 "grch37_chr21.refflat:md5,9c34a780a2505949c4c613dfc79f8d2d",
-                "grch37_chr21_gffread_output.fa:md5,7dbf3195d06f480fa5b2421004580bdd",
                 "rrna.bed:md5,1c99687a18201c904edc40fb03088787",
                 "rrna.bed.interval_list:md5,d12bf78e46ad4ce933d23bcd17950845",
                 "rrna.gtf:md5,f8f524389ae15f74f139fd93e5a1b5df",
@@ -309,6 +309,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-03-28T10:43:22.206652"
+        "timestamp": "2025-04-22T13:54:06.38474"
     }
 }

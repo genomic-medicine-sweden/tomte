@@ -120,7 +120,8 @@ workflow PREPARE_REFERENCES {
         sequence_dict = ch_dict                                // channel: [ val(meta), path(dict) ]
         star_index    = ch_star_final.collect()                // channel: [ val(meta), path(star_index) ]
         salmon_index  = ch_salmon_final.collect()              // channel: [ path(salmon_index) ]
-        refflat       = UCSC_GTFTOGENEPRED.out.refflat.map{ meta, refflat -> [refflat] }.collect()   // channel: [ path(refflat) ]
+        refflat       = UCSC_GTFTOGENEPRED.out.refflat.
+            map{ meta, refflat -> [refflat] }.collect()        // channel: [ path(refflat) ]
         rrna_bed      = GET_RRNA_TRANSCRIPTS.out.bed.collect() // channel: [ path(bed) ]
         interval_list = ch_interval                            // channel: [ path(interval) ]
         vep_cache     = ch_final_vep.collect()                 // channel: [ path(cache) ]
