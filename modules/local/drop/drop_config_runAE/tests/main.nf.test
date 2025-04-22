@@ -48,9 +48,9 @@ nextflow_process {
         process {
             """
             input[0] = Channel.of([
-                        'ACC5963A1', false, 'reverse', 'NA',
-                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
-                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                        ['ACC5963A1'], [false], ['reverse'], ['NA'],
+                        [file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true)],
+                        [file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)]
                     ])
             input[1] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
             input[2] = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true)
@@ -71,8 +71,8 @@ nextflow_process {
                 input[1] = GUNZIP_GTF.out.gunzip.collect()
                 input[2] = DROP_SAMPLE_ANNOT.out.drop_annot
                 input[3] = Channel.of([
-                        [file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true)],
-                        [file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)]
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
                     ])
                 input[4] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
                 input[5] = channel.fromPath("${projectDir}/test_data/drop_data", checkIfExists: true)
