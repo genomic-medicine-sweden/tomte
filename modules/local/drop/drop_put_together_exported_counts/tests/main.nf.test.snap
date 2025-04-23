@@ -1,0 +1,17 @@
+{
+    "Should run without failures": {
+        "content": [
+            [
+                "exported_counts"
+            ],
+            [
+                "versions.yml:md5,ef2c34df7d7aa59f1effd1f590cd4582"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-17T11:39:49.055318"
+    }
+}
