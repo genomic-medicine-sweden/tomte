@@ -1,0 +1,104 @@
+nextflow_process {
+
+    name "Test Process DROP_CONFIG_RUN_AE"
+    script "../main.nf"
+    process "DROP_CONFIG_RUN_AE"
+    tag "modules"
+    tag "modules_local"
+    tag "drop"
+    tag "drop_config_runAE"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+            script "../../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'fasta' ],
+                    file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("SAMTOOLS_FAIDX") {
+            script "../../../../../modules/nf-core/samtools/faidx/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                input[1] = [[],[]]
+                """
+            }
+        }
+
+        run("GUNZIP", alias: "GUNZIP_GTF") {
+            script "../../../../../modules/nf-core/gunzip/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'gtf' ],
+                    file("${projectDir}/test_data/grch37_chr21.gtf.gz", checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        run("DROP_SAMPLE_ANNOT") {
+        script "../../../../../modules/local/drop/drop_sample_annot/main.nf"
+        process {
+            """
+            input[0] = Channel.of([
+                        ['ACC5963A1'], [false], ['reverse'], ['NA'],
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                    ])
+            input[1] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
+            input[2] = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true)
+            input[3] = 'outrider'
+            input[4] = 'fraser'
+            """
+            }
+        }
+
+    }
+
+    test("Should run without failures") {
+
+        when {
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip.join(SAMTOOLS_FAIDX.out.fai).collect()
+                input[1] = GUNZIP_GTF.out.gunzip.collect()
+                input[2] = DROP_SAMPLE_ANNOT.out.drop_annot
+                input[3] = Channel.of([
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                    ])
+                input[4] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
+                input[5] = channel.fromPath("${projectDir}/test_data/drop_data", checkIfExists: true)
+                input[6] = 'GRCh37'
+                input[7] = 'outrider'
+                input[8] = 'fraser'
+                input[9] = 1
+                input[10] = 2.5
+                input[11] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(
+                    process.out.config_drop.collect{ file(it).name },
+                    process.out.drop_gene_name,
+                    process.out.drop_ae_rds.collect{ file(it).name },
+                    process.out.drop_ae_out.collect{ file(it).name },
+                    process.out.versions,
+                ).match()}
+            )
+        }
+
+    }
+
+}
