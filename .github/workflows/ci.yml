@@ -48,6 +48,7 @@ jobs:
           - "gencode_download"
           - "vep_gnomad_download"
           - "wget_download"
+          - "build_vep_cache"
         profile:
           - "docker"
           - "singularity"

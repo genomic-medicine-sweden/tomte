@@ -12,10 +12,10 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = [
+                input[0] = Channel.of([
                     'vep_files.csv',
                     "https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_files.csv",
-                ]
+                ])
                 """
             }
         }
@@ -32,10 +32,10 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = [
+                input[0] = Channel.of([
                     'vep_cache_and_plugins',
                     "https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz",
-                ]
+                ])
                 """
             }
         }
