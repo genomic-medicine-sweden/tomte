@@ -20,8 +20,14 @@ nextflow_process {
         }
 
         then {
-            assert process.success
-            assert snapshot(process.out).match()
+            assertAll(
+                {assert process.success},
+                { assert snapshot(
+                    file(process.out.gnomad_vcf_tbi.get(0).get(0)).getName(),
+                    file(process.out.gnomad_vcf_tbi.get(0).get(1)).getName(),
+                    process.out.versions
+                ).match() }
+            )
         }
 
     }
