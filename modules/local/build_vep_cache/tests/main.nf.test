@@ -29,9 +29,9 @@ nextflow_process {
                 """
             }
         }
-    } 
+    }
 
-    
+
     test("Should run without failures") {
 
         when {
