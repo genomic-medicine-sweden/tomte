@@ -15,7 +15,7 @@
                 "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
             ],
             [
-                "versions.yml:md5,4ab5aab4abb17eb59948e84bc3caacab",
+                "versions.yml:md5,1186a2f1c20c3a02a3a9732820c9a6f4",
                 "versions.yml:md5,751a6d20ce7cac841bd18b19e74189eb",
                 "versions.yml:md5,767cd878bb512f92163193378381d5c9",
                 "versions.yml:md5,8a206ac32b9dc4804f742ea5192e0f7e",
@@ -27,6 +27,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-11T10:50:25.843804"
+        "timestamp": "2025-04-23T15:48:44.076781"
     }
 }
