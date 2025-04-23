@@ -34,7 +34,7 @@ process GENCODE_DOWNLOAD {
     fi
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        wget: \$(echo wget -V 2>&1 | grep "GNU Wget" | cut -d" " -f3)
+        gnu-wget: \$(echo \$(wget --version 2>&1)| grep "GNU Wget" | cut -d" " -f3 )
     END_VERSIONS
     """
 
@@ -44,7 +44,7 @@ process GENCODE_DOWNLOAD {
     touch gencode.v${genome_gencode_version}.primary_assembly.annotation.gtf
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        wget: \$(echo wget -V 2>&1 | grep "GNU Wget" | cut -d" " -f3)
+        gnu-wget: \$(echo \$(wget --version 2>&1)| grep "GNU Wget" | cut -d" " -f3 )
     END_VERSIONS
     """
 

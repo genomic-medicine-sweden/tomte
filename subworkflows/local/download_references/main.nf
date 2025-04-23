@@ -2,10 +2,10 @@
 // Download reference files
 //
 
-include { GENCODE_DOWNLOAD as FASTA_DOWNLOAD } from '../../../modules/local/gencode_download'
-include { GENCODE_DOWNLOAD as GTF_DOWNLOAD   } from '../../../modules/local/gencode_download'
-include { WGET_DOWNLOAD as WGET_DOWNLOAD     } from '../../../modules/local/wget_download'
-include { VEP_GNOMAD_DOWNLOAD                } from '../../../modules/local/vep_gnomad_download'
+include { GENCODE_DOWNLOAD as FASTA_DOWNLOAD } from '../../../modules/local/download/gencode_download'
+include { GENCODE_DOWNLOAD as GTF_DOWNLOAD   } from '../../../modules/local/download/gencode_download'
+include { WGET_DOWNLOAD as WGET_DOWNLOAD     } from '../../../modules/local/download/wget_download'
+include { VEP_GNOMAD_DOWNLOAD                } from '../../../modules/local/download/vep_gnomad_download'
 include { BUILD_VEP_CACHE                    } from '../../../modules/local/build_vep_cache'
 
 workflow DOWNLOAD_REFERENCES {

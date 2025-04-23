@@ -1,0 +1,31 @@
+{
+    "vep_gnomad_download -stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "/home/lucia.penaperez/github/gms/tomte/.nf-test/tests/51e3b9d76b35db65f736ad3a8e40ff40/work/03/7a1948072f961cc16954661617b6e9/gnomad_v4.0.vcf.gz",
+                        "gnomad_v4.0.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,b53047a306822256b15bf6ddb998a393"
+                ],
+                "gnomad_vcf_tbi": [
+                    [
+                        "/home/lucia.penaperez/github/gms/tomte/.nf-test/tests/51e3b9d76b35db65f736ad3a8e40ff40/work/03/7a1948072f961cc16954661617b6e9/gnomad_v4.0.vcf.gz",
+                        "gnomad_v4.0.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,b53047a306822256b15bf6ddb998a393"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-23T08:51:23.334743"
+    }
+}

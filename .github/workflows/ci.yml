@@ -45,6 +45,9 @@ jobs:
           - "allele_specific_calling"
           - "annotate_snv"
           - "igv_tracks"
+          - "gencode_download"
+          - "vep_gnomad_download"
+          - "wget_download"
         profile:
           - "docker"
           - "singularity"
