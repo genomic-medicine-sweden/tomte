@@ -40,11 +40,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated nf-core/tools template to v3.2.0 [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
 - Updated multiqc module [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
 - Updated gatk4/splitncigarreads module [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+- Updated local gffread and gtftorefflat modules solving [#224](https://github.com/genomic-medicine-sweden/tomte/issues/224) to nf-core ones [#227](https://github.com/genomic-medicine-sweden/tomte/pull/227)
 
 | Tool                   | Old version | New version |
 | ---------------------- | ----------- | ----------- |
 | multiqc                | 1.25.1      | 1.27        |
 | gatk4/splitncigarreads | 4.5.0.0     | 4.6.1.0     |
+| gffread                | 0.12.1      | 0.12.7      |
+| gtftogenepred          | 377         | 447         |
 
 ### `Fixed`
 
