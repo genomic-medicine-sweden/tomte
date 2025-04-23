@@ -4,6 +4,7 @@ nextflow_pipeline {
     script "../main.nf"
     tag "pipeline"
     tag "tomte"
+    tag "tomte_no_skip"
 
     test("test profile") {
         tag "tomte_no_skip"

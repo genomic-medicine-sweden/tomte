@@ -10,6 +10,9 @@ nextflow_workflow {
     test("Should run without failures") {
 
         when {
+            params {
+                genome='GRCh37'
+            }
             workflow {
                 """
                 input[0] =  Channel.of([
