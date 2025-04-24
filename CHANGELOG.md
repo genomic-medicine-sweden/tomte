@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nf-test for all drop modules [#226](https://github.com/genomic-medicine-sweden/tomte/pull/226)
 - Nf-test for build_vep_cache, gencode_download, vep_gnomad_download, and wget_download modules [#228](https://github.com/genomic-medicine-sweden/tomte/pull/228)
 - Nf-test for call_variants_gatk [#229](https://github.com/genomic-medicine-sweden/tomte/pull/229)
+- Solve [#230](https://github.com/genomic-medicine-sweden/tomte/issues/230) by running only tests for processes/workflows that have been modified [#231](https://github.com/genomic-medicine-sweden/tomte/pull/231)
 
 ### `Parameters`
 
