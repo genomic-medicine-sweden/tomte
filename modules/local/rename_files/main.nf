@@ -26,7 +26,7 @@ process RENAME_FILES {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        ln: \$(echo \$(ln --version 2>&1 | head -n 1 | cut -d ' ' -f4))
+        gnu-wget: \$(echo \$(wget --version 2>&1)| grep "GNU Wget" | cut -d" " -f3 )
     END_VERSIONS
     """
 
@@ -39,7 +39,7 @@ process RENAME_FILES {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        ln: \$(echo \$(ln --version 2>&1 | head -n 1 | cut -d ' ' -f4))
+        gnu-wget: \$(echo \$(wget --version 2>&1)| grep "GNU Wget" | cut -d" " -f3 )
     END_VERSIONS
     """
 }

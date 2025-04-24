@@ -1,0 +1,50 @@
+nextflow_process {
+
+    name "Test Process WGET_DOWNLOAD"
+    script "modules/local/download/wget_download/main.nf"
+    process "WGET_DOWNLOAD"
+    tag "modules"
+    tag "modules_local"
+    tag "wget_download"
+
+    test("wget") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    'vep_files.csv',
+                    "https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_files.csv",
+                ])
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+    test("wget tar.gz") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    'vep_cache_and_plugins',
+                    "https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz",
+                ])
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}

@@ -1,0 +1,16 @@
+{
+    "vep_gnomad_download -stub": {
+        "content": [
+            "gnomad_v4.0.vcf.gz",
+            "gnomad_v4.0.vcf.gz.tbi",
+            [
+                "versions.yml:md5,b53047a306822256b15bf6ddb998a393"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-23T15:34:16.771672"
+    }
+}
