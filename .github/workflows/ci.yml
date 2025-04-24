@@ -52,6 +52,11 @@ jobs:
           - "build_vep_cache"
           - "create_pedigree_file"
           - "estimate_hb_perc"
+          - "drop_sample_annot"
+          - "drop_config_runAS"
+          - "drop_config_runAS"
+          - "drop_config_runAE"
+          - "drop_filter_results"
           - "drop_put_together_exported_counts"
         profile:
           - "docker"
