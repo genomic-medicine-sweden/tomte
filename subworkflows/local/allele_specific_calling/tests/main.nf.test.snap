@@ -42,8 +42,8 @@
             ],
             "finequagga_split_rmdup.vcf.gz.tbi",
             [
+                "versions.yml:md5,00ddd8c72d45720f971db98815fbfc0e",
                 "versions.yml:md5,5a598f137d76283570a71ae5b1262cdb",
-                "versions.yml:md5,73e67d4932a54761a2a72431418a8dc4",
                 "versions.yml:md5,7630e1a433dad44c977abc1950472edc",
                 "versions.yml:md5,8b20833ca0ea8932e974e6cd11cee929",
                 "versions.yml:md5,abaa706f5766a4d8d47df4c748cb5bb2",
@@ -57,6 +57,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-11T12:05:43.505989"
+        "timestamp": "2025-04-23T16:09:58.632648"
     }
 }
