@@ -111,7 +111,6 @@ workflow PREPARE_REFERENCES {
             ch_built_trfasta = ch_built_trfasta.mix( GFFREAD.out.gffread_fasta.map{ meta, gffread_fa -> gffread_fa } ).collect()
             ch_versions = ch_versions.mix( GFFREAD.out.versions )
         }
-        
         // Gunzip transcript fasta if necessary
         ch_trfasta_gunzip = Channel.empty()
         if ( params.transcript_fasta && params.transcript_fasta.endsWith( ".gz" ) ) {
