@@ -32,7 +32,7 @@ jobs:
       matrix:
         NXF_VER:
           - "24.04.2"
-          - "latest-everything"
+          - "latest-stable"
         tags:
           - "tomte_no_skip"
           - "tomte_skip"
