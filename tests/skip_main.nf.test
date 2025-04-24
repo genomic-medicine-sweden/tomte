@@ -3,8 +3,8 @@ nextflow_pipeline {
     name "Test pipeline GENOMICMEDICINESWEDEN_TOMTE"
     script "../main.nf"
     tag "pipeline"
-    tag "tomte_skip"
     tag "tomte"
+    tag "tomte_skip"
 
     test("test profile") {
         tag "tomte_skip"

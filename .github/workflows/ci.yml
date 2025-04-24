@@ -32,7 +32,7 @@ jobs:
       matrix:
         NXF_VER:
           - "24.04.2"
-          - "latest-everything"
+          - "latest-stable"
         tags:
           - "tomte_no_skip"
           - "tomte_skip"
@@ -45,6 +45,10 @@ jobs:
           - "allele_specific_calling"
           - "annotate_snv"
           - "igv_tracks"
+          - "gencode_download"
+          - "vep_gnomad_download"
+          - "wget_download"
+          - "build_vep_cache"
           - "create_pedigree_file"
           - "estimate_hb_perc"
           - "drop_sample_annot"
@@ -106,5 +110,6 @@ jobs:
             --ci \
             --verbose \
             --tag ${{ matrix.tags }} \
+            --changed-since HEAD^ \
             --profile "+${{ matrix.profile }}" \
             --junitxml=test.xml

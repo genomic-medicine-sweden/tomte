@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nf-test for download_references subworkflow [#223](https://github.com/genomic-medicine-sweden/tomte/pull/223)
 - Nf-test for bootstrapann, create_pedigree_file, estimate_hb_perc, get_chrom_sizes, get_rrna_transcripts,junction_track, rename_files, rna_downsample, and rna_subsample_region modules [#224](https://github.com/genomic-medicine-sweden/tomte/pull/224)
 - Nf-test for all drop modules [#226](https://github.com/genomic-medicine-sweden/tomte/pull/226)
+- Nf-test for build_vep_cache, gencode_download, vep_gnomad_download, and wget_download modules [#228](https://github.com/genomic-medicine-sweden/tomte/pull/228)
+- Solve [#230](https://github.com/genomic-medicine-sweden/tomte/issues/230) by running only tests for processes/workflows that have been modified [#231](https://github.com/genomic-medicine-sweden/tomte/pull/231)
 
 ### `Parameters`
 
@@ -56,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GENCODE_DOWNLOAD stub crashes by removing double versions.yml write. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
 - Default peddy parent ID to "0" if not present. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
 - BUILD_VEP_CACHE, VEP_GNOMAD_DOWNLOAD and WGET_DOWNLOAD stubs crash, fixed by removing double versions.yml write. [#223](https://github.com/genomic-medicine-sweden/tomte/pull/223)
+- Version output of modules solving [#208](https://github.com/genomic-medicine-sweden/tomte/issues/208) [#228](https://github.com/genomic-medicine-sweden/tomte/pull/228)
 
 ## 3.0.1 - Snowman [2025-03-26]
 
