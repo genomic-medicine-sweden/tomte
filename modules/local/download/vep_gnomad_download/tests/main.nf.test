@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process VEP_GNOMAD_DOWNLOAD"
+    script "../main.nf"
+    process "VEP_GNOMAD_DOWNLOAD"
+    tag "modules"
+    tag "modules_local"
+    tag "vep_gnomad_download"
+
+    test("vep_gnomad_download -stub") {
+
+        when {
+            options "-stub"
+            process {
+                """
+                input[0] = 'GRCh38'
+                input[1] = 110
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                {assert process.success},
+                { assert snapshot(
+                    file(process.out.gnomad_vcf_tbi.get(0).get(0)).getName(),
+                    file(process.out.gnomad_vcf_tbi.get(0).get(1)).getName(),
+                    process.out.versions
+                ).match() }
+            )
+        }
+
+    }
+
+}
