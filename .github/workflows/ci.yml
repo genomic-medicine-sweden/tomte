@@ -110,5 +110,6 @@ jobs:
             --ci \
             --verbose \
             --tag ${{ matrix.tags }} \
+            --changed-since HEAD^ \
             --profile "+${{ matrix.profile }}" \
             --junitxml=test.xml
