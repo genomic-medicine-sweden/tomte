@@ -45,9 +45,9 @@ workflow PREPARE_REFERENCES {
         ch_versions = Channel.empty()
 
         // Gunzip fasta if necessary
-        ch_fasta_final = branchChannelToCompressedAndUncompressed(ch_fasta).uncompressed.collect() 
-        if ( gunzip_fasta ) { 
-            GUNZIP_FASTA( ch_fasta ) 
+        ch_fasta_final = branchChannelToCompressedAndUncompressed(ch_fasta).uncompressed.collect()
+        if ( gunzip_fasta ) {
+            GUNZIP_FASTA( ch_fasta )
             ch_fasta_final = ch_fasta_final.mix( GUNZIP_FASTA.out.gunzip ).collect()
             ch_versions = ch_versions.mix( GUNZIP_FASTA.out.versions ) 
         }
@@ -93,7 +93,7 @@ workflow PREPARE_REFERENCES {
                 UNTAR_STAR_INDEX( ch_star_index_input )
                 ch_star_final = ch_star_final.mix( UNTAR_STAR_INDEX.out.untar ).collect()
                 ch_versions = ch_versions.mix( UNTAR_STAR_INDEX.out.versions )
-            }   
+            }
         }
 
         // Convert gtf to refflat for picard
@@ -122,7 +122,7 @@ workflow PREPARE_REFERENCES {
             }
         }
 
-        
+
         // If no salmon index, create it
         if ( build_salmon_index ) {
             SALMON_INDEX( ch_fasta_final.map{ meta, fasta -> fasta }, ch_transcript_fasta_final )
