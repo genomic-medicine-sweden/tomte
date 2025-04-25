@@ -59,7 +59,7 @@ workflow TOMTE {
         !params.fasta,
         !params.gtf,
         !params.skip_download_vep && !params.vep_cache,
-        !params.skip_download_gnomad,
+        !params.skip_download_gnomad
     ).set { downloads }
     ch_versions = ch_versions.mix(DOWNLOAD_REFERENCES.out.versions)
 
