@@ -55,7 +55,11 @@ workflow TOMTE {
         params.genome,
         params.gencode_annotation_version,
         ch_vep_refs_download_unprocessed,
-        params.vep_cache_version
+        params.vep_cache_version,
+        !params.fasta,
+        !params.gtf,
+        !params.skip_download_vep && !params.vep_cache,
+        !params.skip_download_gnomad,
     ).set { downloads }
     ch_versions = ch_versions.mix(DOWNLOAD_REFERENCES.out.versions)
 

@@ -22,7 +22,10 @@ nextflow_workflow {
                 input[1] = Channel.of(46)
                 input[2] = Channel.of([file("${projectDir}/test_data/vep_to_download_37.csv", checkIfExists: true)])
                 input[3] = Channel.of(112)
-
+                input[4] = true
+                input[5] = true
+                input[6] = true
+                input[7] = true
                 """
             }
         }
