@@ -49,7 +49,7 @@ workflow PREPARE_REFERENCES {
         if ( gunzip_fasta ) {
             GUNZIP_FASTA( ch_fasta )
             ch_fasta_final = ch_fasta_final.mix( GUNZIP_FASTA.out.gunzip ).collect()
-            ch_versions = ch_versions.mix( GUNZIP_FASTA.out.versions ) 
+            ch_versions = ch_versions.mix( GUNZIP_FASTA.out.versions )
         }
         ch_fasta_final.view()
         // If no genome indices, create it
