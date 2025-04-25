@@ -28,20 +28,32 @@ workflow PREPARE_REFERENCES {
         ch_transcript_fasta_input // channel: [optional]  [ path(transcript_fasta) ]
         ch_salmon_index_input     // channel: [optional]  [ path(salmon_index) ]
         ch_sequence_dict_input    // channel: [optional]  [ val(meta), path(dict) ]
+        gunzip_fasta              // boolean: should we gunzip fasta
+        gunzip_gtf                // boolean: should we gunzip gtf
+        gunzip_transcript_fasta   // boolean: should we gunzip transcript_fasta
+        untar_star_index          // boolean: should we untar star_index
+        untar_salmon_index        // boolean: should we untar salmon_index
+        untar_vep_cache           // boolean: should we untar vep_cache
+        build_fai                 // boolean: should we build fai
+        build_sequence_dict       // boolean: should we build sequence_dict
+        build_transcript_fasta    // boolean: should we build transcript_fasta
+        build_star_index          // boolean: should we build star_index
+        build_salmon_index        // boolean: should we build salmon_index
+
 
     main:
         ch_versions = Channel.empty()
 
         // Gunzip fasta if necessary
         ch_fasta_final = branchChannelToCompressedAndUncompressed(ch_fasta).uncompressed.collect() 
-        if ( params.fasta && params.fasta.endsWith( ".gz" ) ) { 
+        if ( gunzip_fasta ) { 
             GUNZIP_FASTA( ch_fasta ) 
-            ch_fasta_final = ch_fasta_final.mix( GUNZIP_FASTA.out.gunzip ).collect() 
+            ch_fasta_final = ch_fasta_final.mix( GUNZIP_FASTA.out.gunzip ).collect()
             ch_versions = ch_versions.mix( GUNZIP_FASTA.out.versions ) 
         }
-
+        ch_fasta_final.view()
         // If no genome indices, create it
-        if ( !params.fai ) {
+        if ( build_fai ) {
             SAMTOOLS_FAIDX_GENOME( ch_fasta_final,[[],[]] )
             ch_fai = SAMTOOLS_FAIDX_GENOME.out.fai.collect()
             ch_versions = ch_versions.mix( SAMTOOLS_FAIDX_GENOME.out.versions )
@@ -50,7 +62,7 @@ workflow PREPARE_REFERENCES {
         }
 
         // If no dictionary, create it
-        if ( !params.sequence_dict ) {
+        if ( build_sequence_dict ) {
             BUILD_DICT( ch_fasta_final )
             ch_dict_final = ch_sequence_dict_input.mix( BUILD_DICT.out.dict ).collect()
             ch_versions = ch_versions.mix( BUILD_DICT.out.versions )
@@ -63,21 +75,21 @@ workflow PREPARE_REFERENCES {
 
         // Gunzip gtf if necessary
         ch_gtf_final = branchChannelToCompressedAndUncompressed( ch_gtf ).uncompressed.collect()
-        if ( params.gtf && params.gtf.endsWith( ".gz" ) ) {
+        if ( gunzip_gtf ) {
             GUNZIP_GTF( ch_gtf )
             ch_gtf_final = ch_gtf_final.mix( GUNZIP_GTF.out.gunzip ).collect()
             ch_versions = ch_versions.mix( GUNZIP_GTF.out.versions )
         }
 
         // If no star index, create it
-        if ( !params.star_index ) {
+        if ( build_star_index ) {
             BUILD_STAR_GENOME( ch_fasta_final, ch_gtf_final )
             ch_star_final = BUILD_STAR_GENOME.out.index.collect()
             ch_versions = ch_versions.mix( BUILD_STAR_GENOME.out.versions )
         } else {
             // Untar star index if necessary
             ch_star_final = branchChannelToCompressedAndUncompressed( ch_star_index_input ).uncompressed.collect()
-            if ( params.star_index && params.star_index.endsWith( ".gz" ) ) {
+            if ( untar_star_index ) {
                 UNTAR_STAR_INDEX( ch_star_index_input )
                 ch_star_final = ch_star_final.mix( UNTAR_STAR_INDEX.out.untar ).collect()
                 ch_versions = ch_versions.mix( UNTAR_STAR_INDEX.out.versions )
@@ -96,14 +108,14 @@ workflow PREPARE_REFERENCES {
         ch_fasta_fai = ch_fasta_final.join( ch_fai ).collect()
 
         // Preparing transcript fasta
-        if ( !params.transcript_fasta ) {
+        if ( build_transcript_fasta ) {
             GFFREAD( ch_gtf_final, ch_fasta_final.map{ meta, fasta -> fasta } )
             ch_transcript_fasta_final = GFFREAD.out.gffread_fasta.map{ meta, gffread_fa -> gffread_fa }.collect()
             ch_versions = ch_versions.mix( GFFREAD.out.versions )
         } else {
             ch_transcript_fasta_final = branchChannelToCompressedAndUncompressed( ch_transcript_fasta_input ).uncompressed.collect()
             // Gunzip transcript fasta if necessary
-            if ( params.transcript_fasta && params.transcript_fasta.endsWith( ".gz" ) ) {
+            if ( gunzip_transcript_fasta ) {
                 GUNZIP_TRFASTA ( ch_transcript_fasta_input.map { it -> [[:], it] } )
                 ch_transcript_fasta_final = ch_transcript_fasta_final.mix( GUNZIP_TRFASTA.out.gunzip.map{ meta, index -> index } ).collect()
                 ch_versions = ch_versions.mix( GUNZIP_TRFASTA.out.versions )
@@ -112,14 +124,14 @@ workflow PREPARE_REFERENCES {
 
         
         // If no salmon index, create it
-        if ( !params.salmon_index ) {
+        if ( build_salmon_index ) {
             SALMON_INDEX( ch_fasta_final.map{ meta, fasta -> fasta }, ch_transcript_fasta_final )
             ch_salmon_final = SALMON_INDEX.out.index.collect()
             ch_versions = ch_versions.mix( SALMON_INDEX.out.versions )
         } else {
             ch_salmon_final = branchChannelToCompressedAndUncompressed( ch_salmon_index_input ).uncompressed.collect()
             // Untar salmon index if necessary
-            if ( params.salmon_index && params.salmon_index.endsWith( ".gz" ) ) {
+            if ( untar_salmon_index ) {
                 UNTAR_SALMON_INDEX( ch_salmon_index_input.map { it -> [[:], it] } )
                 ch_salmon_final = ch_salmon_final.mix( UNTAR_SALMON_INDEX.out.untar.map{meta, index -> index} ).collect()
                 ch_versions = ch_versions.mix( UNTAR_SALMON_INDEX.out.versions )
@@ -128,7 +140,7 @@ workflow PREPARE_REFERENCES {
 
         // Untar vep chache is necesary
         ch_final_vep = branchChannelToCompressedAndUncompressed( ch_vep_cache_input ).uncompressed.collect()
-        if ( params.vep_cache && params.vep_cache.endsWith(".gz") ) {
+        if ( untar_vep_cache ) {
             UNTAR_VEP_CACHE ( ch_vep_cache_input.map { vep_cache -> [ [ id:'vep_cache' ], vep_cache ] } )
             ch_final_vep = ch_final_vep.mix( UNTAR_VEP_CACHE.out.untar.map{ meta, vep_cache -> vep_cache } ).collect()
             ch_versions = ch_versions.mix( UNTAR_VEP_CACHE.out.versions )
