@@ -19,32 +19,50 @@ workflow DOWNLOAD_REFERENCES {
         ch_versions = Channel.empty()
 
         // Download fasta if not provided
-        FASTA_DOWNLOAD(ch_genome, ch_gencode_annotation_version, "fasta")
+        ch_downloaded_fasta = Channel.empty()
+        if ( !params.fasta ) {
+            FASTA_DOWNLOAD(ch_genome, ch_gencode_annotation_version, "fasta")
+            ch_downloaded_fasta = ch_downloaded_fasta.mix( FASTA_DOWNLOAD.out.fasta ).collect()
+            ch_versions = ch_versions.mix(FASTA_DOWNLOAD.out.versions)
+        }
 
         // Download gtf if not provided
-        GTF_DOWNLOAD(ch_genome, ch_gencode_annotation_version, "gtf")
+        ch_downloaded_gtf = Channel.empty()
+        if ( !params.gtf ) {
+            GTF_DOWNLOAD(ch_genome, ch_gencode_annotation_version, "gtf")
+            ch_downloaded_gtf = ch_downloaded_gtf.mix( GTF_DOWNLOAD.out.gtf ).collect()
+            ch_versions = ch_versions.mix(GTF_DOWNLOAD.out.versions)
+        }
 
         // Read and store paths in vep_refs_download_unprocessed
-        ch_vep_refs_download_unprocessed.splitCsv(header: true)
-            .map { row -> return tuple(row.name, row.path_for_wget) }
-            .set { ch_vep_refs_download }
-
         // Download files
-        WGET_DOWNLOAD(ch_vep_refs_download.filter{ it != null })
-        VEP_GNOMAD_DOWNLOAD(ch_genome, ch_vep_cache_version)
+        if ( !params.skip_download_vep && !params.vep_cache ) { 
+            ch_vep_refs_download_unprocessed.splitCsv(header: true)
+                .map { row -> return tuple(row.name, row.path_for_wget) }
+                .set { ch_vep_refs_download }
+            WGET_DOWNLOAD(ch_vep_refs_download.filter{ it != null })
+            ch_versions = ch_versions.mix(WGET_DOWNLOAD.out.versions)
+        }
 
-        BUILD_VEP_CACHE(WGET_DOWNLOAD.out.downloaded_file.collect(), VEP_GNOMAD_DOWNLOAD.out.gnomad_vcf_tbi.flatten().collect())
+        if ( !params.skip_download_gnomad ) {
+            VEP_GNOMAD_DOWNLOAD(ch_genome, ch_vep_cache_version)
+            ch_versions = ch_versions.mix(VEP_GNOMAD_DOWNLOAD.out.versions)
+        }
 
-        ch_versions = ch_versions.mix(FASTA_DOWNLOAD.out.versions)
-        ch_versions = ch_versions.mix(GTF_DOWNLOAD.out.versions)
-        ch_versions = ch_versions.mix(WGET_DOWNLOAD.out.versions)
-        ch_versions = ch_versions.mix(VEP_GNOMAD_DOWNLOAD.out.versions)
+        ch_built_vep_cache = Channel.empty()
+        ch_built_vep_plugin_file = Channel.empty()
+        if ( !params.skip_download_vep && !params.vep_cache ){
+            BUILD_VEP_CACHE(WGET_DOWNLOAD.out.downloaded_file.collect(), VEP_GNOMAD_DOWNLOAD.out.gnomad_vcf_tbi.flatten().collect())
+            ch_built_vep_cache = ch_built_vep_cache.mix( BUILD_VEP_CACHE.out.vep_cache )
+            ch_built_vep_plugin_file = ch_built_vep_plugin_file.mix( BUILD_VEP_CACHE.out.vep_plugin_file )
+            ch_versions = ch_versions.mix(BUILD_VEP_CACHE.out.versions)
+        }
 
 
     emit:
-        fasta      = FASTA_DOWNLOAD.out.fasta            // channel: [ path(fasta) ]
-        gtf        = GTF_DOWNLOAD.out.gtf                // channel: [ path(gtf) ]
-        vep_cache  = BUILD_VEP_CACHE.out.vep_cache       // channel: [ path(vep_cache) ]
-        vep_plugin = BUILD_VEP_CACHE.out.vep_plugin_file // channel: [ path(vep_plugin) ]
-        versions   = ch_versions                         // channel: [ path(versions.yml) ]
+        fasta      = ch_downloaded_fasta      // channel: [ path(fasta) ]
+        gtf        = ch_downloaded_gtf        // channel: [ path(gtf) ]
+        vep_cache  = ch_built_vep_cache       // channel: [ path(vep_cache) ]
+        vep_plugin = ch_built_vep_plugin_file // channel: [ path(vep_plugin) ]
+        versions   = ch_versions              // channel: [ path(versions.yml) ]
 }

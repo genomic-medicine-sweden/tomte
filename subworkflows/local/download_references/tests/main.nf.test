@@ -3,7 +3,6 @@ nextflow_workflow {
     name "Test Workflow DOWNLOAD_REFERENCES"
     script "subworkflows/local/download_references/main.nf"
     workflow "DOWNLOAD_REFERENCES"
-    config "./nextflow.config"
     tag "subworkflow"
     tag "download_references"
 
@@ -13,6 +12,9 @@ nextflow_workflow {
             params {
                 skip_download_gnomad = false
                 skip_download_vep    = false
+                fasta                = []
+                gtf                  = []
+                vep_cache            = []
             }
             workflow {
                 """
