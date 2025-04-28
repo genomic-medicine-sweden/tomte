@@ -2,7 +2,7 @@
     "bam_alignment": {
         "content": [
             [
-                "versions.yml:md5,c6359df28f45236797d408fb562cef4d"
+                
             ],
             [
                 [
@@ -41,7 +41,7 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-03-25T14:38:51.148207"
+        "timestamp": "2025-04-28T07:41:43.754107"
     },
     "fastq_alignment": {
         "content": [

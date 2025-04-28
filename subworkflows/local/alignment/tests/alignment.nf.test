@@ -87,6 +87,7 @@ nextflow_workflow {
                 input[9]  = true
                 input[10] = SALMON_INDEX.out.index
                 input[11] = GUNZIP_FASTA.out.gunzip
+                input[12]  = true
                 """
             }
         }
@@ -124,6 +125,7 @@ nextflow_workflow {
                 input[9]  = true
                 input[10] = SALMON_INDEX.out.index
                 input[11] = GUNZIP_FASTA.out.gunzip
+                input[12]  = false
                 """
             }
         }

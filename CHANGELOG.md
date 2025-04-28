@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated multiqc module [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
 - Updated gatk4/splitncigarreads module [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
 - Updated local gffread and gtftorefflat modules solving [#224](https://github.com/genomic-medicine-sweden/tomte/issues/224) to nf-core ones [#227](https://github.com/genomic-medicine-sweden/tomte/pull/227)
+- Substitute ext.when by if statements on alignment subworkflow [#234](https://github.com/genomic-medicine-sweden/tomte/pull/234)
 
 | Tool                   | Old version | New version |
 | ---------------------- | ----------- | ----------- |
