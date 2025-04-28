@@ -84,7 +84,6 @@ workflow ALIGNMENT {
         ch_versions = ch_versions.mix(FASTP.out.versions.first())
         ch_versions = ch_versions.mix(STAR_ALIGN.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
-        
         ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
 
     emit:
