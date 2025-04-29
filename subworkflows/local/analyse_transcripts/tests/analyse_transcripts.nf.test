@@ -5,7 +5,6 @@ nextflow_workflow {
     workflow "ANALYSE_TRANSCRIPTS"
     tag "analyse_transcripts"
     tag "subworkflow"
-    config "./nextflow.config"
 
     setup {
         run("GUNZIP", alias: "GUNZIP_FASTA") {
@@ -43,18 +42,18 @@ nextflow_workflow {
         }
 
         run("SAMTOOLS_CONVERT", alias: "CRAM_TO_BAM") {
-        script "../../../../modules/nf-core/samtools/convert/main.nf"
-        process {
-            """
-            input[0] = Channel.of([
-                [ case:'finequagga', id:'ACC5963A3', sample:'ACC5963A3', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
-                file("${projectDir}/test_data/ACC5963A3.cram", checkIfExists: true),
-                file("${projectDir}/test_data/ACC5963A3.cram.crai", checkIfExists: true)
-                ])
-            input[1] = GUNZIP_FASTA.out.gunzip
-            input[2] = SAMTOOLS_FAIDX.out.fai
-            """
-            }
+            script "../../../../modules/nf-core/samtools/convert/main.nf"
+            process {
+                """
+                input[0] = Channel.of([
+                    [ case:'finequagga', id:'ACC5963A3', sample:'ACC5963A3', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                    file("${projectDir}/test_data/ACC5963A3.cram", checkIfExists: true),
+                    file("${projectDir}/test_data/ACC5963A3.cram.crai", checkIfExists: true)
+                    ])
+                input[1] = GUNZIP_FASTA.out.gunzip
+                input[2] = SAMTOOLS_FAIDX.out.fai
+                """
+                }
         }
 
     }
@@ -63,9 +62,10 @@ nextflow_workflow {
 
         when {
             params {
-                skip_drop_as = false
-                skip_drop_ae = false
-                skip_stringtie = false
+                skip_drop_as            = false
+                skip_drop_ae            = false
+                skip_stringtie          = false
+                skip_export_counts_drop = false
             }
             workflow {
                 """
@@ -93,7 +93,9 @@ nextflow_workflow {
                 input[13] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
                 input[14] = Channel.of([probands:['ACC5963A1','ACC5963A3'], id:'finequagga']).collect()
                 input[15] = params.skip_drop_ae
-                input[16] = params.skip_export_counts_drop
+                input[16] = params.skip_drop_as
+                input[17] = params.skip_export_counts_drop
+                input[18] = params.skip_stringtie
                 """
             }
         }
@@ -121,14 +123,14 @@ nextflow_workflow {
         options "-stub DROP_CONFIG_RUN_AS,DROP_CONFIG_RUN_AE,DROP_FILTER_RESULTS"
     }
 
-    test("Should run without failures") {
+    test("Should run with one sample") {
 
         when {
             params {
-                skip_drop_as = false
-                skip_drop_ae = true
+                skip_drop_as            = true
+                skip_drop_ae            = false
                 skip_export_counts_drop = true
-                skip_stringtie = false
+                skip_stringtie          = true
             }
             workflow {
                 """
@@ -152,7 +154,9 @@ nextflow_workflow {
                 input[13] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
                 input[14] = Channel.of([probands:['ACC5963A1'], id:'finequagga']).collect()
                 input[15] = params.skip_drop_ae
-                input[16] = params.skip_export_counts_drop
+                input[16] = params.skip_drop_as
+                input[17] = params.skip_export_counts_drop
+                input[18] = params.skip_stringtie
                 """
             }
         }
@@ -161,18 +165,10 @@ nextflow_workflow {
             assertAll(
                 {assert workflow.success},
                 {assert snapshot(
-                    file(workflow.out.transcript_gtf.get(0).get(1)).name,
-                    file(workflow.out.abundance.get(0).get(1)).name,
-                    file(workflow.out.coverage_gtf.get(0).get(1)).name,
-                    file(workflow.out.annotated_gtf.get(0).get(1)).name,
-                    workflow.out.stats_gtf,
                     workflow.out.annotation_drop,
                     workflow.out.config_drop_ae.collect{ file(it).name },
-                    workflow.out.config_drop_as.collect{ file(it).name },
                     workflow.out.drop_ae_out_clinical.collect{ file(it).name },
                     workflow.out.drop_ae_out_research.collect{ file(it).name },
-                    workflow.out.drop_as_out_clinical.collect{ file(it).name },
-                    workflow.out.drop_as_out_research.collect{ file(it).name },
                     workflow.out.versions,
                 ).match()}
             )

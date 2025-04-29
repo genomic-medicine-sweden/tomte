@@ -187,7 +187,9 @@ workflow TOMTE {
         ch_gene_panel_clinical_filter,
         ch_case_info,
         params.skip_drop_ae,
-        params.skip_export_counts_drop
+        params.skip_drop_as,
+        params.skip_export_counts_drop,
+        params.skip_stringtie
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
 
