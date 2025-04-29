@@ -51,6 +51,7 @@ nextflow_workflow {
                 input[4] = GUNZIP_FASTA.out.gunzip.collect()
                 input[5] = channel.fromPath("https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_files.csv", checkIfExists: true)
                 input[6] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true)
+                input[7] = false
                 """
             }
         }

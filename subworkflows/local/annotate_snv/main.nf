@@ -2,24 +2,25 @@
 // Annotating SNVs
 //
 
-include { ENSEMBLVEP_VEP       } from '../../../modules/nf-core/ensemblvep/vep/main'
-include { RENAME_FILES         } from '../../../modules/local/rename_files/main'
-include { TABIX_BGZIPTABIX     } from '../../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_TABIX          } from '../../../modules/nf-core/tabix/tabix/main'
-include { GAWK                 } from '../../../modules/nf-core/gawk/main'
-include { ENSEMBLVEP_FILTERVEP } from '../../../modules/nf-core/ensemblvep/filtervep/main'
+include { ENSEMBLVEP_VEP       } from '../../../modules/nf-core/ensemblvep/vep'
+include { RENAME_FILES         } from '../../../modules/local/rename_files'
+include { TABIX_BGZIPTABIX     } from '../../../modules/nf-core/tabix/bgziptabix'
+include { TABIX_TABIX          } from '../../../modules/nf-core/tabix/tabix'
+include { GAWK                 } from '../../../modules/nf-core/gawk'
+include { ENSEMBLVEP_FILTERVEP } from '../../../modules/nf-core/ensemblvep/filtervep'
 
 
 
 workflow ANNOTATE_SNV {
     take:
-    vcf                            // channel:   [mandatory] [ val(meta), path(vcf) ]
+    vcf                            //   channel:   [mandatory] [ val(meta), path(vcf) ]
     val_vep_genome                 // parameter: [mandatory] 'GRCh37' or 'GRCh38'
     val_vep_cache_version          // parameter: [mandatory] default: 110
-    ch_vep_cache                   // channel:   [mandatory] [ path(cache) ]
-    ch_fasta                       // channel:   [mandatory] [ val(meta), path(fasta) ]
-    ch_vep_extra_files             // channel:   [mandatory] [ path(files) ]
-    ch_gene_panel_clinical_filter  // channel:   [optional]  [ path(file) ]
+    ch_vep_cache                   //   channel:   [mandatory] [ path(cache) ]
+    ch_fasta                       //   channel:   [mandatory] [ val(meta), path(fasta) ]
+    ch_vep_extra_files             //   channel:   [mandatory] [ path(files) ]
+    ch_gene_panel_clinical_filter  //   channel:   [optional]  [ path(file) ]
+    skip_clinical_filter           // parameter: [mandatory] default: true
 
     main:
         ch_versions = Channel.empty()
@@ -54,21 +55,25 @@ workflow ANNOTATE_SNV {
         ch_hgnc_ids = GAWK.out.output.map{ meta, hgnc_ids -> [ hgnc_ids ] }
 
         //Filter results
-        ENSEMBLVEP_FILTERVEP(
-            ch_clin_research_vcf.clinical,
-            ch_hgnc_ids
-        )
-        .output
-        .set { ch_filtervep_out }
+        ch_vcf_clin = Channel.empty() 
+        if ( !skip_clinical_filter ) {
+            ENSEMBLVEP_FILTERVEP(
+                ch_clin_research_vcf.clinical,
+                ch_hgnc_ids
+            )
+            .output
+            .set { ch_filtervep_out }
 
-        TABIX_BGZIPTABIX( ch_filtervep_out )
-        ch_vcf_clin = TABIX_BGZIPTABIX.out.gz_tbi
+            TABIX_BGZIPTABIX( ch_filtervep_out )
+            ch_vcf_clin = TABIX_BGZIPTABIX.out.gz_tbi.mix( ch_vcf_clin ).collect()
+            ch_versions = ch_versions.mix( ENSEMBLVEP_FILTERVEP.out.versions )
+            ch_versions = ch_versions.mix( TABIX_BGZIPTABIX.out.versions )
+
+        }
 
         ch_versions = ch_versions.mix( ENSEMBLVEP_VEP.out.versions.first() )
         ch_versions = ch_versions.mix( RENAME_FILES.out.versions )
         ch_versions = ch_versions.mix( GAWK.out.versions )
-        ch_versions = ch_versions.mix( ENSEMBLVEP_FILTERVEP.out.versions )
-        ch_versions = ch_versions.mix( TABIX_BGZIPTABIX.out.versions )
         ch_versions = ch_versions.mix( TABIX_TABIX.out.versions )
 
     emit:
@@ -79,4 +84,3 @@ workflow ANNOTATE_SNV {
         ch_vcf_research = ch_vcf_research           // channel: [ val(meta), path(vcf.gz) path(tbi)]
         versions        = ch_versions               // channel: [ path(versions.yml) ]
 }
-
