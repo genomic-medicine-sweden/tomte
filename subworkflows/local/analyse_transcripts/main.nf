@@ -101,11 +101,11 @@ workflow ANALYSE_TRANSCRIPTS {
             }
 
             ch_out_drop_gene_name = ( !skip_drop_ae ) ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
-                                                      : DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
+                                                        : DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
             ch_out_drop_ae_rds    = ( !skip_drop_ae ) ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()
-                                                      : Channel.empty()
+                                                        : Channel.empty()
             ch_out_drop_as_tsv    = ( !skip_drop_as ) ? DROP_CONFIG_RUN_AS.out.drop_as_tsv.collect()
-                                                      : Channel.empty()
+                                                        : Channel.empty()
 
             DROP_FILTER_RESULTS(
                 case_info,
