@@ -55,7 +55,7 @@ workflow ANNOTATE_SNV {
         ch_hgnc_ids = GAWK.out.output.map{ meta, hgnc_ids -> [ hgnc_ids ] }
 
         //Filter results
-        ch_vcf_clin = Channel.empty() 
+        ch_vcf_clin = Channel.empty()
         if ( !skip_clinical_filter ) {
             ENSEMBLVEP_FILTERVEP(
                 ch_clin_research_vcf.clinical,
