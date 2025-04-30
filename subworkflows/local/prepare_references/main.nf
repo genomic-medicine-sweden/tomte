@@ -45,11 +45,12 @@ workflow PREPARE_REFERENCES {
         ch_versions = Channel.empty()
 
         // Gunzip fasta if necessary
-        ch_fasta_final = branchChannelToCompressedAndUncompressed(ch_fasta).uncompressed.collect()
         if ( gunzip_fasta ) {
             GUNZIP_FASTA( ch_fasta )
-            ch_fasta_final = ch_fasta_final.mix( GUNZIP_FASTA.out.gunzip ).collect()
+            ch_fasta_final = GUNZIP_FASTA.out.gunzip.collect()
             ch_versions = ch_versions.mix( GUNZIP_FASTA.out.versions )
+        } else {
+            ch_fasta_final = branchChannelToCompressedAndUncompressed(ch_fasta).uncompressed.collect()
         }
         // If no genome indices, create it
         if ( build_fai ) {
@@ -63,7 +64,7 @@ workflow PREPARE_REFERENCES {
         // If no dictionary, create it
         if ( build_sequence_dict ) {
             BUILD_DICT( ch_fasta_final )
-            ch_dict_final = ch_sequence_dict_input.mix( BUILD_DICT.out.dict ).collect()
+            ch_dict_final = BUILD_DICT.out.dict.collect()
             ch_versions = ch_versions.mix( BUILD_DICT.out.versions )
         } else {
             ch_dict_final = ch_sequence_dict_input.collect()
@@ -73,11 +74,12 @@ workflow PREPARE_REFERENCES {
         GET_CHROM_SIZES( ch_fai )
 
         // Gunzip gtf if necessary
-        ch_gtf_final = branchChannelToCompressedAndUncompressed( ch_gtf ).uncompressed.collect()
         if ( gunzip_gtf ) {
             GUNZIP_GTF( ch_gtf )
-            ch_gtf_final = ch_gtf_final.mix( GUNZIP_GTF.out.gunzip ).collect()
+            ch_gtf_final = GUNZIP_GTF.out.gunzip.collect()
             ch_versions = ch_versions.mix( GUNZIP_GTF.out.versions )
+        } else {
+            ch_gtf_final = branchChannelToCompressedAndUncompressed( ch_gtf ).uncompressed.collect()
         }
 
         // If no star index, create it
@@ -87,11 +89,12 @@ workflow PREPARE_REFERENCES {
             ch_versions = ch_versions.mix( BUILD_STAR_GENOME.out.versions )
         } else {
             // Untar star index if necessary
-            ch_star_final = branchChannelToCompressedAndUncompressed( ch_star_index_input ).uncompressed.collect()
             if ( untar_star_index ) {
                 UNTAR_STAR_INDEX( ch_star_index_input )
-                ch_star_final = ch_star_final.mix( UNTAR_STAR_INDEX.out.untar ).collect()
+                ch_star_final = UNTAR_STAR_INDEX.out.untar.collect()
                 ch_versions = ch_versions.mix( UNTAR_STAR_INDEX.out.versions )
+            } else {
+                ch_star_final = branchChannelToCompressedAndUncompressed( ch_star_index_input ).uncompressed.collect()
             }
         }
 
@@ -112,12 +115,13 @@ workflow PREPARE_REFERENCES {
             ch_transcript_fasta_final = GFFREAD.out.gffread_fasta.map{ meta, gffread_fa -> gffread_fa }.collect()
             ch_versions = ch_versions.mix( GFFREAD.out.versions )
         } else {
-            ch_transcript_fasta_final = branchChannelToCompressedAndUncompressed( ch_transcript_fasta_input ).uncompressed.collect()
             // Gunzip transcript fasta if necessary
             if ( gunzip_transcript_fasta ) {
                 GUNZIP_TRFASTA ( ch_transcript_fasta_input.map { it -> [[:], it] } )
-                ch_transcript_fasta_final = ch_transcript_fasta_final.mix( GUNZIP_TRFASTA.out.gunzip.map{ meta, index -> index } ).collect()
+                ch_transcript_fasta_final = GUNZIP_TRFASTA.out.gunzip.map{ meta, index -> index }.collect()
                 ch_versions = ch_versions.mix( GUNZIP_TRFASTA.out.versions )
+            } else {
+                ch_transcript_fasta_final = branchChannelToCompressedAndUncompressed( ch_transcript_fasta_input ).uncompressed.collect()
             }
         }
 
@@ -128,21 +132,23 @@ workflow PREPARE_REFERENCES {
             ch_salmon_final = SALMON_INDEX.out.index.collect()
             ch_versions = ch_versions.mix( SALMON_INDEX.out.versions )
         } else {
-            ch_salmon_final = branchChannelToCompressedAndUncompressed( ch_salmon_index_input ).uncompressed.collect()
             // Untar salmon index if necessary
             if ( untar_salmon_index ) {
                 UNTAR_SALMON_INDEX( ch_salmon_index_input.map { it -> [[:], it] } )
-                ch_salmon_final = ch_salmon_final.mix( UNTAR_SALMON_INDEX.out.untar.map{meta, index -> index} ).collect()
+                ch_salmon_final = UNTAR_SALMON_INDEX.out.untar.map{meta, index -> index}.collect()
                 ch_versions = ch_versions.mix( UNTAR_SALMON_INDEX.out.versions )
+            } else {
+                ch_salmon_final = branchChannelToCompressedAndUncompressed( ch_salmon_index_input ).uncompressed.collect()
             }
         }
 
         // Untar vep chache is necesary
-        ch_final_vep = branchChannelToCompressedAndUncompressed( ch_vep_cache_input ).uncompressed.collect()
         if ( untar_vep_cache ) {
             UNTAR_VEP_CACHE ( ch_vep_cache_input.map { vep_cache -> [ [ id:'vep_cache' ], vep_cache ] } )
-            ch_final_vep = ch_final_vep.mix( UNTAR_VEP_CACHE.out.untar.map{ meta, vep_cache -> vep_cache } ).collect()
+            ch_final_vep = UNTAR_VEP_CACHE.out.untar.map{ meta, vep_cache -> vep_cache }.collect()
             ch_versions = ch_versions.mix( UNTAR_VEP_CACHE.out.versions )
+        } else {
+            ch_final_vep = branchChannelToCompressedAndUncompressed( ch_vep_cache_input ).uncompressed.collect()
         }
 
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
