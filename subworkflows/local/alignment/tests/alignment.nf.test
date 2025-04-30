@@ -98,7 +98,8 @@ nextflow_workflow {
                 { assert snapshot(
                     workflow.out.versions,
                     workflow.out.bam_bai,
-                    workflow.out.bam_ds_bai
+                    workflow.out.bam_ds_bai,
+                    workflow.out.cram_crai
                 ).match() }
             )
         }

@@ -48,12 +48,9 @@ workflow ALIGNMENT {
         SAMTOOLS_INDEX( ch_bam_from_star )
         ch_bai = ch_bai_input_reads.mix(SAMTOOLS_INDEX.out.bai)
 
-        ch_bam_bai_not_downsamp = Channel.empty()
-        ch_bam_bai_input_drop = Channel.empty()
-
         if (!skip_subsample_region) {
             RNA_SUBSAMPLE_REGION( ch_bam_2_process, subsample_bed, seed_frac)
-            ch_bam_bai_not_downsamp = ch_bam_bai_not_downsamp.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
+            ch_bam_bai_not_downsamp = RNA_SUBSAMPLE_REGION.out.bam_bai
             ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
             if (skip_downsample) {
                 ch_bam_bai_input_drop = RNA_SUBSAMPLE_REGION.out.bam_bai
@@ -63,7 +60,7 @@ workflow ALIGNMENT {
                 ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
             }
         } else {
-            ch_bam_bai_not_downsamp = ch_bam_bai_not_downsamp.mix(ch_bam_2_process.join(ch_bai))
+            ch_bam_bai_not_downsamp = ch_bam_2_process.join(ch_bai)
             if (skip_downsample) {
                 ch_bam_bai_input_drop = ch_bam_2_process.join(ch_bai)
             } else {
@@ -76,6 +73,9 @@ workflow ALIGNMENT {
         if ( save_mapped_as_cram ) {
             SAMTOOLS_VIEW( ch_bam_2_process.join(ch_bai), ch_genome_fasta, [], 'crai' )
             ch_versions = ch_versions.mix(SAMTOOLS_VIEW.out.versions.first())
+            ch_cram_crai = SAMTOOLS_VIEW.out.cram.join(SAMTOOLS_VIEW.out.crai)
+        } else {
+            ch_cram_crai = Channel.empty()
         }
 
         SALMON_QUANT( FASTP.out.reads, salmon_index, ch_gtf.map{ meta, gtf ->  gtf  }, [], false, 'A')
@@ -98,6 +98,7 @@ workflow ALIGNMENT {
         star_wig        = STAR_ALIGN.out.wig                 // channel: [ val(meta), path(wig) ]
         salmon_result   = SALMON_QUANT.out.results           // channel: [ val(meta), path(results) ]
         salmon_info     = SALMON_QUANT.out.json_info         // channel: [ val(meta), path(json) ]
+        cram_crai       = ch_cram_crai                       // channel: [ val(meta), path(cram), path(crai) ]
         versions        = ch_versions                        // channel: [ path(versions.yml) ]
 }
 

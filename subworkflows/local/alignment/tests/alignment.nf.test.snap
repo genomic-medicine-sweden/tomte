@@ -89,12 +89,31 @@
                     "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
                     "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
                 ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "case": "finequagga",
+                            "id": "ACC5963A2",
+                            "sample": "ACC5963A2",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        }
+                    },
+                    "ACC5963A2.cram:md5,d630d5365c9b1d03137f5f0a81fd9c78",
+                    "ACC5963A2.cram.crai:md5,bccc8039779c0583419c9a62271737f0"
+                ]
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-03-26T09:08:15.678436"
+        "timestamp": "2025-04-30T12:20:22.129425"
     }
 }
