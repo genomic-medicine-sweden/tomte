@@ -51,7 +51,7 @@ workflow PREPARE_REFERENCES {
             ch_fasta_final = ch_fasta_final.mix( GUNZIP_FASTA.out.gunzip ).collect()
             ch_versions = ch_versions.mix( GUNZIP_FASTA.out.versions )
         }
-        ch_fasta_final.view()
+        
         // If no genome indices, create it
         if ( build_fai ) {
             SAMTOOLS_FAIDX_GENOME( ch_fasta_final,[[],[]] )
