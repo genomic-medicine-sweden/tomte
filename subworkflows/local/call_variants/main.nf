@@ -9,7 +9,7 @@ include { BCFTOOLS_NORM as REMOVE_DUPLICATES   } from '../../../modules/nf-core/
 include { ADD_FOUND_IN_TAG                     } from '../../../modules/local/add_found_in_tag/main'
 
 // Subworkflows
-include { CALL_VARIANTS_GATK } from '../call_variants_gatk.nf'
+include { CALL_VARIANTS_GATK } from '../call_variants_gatk/main'
 
 workflow CALL_VARIANTS {
     take:
