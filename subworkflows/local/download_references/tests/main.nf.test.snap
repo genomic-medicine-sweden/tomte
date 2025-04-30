@@ -3,44 +3,66 @@
         "content": [
             {
                 "0": [
-                    
+                    [
+                        "GRCh37.primary_assembly.genome.fa:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "1": [
-                    
+                    [
+                        "gencode.v46.primary_assembly.annotation.gtf:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "2": [
                     [
-                        
+                        [
+                            
+                        ]
                     ]
                 ],
                 "3": [
-                    "vep_plugin_files.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    [
+                        "vep_plugin_files.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "4": [
                     "versions.yml:md5,5ad99e0b232f053012067e832e6e1e92",
+                    "versions.yml:md5,72932bc4909327e47ed71956c9e1647b",
+                    "versions.yml:md5,c620cc71650399ca7595d5e2348c9e44",
                     "versions.yml:md5,c8e288955620652841c4379a9a7db706",
                     "versions.yml:md5,c8e288955620652841c4379a9a7db706",
-                    "versions.yml:md5,c8e288955620652841c4379a9a7db706"
+                    "versions.yml:md5,c8e288955620652841c4379a9a7db706",
+                    "versions.yml:md5,ee8fecbddd61cf08aba129404527152c"
                 ],
                 "fasta": [
-                    
+                    [
+                        "GRCh37.primary_assembly.genome.fa:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "gtf": [
-                    
+                    [
+                        "gencode.v46.primary_assembly.annotation.gtf:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "vep_cache": [
                     [
-                        
+                        [
+                            
+                        ]
                     ]
                 ],
                 "vep_plugin": [
-                    "vep_plugin_files.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    [
+                        "vep_plugin_files.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "versions": [
                     "versions.yml:md5,5ad99e0b232f053012067e832e6e1e92",
+                    "versions.yml:md5,72932bc4909327e47ed71956c9e1647b",
+                    "versions.yml:md5,c620cc71650399ca7595d5e2348c9e44",
                     "versions.yml:md5,c8e288955620652841c4379a9a7db706",
                     "versions.yml:md5,c8e288955620652841c4379a9a7db706",
-                    "versions.yml:md5,c8e288955620652841c4379a9a7db706"
+                    "versions.yml:md5,c8e288955620652841c4379a9a7db706",
+                    "versions.yml:md5,ee8fecbddd61cf08aba129404527152c"
                 ]
             }
         ],
@@ -48,6 +70,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-23T12:01:26.937697"
+        "timestamp": "2025-04-25T16:51:38.989457"
     }
 }

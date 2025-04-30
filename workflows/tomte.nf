@@ -55,7 +55,11 @@ workflow TOMTE {
         params.genome,
         params.gencode_annotation_version,
         ch_vep_refs_download_unprocessed,
-        params.vep_cache_version
+        params.vep_cache_version,
+        !params.fasta,
+        !params.gtf,
+        !params.skip_download_vep && !params.vep_cache,
+        !params.skip_download_gnomad
     ).set { downloads }
     ch_versions = ch_versions.mix(DOWNLOAD_REFERENCES.out.versions)
 
@@ -118,7 +122,18 @@ workflow TOMTE {
         ch_vep_cache_unprocessed,
         ch_transcript_fasta,
         ch_salmon_index,
-        ch_sequence_dict
+        ch_sequence_dict,
+        params.fasta && params.fasta.endsWith( ".gz" ),
+        params.gtf && params.gtf.endsWith( ".gz" ),
+        params.transcript_fasta && params.transcript_fasta.endsWith( ".gz" ),
+        params.star_index && params.star_index.endsWith( ".gz" ),
+        params.salmon_index && params.salmon_index.endsWith( ".gz" ),
+        params.vep_cache && params.vep_cache.endsWith(".gz"),
+        !params.fai,
+        !params.sequence_dict,
+        !params.transcript_fasta,
+        !params.star_index ,
+        !params.salmon_index
     ).set { ch_references }
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
 
