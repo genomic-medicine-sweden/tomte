@@ -1,0 +1,77 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_VARIANTS_GATK"
+    script "subworkflows/local/call_variants_gatk/main.nf"
+    workflow "CALL_VARIANTS_GATK"
+    config "./nextflow.config"
+    tag "subworkflow"
+    tag "call_variants_gatk"
+
+    setup {
+        run("GUNZIP", alias: "GUNZIP_FASTA") {
+        script "../../../../modules/nf-core/gunzip/main.nf"
+        process {
+            """
+            input[0] = Channel.of([
+                [ id:'fasta' ],
+                file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
+            ])
+            """
+            }
+        }
+
+        run("SAMTOOLS_FAIDX") {
+        script "../../../../modules/nf-core/samtools/faidx/main.nf"
+        process {
+            """
+            input[0] = GUNZIP_FASTA.out.gunzip
+            input[1] = [[],[]]
+            """
+            }
+        }
+
+        run("GATK4_CREATESEQUENCEDICTIONARY", alias: "BUILD_DICT") {
+        script "../../../../modules/nf-core/gatk4/createsequencedictionary/main.nf"
+        process {
+            """
+            input[0] = GUNZIP_FASTA.out.gunzip
+            """
+            }
+        }
+
+    }
+
+
+    test("Should run without failures") {
+
+        when {
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = Channel.of([
+                    [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                    file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                    file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                ])
+                input[1] = GUNZIP_FASTA.out.gunzip.collect()
+                input[2] = SAMTOOLS_FAIDX.out.fai.collect()
+                input[3] = BUILD_DICT.out.dict.collect()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf.collect{path(it[1]).vcf.summary},
+                    workflow.out.tbi,
+                    workflow.out.stats,
+                    workflow.out.versions,
+                ).match()}
+            )
+        }
+
+    }
+
+}

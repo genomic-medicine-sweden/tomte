@@ -40,6 +40,7 @@ jobs:
           - "prepare_references"
           - "alignment"
           - "call_variants"
+          - "call_variants_gatk"
           - "analyse_transcripts"
           - "bam_qc"
           - "allele_specific_calling"
