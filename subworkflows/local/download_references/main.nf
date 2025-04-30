@@ -23,19 +23,21 @@ workflow DOWNLOAD_REFERENCES {
         ch_versions = Channel.empty()
 
         // Download fasta if not provided
-        ch_downloaded_fasta = Channel.empty()
         if ( download_fasta ) {
             FASTA_DOWNLOAD(ch_genome, ch_gencode_annotation_version, "fasta")
-            ch_downloaded_fasta = ch_downloaded_fasta.mix( FASTA_DOWNLOAD.out.fasta ).collect()
+            ch_downloaded_fasta = FASTA_DOWNLOAD.out.fasta.collect()
             ch_versions = ch_versions.mix(FASTA_DOWNLOAD.out.versions)
+        } else {
+            ch_downloaded_fasta = Channel.empty()
         }
 
         // Download gtf if not provided
-        ch_downloaded_gtf = Channel.empty()
         if ( download_gtf ) {
             GTF_DOWNLOAD(ch_genome, ch_gencode_annotation_version, "gtf")
-            ch_downloaded_gtf = ch_downloaded_gtf.mix( GTF_DOWNLOAD.out.gtf ).collect()
+            ch_downloaded_gtf = GTF_DOWNLOAD.out.gtf.collect()
             ch_versions = ch_versions.mix(GTF_DOWNLOAD.out.versions)
+        } else {
+            ch_downloaded_gtf = Channel.empty()
         }
 
 
@@ -44,8 +46,6 @@ workflow DOWNLOAD_REFERENCES {
             ch_versions = ch_versions.mix(VEP_GNOMAD_DOWNLOAD.out.versions)
         }
 
-        ch_built_vep_cache = Channel.empty()
-        ch_built_vep_plugin_file = Channel.empty()
         if ( download_vep_cache ){
             // Read and store paths in vep_refs_download_unprocessed
             // Download files
@@ -54,10 +54,13 @@ workflow DOWNLOAD_REFERENCES {
                 .set { ch_vep_refs_download }
             WGET_DOWNLOAD(ch_vep_refs_download.filter{ it != null })
             BUILD_VEP_CACHE(WGET_DOWNLOAD.out.downloaded_file.collect(), VEP_GNOMAD_DOWNLOAD.out.gnomad_vcf_tbi.flatten().collect())
-            ch_built_vep_cache = ch_built_vep_cache.mix( BUILD_VEP_CACHE.out.vep_cache ).collect()
-            ch_built_vep_plugin_file = ch_built_vep_plugin_file.mix( BUILD_VEP_CACHE.out.vep_plugin_file ).collect()
+            ch_built_vep_cache = BUILD_VEP_CACHE.out.vep_cache.collect()
+            ch_built_vep_plugin_file = BUILD_VEP_CACHE.out.vep_plugin_file.collect()
             ch_versions = ch_versions.mix(WGET_DOWNLOAD.out.versions)
             ch_versions = ch_versions.mix(BUILD_VEP_CACHE.out.versions)
+        } else {
+            ch_built_vep_cache = Channel.empty()
+            ch_built_vep_plugin_file = Channel.empty()
         }
 
 
