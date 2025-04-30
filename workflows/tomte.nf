@@ -122,7 +122,18 @@ workflow TOMTE {
         ch_vep_cache_unprocessed,
         ch_transcript_fasta,
         ch_salmon_index,
-        ch_sequence_dict
+        ch_sequence_dict,
+        params.fasta && params.fasta.endsWith( ".gz" ),
+        params.gtf && params.gtf.endsWith( ".gz" ),
+        params.transcript_fasta && params.transcript_fasta.endsWith( ".gz" ),
+        params.star_index && params.star_index.endsWith( ".gz" ),
+        params.salmon_index && params.salmon_index.endsWith( ".gz" ),
+        params.vep_cache && params.vep_cache.endsWith(".gz"),
+        !params.fai,
+        !params.sequence_dict,
+        !params.transcript_fasta,
+        !params.star_index ,
+        !params.salmon_index
     ).set { ch_references }
     ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
 
