@@ -93,13 +93,17 @@ nextflow_workflow {
         }
 
         then {
+            def fasta = file("${outputDir}/../results/references/grch37_chr21.fa").toString()
+            def cram_file = workflow.out.cram_crai.get(0).get(1).toString()
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.versions,
                     workflow.out.bam_bai,
                     workflow.out.bam_ds_bai,
-                    workflow.out.cram_crai
+                    file(workflow.out.cram_crai.get(0).get(2)).name,
+                    cram( cram_file, fasta ).getHeader(),
+                    cram( cram_file, fasta ).getStatistics(),
+                    workflow.out.versions
                 ).match() }
             )
         }

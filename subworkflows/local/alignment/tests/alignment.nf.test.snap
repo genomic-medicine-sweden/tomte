@@ -46,74 +46,73 @@
     "fastq_alignment": {
         "content": [
             [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "case": "finequagga",
+                            "id": "ACC5963A2",
+                            "sample": "ACC5963A2",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        }
+                    },
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "case": "finequagga",
+                            "id": "ACC5963A2",
+                            "sample": "ACC5963A2",
+                            "strandedness": "reverse",
+                            "sex": "NA",
+                            "single_end": false,
+                            "fq_pairs": 1,
+                            "is_fastq": true
+                        }
+                    },
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
+                ]
+            ],
+            "ACC5963A2.cram.crai",
+            [
+                "@HD\tVN:1.6\tSO:coordinate",
+                "@SQ\tSN:chr21\tLN:48129895\tM5:2979a6085bfe28e3ad6f552f361ed74d\tUR:/home/lucia.penaperez/github/gms/tomte/.nf-test/tests/6bb259510c57975e30a9b0a43cd0c315/work/af/6abe69d69d2262d76609751440f847/grch37_chr21.fa",
+                "@RG\tID:ACC5963A2\tSM:ACC5963A2\tPL:[illumina]",
+                "@PG\tID:STAR\tPN:STAR\tVN:2.7.11b\tCL:/opt/conda/bin/STAR-avx2   --runThreadN 4   --genomeDir star   --readFilesIn input1/ACC5963A2_1.fastp.fastq.gz   input2/ACC5963A2_2.fastp.fastq.gz      --readFilesCommand gunzip   -c      --outFileNamePrefix ACC5963A2.   --outReadsUnmapped None   --outSAMtype BAM   SortedByCoordinate      --outSAMstrandField intronMotif   --outSAMattrRGline ID:ACC5963A2   SM:ACC5963A2   PL:[illumina]      --outWigType wiggle      --outWigStrand Unstranded      --peOverlapNbasesMin 10   --peOverlapMMp 0.1   --chimSegmentMin 12   --chimJunctionOverhangMin 12   --chimOutType WithinBAM      --sjdbGTFfile grch37_chr21.gtf   --quantMode GeneCounts      --twopassMode Basic",
+                "@PG\tID:samtools\tPN:samtools\tPP:STAR\tVN:1.21\tCL:samtools view --threads 1 --reference grch37_chr21.fa --output-fmt cram -o ACC5963A2.cram##idx##ACC5963A2.cram.crai --write-index ACC5963A2.Aligned.sortedByCoord.out.bam",
+                "@CO\tuser command line: /opt/conda/bin/STAR-avx2 --genomeDir star --readFilesIn input1/ACC5963A2_1.fastp.fastq.gz input2/ACC5963A2_2.fastp.fastq.gz --runThreadN 4 --outFileNamePrefix ACC5963A2. --sjdbGTFfile grch37_chr21.gtf --outSAMattrRGline ID:ACC5963A2 SM:ACC5963A2 PL:[illumina] --twopassMode Basic --outReadsUnmapped None --outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --outSAMstrandField intronMotif --peOverlapNbasesMin 10 --peOverlapMMp 0.1 --chimSegmentMin 12 --chimJunctionOverhangMin 12 --chimOutType WithinBAM --readFilesCommand gunzip -c --outWigType wiggle --outWigStrand Unstranded"
+            ],
+            {
+                "maxReadLength": 151,
+                "minReadLength": 13,
+                "meanReadLength": 138,
+                "maxQuality": 255,
+                "minQuality": 0,
+                "meanQuality": 253,
+                "readCount": 209253
+            },
+            [
                 "versions.yml:md5,1533d93ad0c82b21db0a8c1d61e0acbb",
                 "versions.yml:md5,6fae393145021e4660c61ada0d720466",
                 "versions.yml:md5,bd1f6a0d8ee30d9ad14843e2abfcf9e3",
                 "versions.yml:md5,c6359df28f45236797d408fb562cef4d",
                 "versions.yml:md5,fc3cdfeb9650e6068242aa84be1e3db1"
-            ],
-            [
-                [
-                    {
-                        "groupSize": 1,
-                        "groupTarget": {
-                            "case": "finequagga",
-                            "id": "ACC5963A2",
-                            "sample": "ACC5963A2",
-                            "strandedness": "reverse",
-                            "sex": "NA",
-                            "single_end": false,
-                            "fq_pairs": 1,
-                            "is_fastq": true
-                        }
-                    },
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
-                ]
-            ],
-            [
-                [
-                    {
-                        "groupSize": 1,
-                        "groupTarget": {
-                            "case": "finequagga",
-                            "id": "ACC5963A2",
-                            "sample": "ACC5963A2",
-                            "strandedness": "reverse",
-                            "sex": "NA",
-                            "single_end": false,
-                            "fq_pairs": 1,
-                            "is_fastq": true
-                        }
-                    },
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
-                ]
-            ],
-            [
-                [
-                    {
-                        "groupSize": 1,
-                        "groupTarget": {
-                            "case": "finequagga",
-                            "id": "ACC5963A2",
-                            "sample": "ACC5963A2",
-                            "strandedness": "reverse",
-                            "sex": "NA",
-                            "single_end": false,
-                            "fq_pairs": 1,
-                            "is_fastq": true
-                        }
-                    },
-                    "ACC5963A2.cram:md5,d630d5365c9b1d03137f5f0a81fd9c78",
-                    "ACC5963A2.cram.crai:md5,bccc8039779c0583419c9a62271737f0"
-                ]
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-30T12:20:22.129425"
+        "timestamp": "2025-04-30T17:12:38.710865"
     }
 }
