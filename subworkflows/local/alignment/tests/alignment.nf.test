@@ -101,7 +101,7 @@ nextflow_workflow {
                     workflow.out.bam_bai,
                     workflow.out.bam_ds_bai,
                     file(workflow.out.cram_crai.get(0).get(2)).name,
-                    cram( cram_file, fasta ).getHeader(),
+                    file(workflow.out.cram_crai.get(0).get(1)).name,
                     cram( cram_file, fasta ).getStatistics(),
                     workflow.out.versions
                 ).match() }
