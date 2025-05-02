@@ -207,53 +207,66 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
 
-    CALL_VARIANTS(
-        ch_alignment.bam_bai,
-        ch_references.fasta,
-        ch_references.fai,
-        ch_references.sequence_dict,
-        params.variant_caller
-    )
-    ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
+    if ( !params.skip_variant_calling ) {
+        CALL_VARIANTS(
+            ch_alignment.bam_bai,
+            ch_references.fasta,
+            ch_references.fai,
+            ch_references.sequence_dict,
+            params.variant_caller
+        )
+        ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
 
-    ALLELE_SPECIFIC_CALLING(
-        CALL_VARIANTS.out.vcf_tbi,
-        ch_alignment.bam_bai,
-        ch_references.fasta,
-        ch_references.fai,
-        ch_references.sequence_dict,
-        ch_case_info
-    )
-    ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
+        ALLELE_SPECIFIC_CALLING(
+            CALL_VARIANTS.out.vcf_tbi,
+            ch_alignment.bam_bai,
+            ch_references.fasta,
+            ch_references.fai,
+            ch_references.sequence_dict,
+            ch_case_info
+        )
+        ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
 
-    ANNOTATE_SNV (
-        ALLELE_SPECIFIC_CALLING.out.vcf,
-        params.genome,
-        params.vep_cache_version,
-        ch_references.vep_cache,
-        ch_references.fasta,
-        ch_vep_extra_files,
-        ch_gene_panel_clinical_filter
-    )
-    ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
+        ANNOTATE_SNV (
+            ALLELE_SPECIFIC_CALLING.out.vcf,
+            params.genome,
+            params.vep_cache_version,
+            ch_references.vep_cache,
+            ch_references.fasta,
+            ch_vep_extra_files,
+            ch_gene_panel_clinical_filter
+        )
+        ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
 
-    IGV_TRACKS(
-        ch_alignment.star_wig,
-        ch_references.chrom_sizes,
-        ch_alignment.spl_junc
-    )
-    ch_versions = ch_versions.mix(IGV_TRACKS.out.versions)
+        ch_multiqc_files                      = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files                      = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
+    }
 
-    ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
-    ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
-    PEDDY (
-        CALL_VARIANTS.out.vcf_tbi,
-        ch_pedfile
-    )
-    ch_versions = ch_versions.mix(PEDDY.out.versions)
+    if ( !params.skip_build_tracks ) {
+        IGV_TRACKS(
+            ch_alignment.star_wig,
+            ch_references.chrom_sizes,
+            ch_alignment.spl_junc
+        )
+        ch_versions = ch_versions.mix(IGV_TRACKS.out.versions)
+    }
 
-    ESTIMATE_HB_PERC(ALIGNMENT.out.gene_counts, ch_hb_genes)
-    ch_versions = ch_versions.mix(ESTIMATE_HB_PERC.out.versions)
+    if ( !params.skip_peddy ) {
+        ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+        ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
+        PEDDY (
+            CALL_VARIANTS.out.vcf_tbi,
+            ch_pedfile
+        )
+        ch_versions = ch_versions.mix(PEDDY.out.versions)
+    } else {
+        ch_pedfile = Channel.empty()
+    }
+
+    if ( !params.skip_calculate_hb_frac ) {
+        ESTIMATE_HB_PERC(ALIGNMENT.out.gene_counts, ch_hb_genes)
+        ch_versions = ch_versions.mix(ESTIMATE_HB_PERC.out.versions)
+    }
 
     /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -292,8 +305,6 @@ workflow TOMTE {
     ch_multiqc_files                      = ch_multiqc_files.mix(BAM_QC.out.metrics_general_rna.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files                      = ch_multiqc_files.mix(BAM_QC.out.metrics_insert_size.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files                      = ch_multiqc_files.mix(ANALYSE_TRANSCRIPTS.out.stats_gtf.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files                      = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files                      = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),
@@ -305,19 +316,27 @@ workflow TOMTE {
     )
 
     emit:
-    multiqc_report         = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    vcf_tbi                = CALL_VARIANTS.out.vcf_tbi   // channel: [ val(meta), path(vcf), path(tbi) ]
-    junction_bed           = IGV_TRACKS.out.bed          // channel: [ val(meta), path(bed.gz), path(tbi) ]
-    drop_ae_out_clinical   = ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical // channel: [ path(drop_AE_clinical.tsv) ]
-    drop_ae_out_research   = ANALYSE_TRANSCRIPTS.out.drop_ae_out_research // channel: [ path(drop_AE_research.tsv) ]
-    drop_as_out_clinical   = ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical // channel: [ path(drop_AS_clinical.tsv) ]
-    drop_as_out_research   = ANALYSE_TRANSCRIPTS.out.drop_as_out_research // channel: [ path(drop_AS_research.tsv) ]
-    bigwig                 = IGV_TRACKS.out.bw           // channel: [ val(meta), path(bw) ]
-    ped                    = ch_pedfile                  // channel: [ path(ped_file) ]
-    multiqc_data           = MULTIQC.out.data            // channel: [ path(multiqc_data) ]
-    hb_estimates           = ESTIMATE_HB_PERC.out.json   // channel: [ val(meta), path(json) ]
-    bam_bai                = ALIGNMENT.out.bam_bai       // channel: [ val(meta), path(bam), path(bai) ]
-    versions               = ch_versions                 // channel: [ path(versions.yml) ]
+    vcf_tbi                = !params.skip_build_tracks ? 
+                                CALL_VARIANTS.out.vcf_tbi : Channel.empty()                    // channel: [ val(meta), path(vcf), path(tbi) ]
+    junction_bed           = !params.skip_build_tracks ?
+                                IGV_TRACKS.out.bed : Channel.empty()                           // channel: [ val(meta), path(bed.gz), path(tbi) ]
+    drop_ae_out_clinical   = !params.skip_variant_calling ?
+                                ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical : Channel.empty() // channel: [ path(drop_AE_clinical.tsv) ]
+    drop_ae_out_research   = !params.skip_variant_calling ?
+                                ANALYSE_TRANSCRIPTS.out.drop_ae_out_research : Channel.empty() // channel: [ path(drop_AE_research.tsv) ]
+    drop_as_out_clinical   = !params.skip_variant_calling ?
+                                ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical : Channel.empty() // channel: [ path(drop_AS_clinical.tsv) ]
+    drop_as_out_research   = !params.skip_variant_calling ?
+                                ANALYSE_TRANSCRIPTS.out.drop_as_out_research : Channel.empty() // channel: [ path(drop_AS_research.tsv) ]
+    bigwig                 = !params.skip_build_tracks ?
+                                IGV_TRACKS.out.bw : Channel.empty()                           // channel: [ val(meta), path(bw) ]
+    hb_estimates           = !params.skip_calculate_hb_frac ? 
+                                ESTIMATE_HB_PERC.out.json : Channel.empty()    // channel: [ val(meta), path(json) ]
+    ped                    = ch_pedfile                   // channel: [ path(ped_file) ]
+    multiqc_report         = MULTIQC.out.report.toList()  // channel: /path/to/multiqc_report.html
+    multiqc_data           = MULTIQC.out.data             // channel: [ path(multiqc_data) ]
+    bam_bai                = ALIGNMENT.out.bam_bai        // channel: [ val(meta), path(bam), path(bai) ]
+    versions               = ch_versions                  // channel: [ path(versions.yml) ]
 }
 
 /*
