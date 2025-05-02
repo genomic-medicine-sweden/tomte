@@ -172,7 +172,8 @@ workflow TOMTE {
         params.skip_subsample_region,
         params.skip_downsample,
         ch_references.salmon_index,
-        ch_references.fasta
+        ch_references.fasta,
+        params.save_mapped_as_cram
     ).set { ch_alignment }
     ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
 

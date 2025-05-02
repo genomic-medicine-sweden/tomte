@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated local gffread and gtftorefflat modules solving [#224](https://github.com/genomic-medicine-sweden/tomte/issues/224) to nf-core ones [#227](https://github.com/genomic-medicine-sweden/tomte/pull/227)
 - Substitute ext.when by if statements on prepare references subworkflow [#232](https://github.com/genomic-medicine-sweden/tomte/pull/232)
 - Substitute ext.when by if statements on download_references subworkflow [#233](https://github.com/genomic-medicine-sweden/tomte/pull/233)
+- Substitute ext.when by if statements on alignment subworkflow [#234](https://github.com/genomic-medicine-sweden/tomte/pull/234)
 
 | Tool                   | Old version | New version |
 | ---------------------- | ----------- | ----------- |
