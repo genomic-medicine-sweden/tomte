@@ -428,17 +428,17 @@
             ],
             [
                 "ACC5963A1.bam:md5,0f3e153a88d96c4ad6a59898d2bea037",
-                "ACC5963A1_downsmapled.bam:md5,180dea0d5f742ce093095dfbce85f8d7",
-                "ACC5963A1_downsmapled.bam.bai:md5,80eb8bfdb2e8995f3bf7f8403e2268ca",
+                "ACC5963A1_downsmapled.bam:md5,5653a0fc7f9d54f08da5bf88b0641ee4",
+                "ACC5963A1_downsmapled.bam.bai:md5,5ce198dbf529b2bcec574454197ecb29",
                 "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,5f5347d0afd3ea3f4e8c8b24029644c2",
                 "ACC5963A2.ReadsPerGene.out.tab:md5,ec7fa257059d2545e07635a3e6101997",
                 "ACC5963A2.SJ.out.tab:md5,dea5d6b61390b2e01699441ad0c56b05",
                 "ACC5963A2.Signal.Unique.str1.out.wig:md5,57216a6d909e526d0447c1967eae177c",
                 "ACC5963A2.Signal.UniqueMultiple.str1.out.wig:md5,0a82d7eba84b95ae25d135e994a44c28",
-                "ACC5963A2_downsmapled.bam:md5,db5e8ae997f7ae1dd9ac881716704939",
-                "ACC5963A2_downsmapled.bam.bai:md5,c93292786441803a03053d377815de09",
+                "ACC5963A2_downsmapled.bam:md5,eae155e8cafe6ca71bbc5e939e94b70e",
+                "ACC5963A2_downsmapled.bam.bai:md5,51f375732e01681f43725808ea9d791e",
                 "ACC5963A3.bam:md5,20a8f0d5c77d4fe6dda8359e39f0385a",
-                "ACC5963A3_downsmapled.bam:md5,3a6de5377906472ce825f9e23fae314e",
+                "ACC5963A3_downsmapled.bam:md5,b6f27b4d8e462dd743f7c6d93903a051",
                 "ACC5963A3_downsmapled.bam.bai:md5,cad95d98e24493c2fc4e3513b448951a",
                 "e2t.ctab:md5,3ba87d66102fe6b94aa9a407446eeee9",
                 "e_data.ctab:md5,6120ca51e6b8bb3c25fba75ac59da997",
@@ -560,6 +560,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-30T09:44:03.612167"
+        "timestamp": "2025-05-02T13:17:26.429984"
     }
 }
