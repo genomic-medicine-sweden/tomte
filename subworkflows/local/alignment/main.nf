@@ -2,29 +2,30 @@
 // Alignment
 //
 
-include { CAT_FASTQ            } from '../../../modules/nf-core/cat/fastq/main'
-include { FASTP                } from '../../../modules/nf-core/fastp/main'
-include { STAR_ALIGN           } from '../../../modules/nf-core/star/align/main'
-include { SAMTOOLS_INDEX       } from '../../../modules/nf-core/samtools/index/main'
-include { RNA_DOWNSAMPLE       } from '../../../modules/local/rna_downsample/main'
-include { RNA_SUBSAMPLE_REGION } from '../../../modules/local/rna_subsample_region/main'
-include { SALMON_QUANT         } from '../../../modules/nf-core/salmon/quant/main'
-include { SAMTOOLS_VIEW        } from '../../../modules/nf-core/samtools/view/main'
+include { CAT_FASTQ            } from '../../../modules/nf-core/cat/fastq'
+include { FASTP                } from '../../../modules/nf-core/fastp'
+include { STAR_ALIGN           } from '../../../modules/nf-core/star/align'
+include { SAMTOOLS_INDEX       } from '../../../modules/nf-core/samtools/index'
+include { RNA_DOWNSAMPLE       } from '../../../modules/local/rna_downsample'
+include { RNA_SUBSAMPLE_REGION } from '../../../modules/local/rna_subsample_region'
+include { SALMON_QUANT         } from '../../../modules/nf-core/salmon/quant'
+include { SAMTOOLS_VIEW        } from '../../../modules/nf-core/samtools/view'
 
 workflow ALIGNMENT {
     take:
-        ch_fastq_input_reads   // channel:   [optional] [ val(meta), [path(reads)] ]
-        ch_bam_bai_input_reads // channel:   [optional] [ val(meta), [path(bam) path(bai)] ]
-        star_index             // channel:   [mandatory] [ val(meta), path(star_index) ]
-        ch_gtf                 // channel:   [mandatory] [ val(meta), path(gtf) ]
-        ch_platform            // channel:   [mandatory] [ val(platform) ]
-        subsample_bed          // channel:   [optional]  [ path(subsample_bed) ]
+        ch_fastq_input_reads   //   channel: [optional]  [ val(meta), [path(reads)] ]
+        ch_bam_bai_input_reads //   channel: [optional]  [ val(meta), [path(bam) path(bai)] ]
+        star_index             //   channel: [mandatory] [ val(meta), path(star_index) ]
+        ch_gtf                 //   channel: [mandatory] [ val(meta), path(gtf) ]
+        ch_platform            //   channel: [mandatory] [ val(platform) ]
+        subsample_bed          //   channel: [optional]  [ path(subsample_bed) ]
         seed_frac              // parameter: [optional]  default: 0.001
         num_reads              // parameter: [optional]  default: 120000000
         skip_subsample_region  // parameter: [mandatory] default: true
         skip_downsample        // parameter: [mandatory] default: true
-        salmon_index           // channel:   [mandatory] [ path(salmon_index) ]
-        ch_genome_fasta        // channel:   [mandatory] [ val(meta), path(fasta) ]
+        salmon_index           //   channel: [mandatory] [ path(salmon_index) ]
+        ch_genome_fasta        //   channel: [mandatory] [ val(meta), path(fasta) ]
+        save_mapped_as_cram    // parameter: [mandatory] default: true
 
     main:
         ch_versions = Channel.empty()
@@ -47,12 +48,9 @@ workflow ALIGNMENT {
         SAMTOOLS_INDEX( ch_bam_from_star )
         ch_bai = ch_bai_input_reads.mix(SAMTOOLS_INDEX.out.bai)
 
-        ch_bam_bai_not_downsamp = Channel.empty()
-        ch_bam_bai_input_drop = Channel.empty()
-
         if (!skip_subsample_region) {
             RNA_SUBSAMPLE_REGION( ch_bam_2_process, subsample_bed, seed_frac)
-            ch_bam_bai_not_downsamp = ch_bam_bai_not_downsamp.mix(RNA_SUBSAMPLE_REGION.out.bam_bai)
+            ch_bam_bai_not_downsamp = RNA_SUBSAMPLE_REGION.out.bam_bai
             ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
             if (skip_downsample) {
                 ch_bam_bai_input_drop = RNA_SUBSAMPLE_REGION.out.bam_bai
@@ -62,7 +60,7 @@ workflow ALIGNMENT {
                 ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
             }
         } else {
-            ch_bam_bai_not_downsamp = ch_bam_bai_not_downsamp.mix(ch_bam_2_process.join(ch_bai))
+            ch_bam_bai_not_downsamp = ch_bam_2_process.join(ch_bai)
             if (skip_downsample) {
                 ch_bam_bai_input_drop = ch_bam_2_process.join(ch_bai)
             } else {
@@ -72,7 +70,13 @@ workflow ALIGNMENT {
             }
         }
 
-        SAMTOOLS_VIEW( ch_bam_2_process.join(ch_bai), ch_genome_fasta, [], 'crai' )
+        if ( save_mapped_as_cram ) {
+            SAMTOOLS_VIEW( ch_bam_2_process.join(ch_bai), ch_genome_fasta, [], 'crai' )
+            ch_versions = ch_versions.mix(SAMTOOLS_VIEW.out.versions.first())
+            ch_cram_crai = SAMTOOLS_VIEW.out.cram.join(SAMTOOLS_VIEW.out.crai)
+        } else {
+            ch_cram_crai = Channel.empty()
+        }
 
         SALMON_QUANT( FASTP.out.reads, salmon_index, ch_gtf.map{ meta, gtf ->  gtf  }, [], false, 'A')
 
@@ -80,7 +84,6 @@ workflow ALIGNMENT {
         ch_versions = ch_versions.mix(FASTP.out.versions.first())
         ch_versions = ch_versions.mix(STAR_ALIGN.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
-        ch_versions = ch_versions.mix(SAMTOOLS_VIEW.out.versions.first())
         ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
 
     emit:
@@ -95,6 +98,7 @@ workflow ALIGNMENT {
         star_wig        = STAR_ALIGN.out.wig                 // channel: [ val(meta), path(wig) ]
         salmon_result   = SALMON_QUANT.out.results           // channel: [ val(meta), path(results) ]
         salmon_info     = SALMON_QUANT.out.json_info         // channel: [ val(meta), path(json) ]
+        cram_crai       = ch_cram_crai                       // channel: [ val(meta), path(cram), path(crai) ]
         versions        = ch_versions                        // channel: [ path(versions.yml) ]
 }
 

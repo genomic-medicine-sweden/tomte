@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nf-test for bootstrapann, create_pedigree_file, estimate_hb_perc, get_chrom_sizes, get_rrna_transcripts,junction_track, rename_files, rna_downsample, and rna_subsample_region modules [#224](https://github.com/genomic-medicine-sweden/tomte/pull/224)
 - Nf-test for all drop modules [#226](https://github.com/genomic-medicine-sweden/tomte/pull/226)
 - Nf-test for build_vep_cache, gencode_download, vep_gnomad_download, and wget_download modules [#228](https://github.com/genomic-medicine-sweden/tomte/pull/228)
+- Nf-test for call_variants_gatk [#229](https://github.com/genomic-medicine-sweden/tomte/pull/229)
 - Solve [#230](https://github.com/genomic-medicine-sweden/tomte/issues/230) by running only tests for processes/workflows that have been modified [#231](https://github.com/genomic-medicine-sweden/tomte/pull/231)
 
 ### `Parameters`
@@ -43,6 +44,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated multiqc module [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
 - Updated gatk4/splitncigarreads module [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
 - Updated local gffread and gtftorefflat modules solving [#224](https://github.com/genomic-medicine-sweden/tomte/issues/224) to nf-core ones [#227](https://github.com/genomic-medicine-sweden/tomte/pull/227)
+- Substitute ext.when by if statements on prepare references subworkflow [#232](https://github.com/genomic-medicine-sweden/tomte/pull/232)
+- Substitute ext.when by if statements on download_references subworkflow [#233](https://github.com/genomic-medicine-sweden/tomte/pull/233)
+- Substitute ext.when by if statements on alignment subworkflow [#234](https://github.com/genomic-medicine-sweden/tomte/pull/234)
 - Substitute ext.when by if statements on analyse_transcripts subworkflow [#235](https://github.com/genomic-medicine-sweden/tomte/pull/235)
 
 | Tool                   | Old version | New version |

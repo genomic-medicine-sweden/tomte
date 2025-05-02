@@ -87,17 +87,23 @@ nextflow_workflow {
                 input[9]  = true
                 input[10] = SALMON_INDEX.out.index
                 input[11] = GUNZIP_FASTA.out.gunzip
+                input[12]  = true
                 """
             }
         }
 
         then {
+            def fasta = file("${outputDir}/../results/references/grch37_chr21.fa").toString()
+            def cram_file = workflow.out.cram_crai.get(0).get(1).toString()
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.versions,
                     workflow.out.bam_bai,
-                    workflow.out.bam_ds_bai
+                    workflow.out.bam_ds_bai,
+                    file(workflow.out.cram_crai.get(0).get(2)).name,
+                    file(workflow.out.cram_crai.get(0).get(1)).name,
+                    cram( cram_file, fasta ).getStatistics(),
+                    workflow.out.versions
                 ).match() }
             )
         }
@@ -124,6 +130,7 @@ nextflow_workflow {
                 input[9]  = true
                 input[10] = SALMON_INDEX.out.index
                 input[11] = GUNZIP_FASTA.out.gunzip
+                input[12]  = false
                 """
             }
         }
