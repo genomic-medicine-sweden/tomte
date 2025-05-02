@@ -65,7 +65,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                     workflow.out.vcf.collect{path(it[1]).vcf.summary},
-                    workflow.out.tbi,
+                    file(workflow.out.tbi.get(0).get(1)).name,
                     workflow.out.stats,
                     workflow.out.versions,
                 ).match()}
