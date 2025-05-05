@@ -152,6 +152,16 @@ nextflow_workflow {
         then {
             assertAll(
                 {assert workflow.success},
+                {assert [
+                    workflow.out.transcript_gtf,
+                    workflow.out.abundance,
+                    workflow.out.coverage_gtf,
+                    workflow.out.annotated_gtf,
+                    workflow.out.stats_gtf,
+                    workflow.out.config_drop_as,
+                    workflow.out.drop_as_out_clinical,
+                    workflow.out.drop_as_out_research
+                ].every{ it.isEmpty() } },
                 {assert snapshot(
                     workflow.out.annotation_drop,
                     workflow.out.config_drop_ae.collect{ file(it).name },
