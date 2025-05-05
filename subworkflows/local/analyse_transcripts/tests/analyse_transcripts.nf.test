@@ -61,12 +61,6 @@ nextflow_workflow {
     test("Should run with two samples") {
 
         when {
-            params {
-                skip_drop_as            = false
-                skip_drop_ae            = false
-                skip_stringtie          = false
-                skip_export_counts_drop = false
-            }
             workflow {
                 """
                 ch_cram_converted = CRAM_TO_BAM.out.bam.collect().join(CRAM_TO_BAM.out.bai.collect())
@@ -92,10 +86,10 @@ nextflow_workflow {
                 input[12] = 2.5
                 input[13] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
                 input[14] = Channel.of([probands:['ACC5963A1','ACC5963A3'], id:'finequagga']).collect()
-                input[15] = params.skip_drop_ae
-                input[16] = params.skip_drop_as
-                input[17] = params.skip_export_counts_drop
-                input[18] = params.skip_stringtie
+                input[15] = false
+                input[16] = false
+                input[17] = false
+                input[18] = false
                 """
             }
         }
@@ -126,12 +120,6 @@ nextflow_workflow {
     test("Should run with one sample") {
 
         when {
-            params {
-                skip_drop_as            = true
-                skip_drop_ae            = false
-                skip_export_counts_drop = true
-                skip_stringtie          = true
-            }
             workflow {
                 """
                 input[0]  = Channel.of([
@@ -153,10 +141,10 @@ nextflow_workflow {
                 input[12] = 2.5
                 input[13] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
                 input[14] = Channel.of([probands:['ACC5963A1'], id:'finequagga']).collect()
-                input[15] = params.skip_drop_ae
-                input[16] = params.skip_drop_as
-                input[17] = params.skip_export_counts_drop
-                input[18] = params.skip_stringtie
+                input[15] = false
+                input[16] = true
+                input[17] = true
+                input[18] = true
                 """
             }
         }

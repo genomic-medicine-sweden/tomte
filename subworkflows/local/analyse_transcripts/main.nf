@@ -100,12 +100,12 @@ workflow ANALYSE_TRANSCRIPTS {
                 ch_versions = ch_versions.mix( DROP_CONFIG_RUN_AS.out.versions )
             }
 
-            ch_out_drop_gene_name = ( !skip_drop_ae ) ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
-                                                        : DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
-            ch_out_drop_ae_rds    = ( !skip_drop_ae ) ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()
-                                                        : Channel.empty()
-            ch_out_drop_as_tsv    = ( !skip_drop_as ) ? DROP_CONFIG_RUN_AS.out.drop_as_tsv.collect()
-                                                        : Channel.empty()
+            ch_out_drop_gene_name = !skip_drop_ae ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
+                                                    : DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
+            ch_out_drop_ae_rds    = !skip_drop_ae ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()
+                                                    : Channel.empty()
+            ch_out_drop_as_tsv    = !skip_drop_as ? DROP_CONFIG_RUN_AS.out.drop_as_tsv.collect()
+                                                    : Channel.empty()
 
             DROP_FILTER_RESULTS(
                 case_info,
@@ -131,7 +131,6 @@ workflow ANALYSE_TRANSCRIPTS {
 
         // Stringtie
         ch_bam = ch_bam_bai.map{ meta, bam, bai -> [meta, [bam]] }
-        transcript_gtf = Channel.empty()
         if ( !skip_stringtie ){
             STRINGTIE_STRINGTIE(
                 ch_bam,
