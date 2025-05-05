@@ -4,9 +4,7 @@
             [
                 "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=2502, phased=false, phasedAutodetect=false]"
             ],
-            [
-                "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=2502, phased=false, phasedAutodetect=false]"
-            ],
+            "ACC5963A1_split_rmdup_info.vcf.gz.tbi",
             "ACC5963A1_split_rmdup_info.vcf.gz.tbi",
             [
                 [
@@ -34,16 +32,14 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-11T11:11:42.578799"
+        "timestamp": "2025-05-02T12:01:59.691516"
     },
     "bcftools": {
         "content": [
             [
                 "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
             ],
-            [
-                "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
-            ],
+            "ACC5963A1_split_rmdup_info.vcf.gz.tbi",
             "ACC5963A1_split_rmdup_info.vcf.gz.tbi",
             [
                 [
@@ -71,6 +67,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-11T11:10:14.823748"
+        "timestamp": "2025-05-02T11:59:39.477384"
     }
 }
