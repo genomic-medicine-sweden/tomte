@@ -57,6 +57,7 @@
             [
                 "versions.yml:md5,205c586a4c68fb4299b3bac50b12d80a",
                 "versions.yml:md5,31b05e908f6d6fbf36e1f2406222fa4f",
+                "versions.yml:md5,4a8ef69b45dec5c4a3022e258e6b9b7f",
                 "versions.yml:md5,857edf69eaf74d50dd238de0ed028e42",
                 "versions.yml:md5,af99797f66dd8e19bde4746d8b5867fb",
                 "versions.yml:md5,c1db02784284f2b36514a18eba77d81a",
@@ -67,62 +68,32 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-08T16:06:32.427212"
+        "timestamp": "2025-04-28T11:23:57.066601"
     },
-    "Should run without failures": {
+    "Should run with one sample": {
         "content": [
-            "ACC5963A1.transcripts.gtf",
-            "ACC5963A1.gene.abundance.txt",
-            "ACC5963A1.coverage.gtf",
-            "ACC5963A1.annotated.gtf",
-            [
-                [
-                    {
-                        "case": "finequagga",
-                        "id": "ACC5963A1",
-                        "sample": "ACC5963A1",
-                        "strandedness": "reverse",
-                        "sex": "NA",
-                        "single_end": false,
-                        "fq_pairs": 1,
-                        "is_fastq": false
-                    },
-                    "ACC5963A1.stats:md5,a02390fea096cdc4b667c0d317669750"
-                ]
-            ],
             [
                 "sample_annotation.tsv:md5,b4280c567590c13b784215af25355a82"
-            ],
-            [
-                
             ],
             [
                 "config.yaml"
             ],
             [
-                
+                "finequagga_outrider_top_hits_clinical.tsv"
             ],
             [
-                
+                "finequagga_outrider_top_hits_research.tsv"
             ],
             [
-                "finequagga_fraser_top_hits_clinical.tsv"
-            ],
-            [
-                "finequagga_fraser_top_hits_research.tsv"
-            ],
-            [
-                "versions.yml:md5,205c586a4c68fb4299b3bac50b12d80a",
-                "versions.yml:md5,31b05e908f6d6fbf36e1f2406222fa4f",
                 "versions.yml:md5,857edf69eaf74d50dd238de0ed028e42",
-                "versions.yml:md5,af99797f66dd8e19bde4746d8b5867fb",
-                "versions.yml:md5,c1db02784284f2b36514a18eba77d81a"
+                "versions.yml:md5,c1db02784284f2b36514a18eba77d81a",
+                "versions.yml:md5,f7c74225a1706aafc3c0a1e40793293b"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-08T16:13:30.806364"
+        "timestamp": "2025-04-29T13:02:23.099534"
     }
 }
