@@ -37,7 +37,7 @@ nextflow_pipeline {
                     // All files with stable contents
                     stable_path,
                     // All bam files
-                    bam_files.collect{ file -> [ file.getName(), bam(file.toString(), stringency: 'silent').getReadsMD5() ] },
+                    bam_files.collect{ file -> [ file.getName(), bam(file.toString(), stringency: 'silent').getStatistics() ] },
                     // All vcf files
                     all_vcf_files.collect{ file -> [ file.getName(), path(file.toString()).vcf.summary ] },
                 ).match() }
