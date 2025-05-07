@@ -322,27 +322,23 @@ workflow TOMTE {
     )
 
     emit:
-    vcf_tbi                = !params.skip_build_tracks ?
-                                CALL_VARIANTS.out.vcf_tbi : Channel.empty()                    // channel: [ val(meta), path(vcf), path(tbi) ]
-    junction_bed           = !params.skip_build_tracks ?
-                                IGV_TRACKS.out.bed : Channel.empty()                           // channel: [ val(meta), path(bed.gz), path(tbi) ]
-    drop_ae_out_clinical   = !params.skip_variant_calling ?
-                                ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical : Channel.empty() // channel: [ path(drop_AE_clinical.tsv) ]
-    drop_ae_out_research   = !params.skip_variant_calling ?
-                                ANALYSE_TRANSCRIPTS.out.drop_ae_out_research : Channel.empty() // channel: [ path(drop_AE_research.tsv) ]
-    drop_as_out_clinical   = !params.skip_variant_calling ?
-                                ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical : Channel.empty() // channel: [ path(drop_AS_clinical.tsv) ]
-    drop_as_out_research   = !params.skip_variant_calling ?
-                                ANALYSE_TRANSCRIPTS.out.drop_as_out_research : Channel.empty() // channel: [ path(drop_AS_research.tsv) ]
-    bigwig                 = !params.skip_build_tracks ?
-                                IGV_TRACKS.out.bw : Channel.empty()                           // channel: [ val(meta), path(bw) ]
-    hb_estimates           = !params.skip_calculate_hb_frac ?
-                                ESTIMATE_HB_PERC.out.json : Channel.empty()    // channel: [ val(meta), path(json) ]
-    ped                    = ch_pedfile                   // channel: [ path(ped_file) ]
-    multiqc_report         = MULTIQC.out.report.toList()  // channel: /path/to/multiqc_report.html
-    multiqc_data           = MULTIQC.out.data             // channel: [ path(multiqc_data) ]
-    bam_bai                = ALIGNMENT.out.bam_bai        // channel: [ val(meta), path(bam), path(bai) ]
-    versions               = ch_versions                  // channel: [ path(versions.yml) ]
+    vcf_tbi              = !params.skip_build_tracks ?
+                                CALL_VARIANTS.out.vcf_tbi : Channel.empty() // channel: [ val(meta), path(vcf), path(tbi) ]
+    junction_bed         = !params.skip_build_tracks ?
+                                IGV_TRACKS.out.bed : Channel.empty()        // channel: [ val(meta), path(bed.gz), path(tbi) ]
+    bigwig               = !params.skip_build_tracks ?
+                                IGV_TRACKS.out.bw : Channel.empty()         // channel: [ val(meta), path(bw) ]
+    hb_estimates         = !params.skip_calculate_hb_frac ?
+                                ESTIMATE_HB_PERC.out.json : Channel.empty() // channel: [ val(meta), path(json) ]
+    drop_ae_out_clinical = ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical     // channel: [ path(drop_AE_clinical.tsv) ]
+    drop_ae_out_research = ANALYSE_TRANSCRIPTS.out.drop_ae_out_research     // channel: [ path(drop_AE_research.tsv) ]
+    drop_as_out_clinical = ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical     // channel: [ path(drop_AS_clinical.tsv) ]
+    drop_as_out_research = ANALYSE_TRANSCRIPTS.out.drop_as_out_research     // channel: [ path(drop_AS_research.tsv) ]
+    ped                  = ch_pedfile                                       // channel: [ path(ped_file) ]
+    multiqc_report       = MULTIQC.out.report.toList()                      // channel: /path/to/multiqc_report.html
+    multiqc_data         = MULTIQC.out.data                                 // channel: [ path(multiqc_data) ]
+    bam_bai              = ALIGNMENT.out.bam_bai                            // channel: [ val(meta), path(bam), path(bai) ]
+    versions             = ch_versions                                      // channel: [ path(versions.yml) ]
 }
 
 /*
