@@ -55,7 +55,6 @@ workflow ANNOTATE_SNV {
         ch_hgnc_ids = GAWK.out.output.map{ meta, hgnc_ids -> [ hgnc_ids ] }
 
         //Filter results
-        ch_vcf_clin = Channel.empty()
         if ( !skip_clinical_filter ) {
             ENSEMBLVEP_FILTERVEP(
                 ch_clin_research_vcf.clinical,
@@ -65,10 +64,11 @@ workflow ANNOTATE_SNV {
             .set { ch_filtervep_out }
 
             TABIX_BGZIPTABIX( ch_filtervep_out )
-            ch_vcf_clin = TABIX_BGZIPTABIX.out.gz_tbi.mix( ch_vcf_clin ).collect()
+            ch_vcf_clin = TABIX_BGZIPTABIX.out.gz_tbi.mix.collect()
             ch_versions = ch_versions.mix( ENSEMBLVEP_FILTERVEP.out.versions )
             ch_versions = ch_versions.mix( TABIX_BGZIPTABIX.out.versions )
-
+        } else {
+            ch_vcf_clin = Channel.empty()
         }
 
         ch_versions = ch_versions.mix( ENSEMBLVEP_VEP.out.versions.first() )
