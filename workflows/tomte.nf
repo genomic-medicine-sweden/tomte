@@ -229,19 +229,23 @@ workflow TOMTE {
         )
         ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
 
-        ANNOTATE_SNV (
-            ALLELE_SPECIFIC_CALLING.out.vcf,
-            params.genome,
-            params.vep_cache_version,
-            ch_references.vep_cache,
-            ch_references.fasta,
-            ch_vep_extra_files,
-            ch_gene_panel_clinical_filter
-        )
-        ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
+        if ( !params.skip_vep ) {
+            ANNOTATE_SNV (
+                ALLELE_SPECIFIC_CALLING.out.vcf,
+                params.genome,
+                params.vep_cache_version,
+                ch_references.vep_cache,
+                ch_references.fasta,
+                ch_vep_extra_files,
+                ch_gene_panel_clinical_filter,
+                !params.gene_panel_clinical_filter
+            )
+            ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
+            ch_multiqc_files = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
+        }
 
-        ch_multiqc_files                      = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
-        ch_multiqc_files                      = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
     }
 
     if ( !params.skip_build_tracks ) {
