@@ -236,7 +236,7 @@ workflow TOMTE {
             ch_references.vep_cache,
             ch_references.fasta,
             ch_vep_extra_files,
-            ch_gene_panel_clinical_filte,
+            ch_gene_panel_clinical_filter,
             !params.gene_panel_clinical_filter
         )
         ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
