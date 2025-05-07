@@ -322,7 +322,7 @@ workflow TOMTE {
     )
 
     emit:
-    vcf_tbi                = !params.skip_build_tracks ? 
+    vcf_tbi                = !params.skip_build_tracks ?
                                 CALL_VARIANTS.out.vcf_tbi : Channel.empty()                    // channel: [ val(meta), path(vcf), path(tbi) ]
     junction_bed           = !params.skip_build_tracks ?
                                 IGV_TRACKS.out.bed : Channel.empty()                           // channel: [ val(meta), path(bed.gz), path(tbi) ]
@@ -336,7 +336,7 @@ workflow TOMTE {
                                 ANALYSE_TRANSCRIPTS.out.drop_as_out_research : Channel.empty() // channel: [ path(drop_AS_research.tsv) ]
     bigwig                 = !params.skip_build_tracks ?
                                 IGV_TRACKS.out.bw : Channel.empty()                           // channel: [ val(meta), path(bw) ]
-    hb_estimates           = !params.skip_calculate_hb_frac ? 
+    hb_estimates           = !params.skip_calculate_hb_frac ?
                                 ESTIMATE_HB_PERC.out.json : Channel.empty()    // channel: [ val(meta), path(json) ]
     ped                    = ch_pedfile                   // channel: [ path(ped_file) ]
     multiqc_report         = MULTIQC.out.report.toList()  // channel: /path/to/multiqc_report.html
