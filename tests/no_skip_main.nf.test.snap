@@ -267,16 +267,6 @@
                 "bam_qc/ACC5963A3.rna_metrics",
                 "bam_qc/ACC5963A3_insert_size.pdf",
                 "bam_qc/ACC5963A3_insert_size.txt",
-                "bcftools",
-                "bcftools/ACC5963A1.bcftools_stats.txt",
-                "bcftools/ACC5963A1.vcf.gz",
-                "bcftools/ACC5963A1.vcf.gz.tbi",
-                "bcftools/ACC5963A2.bcftools_stats.txt",
-                "bcftools/ACC5963A2.vcf.gz",
-                "bcftools/ACC5963A2.vcf.gz.tbi",
-                "bcftools/ACC5963A3.bcftools_stats.txt",
-                "bcftools/ACC5963A3.vcf.gz",
-                "bcftools/ACC5963A3.vcf.gz.tbi",
                 "bootstrapann",
                 "bootstrapann/finequagga_split_rmdup.vcf.gz",
                 "bootstrapann/finequagga_split_rmdup.vcf.gz.tbi",
@@ -424,20 +414,6 @@
                 "references/star/sjdbList.fromGTF.out.tab",
                 "references/star/sjdbList.out.tab",
                 "references/star/transcriptInfo.tab",
-                "remove",
-                "remove/ACC5963A1_split_rmdup.vcf.gz",
-                "remove/ACC5963A1_split_rmdup.vcf.gz.tbi",
-                "remove/ACC5963A2_split_rmdup.vcf.gz",
-                "remove/ACC5963A2_split_rmdup.vcf.gz.tbi",
-                "remove/ACC5963A3_split_rmdup.vcf.gz",
-                "remove/ACC5963A3_split_rmdup.vcf.gz.tbi",
-                "split",
-                "split/ACC5963A1_norm.vcf.gz",
-                "split/ACC5963A1_norm.vcf.gz.tbi",
-                "split/ACC5963A2_norm.vcf.gz",
-                "split/ACC5963A2_norm.vcf.gz.tbi",
-                "split/ACC5963A3_norm.vcf.gz",
-                "split/ACC5963A3_norm.vcf.gz.tbi",
                 "trimming",
                 "trimming/ACC5963A2.Aligned.sortedByCoord.out.bam.bai",
                 "trimming/ACC5963A2.fastp.html",
@@ -470,15 +446,6 @@
                 "i2t.ctab:md5,37bfc663c6ab9bfd37a6425b4ea082eb",
                 "i_data.ctab:md5,a64ec517859ed296146a5497ec5cf645",
                 "t_data.ctab:md5,adea5cce0d453ca8108143842b21157c",
-                "ACC5963A1.bcftools_stats.txt:md5,3b763dea64d311e1689cf52a72b33e44",
-                "ACC5963A1.vcf.gz:md5,d84c6e8a15d5fbeca873b4e33123a5f7",
-                "ACC5963A1.vcf.gz.tbi:md5,a4a55f50cb1dbfb15ddcbcbd2f30c4cf",
-                "ACC5963A2.bcftools_stats.txt:md5,80bddba278067bd2624c46ab3ba7b67f",
-                "ACC5963A2.vcf.gz:md5,0c33ab88661c1efcc9d43b916eca21c2",
-                "ACC5963A2.vcf.gz.tbi:md5,87664c815fd7616bd12088b85285121c",
-                "ACC5963A3.bcftools_stats.txt:md5,dea438cdf246d2f03b793085833e6361",
-                "ACC5963A3.vcf.gz:md5,c12478fbd10863cf9044ea3149da3d5a",
-                "ACC5963A3.vcf.gz.tbi:md5,a4a55f50cb1dbfb15ddcbcbd2f30c4cf",
                 "hgnc.tsv:md5,bbf07f9733fbd7e4666f039b5c4be128",
                 "ACC5963A2_junction.bed:md5,7b66db28a4b006d798a96fbc81f345e5",
                 "GRCh37_gffread_output.fasta:md5,7dbf3195d06f480fa5b2421004580bdd",
@@ -509,18 +476,6 @@
                 "sjdbList.fromGTF.out.tab:md5,e394912ab5667171a27e8897d116f8f0",
                 "sjdbList.out.tab:md5,12efd0795aa3db892113dcc09c5843f1",
                 "transcriptInfo.tab:md5,b2726efcc116cb22abd4479168dba574",
-                "ACC5963A1_split_rmdup.vcf.gz:md5,4c3d3559fd90efe494ac90ecd51cc2fd",
-                "ACC5963A1_split_rmdup.vcf.gz.tbi:md5,6f0c5b34b9a733fff3e0d05e3024d445",
-                "ACC5963A2_split_rmdup.vcf.gz:md5,00b674af4564aaf7ea4f6a9e89d5e587",
-                "ACC5963A2_split_rmdup.vcf.gz.tbi:md5,01a566b9fd95689a16a194472950cf23",
-                "ACC5963A3_split_rmdup.vcf.gz:md5,683e91ba7fb68be5add74eb154225d7b",
-                "ACC5963A3_split_rmdup.vcf.gz.tbi:md5,2187dba8e0a6d435bfd6e580e923718d",
-                "ACC5963A1_norm.vcf.gz:md5,cd013150a86fbb7e337c8689e09e96fb",
-                "ACC5963A1_norm.vcf.gz.tbi:md5,ac354d46d6c806b04e4348260bc777fd",
-                "ACC5963A2_norm.vcf.gz:md5,23e27d56f437d1b4aad8a2390fddde22",
-                "ACC5963A2_norm.vcf.gz.tbi:md5,1f51e7f8e9c5a8e0e4ff62f1d2d6a84b",
-                "ACC5963A3_norm.vcf.gz:md5,0453758baaa86bf6a066f3aaf9098eda",
-                "ACC5963A3_norm.vcf.gz.tbi:md5,ac354d46d6c806b04e4348260bc777fd",
                 "ACC5963A2.fastp.json:md5,864bf7cafcea8c47d9784f7bd5066e53",
                 "ACC5963A2_1.fastp.fastq.gz:md5,35894d5840555bc9360f7f81adf953e2",
                 "ACC5963A2_2.fastp.fastq.gz:md5,6e8779ccbfdf584f2daf3aa33999f593",
@@ -628,18 +583,6 @@
                     "VcfFile [chromosomes=[chr21], sampleCount=3, variantCount=805, phased=false, phasedAutodetect=false]"
                 ],
                 [
-                    "ACC5963A1.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=806, phased=false, phasedAutodetect=false]"
-                ],
-                [
-                    "ACC5963A2.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=806, phased=false, phasedAutodetect=false]"
-                ],
-                [
-                    "ACC5963A3.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=806, phased=false, phasedAutodetect=false]"
-                ],
-                [
                     "finequagga_split_rmdup.vcf.gz",
                     "VcfFile [chromosomes=[chr21], sampleCount=3, variantCount=805, phased=false, phasedAutodetect=false]"
                 ],
@@ -654,30 +597,6 @@
                 [
                     "ACC5963A3_split_rmdup_info.vcf.gz",
                     "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
-                ],
-                [
-                    "ACC5963A1_split_rmdup.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
-                ],
-                [
-                    "ACC5963A2_split_rmdup.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
-                ],
-                [
-                    "ACC5963A3_split_rmdup.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
-                ],
-                [
-                    "ACC5963A1_norm.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=806, phased=false, phasedAutodetect=false]"
-                ],
-                [
-                    "ACC5963A2_norm.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=806, phased=false, phasedAutodetect=false]"
-                ],
-                [
-                    "ACC5963A3_norm.vcf.gz",
-                    "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=806, phased=false, phasedAutodetect=false]"
                 ]
             ]
         ],
@@ -685,6 +604,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-05-07T17:39:38.570118"
+        "timestamp": "2025-05-07T17:59:15.386239"
     }
 }
