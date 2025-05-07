@@ -64,7 +64,7 @@ workflow ANNOTATE_SNV {
             .set { ch_filtervep_out }
 
             TABIX_BGZIPTABIX( ch_filtervep_out )
-            ch_vcf_clin = TABIX_BGZIPTABIX.out.gz_tbi.mix.collect()
+            ch_vcf_clin = TABIX_BGZIPTABIX.out.gz_tbi.collect()
             ch_versions = ch_versions.mix( ENSEMBLVEP_FILTERVEP.out.versions )
             ch_versions = ch_versions.mix( TABIX_BGZIPTABIX.out.versions )
         } else {
