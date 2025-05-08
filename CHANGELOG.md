@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Substitute ext.when by if statements on alignment subworkflow [#234](https://github.com/genomic-medicine-sweden/tomte/pull/234)
 - Substitute ext.when by if statements on analyse_transcripts subworkflow [#235](https://github.com/genomic-medicine-sweden/tomte/pull/235)
 - Substitute ext.when by if statements on analyse_transcripts subworkflow [#236](https://github.com/genomic-medicine-sweden/tomte/pull/236)
+- Substitute ext.when by if statements on call_variants, igv_tracks, and general_tomte subworkflow [#237](https://github.com/genomic-medicine-sweden/tomte/pull/237)
 
 | Tool                   | Old version | New version |
 | ---------------------- | ----------- | ----------- |
