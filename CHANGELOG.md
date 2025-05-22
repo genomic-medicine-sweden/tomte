@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Default peddy parent ID to "0" if not present. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
 - BUILD_VEP_CACHE, VEP_GNOMAD_DOWNLOAD and WGET_DOWNLOAD stubs crash, fixed by removing double versions.yml write. [#223](https://github.com/genomic-medicine-sweden/tomte/pull/223)
 - Version output of modules solving [#208](https://github.com/genomic-medicine-sweden/tomte/issues/208) [#228](https://github.com/genomic-medicine-sweden/tomte/pull/228)
+- Fixed indentation and adapt local modules and subworkflows to follow to correct Nextflow language syntax solving [#189](https://github.com/genomic-medicine-sweden/tomte/issues/189) [#239](https://github.com/genomic-medicine-sweden/tomte/pull/239)
 
 ## 3.0.1 - Snowman [2025-03-26]
 
