@@ -20,7 +20,7 @@ process BOOTSTRAPANN {
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    $baseDir/bin/BootstrapAnn.py \\
+    BootstrapAnn.py \\
         --vcf ${vcf} \\
         --ase ${csv} \\
         > ${prefix}_ase.vcf

@@ -43,7 +43,7 @@ workflow TOMTE {
     ch_multiqc_files = Channel.empty()
 
     // Mandatory
-    ch_samples        = ch_samplesheet.map { meta, fastqs -> meta }
+    ch_samples        = ch_samplesheet.map { meta, _fastqs -> meta }
     ch_case_info      = ch_samples.toList().map { create_case_channel(it) }
     ch_platform       = Channel.from(params.platform).collect()
 
@@ -359,7 +359,7 @@ def create_case_channel(List rows) {
     def case_info = [:]
     def probands = []
 
-    for (item in rows) {
+    rows.each { item ->
         probands.add(item.sample)
     }
 

@@ -35,9 +35,6 @@ workflow ANALYSE_TRANSCRIPTS {
     main:
         ch_versions = Channel.empty()
 
-        // Generates sample annotation
-        ch_bam_files = ch_bam_ds_bai.collect{it[1]}
-
         ch_bam_ds_bai
             .map { meta, bam, bai ->
             [ meta.id, meta.single_end, meta.strandedness, meta.sex, bam, bai ]
@@ -130,11 +127,11 @@ workflow ANALYSE_TRANSCRIPTS {
         }
 
         // Stringtie
-        ch_bam = ch_bam_bai.map{ meta, bam, bai -> [meta, [bam]] }
+        ch_bam = ch_bam_bai.map{ meta, bam, _bai -> [meta, [bam]] }
         if ( !skip_stringtie ){
             STRINGTIE_STRINGTIE(
                 ch_bam,
-                ch_gtf.map{ meta, gtf -> gtf }
+                ch_gtf.map{ _meta, gtf -> gtf }
             )
 
             // Compare stringtie results to reference

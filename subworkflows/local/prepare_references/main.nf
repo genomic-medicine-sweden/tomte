@@ -104,21 +104,21 @@ workflow PREPARE_REFERENCES {
         // Get rRNA transcripts and convert to interval_list format
         GET_RRNA_TRANSCRIPTS(ch_gtf_final)
         BEDTOINTERVALLIST( GET_RRNA_TRANSCRIPTS.out.bed.map { it -> [ [id:it.name], it ] }, ch_dict_final )
-        ch_interval = BEDTOINTERVALLIST.out.interval_list.map{ meta, interv -> [interv] }.collect()
+        ch_interval = BEDTOINTERVALLIST.out.interval_list.map{ _meta, interv -> [interv] }.collect()
 
         // Prepare fasta fai
         ch_fasta_fai = ch_fasta_final.join( ch_fai ).collect()
 
         // Preparing transcript fasta
         if ( build_transcript_fasta ) {
-            GFFREAD( ch_gtf_final, ch_fasta_final.map{ meta, fasta -> fasta } )
-            ch_transcript_fasta_final = GFFREAD.out.gffread_fasta.map{ meta, gffread_fa -> gffread_fa }.collect()
+            GFFREAD( ch_gtf_final, ch_fasta_final.map{ _meta, fasta -> fasta } )
+            ch_transcript_fasta_final = GFFREAD.out.gffread_fasta.map{ _meta, gffread_fa -> gffread_fa }.collect()
             ch_versions = ch_versions.mix( GFFREAD.out.versions )
         } else {
             // Gunzip transcript fasta if necessary
             if ( gunzip_transcript_fasta ) {
                 GUNZIP_TRFASTA ( ch_transcript_fasta_input.map { it -> [[:], it] } )
-                ch_transcript_fasta_final = GUNZIP_TRFASTA.out.gunzip.map{ meta, index -> index }.collect()
+                ch_transcript_fasta_final = GUNZIP_TRFASTA.out.gunzip.map{ _meta, index -> index }.collect()
                 ch_versions = ch_versions.mix( GUNZIP_TRFASTA.out.versions )
             } else {
                 ch_transcript_fasta_final = branchChannelToCompressedAndUncompressed( ch_transcript_fasta_input ).uncompressed.collect()
@@ -128,14 +128,14 @@ workflow PREPARE_REFERENCES {
 
         // If no salmon index, create it
         if ( build_salmon_index ) {
-            SALMON_INDEX( ch_fasta_final.map{ meta, fasta -> fasta }, ch_transcript_fasta_final )
+            SALMON_INDEX( ch_fasta_final.map{ _meta, fasta -> fasta }, ch_transcript_fasta_final )
             ch_salmon_final = SALMON_INDEX.out.index.collect()
             ch_versions = ch_versions.mix( SALMON_INDEX.out.versions )
         } else {
             // Untar salmon index if necessary
             if ( untar_salmon_index ) {
                 UNTAR_SALMON_INDEX( ch_salmon_index_input.map { it -> [[:], it] } )
-                ch_salmon_final = UNTAR_SALMON_INDEX.out.untar.map{meta, index -> index}.collect()
+                ch_salmon_final = UNTAR_SALMON_INDEX.out.untar.map{ _meta, index -> index }.collect()
                 ch_versions = ch_versions.mix( UNTAR_SALMON_INDEX.out.versions )
             } else {
                 ch_salmon_final = branchChannelToCompressedAndUncompressed( ch_salmon_index_input ).uncompressed.collect()
@@ -145,7 +145,7 @@ workflow PREPARE_REFERENCES {
         // Untar vep chache is necesary
         if ( untar_vep_cache ) {
             UNTAR_VEP_CACHE ( ch_vep_cache_input.map { vep_cache -> [ [ id:'vep_cache' ], vep_cache ] } )
-            ch_final_vep = UNTAR_VEP_CACHE.out.untar.map{ meta, vep_cache -> vep_cache }.collect()
+            ch_final_vep = UNTAR_VEP_CACHE.out.untar.map{ _meta, vep_cache -> vep_cache }.collect()
             ch_versions = ch_versions.mix( UNTAR_VEP_CACHE.out.versions )
         } else {
             ch_final_vep = branchChannelToCompressedAndUncompressed( ch_vep_cache_input ).uncompressed.collect()
@@ -166,7 +166,7 @@ workflow PREPARE_REFERENCES {
         star_index    = ch_star_final                          // channel: [ val(meta), path(star_index) ]
         salmon_index  = ch_salmon_final                        // channel: [ path(salmon_index) ]
         refflat       = UCSC_GTFTOGENEPRED.out.refflat
-            .map{ meta, refflat -> refflat }.collect()         // channel: [ path(refflat) ]
+            .map{ _meta, refflat -> refflat }.collect()         // channel: [ path(refflat) ]
         rrna_bed      = GET_RRNA_TRANSCRIPTS.out.bed.collect() // channel: [ path(bed) ]
         interval_list = ch_interval                            // channel: [ path(interval) ]
         vep_cache     = ch_final_vep.collect()                 // channel: [ path(cache) ]

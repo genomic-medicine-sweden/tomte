@@ -78,7 +78,7 @@ workflow ALIGNMENT {
             ch_cram_crai = Channel.empty()
         }
 
-        SALMON_QUANT( FASTP.out.reads, salmon_index, ch_gtf.map{ meta, gtf ->  gtf  }, [], false, 'A')
+        SALMON_QUANT( FASTP.out.reads, salmon_index, ch_gtf.map{ _meta, gtf ->  gtf  }, [], false, 'A')
 
         ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first())
         ch_versions = ch_versions.mix(FASTP.out.versions.first())

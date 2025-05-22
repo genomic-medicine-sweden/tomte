@@ -26,42 +26,33 @@ workflow CALL_VARIANTS {
         ch_tbi = Channel.empty()
         ch_stats = Channel.empty()
 
-        switch (variant_caller) {
+        if (variant_caller == 'gatk') {
+            CALL_VARIANTS_GATK(
+                ch_bam_bai,
+                ch_fasta,
+                ch_fai,
+                ch_dict
+            )
 
-            case 'gatk':
+            ch_vcf = ch_vcf.mix(CALL_VARIANTS_GATK.out.vcf)
+            ch_tbi = ch_tbi.mix(CALL_VARIANTS_GATK.out.tbi)
+            ch_stats = ch_stats.mix(CALL_VARIANTS_GATK.out.stats)
+            ch_versions = ch_versions.mix(CALL_VARIANTS_GATK.out.versions.first())
 
-                CALL_VARIANTS_GATK(
-                    ch_bam_bai,
-                    ch_fasta,
-                    ch_fai,
-                    ch_dict,
-                )
+        } else if (variant_caller == 'bcftools') {
+            BCFTOOLS_MPILEUP(
+                ch_bam_bai.map{ meta, bam, _bai -> [ meta, bam, [] ]},
+                ch_fasta,
+                false
+            )
 
-                ch_vcf = ch_vcf.mix(CALL_VARIANTS_GATK.out.vcf)
-                ch_tbi = ch_tbi.mix(CALL_VARIANTS_GATK.out.tbi)
-                ch_stats = ch_stats.mix(CALL_VARIANTS_GATK.out.stats)
-                ch_versions = ch_versions.mix(CALL_VARIANTS_GATK.out.versions.first())
+            ch_vcf = ch_vcf.mix(BCFTOOLS_MPILEUP.out.vcf)
+            ch_tbi = ch_tbi.mix(BCFTOOLS_MPILEUP.out.tbi)
+            ch_stats = ch_stats.mix(BCFTOOLS_MPILEUP.out.stats)
+            ch_versions = ch_versions.mix(BCFTOOLS_MPILEUP.out.versions.first())
 
-                break
-
-            case 'bcftools':
-
-                BCFTOOLS_MPILEUP(
-                    ch_bam_bai.map{ meta, bam, bai -> [ meta, bam, [] ]},
-                    ch_fasta,
-                    false
-                )
-
-                ch_vcf = ch_vcf.mix(BCFTOOLS_MPILEUP.out.vcf)
-                ch_tbi = ch_tbi.mix(BCFTOOLS_MPILEUP.out.tbi)
-                ch_stats = ch_stats.mix(BCFTOOLS_MPILEUP.out.stats)
-
-                ch_versions = ch_versions.mix(BCFTOOLS_MPILEUP.out.versions.first())
-
-                break
-
-            default:
-                exit 1, "Unknown variantcaller: ${variant_caller}"
+        } else {
+            exit 1, "Unknown variantcaller: ${variant_caller}"
         }
 
         ch_in_split_multi = ch_vcf.join(ch_tbi)

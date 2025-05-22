@@ -18,7 +18,7 @@ workflow BAM_QC {
         PICARD_COLLECTRNASEQMETRICS(
             ch_bam,
             ch_refflat,
-            ch_fasta.map{ meta, fasta -> fasta },
+            ch_fasta.map{ _meta, fasta -> fasta },
             ch_rrna_intervals
         )
 

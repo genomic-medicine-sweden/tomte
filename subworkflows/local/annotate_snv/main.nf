@@ -27,7 +27,7 @@ workflow ANNOTATE_SNV {
 
         // Annotate with VEP
         ENSEMBLVEP_VEP(
-            vcf.map{ meta, vcf -> [ meta, vcf, [] ] },
+            vcf.map{ meta, vcf_ -> [ meta, vcf_, [] ] },
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,
@@ -37,9 +37,9 @@ workflow ANNOTATE_SNV {
         )
 
         ENSEMBLVEP_VEP.out.vcf
-            .multiMap { meta, vcf ->
-                clinical: [ meta + [ set: "clinical" ], vcf ]
-                research: [ meta + [ set: "research" ], vcf ]
+            .multiMap { meta, vcf_ ->
+                clinical: [ meta + [ set: "clinical" ], vcf_ ]
+                research: [ meta + [ set: "research" ], vcf_ ]
             }
             .set { ch_clin_research_vcf }
 
@@ -52,7 +52,7 @@ workflow ANNOTATE_SNV {
         GAWK( ch_gene_panel_clinical_filter.map{it -> [[id:'hgnc'], it]}.collect(),
             [] )
 
-        ch_hgnc_ids = GAWK.out.output.map{ meta, hgnc_ids -> [ hgnc_ids ] }
+        ch_hgnc_ids = GAWK.out.output.map{ _meta, hgnc_ids -> [ hgnc_ids ] }
 
         //Filter results
         if ( !skip_clinical_filter ) {

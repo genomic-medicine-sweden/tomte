@@ -1,11 +1,7 @@
 process DROP_FILTER_RESULTS {
     tag "DROP_FILTER_RESULTS"
     label 'process_low'
-
-    // Exit if running this module with -profile conda / -profile mamba
-    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
-        exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
-    }
+    errorStrategy 'terminate'
 
     container "docker.io/clinicalgenomics/drop:1.4.0"
 
@@ -24,7 +20,9 @@ process DROP_FILTER_RESULTS {
     path "versions.yml"                                      , emit: versions
 
     when:
-    task.ext.when == null || task.ext.when
+    // Exit if running this module with -profile conda / -profile mamba
+    workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0 ||
+        { log.error("Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."); return false }
 
     script:
     def ids = "${case_info.probands}".replace("[","").replace("]","").replace(",","")
@@ -41,7 +39,7 @@ process DROP_FILTER_RESULTS {
         $drop_ae_rds \\
         $out_drop_gene_name \\
         $out_drop_as_tsv \\
-        --case $case_id \\
+        --case $case_id
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
