@@ -76,12 +76,12 @@ process ADD_FOUND_IN_TAG {
                     args2.contains("--output-type z") || args2.contains("-Oz") ? "vcf.gz" :
                     args2.contains("--output-type v") || args2.contains("-Ov") ? "vcf" :
                     "vcf"
-    def index_ = args2.contains("--write-index=tbi") || args2.contains("-W=tbi") ? "tbi" :
+    def _index = args2.contains("--write-index=tbi") || args2.contains("-W=tbi") ? "tbi" :
                 args2.contains("--write-index=csi") || args2.contains("-W=csi") ? "csi" :
                 args2.contains("--write-index") || args2.contains("-W") ? "csi" :
                 ""
     def create_cmd = extension.endsWith(".gz") ? "echo '' | gzip >" : "touch"
-    def create_index = extension.endsWith(".gz") && index_.matches("csi|tbi") ? "touch ${prefix}.${extension}.${index_}" : ""
+    def create_index = extension.endsWith(".gz") && _index.matches("csi|tbi") ? "touch ${prefix}.${extension}.${_index}" : ""
 
     """
     ${create_cmd} ${prefix}.${extension}
