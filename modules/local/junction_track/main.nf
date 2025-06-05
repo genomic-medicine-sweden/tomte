@@ -21,7 +21,7 @@ process JUNCTION_TRACK {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    $baseDir/bin/sj2bed.py --sj ${sj} --output ${prefix}_junction.bed
+    sj2bed.py --sj ${sj} --output ${prefix}_junction.bed
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -1,11 +1,7 @@
 process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
     tag "DROP_put_together_exported_counts"
     label 'process_low'
-
-    // Exit if running this module with -profile conda / -profile mamba
-    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
-        exit 1, "Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."
-    }
+    errorStrategy 'terminate'
 
     container "docker.io/clinicalgenomics/drop:1.4.0"
 
@@ -19,7 +15,10 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
     path "versions.yml"    , emit: versions
 
     when:
-    task.ext.when == null || task.ext.when
+    // Exit if running this module with -profile conda / -profile mamba
+    workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() == 0 ||
+        { log.error("Local DROP module does not support Conda. Please use Docker / Singularity / Podman instead."); return false }
+
 
     script:
     def ae_run = exported_counts_ae ? true : false

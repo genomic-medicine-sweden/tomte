@@ -49,7 +49,6 @@ process VEP_GNOMAD_DOWNLOAD {
 
     stub:
     def gnomad_version2download = "${genome}".contains("38") ? "4.0": "2.1.1"
-    def base_gnomad_path="https://storage.googleapis.com/gcp-public-data--gnomad/release/${gnomad_version2download}/vcf/genomes/gnomad.genomes."
     """
     touch gnomad_v${gnomad_version2download}.vcf.gz
     touch gnomad_v${gnomad_version2download}.vcf.gz.tbi

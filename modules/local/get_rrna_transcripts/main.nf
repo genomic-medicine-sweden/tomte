@@ -20,9 +20,9 @@ process GET_RRNA_TRANSCRIPTS {
 
     script:
     """
-    $baseDir/bin/get_rrna_transcripts.py --gtf ${gtf} --output rrna.gtf
+    get_rrna_transcripts.py --gtf ${gtf} --output rrna.gtf
 
-    $baseDir/bin/gtf2bed rrna.gtf > rrna.bed
+    gtf2bed rrna.gtf > rrna.bed
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
