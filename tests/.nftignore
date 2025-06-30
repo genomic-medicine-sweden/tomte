@@ -1,3 +1,4 @@
+.DS_Store
 alignment/*.{cram,cram.crai,json,out,sf}
 alignment/**/*
 analyse_transcripts/*
