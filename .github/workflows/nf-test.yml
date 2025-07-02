@@ -30,6 +30,9 @@ env:
   NXF_ANSI_LOG: false
   NXF_SINGULARITY_CACHEDIR: ${{ github.workspace }}/.singularity
   NXF_SINGULARITY_LIBRARYDIR: ${{ github.workspace }}/.singularity
+  # Add these for better cache management
+  TMPDIR: ${{ github.workspace }}/tmp
+  NXF_TEMP: ${{ github.workspace }}/tmp
 
 jobs:
   nf-test-changes:
@@ -105,6 +108,11 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
+
+      - name: Additional Docker cleanup
+        run: |
+          docker system prune -af || true
+          df -h
 
       - name: Run nf-test
         uses: ./.github/actions/nf-test
