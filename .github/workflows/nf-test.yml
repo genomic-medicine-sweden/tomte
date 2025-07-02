@@ -92,6 +92,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Free Disk Space (Ubuntu)
+        if: contains(matrix.profile, 'singularity')
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # This option is false by default if not specified
+          tool-cache: false
+          # All of these default to true if not specified
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
       - name: Run nf-test
         uses: ./.github/actions/nf-test
         env:
