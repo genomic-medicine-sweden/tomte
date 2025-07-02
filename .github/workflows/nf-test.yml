@@ -99,9 +99,7 @@ jobs:
         if: contains(matrix.profile, 'singularity')
         uses: jlumbroso/free-disk-space@main
         with:
-          # This option is false by default if not specified
           tool-cache: false
-          # All of these default to true if not specified
           android: true
           dotnet: true
           haskell: true
@@ -109,9 +107,11 @@ jobs:
           docker-images: true
           swap-storage: true
 
-      - name: Additional Docker cleanup
+      - name: Setup Singularity cache directories
+        if: contains(matrix.profile, 'singularity')
         run: |
-          docker system prune -af || true
+          mkdir -p $NXF_SINGULARITY_CACHEDIR
+          mkdir -p $NXF_SINGULARITY_LIBRARYDIR
           df -h
 
       - name: Run nf-test
