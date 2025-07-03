@@ -79,7 +79,7 @@ jobs:
         # Exclude singularity on dev
         exclude:
           - isMain: false
-            profile: "test,singularity"  # Make this explicit
+            profile: "test,singularity" # Make this explicit
         NXF_VER:
           - "24.04.2"
           - "latest-everything"
