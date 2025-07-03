@@ -8,9 +8,8 @@ bootstrapann/*.{vcf.gz,vcf.gz.tbi}
 bam_qc/*
 call_variants/*.{vcf.gz,vcf.gz.tbi}
 fastqc/*.{zip,html}
-multiqc/**.{html,json,log,txt}
-multiqc/multiqc_plots/**
-pipeline_info/**.{html,json,txt,yml}
+multiqc/**
+pipeline_info/**
 references/salmon/*.{bin,log}
 references/star/*.{out}
 trimming/*.{html,log}
