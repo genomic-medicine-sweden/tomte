@@ -1,12 +1,12 @@
 nextflow_pipeline {
 
-    name "Test pipeline GENOMICMEDICINESWEDEN_TOMTE"
+    name "Test pipeline"
     script "../main.nf"
     tag "pipeline"
     tag "tomte"
     tag "tomte_no_skip"
 
-    test("test profile") {
+    test("-profile test") {
         tag "tomte_no_skip"
 
         when {
