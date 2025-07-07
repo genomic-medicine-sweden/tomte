@@ -1,6 +1,6 @@
 # ![tomte](docs/images/tomte_logo_light.png#gh-light-mode-only) ![tomte](docs/images/tomte_logo_dark.png#gh-dark-mode-only)
 
-[![GitHub Actions CI Status](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/ci.yml/badge.svg)](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/ci.yml)
+[![GitHub Actions CI Status](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/nf-test.yml/badge.svg)](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/nf-test.yml)
 [![GitHub Actions Linting Status](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/linting.yml/badge.svg)](https://github.com/genomic-medicine-sweden/tomte/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.10828946-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.10828946)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
