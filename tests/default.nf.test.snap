@@ -449,7 +449,6 @@
                 "t_data.ctab:md5,adea5cce0d453ca8108143842b21157c",
                 "hgnc.tsv:md5,bbf07f9733fbd7e4666f039b5c4be128",
                 "ACC5963A2_junction.bed:md5,7b66db28a4b006d798a96fbc81f345e5",
-                "tomte_pipeline_software_mqc_versions.yml:md5,27382c49f5f8f29c756844f67f83f4e0",
                 "GRCh37_gffread_output.fasta:md5,7dbf3195d06f480fa5b2421004580bdd",
                 "grch37_chr21.dict:md5,53d95c36db0422d29db02c8a8da56e43",
                 "grch37_chr21.fa:md5,e9ce36e75cd57d255ad64eb2ecca4dd0",
@@ -606,6 +605,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-07-09T16:12:16.683283646"
+        "timestamp": "2025-07-09T17:17:58.97739516"
     }
 }
