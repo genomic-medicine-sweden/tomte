@@ -51,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Substitute ext.when by if statements on analyse_transcripts subworkflow [#236](https://github.com/genomic-medicine-sweden/tomte/pull/236)
 - Substitute ext.when by if statements on call_variants, igv_tracks, and general_tomte subworkflow [#237](https://github.com/genomic-medicine-sweden/tomte/pull/237)
 - Updated nf-core/tools template to v3.3.1 [#242](https://github.com/genomic-medicine-sweden/tomte/pull/242)
+- Updated nf-core/tools template to v3.3.2 [#245](https://github.com/genomic-medicine-sweden/tomte/pull/245)
 
 | Tool                   | Old version | New version |
 | ---------------------- | ----------- | ----------- |
@@ -67,6 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BUILD_VEP_CACHE, VEP_GNOMAD_DOWNLOAD and WGET_DOWNLOAD stubs crash, fixed by removing double versions.yml write. [#223](https://github.com/genomic-medicine-sweden/tomte/pull/223)
 - Version output of modules solving [#208](https://github.com/genomic-medicine-sweden/tomte/issues/208) [#228](https://github.com/genomic-medicine-sweden/tomte/pull/228)
 - Fixed indentation and adapted local modules and subworkflows to follow to correct Nextflow language syntax solving [#189](https://github.com/genomic-medicine-sweden/tomte/issues/189) [#239](https://github.com/genomic-medicine-sweden/tomte/pull/239)
+- Fixed link from README.md to docs/parameters.md, the file has now been created solving [#194](https://github.com/genomic-medicine-sweden/tomte/issues/194) [#246](https://github.com/genomic-medicine-sweden/tomte/pull/246)
+- Fixed output description for bootstrapAnn solving [#238](https://github.com/genomic-medicine-sweden/tomte/issues/238) [#246](https://github.com/genomic-medicine-sweden/tomte/pull/246)
 
 ## 3.0.1 - Snowman [2025-03-26]
 

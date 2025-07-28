@@ -215,7 +215,7 @@ to "gatk". Involves several steps: [`SplitN Cigar Reads`](https://gatk.broadinst
 <summary>Output files</summary>
 
 - `bootstrapann`
-  - `*ase.vcf`: annotated vcf where allelic imbalance is marked
+  - `*_split_rmdup.vcf.gz`: An annotated VCF file where each SNP includes ASEReadCounter read counts and two ASE p-values: a symmetric binomial test and a non-parametric exact test.
 
 </details>
 
