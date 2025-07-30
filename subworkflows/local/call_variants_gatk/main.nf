@@ -49,7 +49,8 @@ workflow CALL_VARIANTS_GATK {
         GATK4_HAPLOTYPECALLER.out.vcf.join(GATK4_HAPLOTYPECALLER.out.tbi),
         ch_fasta,
         ch_fai,
-        ch_dict
+        ch_dict,
+        [[],[]]
     )
     ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first())
 

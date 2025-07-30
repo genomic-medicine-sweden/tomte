@@ -51,6 +51,7 @@ workflow ANNOTATE_SNV {
     // Generate Clinical filter
     GAWK(
         ch_gene_panel_clinical_filter.map{it -> [[id:'hgnc'], it]}.collect(),
+        [],
         []
     )
 
