@@ -4,18 +4,18 @@
             28,
             {
                 "BEDTOINTERVALLIST": {
-                    "gatk4": "4.5.0.0"
+                    "gatk4": "4.6.1.0"
                 },
                 "BUILD_DICT": {
-                    "gatk4": "4.5.0.0"
+                    "gatk4": "4.6.1.0"
                 },
                 "BUILD_STAR_GENOME": {
                     "star": "2.7.11b",
-                    "samtools": 1.2,
+                    "samtools": 1.21,
                     "gawk": "5.1.0"
                 },
                 "FASTP": {
-                    "fastp": "0.23.4"
+                    "fastp": "0.24.0"
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
@@ -30,10 +30,10 @@
                     "gffread": "0.12.7"
                 },
                 "GUNZIP_FASTA": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "PICARD_COLLECTINSERTSIZEMETRICS": {
                     "picard": "3.3.0"
@@ -58,7 +58,7 @@
                 },
                 "STAR_ALIGN": {
                     "star": "2.7.11b",
-                    "samtools": 1.2,
+                    "samtools": 1.21,
                     "gawk": "5.1.0"
                 },
                 "UCSC_GTFTOGENEPRED": {
@@ -68,7 +68,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "genomic-medicine-sweden/tomte": "v3.0.1"
+                    "genomic-medicine-sweden/tomte": "v4.0.0"
                 }
             },
             [
@@ -161,6 +161,7 @@
                 "multiqc/multiqc_data/fastqc_sequence_counts_plot.txt",
                 "multiqc/multiqc_data/fastqc_sequence_duplication_levels_plot.txt",
                 "multiqc/multiqc_data/fastqc_top_overrepresented_sequences_table.txt",
+                "multiqc/multiqc_data/llms-full.txt",
                 "multiqc/multiqc_data/multiqc.log",
                 "multiqc/multiqc_data/multiqc_citations.txt",
                 "multiqc/multiqc_data/multiqc_data.json",
@@ -274,7 +275,7 @@
                 "sjdbList.fromGTF.out.tab:md5,e394912ab5667171a27e8897d116f8f0",
                 "sjdbList.out.tab:md5,12efd0795aa3db892113dcc09c5843f1",
                 "transcriptInfo.tab:md5,b2726efcc116cb22abd4479168dba574",
-                "ACC5963A2.fastp.json:md5,864bf7cafcea8c47d9784f7bd5066e53",
+                "ACC5963A2.fastp.json:md5,6b9755d6b949a5af8167785849fb6424",
                 "ACC5963A2_1.fastp.fastq.gz:md5,35894d5840555bc9360f7f81adf953e2",
                 "ACC5963A2_2.fastp.fastq.gz:md5,6e8779ccbfdf584f2daf3aa33999f593"
             ],
@@ -304,6 +305,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-07-09T17:23:25.024912811"
+        "timestamp": "2025-07-30T12:52:30.666107872"
     }
 }

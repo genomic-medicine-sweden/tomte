@@ -26,6 +26,7 @@ nextflow_workflow {
                 """
                 input[0] = GUNZIP_FASTA.out.gunzip
                 input[1] = [[],[]]
+                input[2] = []
                 """
             }
         }

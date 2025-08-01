@@ -12,22 +12,22 @@
             ],
             "finequagga_split_rmdup.vcf.gz.tbi",
             [
-                "versions.yml:md5,5a598f137d76283570a71ae5b1262cdb",
-                "versions.yml:md5,7630e1a433dad44c977abc1950472edc",
-                "versions.yml:md5,8b20833ca0ea8932e974e6cd11cee929",
-                "versions.yml:md5,abaa706f5766a4d8d47df4c748cb5bb2",
-                "versions.yml:md5,ba3852833e33551dd9fb8d51cc8070bb",
-                "versions.yml:md5,bad6f660f4dc6e62578548c23ae46e9a",
-                "versions.yml:md5,e9783fbcbcda2c371f2fc2ff8831afbb",
+                "versions.yml:md5,4260f81272bc7976004cb71c220ac7c4",
+                "versions.yml:md5,53dc76802ccd9d3604c413cea5810d43",
+                "versions.yml:md5,938667310a4b39815b7d6c59e90be868",
+                "versions.yml:md5,a0fd1d34c375ce6de3c12f7677455568",
+                "versions.yml:md5,a265f17fbd2eeb9eda1f4e876bc1ebcc",
+                "versions.yml:md5,d2143d7224a883879775c66b56ca2912",
+                "versions.yml:md5,dfa95053efa28dd1e5be7fa129fe83b9",
                 "versions.yml:md5,f375509729cb99d7a6f8073446f84f00",
-                "versions.yml:md5,fb43d83aa26352283bc97da7193df19f"
+                "versions.yml:md5,ff29ff5a2e422142521dd23401bb87f8"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.5"
+            "nextflow": "25.04.5"
         },
-        "timestamp": "2025-04-11T12:06:18.677213"
+        "timestamp": "2025-07-29T15:37:21.545753406"
     },
     "Should run without failures": {
         "content": [
@@ -43,20 +43,20 @@
             "finequagga_split_rmdup.vcf.gz.tbi",
             [
                 "versions.yml:md5,00ddd8c72d45720f971db98815fbfc0e",
-                "versions.yml:md5,5a598f137d76283570a71ae5b1262cdb",
-                "versions.yml:md5,7630e1a433dad44c977abc1950472edc",
-                "versions.yml:md5,8b20833ca0ea8932e974e6cd11cee929",
-                "versions.yml:md5,abaa706f5766a4d8d47df4c748cb5bb2",
-                "versions.yml:md5,ba3852833e33551dd9fb8d51cc8070bb",
-                "versions.yml:md5,bad6f660f4dc6e62578548c23ae46e9a",
+                "versions.yml:md5,4260f81272bc7976004cb71c220ac7c4",
+                "versions.yml:md5,53dc76802ccd9d3604c413cea5810d43",
+                "versions.yml:md5,938667310a4b39815b7d6c59e90be868",
+                "versions.yml:md5,a0fd1d34c375ce6de3c12f7677455568",
+                "versions.yml:md5,a265f17fbd2eeb9eda1f4e876bc1ebcc",
+                "versions.yml:md5,d2143d7224a883879775c66b56ca2912",
                 "versions.yml:md5,f375509729cb99d7a6f8073446f84f00",
-                "versions.yml:md5,fb43d83aa26352283bc97da7193df19f"
+                "versions.yml:md5,ff29ff5a2e422142521dd23401bb87f8"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.5"
+            "nextflow": "25.04.5"
         },
-        "timestamp": "2025-04-23T16:09:58.632648"
+        "timestamp": "2025-07-29T15:36:43.313979082"
     }
 }

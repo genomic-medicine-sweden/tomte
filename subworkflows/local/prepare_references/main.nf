@@ -54,7 +54,7 @@ workflow PREPARE_REFERENCES {
     }
     // If no genome indices, create it
     if ( build_fai ) {
-        SAMTOOLS_FAIDX_GENOME( ch_fasta_final,[[],[]] )
+        SAMTOOLS_FAIDX_GENOME( ch_fasta_final,[[],[]], [] )
         ch_fai = SAMTOOLS_FAIDX_GENOME.out.fai.collect()
         ch_versions = ch_versions.mix( SAMTOOLS_FAIDX_GENOME.out.versions )
     } else {

@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## X.X.X - TBD [XXXX-XX-XX]
+## 4.0.0 - Snowball [XXXX-XX-XX]
 
 ### `Added`
 
@@ -52,13 +52,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Substitute ext.when by if statements on call_variants, igv_tracks, and general_tomte subworkflow [#237](https://github.com/genomic-medicine-sweden/tomte/pull/237)
 - Updated nf-core/tools template to v3.3.1 [#242](https://github.com/genomic-medicine-sweden/tomte/pull/242)
 - Updated nf-core/tools template to v3.3.2 [#245](https://github.com/genomic-medicine-sweden/tomte/pull/245)
+- Updated bcftools/merge, bcftools/mpileup, bcftools/norm, bcftools/stats, bcftools/view, fastp, gatk4/asereadcounter, gatk4/bedtointervalist, gatk4/createsequencedictionary, gatk4/haplotypecaller, gatk4/variantfiltration, gunzip, multiqc, tabix/bgziptabix, and tabix/tabix module [#246](https://github.com/genomic-medicine-sweden/tomte/pull/246)
 
-| Tool                   | Old version | New version |
-| ---------------------- | ----------- | ----------- |
-| multiqc                | 1.25.1      | 1.27        |
-| gatk4/splitncigarreads | 4.5.0.0     | 4.6.1.0     |
-| gffread                | 0.12.1      | 0.12.7      |
-| gtftogenepred          | 377         | 447         |
+| Tool                           | Old version | New version |
+| ------------------------------ | ----------- | ----------- |
+| bcftools/merge                 | 1.2         | 1.21        |
+| bcftools/mpileup               | 1.2         | 1.21        |
+| bcftools/norm                  | 1.2         | 1.21        |
+| bcftools/stats                 | 1.2         | 1.21        |
+| bcftools/view                  | 1.2         | 1.21        |
+| fastp                          | 0.23.4      | 0.24.0      |
+| gatk4/asereadcounter           | 4.5.0.0     | 4.6.1.0     |
+| gatk4/bedtointervalist         | 4.5.0.0     | 4.6.1.0     |
+| gatk4/createsequencedictionary | 4.5.0.0     | 4.6.1.0     |
+| gatk4/haplotypecaller          | 4.5.0.0     | 4.6.1.0     |
+| gatk4/splitncigarreads         | 4.5.0.0     | 4.6.1.0     |
+| gatk4/variantfiltration        | 4.5.0.0     | 4.6.1.0     |
+| gffread                        | 0.12.1      | 0.12.7      |
+| gtftogenepred                  | 377         | 447         |
+| gunzip                         | 1.1         | 1.13        |
+| multiqc                        | 1.25.1      | 1.30        |
+| tabix/bgziptabix               | 1.2         | 1.21        |
+| tabix/tabix                    | 1.2         | 1.21        |
 
 ### `Fixed`
 

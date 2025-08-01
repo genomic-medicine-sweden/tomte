@@ -95,8 +95,8 @@
                 "readCount": 209253
             },
             [
-                "versions.yml:md5,1533d93ad0c82b21db0a8c1d61e0acbb",
-                "versions.yml:md5,6fae393145021e4660c61ada0d720466",
+                "versions.yml:md5,26e766c12c867bec19ce7936855c9506",
+                "versions.yml:md5,7c11e9e9e5618299c34aca60c92450a6",
                 "versions.yml:md5,bd1f6a0d8ee30d9ad14843e2abfcf9e3",
                 "versions.yml:md5,c6359df28f45236797d408fb562cef4d",
                 "versions.yml:md5,fc3cdfeb9650e6068242aa84be1e3db1"
@@ -104,8 +104,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.5"
+            "nextflow": "25.04.5"
         },
-        "timestamp": "2025-04-30T18:08:06.566339"
+        "timestamp": "2025-07-29T15:01:03.375944904"
     }
 }
