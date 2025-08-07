@@ -72,7 +72,7 @@ workflow TOMTE {
                                                                         : Channel.empty().mix(downloads.vep_cache)
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
                                                                         : Channel.empty().mix(downloads.vep_plugin)
-    ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it.getSimpleName()], it]}.collect()
+    ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                         : Channel.empty()
     ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()
                                                                         : Channel.empty()
@@ -84,15 +84,13 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_salmon_index               = params.salmon_index                 ? Channel.fromPath(params.salmon_index)
                                                                         : Channel.empty()
-    ch_star_index                 = params.star_index                   ? Channel.fromPath(params.star_index).map {it -> [[id:it.getSimpleName()], it]}.collect()
+    ch_star_index                 = params.star_index                   ? Channel.fromPath(params.star_index).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                         : Channel.empty()
     ch_transcript_fasta           = params.transcript_fasta             ? Channel.fromPath(params.transcript_fasta)
                                                                         : Channel.empty()
-    ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it.getSimpleName()], it] }.collect()
+    ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                         : Channel.empty()
     ch_subsample_bed              = params.subsample_bed                ? Channel.fromPath(params.subsample_bed).collect()
-                                                                        : Channel.empty()
-    ch_hb_genes                   = params.hb_genes                     ? Channel.fromPath(params.hb_genes).collect()
                                                                         : Channel.empty()
 
     // Read and store paths in the vep_plugin_files file
@@ -135,34 +133,16 @@ workflow TOMTE {
         !params.star_index ,
         !params.salmon_index
     ).set { ch_references }
-    ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
-
-    // Prepare input
-    ch_samplesheet
-        .branch {
-            fastq: it[1].any { it.toString().endsWith('.fastq.gz') || it.toString().endsWith('.fq.gz') }
-            cram:  it[1].any { it.toString().endsWith('.cram') }
-            bam:   it[1].any { it.toString().endsWith('.bam') }
-        }
-        .set { ch_input_branch }
-    ch_cram_reads = ch_input_branch.cram.map{ meta, cram_crai -> [meta, cram_crai[0], cram_crai[1]] }
-
-    // Convet cram to bam
-    CRAM_TO_BAM(ch_cram_reads, ch_references.fasta, ch_references.fai)
-    ch_bam_from_cram = CRAM_TO_BAM.out.bam.join(CRAM_TO_BAM.out.bai).map{ meta, bam, bai -> [meta, [bam, bai]]}
-
-    ch_bam_reads = ch_input_branch.bam.mix(ch_bam_from_cram)
-    ch_fastq_reads = ch_input_branch.fastq
+    ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions.first())
 
     FASTQC (
-        ch_fastq_reads
+        ch_samplesheet
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions)
+    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     ALIGNMENT(
-        ch_fastq_reads,
-        ch_bam_reads,
+        ch_samplesheet,
         ch_references.star_index,
         ch_references.gtf,
         ch_platform,

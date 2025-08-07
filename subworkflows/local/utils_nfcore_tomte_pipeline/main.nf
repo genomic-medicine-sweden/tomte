@@ -179,22 +179,16 @@ def validateInputParameters() {
 // Validate channels from input samplesheet
 //
 def validateInputSamplesheet(input) {
-    def (metas, files) = input[1..2]
-        if (metas[0].is_fastq) {
-            // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
-            def endedness_ok = metas.collect{ meta -> meta.single_end }.unique().size == 1
-            if (!endedness_ok) {
-                error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
-            }
-        } else {
-            if (files.flatten().size() != 2) {
-                error("BAM/CRAM input for sample ${metas.sample} should have both BAM/CRAM and BAI/CRAI files.")
-            }
-        }
+    def (metas, fastqs) = input[1..2]
 
-    return [ metas[0], files ]
+    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
+    def endedness_ok = metas.collect{ meta -> meta.single_end }.unique().size == 1
+    if (!endedness_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+    }
+
+    return [ metas[0], fastqs ]
 }
-
 //
 // Get attribute from genome config file e.g. fasta
 //
@@ -272,7 +266,7 @@ def toolBibliographyText() {
 }
 
 def methodsDescriptionText(mqc_methods_yaml) {
-    // Convert to a named map so can be used as with familar NXF ${workflow} variable syntax in the MultiQC YML file
+    // Convert  to a named map so can be used as with familar NXF ${workflow} variable syntax in the MultiQC YML file
     def meta = [:]
     meta.workflow = workflow.toMap()
     meta["manifest_map"] = workflow.manifest.toMap()

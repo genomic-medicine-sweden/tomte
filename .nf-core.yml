@@ -1,3 +1,4 @@
+bump_version: null
 lint:
   files_exist:
     - assets/nf-core-tomte_logo_light.png
