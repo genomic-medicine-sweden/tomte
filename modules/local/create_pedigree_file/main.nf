@@ -33,7 +33,7 @@ process CREATE_PEDIGREE_FILE {
         }
     }
     """
-    echo -e "$outfile_text" >${case_name}.ped
+    echo -e "$outfile_text" > ${case_name}.ped
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
