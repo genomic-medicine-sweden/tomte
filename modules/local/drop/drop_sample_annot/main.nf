@@ -1,7 +1,6 @@
 process DROP_SAMPLE_ANNOT {
     tag "DROP_annot_file"
     label 'process_low'
-    errorStrategy 'terminate'
 
     container "docker.io/clinicalgenomics/drop:1.4.0"
 

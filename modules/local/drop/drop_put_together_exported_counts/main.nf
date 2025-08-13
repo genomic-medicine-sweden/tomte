@@ -1,7 +1,6 @@
 process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
     tag "DROP_put_together_exported_counts"
     label 'process_low'
-    errorStrategy 'terminate'
 
     container "docker.io/clinicalgenomics/drop:1.4.0"
 

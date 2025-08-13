@@ -1,7 +1,6 @@
 process DROP_CONFIG_RUN_AE {
     tag "DROP_CONFIG_RUN_AE"
     label 'process_drop'
-    errorStrategy 'terminate'
 
     container "docker.io/clinicalgenomics/drop:1.4.0"
 
