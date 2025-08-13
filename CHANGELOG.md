@@ -315,9 +315,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed `--vep_filters`, it will now be automatically extracted from the `--gene_panel_clinical_filter`[#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
 
-| Old parameter | New parameter |
+| Old parameter   | New parameter |
 | --------------- | ------------- |
-| `--vep_filters` | |
+| `--vep_filters` |               |
 
 > [!NOTE]
 > Parameter has been updated if both old and new parameter information is present.
