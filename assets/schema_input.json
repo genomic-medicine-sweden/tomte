@@ -97,7 +97,8 @@
             },
             {
                 "dependentRequired": {
-                    "case": ["bam_cram"]
+                    "case": ["bam_cram"],
+                    "bam_cram": ["bai_crai"]
                 }
             }
         ],
