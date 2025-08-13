@@ -60,6 +60,8 @@ nextflow_workflow {
     }
 
     test("Should run with two samples") {
+        
+        options "-stub DROP_CONFIG_RUN_AS,DROP_CONFIG_RUN_AE,DROP_FILTER_RESULTS"
 
         when {
             workflow {
@@ -115,7 +117,6 @@ nextflow_workflow {
                 ).match()}
             )
         }
-        options "-stub DROP_CONFIG_RUN_AS,DROP_CONFIG_RUN_AE,DROP_FILTER_RESULTS"
     }
 
     test("Should run with one sample") {

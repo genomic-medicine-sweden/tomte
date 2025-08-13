@@ -61,6 +61,18 @@
                 "enum": ["unstranded", "forward", "reverse"],
                 "errorMessage": "Sample strandness valid input is unstranded,forward or reverse"
             },
+            "paternal": {
+                "type": "string",
+                "meta": ["paternal"],
+                "pattern": "^\\S+$",
+                "default": "0"
+            },
+            "maternal": {
+                "type": "string",
+                "meta": ["maternal"],
+                "pattern": "^\\S+$",
+                "default": "0"
+            },
             "sex": {
                 "meta": ["sex"],
                 "oneOf": [

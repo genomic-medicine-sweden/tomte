@@ -109,15 +109,18 @@ genomic-medicine-sweden/tomte will requires the information given bellow.
 | `fastq_2`      | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Only if paired fastqs are provided |
 | `bam_cram`     | Full path to BAM/CRAM file.                                                                                                                                                            | Provide either fastq_1 or bam/cram |
 | `bai_crai`     | Full path to BAM/CRAM index file.                                                                                                                                                      | Only when bam/cram is provided     |
+| `Paternal`     | Father's custom sample name. If there is no paternal sample available, it can be left empty.                                                                                           | Optional                           |
+| `Maternal`     | Mother's custom sample name. If there is no maternal sample available, it can be left empty.                                                                                           | Optional                           |
+| `Sex`          | Sample sex. The valid input is M or 1for male; F or 2 for female; NA, 0, or other if unkown                                                                                            | Optional                           |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
-| case  | sample       | strandedness | fastq_1                          | fastq_2                          |
-| ----- | ------------ | ------------ | -------------------------------- | -------------------------------- |
-| fam_1 | CONTROL_REP1 | reverse      | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz |
-| fam_1 | CONTROL_REP2 | reverse      | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz |
-| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz |
-| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz |
+| case  | sample       | strandedness | fastq_1                          | fastq_2                          | Paternal     | Maternal     | Sex |
+| ----- | ------------ | ------------ | -------------------------------- | -------------------------------- | ------------ | ------------ | --- |
+| fam_1 | CONTROL_REP1 | reverse      | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz |              |              | M   |
+| fam_1 | CONTROL_REP2 | reverse      | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz |              |              | F   |
+| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   |
+| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   |
 
 Here is an example of a samplesheet where BAM files are provided:
 

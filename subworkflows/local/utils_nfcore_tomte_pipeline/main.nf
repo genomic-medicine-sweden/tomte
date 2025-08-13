@@ -92,10 +92,21 @@ workflow PIPELINE_INITIALISATION {
         }
         .tap { ch_input_counts }
         .map { meta, files -> [meta.id, files] }
-        .reduce([:]) { counts, id_files ->
-            counts[id_files[0]] = (counts[id_files[0]] ?: [:])
-            counts[id_files[0]][id_files[1]] = counts[id_files[0]].size() + 1
-            return counts
+        // Create line numbering for samples with multiple file pairs
+        .reduce([:]) { line_counts, sample_and_files ->
+            def sample_id = sample_and_files[0] 
+            def file_paths = sample_and_files[1]
+            
+            // Initialize sample entry if first time seeing this sample
+            if (!line_counts.containsKey(sample_id)) {
+                line_counts[sample_id] = [:]
+            }
+            
+            // Assign next available line number for this sample
+            def next_line_number = line_counts[sample_id].size() + 1
+            line_counts[sample_id][file_paths] = next_line_number
+            
+            return line_counts
         }
         .combine( ch_input_counts )
         .map { lineno, meta, files ->

@@ -106,7 +106,7 @@ workflow ALIGNMENT {
 // Custom functions
 
 /**
-* Branch the read channel into differnt channels,
+* Branch the read channel into different channels,
 * depending on whether the sample has multiple fastq files or not.
 * The resulting channels gets the original sample id in meta.
 *

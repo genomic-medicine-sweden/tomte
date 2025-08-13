@@ -98,7 +98,6 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                // define inputs of the workflow here. Example:
                 input[0] = STAR_ALIGN.out.wig
                 input[1] = GET_CHROM_SIZES.out.sizes.collect()
                 input[2] = STAR_ALIGN.out.spl_junc_tab
