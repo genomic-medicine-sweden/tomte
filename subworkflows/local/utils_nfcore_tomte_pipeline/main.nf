@@ -94,7 +94,7 @@ workflow PIPELINE_INITIALISATION {
         .map { meta, files -> [meta.id, files] }
         // Create line numbering for samples with multiple file pairs
         .reduce([:]) { line_counts, sample_and_files ->
-            def sample_id = sample_and_files[0] 
+            def sample_id = sample_and_files[0]
             def file_paths = sample_and_files[1]
 
             // Initialize sample entry if first time seeing this sample
