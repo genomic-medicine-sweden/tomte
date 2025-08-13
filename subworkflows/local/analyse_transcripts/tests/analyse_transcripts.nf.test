@@ -60,7 +60,7 @@ nextflow_workflow {
     }
 
     test("Should run with two samples") {
-        
+
         options "-stub DROP_CONFIG_RUN_AS,DROP_CONFIG_RUN_AE,DROP_FILTER_RESULTS"
 
         when {

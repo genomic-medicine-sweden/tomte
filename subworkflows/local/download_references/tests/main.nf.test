@@ -8,7 +8,7 @@ nextflow_workflow {
 
     test("Should run without failures") {
         options "-stub"
-        
+
         when {
             params {
                 skip_download_gnomad = false

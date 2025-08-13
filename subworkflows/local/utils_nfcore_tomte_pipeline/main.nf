@@ -96,16 +96,16 @@ workflow PIPELINE_INITIALISATION {
         .reduce([:]) { line_counts, sample_and_files ->
             def sample_id = sample_and_files[0] 
             def file_paths = sample_and_files[1]
-            
+
             // Initialize sample entry if first time seeing this sample
             if (!line_counts.containsKey(sample_id)) {
                 line_counts[sample_id] = [:]
             }
-            
+
             // Assign next available line number for this sample
             def next_line_number = line_counts[sample_id].size() + 1
             line_counts[sample_id][file_paths] = next_line_number
-            
+
             return line_counts
         }
         .combine( ch_input_counts )
