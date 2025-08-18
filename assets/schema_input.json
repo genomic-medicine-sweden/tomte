@@ -62,15 +62,31 @@
                 "errorMessage": "Sample strandness valid input is unstranded,forward or reverse"
             },
             "paternal": {
-                "type": "string",
                 "meta": ["paternal"],
-                "pattern": "^\\S+$",
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "enum": [0]
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
                 "default": "0"
             },
             "maternal": {
-                "type": "string",
                 "meta": ["maternal"],
-                "pattern": "^\\S+$",
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "enum": [0]
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
                 "default": "0"
             },
             "sex": {
