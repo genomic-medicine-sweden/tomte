@@ -111,7 +111,7 @@ genomic-medicine-sweden/tomte will requires the information given bellow.
 | `bai_crai`     | Full path to BAM/CRAM index file.                                                                                                                                                      | Only when bam/cram is provided     |
 | `Paternal`     | Father's custom sample name. If there is no paternal sample available, it can be left empty.                                                                                           | Optional                           |
 | `Maternal`     | Mother's custom sample name. If there is no maternal sample available, it can be left empty.                                                                                           | Optional                           |
-| `Sex`          | Sample sex. The valid input is M or 1 for male; F or 2 for female; NA, 0, or other if unknown        | Optional                           |
+| `Sex`          | Sample sex. The valid input is M or 1 for male; F or 2 for female; NA, 0, or other if unknown                                                                                          | Optional                           |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
