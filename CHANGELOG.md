@@ -3,6 +3,34 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## X.X.X - [XXXX-XX-XX]
+
+### `Added`
+
+### `Parameters`
+
+| Old parameter | New parameter  |
+| ------------- | -------------- |
+|               | `--skip_peddy` |
+
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
+
+### `Changed`
+
+| Tool | Old version | New version |
+| ---- | ----------- | ----------- |
+|      |             |             |
+
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
+
+### `Fixed`
+
 ## 4.0.0 - Snowball [2025-08-18]
 
 ### `Added`
