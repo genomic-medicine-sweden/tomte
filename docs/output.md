@@ -58,6 +58,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 #### Salmon
 
 [`Salmon`](https://salmon.readthedocs.io/en/latest/) quantifies reads.
+Note that as Salmon has been setup to start from fastq files, it will not run if the pipeline starts from bam/cram files.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -214,7 +215,7 @@ to "gatk". Involves several steps: [`SplitN Cigar Reads`](https://gatk.broadinst
 <summary>Output files</summary>
 
 - `bootstrapann`
-  - `*ase.vcf`: annotated vcf where allelic imbalance is marked
+  - `*_split_rmdup.vcf.gz`: An annotated VCF file where each SNP includes ASEReadCounter read counts and two ASE p-values: a symmetric binomial test and a non-parametric exact test.
 
 </details>
 

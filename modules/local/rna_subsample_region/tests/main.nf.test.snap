@@ -1,0 +1,26 @@
+{
+    "Should run without failures": {
+        "content": [
+            [
+                "@HD\tVN:1.6"
+            ],
+            {
+                "maxReadLength": 151,
+                "minReadLength": 13,
+                "meanReadLength": 138,
+                "maxQuality": 255,
+                "minQuality": 0,
+                "meanQuality": 253,
+                "readCount": 209135
+            },
+            [
+                "versions.yml:md5,68bb43a74b265ac9d219c0deae9146e6"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-16T14:20:05.267285"
+    }
+}

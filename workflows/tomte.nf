@@ -3,25 +3,29 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
+include { FASTQC                          } from '../modules/nf-core/fastqc/main'
+include { MULTIQC                         } from '../modules/nf-core/multiqc/main'
+include { PEDDY                           } from '../modules/nf-core/peddy/main'
+include { CREATE_PEDIGREE_FILE            } from '../modules/local/create_pedigree_file/main'
+include { ESTIMATE_HB_PERC                } from '../modules/local/estimate_hb_perc/main'
+include { paramsSummaryMap                } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML          } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText          } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
+include { SAMTOOLS_CONVERT as CRAM_TO_BAM } from '../modules/nf-core/samtools/convert/main'
 
 //
 // SUBWORKFLOW: local
 //
-include { DOWNLOAD_REFERENCES     } from '../subworkflows/local/download_references'
-include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_references'
-include { ALIGNMENT               } from '../subworkflows/local/alignment'
-include { BAM_QC                  } from '../subworkflows/local/bam_qc'
-include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts'
-include { CALL_VARIANTS           } from '../subworkflows/local/call_variants'
-include { ALLELE_SPECIFIC_CALLING } from '../subworkflows/local/allele_specific_calling'
-include { ANNOTATE_SNV            } from '../subworkflows/local/annotate_snv'
-include { IGV_TRACKS              } from '../subworkflows/local/igv_tracks'
+include { DOWNLOAD_REFERENCES     } from '../subworkflows/local/download_references/main'
+include { PREPARE_REFERENCES      } from '../subworkflows/local/prepare_references/main'
+include { ALIGNMENT               } from '../subworkflows/local/alignment/main'
+include { BAM_QC                  } from '../subworkflows/local/bam_qc/main'
+include { ANALYSE_TRANSCRIPTS     } from '../subworkflows/local/analyse_transcripts/main'
+include { CALL_VARIANTS           } from '../subworkflows/local/call_variants/main'
+include { ALLELE_SPECIFIC_CALLING } from '../subworkflows/local/allele_specific_calling/main'
+include { ANNOTATE_SNV            } from '../subworkflows/local/annotate_snv/main'
+include { IGV_TRACKS              } from '../subworkflows/local/igv_tracks/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,7 +43,7 @@ workflow TOMTE {
     ch_multiqc_files = Channel.empty()
 
     // Mandatory
-    ch_samples        = ch_samplesheet.map { meta, fastqs -> meta }
+    ch_samples        = ch_samplesheet.map { meta, _fastqs -> meta }
     ch_case_info      = ch_samples.toList().map { create_case_channel(it) }
     ch_platform       = Channel.from(params.platform).collect()
 
@@ -51,20 +55,24 @@ workflow TOMTE {
         params.genome,
         params.gencode_annotation_version,
         ch_vep_refs_download_unprocessed,
-        params.vep_cache_version
+        params.vep_cache_version,
+        !params.fasta,
+        !params.gtf,
+        !params.skip_download_vep && !params.vep_cache,
+        !params.skip_download_gnomad
     ).set { downloads }
     ch_versions = ch_versions.mix(DOWNLOAD_REFERENCES.out.versions)
 
     // Optional
-    ch_fasta                      = params.fasta                        ? Channel.fromPath(params.fasta).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                        : downloads.fasta.map {it -> [[id:it[0].simpleName], it]}.collect()
-    ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                        : downloads.gtf.map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_fasta                      = params.fasta                        ? Channel.fromPath(params.fasta).map {it -> [[id:it.getSimpleName()], it]}.collect()
+                                                                        : downloads.fasta.map {it -> [[id:it.getSimpleName()], it]}.collect()
+    ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it.getSimpleName()], it]}.collect()
+                                                                        : downloads.gtf.map {it -> [[id:it.getSimpleName()], it]}.collect()
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
                                                                         : Channel.empty().mix(downloads.vep_cache)
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
                                                                         : Channel.empty().mix(downloads.vep_plugin)
-    ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : Channel.empty()
     ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()
                                                                         : Channel.empty()
@@ -76,13 +84,15 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_salmon_index               = params.salmon_index                 ? Channel.fromPath(params.salmon_index)
                                                                         : Channel.empty()
-    ch_star_index                 = params.star_index                   ? Channel.fromPath(params.star_index).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_star_index                 = params.star_index                   ? Channel.fromPath(params.star_index).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : Channel.empty()
     ch_transcript_fasta           = params.transcript_fasta             ? Channel.fromPath(params.transcript_fasta)
                                                                         : Channel.empty()
-    ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it[0].simpleName], it] }.collect()
+    ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it.getSimpleName()], it] }.collect()
                                                                         : Channel.empty()
     ch_subsample_bed              = params.subsample_bed                ? Channel.fromPath(params.subsample_bed).collect()
+                                                                        : Channel.empty()
+    ch_hb_genes                   = params.hb_genes                     ? Channel.fromPath(params.hb_genes).collect()
                                                                         : Channel.empty()
 
     // Read and store paths in the vep_plugin_files file
@@ -112,18 +122,47 @@ workflow TOMTE {
         ch_vep_cache_unprocessed,
         ch_transcript_fasta,
         ch_salmon_index,
-        ch_sequence_dict
+        ch_sequence_dict,
+        params.fasta && params.fasta.endsWith(".gz"),
+        params.gtf && params.gtf.endsWith(".gz"),
+        params.transcript_fasta && params.transcript_fasta.endsWith(".gz"),
+        params.star_index && params.star_index.endsWith(".gz"),
+        params.salmon_index && params.salmon_index.endsWith(".gz"),
+        params.vep_cache && params.vep_cache.endsWith(".gz"),
+        !params.fai,
+        !params.sequence_dict,
+        !params.transcript_fasta,
+        !params.star_index ,
+        !params.salmon_index
     ).set { ch_references }
-    ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions.first())
+    ch_versions = ch_versions.mix(PREPARE_REFERENCES.out.versions)
+
+    // Prepare input
+    ch_samplesheet
+        .branch {
+            fastq: it[1].any { it.toString().endsWith('.fastq.gz') || it.toString().endsWith('.fq.gz') }
+            cram:  it[1].any { it.toString().endsWith('.cram') }
+            bam:   it[1].any { it.toString().endsWith('.bam') }
+        }
+        .set { ch_input_branch }
+    ch_cram_reads = ch_input_branch.cram.map{ meta, cram_crai -> [meta, cram_crai[0], cram_crai[1]] }
+
+    // Convet cram to bam
+    CRAM_TO_BAM(ch_cram_reads, ch_references.fasta, ch_references.fai)
+    ch_bam_from_cram = CRAM_TO_BAM.out.bam.join(CRAM_TO_BAM.out.bai).map{ meta, bam, bai -> [meta, [bam, bai]]}
+
+    ch_bam_reads = ch_input_branch.bam.mix(ch_bam_from_cram)
+    ch_fastq_reads = ch_input_branch.fastq
 
     FASTQC (
-        ch_samplesheet
+        ch_fastq_reads
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    ch_versions = ch_versions.mix(FASTQC.out.versions)
 
     ALIGNMENT(
-        ch_samplesheet,
+        ch_fastq_reads,
+        ch_bam_reads,
         ch_references.star_index,
         ch_references.gtf,
         ch_platform,
@@ -133,7 +172,8 @@ workflow TOMTE {
         params.skip_subsample_region,
         params.skip_downsample,
         ch_references.salmon_index,
-        ch_references.fasta
+        ch_references.fasta,
+        params.save_mapped_as_cram
     ).set { ch_alignment }
     ch_versions = ch_versions.mix(ALIGNMENT.out.versions)
 
@@ -145,12 +185,12 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(BAM_QC.out.versions)
 
+
     ANALYSE_TRANSCRIPTS(
         ch_alignment.bam_bai,
         ch_alignment.bam_ds_bai,
         ch_references.gtf,
         ch_references.fasta_fai,
-        ch_alignment.gene_counts,
         ch_ref_drop_count_file,
         ch_ref_drop_annot_file,
         ch_ref_drop_splice_folder,
@@ -163,48 +203,89 @@ workflow TOMTE {
         ch_gene_panel_clinical_filter,
         ch_case_info,
         params.skip_drop_ae,
-        params.skip_export_counts_drop
+        params.skip_drop_as,
+        params.skip_export_counts_drop,
+        params.skip_stringtie
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
 
-    CALL_VARIANTS(
-        ch_alignment.bam_bai,
-        ch_references.fasta,
-        ch_references.fai,
-        ch_references.sequence_dict,
-        params.variant_caller
-    )
-    ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
+    if ( !params.skip_variant_calling ) {
+        CALL_VARIANTS(
+            ch_alignment.bam_bai,
+            ch_references.fasta,
+            ch_references.fai,
+            ch_references.sequence_dict,
+            params.variant_caller
+        )
+        ch_vcf_tbi = CALL_VARIANTS.out.vcf_tbi
+        ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
 
-    ALLELE_SPECIFIC_CALLING(
-        CALL_VARIANTS.out.vcf_tbi,
-        ch_alignment.bam_bai,
-        ch_references.fasta,
-        ch_references.fai,
-        ch_references.sequence_dict,
-        ch_case_info
-    )
-    ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
+        ALLELE_SPECIFIC_CALLING(
+            ch_vcf_tbi,
+            ch_alignment.bam_bai,
+            ch_references.fasta,
+            ch_references.fai,
+            ch_references.sequence_dict,
+            ch_case_info
+        )
+        ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
 
-    ANNOTATE_SNV (
-        ALLELE_SPECIFIC_CALLING.out.vcf,
-        params.genome,
-        params.vep_cache_version,
-        ch_references.vep_cache,
-        ch_references.fasta,
-        ch_vep_extra_files,
-        ch_gene_panel_clinical_filter
-    )
-    ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
+        if ( !params.skip_vep ) {
+            ANNOTATE_SNV (
+                ALLELE_SPECIFIC_CALLING.out.vcf,
+                params.genome,
+                params.vep_cache_version,
+                ch_references.vep_cache,
+                ch_references.fasta,
+                ch_vep_extra_files,
+                ch_gene_panel_clinical_filter,
+                !params.gene_panel_clinical_filter
+            )
+            ch_versions = ch_versions.mix(ANNOTATE_SNV.out.versions)
+            ch_multiqc_files = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
+        }
 
-    IGV_TRACKS(
-        ch_alignment.star_wig,
-        ch_references.chrom_sizes,
-        ch_alignment.spl_junc
-    )
-    ch_versions = ch_versions.mix(IGV_TRACKS.out.versions)
+        ch_multiqc_files = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
+    } else {
+        ch_vcf_tbi = Channel.empty()
+    }
 
-/*
+    if ( !params.skip_build_tracks ) {
+        IGV_TRACKS(
+            ch_alignment.star_wig,
+            ch_references.chrom_sizes,
+            ch_alignment.spl_junc
+        )
+        ch_junction_bed = IGV_TRACKS.out.bed
+        ch_bigwig = IGV_TRACKS.out.bw
+        ch_versions = ch_versions.mix(IGV_TRACKS.out.versions)
+    } else {
+        ch_junction_bed = Channel.empty()
+        ch_bigwig = Channel.empty()
+    }
+
+    if ( !params.skip_peddy ) {
+        ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+        ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
+        PEDDY (
+            ch_vcf_tbi,
+            ch_pedfile
+        )
+        ch_versions = ch_versions.mix(PEDDY.out.versions)
+    } else {
+        ch_pedfile = Channel.empty()
+    }
+
+    if ( !params.skip_calculate_hb_frac ) {
+        ESTIMATE_HB_PERC(ALIGNMENT.out.gene_counts, ch_hb_genes)
+        ch_hb_estimates = ESTIMATE_HB_PERC.out.json
+        ch_versions = ch_versions.mix(ESTIMATE_HB_PERC.out.versions)
+    } else {
+        ch_hb_estimates = Channel.empty()
+    }
+
+    /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     COLLECT SOFTWARE VERSIONS & MultiQC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -241,8 +322,6 @@ workflow TOMTE {
     ch_multiqc_files                      = ch_multiqc_files.mix(BAM_QC.out.metrics_general_rna.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files                      = ch_multiqc_files.mix(BAM_QC.out.metrics_insert_size.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files                      = ch_multiqc_files.mix(ANALYSE_TRANSCRIPTS.out.stats_gtf.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files                      = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files                      = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),
@@ -253,9 +332,20 @@ workflow TOMTE {
         []
     )
 
-    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
-
+    emit:
+    vcf_tbi              = ch_vcf_tbi                                   // channel: [ val(meta), path(vcf), path(tbi) ]
+    junction_bed         = ch_junction_bed                              // channel: [ val(meta), path(bed.gz), path(tbi) ]
+    bigwig               = ch_bigwig                                    // channel: [ val(meta), path(bw) ]
+    hb_estimates         = ch_hb_estimates                              // channel: [ val(meta), path(json) ]
+    drop_ae_out_clinical = ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical // channel: [ path(drop_AE_clinical.tsv) ]
+    drop_ae_out_research = ANALYSE_TRANSCRIPTS.out.drop_ae_out_research // channel: [ path(drop_AE_research.tsv) ]
+    drop_as_out_clinical = ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical // channel: [ path(drop_AS_clinical.tsv) ]
+    drop_as_out_research = ANALYSE_TRANSCRIPTS.out.drop_as_out_research // channel: [ path(drop_AS_research.tsv) ]
+    ped                  = ch_pedfile                                   // channel: [ path(ped_file) ]
+    multiqc_report       = MULTIQC.out.report.toList()                  // channel: /path/to/multiqc_report.html
+    multiqc_data         = MULTIQC.out.data                             // channel: [ path(multiqc_data) ]
+    bam_bai              = ALIGNMENT.out.bam_bai                        // channel: [ val(meta), path(bam), path(bai) ]
+    versions             = ch_versions                                  // channel: [ path(versions.yml) ]
 }
 
 /*
@@ -269,7 +359,7 @@ def create_case_channel(List rows) {
     def case_info = [:]
     def probands = []
 
-    for (item in rows) {
+    rows.each { item ->
         probands.add(item.sample)
     }
 

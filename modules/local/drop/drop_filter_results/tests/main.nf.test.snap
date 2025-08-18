@@ -1,0 +1,62 @@
+{
+    "With only AS": {
+        "content": [
+            [
+                "finequagga_fraser_top_hits_clinical.tsv"
+            ],
+            [
+                "finequagga_fraser_top_hits_research.tsv"
+            ],
+            [
+                "versions.yml:md5,9053b392802520d69bb81b7300ecff6d"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.5"
+        },
+        "timestamp": "2025-08-13T08:16:58.358815042"
+    },
+    "With only AE": {
+        "content": [
+            [
+                "finequagga_outrider_top_hits_clinical.tsv"
+            ],
+            [
+                "finequagga_outrider_top_hits_research.tsv"
+            ],
+            [
+                "versions.yml:md5,9053b392802520d69bb81b7300ecff6d"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.5"
+        },
+        "timestamp": "2025-08-13T08:09:52.472086619"
+    },
+    "With AS and AE": {
+        "content": [
+            [
+                "finequagga_fraser_top_hits_clinical.tsv"
+            ],
+            [
+                "finequagga_fraser_top_hits_research.tsv"
+            ],
+            [
+                "finequagga_outrider_top_hits_clinical.tsv"
+            ],
+            [
+                "finequagga_outrider_top_hits_research.tsv"
+            ],
+            [
+                "versions.yml:md5,9053b392802520d69bb81b7300ecff6d"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.5"
+        },
+        "timestamp": "2025-08-13T08:02:55.343797165"
+    }
+}

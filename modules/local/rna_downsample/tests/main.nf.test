@@ -1,0 +1,32 @@
+nextflow_process {
+
+    name "Test Process RNA_DOWNSAMPLE"
+    script "../main.nf"
+    process "RNA_DOWNSAMPLE"
+    tag "modules_local"
+    tag "modules"
+    tag "rna_downsample"
+
+    test("Should run without failures") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                    ])
+                input[1] = 20000
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}

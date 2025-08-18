@@ -23,7 +23,7 @@
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
                 "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             },
             "fastq_2": {
@@ -41,20 +41,83 @@
                     }
                 ]
             },
+            "bam_cram": {
+                "errorMessage": "BAM/CRAM file cannot contain spaces and must have extension '.bam' or '.cram'",
+                "type": "string",
+                "pattern": "^\\S+(\\.bam$|\\.cram$)",
+                "format": "file-path",
+                "exists": true
+            },
+            "bai_crai": {
+                "errorMessage": "BAM/CRAM index file cannot contain spaces and must have extension '.bai' or '.crai'",
+                "type": "string",
+                "pattern": "^\\S+(\\.bai$|\\.crai$)",
+                "format": "file-path",
+                "exists": true
+            },
             "strandedness": {
                 "type": "string",
                 "meta": ["strandedness"],
                 "enum": ["unstranded", "forward", "reverse"],
                 "errorMessage": "Sample strandness valid input is unstranded,forward or reverse"
             },
+            "paternal": {
+                "meta": ["paternal"],
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "enum": [0]
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
+                "default": "0"
+            },
+            "maternal": {
+                "meta": ["maternal"],
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "enum": [0]
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
+                "default": "0"
+            },
             "sex": {
-                "type": "string",
                 "meta": ["sex"],
-                "enum": ["M", "F", "NA"],
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "enum": [0, 1, 2]
+                    },
+                    {
+                        "type": "string",
+                        "enum": ["M", "F", "NA", "other"]
+                    }
+                ],
                 "default": "NA",
-                "errorMessage": "The valid input for sample sex is M, F or NA"
+                "errorMessage": "The valid input for sample sex is M, F, NA, other, 0, 1 or 2"
             }
         },
-        "required": ["case", "sample", "fastq_1", "strandedness"]
+        "anyOf": [
+            {
+                "dependentRequired": {
+                    "case": ["fastq_1"]
+                }
+            },
+            {
+                "dependentRequired": {
+                    "case": ["bam_cram"],
+                    "bam_cram": ["bai_crai"]
+                }
+            }
+        ],
+        "required": ["case", "sample", "strandedness"]
     }
 }

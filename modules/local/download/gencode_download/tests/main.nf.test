@@ -1,0 +1,48 @@
+nextflow_process {
+
+    name "Test Process GENCODE_DOWNLOAD"
+    script "../main.nf"
+    process "GENCODE_DOWNLOAD"
+    tag "modules"
+    tag "modules_local"
+    tag "gencode_download"
+
+    test("Download fasta -stub") {
+        options "-stub"
+        when {
+            process {
+                """
+                input[0] = 'GRCh38'
+                input[1] = 46
+                input[2] = 'fasta'
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+    test("Download gtf -stub") {
+        options "-stub"
+        when {
+            process {
+                """
+                input[0] = 'GRCh38'
+                input[1] = 46
+                input[2] = 'gtf'
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}

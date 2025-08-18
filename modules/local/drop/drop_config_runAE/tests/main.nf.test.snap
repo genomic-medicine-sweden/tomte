@@ -1,0 +1,26 @@
+{
+    "Should run without failures": {
+        "content": [
+            [
+                "config.yaml"
+            ],
+            [
+                "gene_name_mapping_grch37_chr21.tsv:md5,2403f42b96755d9f8bf566ac04f590ce"
+            ],
+            [
+                "OUTRIDER_results_all.Rds"
+            ],
+            [
+                "output"
+            ],
+            [
+                "versions.yml:md5,49e1d7b9f8f2f9ae82fab6d3aee2d456"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.5"
+        },
+        "timestamp": "2025-08-13T08:21:28.321137929"
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_ase.vcf:md5,e05755ba98284f12bf1df0e6a30e0653"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,2b69ef5b6182fde60cf48b73f3ffeec1"
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_ase.vcf:md5,e05755ba98284f12bf1df0e6a30e0653"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,2b69ef5b6182fde60cf48b73f3ffeec1"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-15T16:15:43.272934"
+    }
+}

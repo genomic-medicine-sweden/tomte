@@ -3,6 +3,99 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 4.0.0 - Snowball [2025-08-18]
+
+### `Added`
+
+- Added the option of starting from a bam or cram file [#193](https://github.com/genomic-medicine-sweden/tomte/pull/193)
+- Optionally run Peddy for per-sample sex- and heterozygosity checks [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
+- Optionally calculate percentage mapping to hemoglobin genes (or any other set of genes provided) [#190](https://github.com/genomic-medicine-sweden/tomte/pull/190)
+- Added the option of providing sex as 0, 1, or 2 as in the raredisease pipeline [#192](https://github.com/genomic-medicine-sweden/tomte/pull/192)
+- Nf-test for pipeline [#207](https://github.com/genomic-medicine-sweden/tomte/pull/207)
+- Output channels to Tomte, allowing it to run as part of a larger pipeline [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+- Nf-test for alignment subworkflow [#209](https://github.com/genomic-medicine-sweden/tomte/pull/209)
+- Nf-test for prepare_references subworkflow [#214](https://github.com/genomic-medicine-sweden/tomte/pull/214)
+- Nf-test for analyse_transcripts subworkflow [#215](https://github.com/genomic-medicine-sweden/tomte/pull/215)
+- Nf-test for call_variants subworkflow [#218](https://github.com/genomic-medicine-sweden/tomte/pull/218)
+- Nf-test for bam_qc subworkflow [#219](https://github.com/genomic-medicine-sweden/tomte/pull/219)
+- Nf-test for analyse_transcripts subworkflow allele_specific_calling [#220](https://github.com/genomic-medicine-sweden/tomte/pull/220)
+- Nf-test for annotate_snv subworkflow [#221](https://github.com/genomic-medicine-sweden/tomte/pull/221)
+- Nf-test for igv_tracks subworkflow [#222](https://github.com/genomic-medicine-sweden/tomte/pull/222)
+- Nf-test for download_references subworkflow [#223](https://github.com/genomic-medicine-sweden/tomte/pull/223)
+- Nf-test for bootstrapann, create_pedigree_file, estimate_hb_perc, get_chrom_sizes, get_rrna_transcripts,junction_track, rename_files, rna_downsample, and rna_subsample_region modules [#224](https://github.com/genomic-medicine-sweden/tomte/pull/224)
+- Nf-test for all drop modules [#226](https://github.com/genomic-medicine-sweden/tomte/pull/226)
+- Nf-test for build_vep_cache, gencode_download, vep_gnomad_download, and wget_download modules [#228](https://github.com/genomic-medicine-sweden/tomte/pull/228)
+- Nf-test for call_variants_gatk [#229](https://github.com/genomic-medicine-sweden/tomte/pull/229)
+
+### `Parameters`
+
+| Old parameter | New parameter              |
+| ------------- | -------------------------- |
+|               | `--skip_peddy`             |
+|               | `--skip_calculate_hb_frac` |
+|               | `--hb_genes`               |
+|               | `--trace_report_suffix`    |
+
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
+
+### `Changed`
+
+- Updated nf-core/tools template to v3.1.2 [#204](https://github.com/genomic-medicine-sweden/tomte/pull/204)
+- Updated nf-core/tools template to v3.2.0 [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
+- Updated multiqc module [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
+- Updated gatk4/splitncigarreads module [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+- Updated local gffread and gtftorefflat modules solving [#224](https://github.com/genomic-medicine-sweden/tomte/issues/224) to nf-core ones [#227](https://github.com/genomic-medicine-sweden/tomte/pull/227)
+- Solve [#230](https://github.com/genomic-medicine-sweden/tomte/issues/230) by running only tests for processes/workflows that have been modified [#231](https://github.com/genomic-medicine-sweden/tomte/pull/231)
+- Substitute ext.when by if statements on prepare references subworkflow [#232](https://github.com/genomic-medicine-sweden/tomte/pull/232)
+- Substitute ext.when by if statements on download_references subworkflow [#233](https://github.com/genomic-medicine-sweden/tomte/pull/233)
+- Substitute ext.when by if statements on alignment subworkflow [#234](https://github.com/genomic-medicine-sweden/tomte/pull/234)
+- Substitute ext.when by if statements on analyse_transcripts subworkflow [#235](https://github.com/genomic-medicine-sweden/tomte/pull/235)
+- Substitute ext.when by if statements on analyse_transcripts subworkflow [#236](https://github.com/genomic-medicine-sweden/tomte/pull/236)
+- Substitute ext.when by if statements on call_variants, igv_tracks, and general_tomte subworkflow [#237](https://github.com/genomic-medicine-sweden/tomte/pull/237)
+- Updated nf-core/tools template to v3.3.1 [#242](https://github.com/genomic-medicine-sweden/tomte/pull/242)
+- Updated nf-core/tools template to v3.3.2 [#245](https://github.com/genomic-medicine-sweden/tomte/pull/245)
+- Updated bcftools/merge, bcftools/mpileup, bcftools/norm, bcftools/stats, bcftools/view, fastp, gatk4/asereadcounter, gatk4/bedtointervalist, gatk4/createsequencedictionary, gatk4/haplotypecaller, gatk4/variantfiltration, gunzip, multiqc, tabix/bgziptabix, and tabix/tabix module [#246](https://github.com/genomic-medicine-sweden/tomte/pull/246)
+
+| Tool                           | Old version | New version |
+| ------------------------------ | ----------- | ----------- |
+| bcftools/merge                 | 1.2         | 1.21        |
+| bcftools/mpileup               | 1.2         | 1.21        |
+| bcftools/norm                  | 1.2         | 1.21        |
+| bcftools/stats                 | 1.2         | 1.21        |
+| bcftools/view                  | 1.2         | 1.21        |
+| fastp                          | 0.23.4      | 0.24.0      |
+| gatk4/asereadcounter           | 4.5.0.0     | 4.6.1.0     |
+| gatk4/bedtointervalist         | 4.5.0.0     | 4.6.1.0     |
+| gatk4/createsequencedictionary | 4.5.0.0     | 4.6.1.0     |
+| gatk4/haplotypecaller          | 4.5.0.0     | 4.6.1.0     |
+| gatk4/splitncigarreads         | 4.5.0.0     | 4.6.1.0     |
+| gatk4/variantfiltration        | 4.5.0.0     | 4.6.1.0     |
+| gffread                        | 0.12.1      | 0.12.7      |
+| gtftogenepred                  | 377         | 447         |
+| gunzip                         | 1.1         | 1.13        |
+| multiqc                        | 1.25.1      | 1.30        |
+| tabix/bgziptabix               | 1.2         | 1.21        |
+| tabix/tabix                    | 1.2         | 1.21        |
+
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
+
+### `Fixed`
+
+- DROP expression outliers previously returned max 20 lowest p-value entries. Now it returns those classified as having aberrant expression first, and then fills up to 20 from those with lowest p-values. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+- GENCODE_DOWNLOAD stub crashes by removing double versions.yml write. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+- Default peddy parent ID to "0" if not present. [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
+- BUILD_VEP_CACHE, VEP_GNOMAD_DOWNLOAD and WGET_DOWNLOAD stubs crash, fixed by removing double versions.yml write. [#223](https://github.com/genomic-medicine-sweden/tomte/pull/223)
+- Version output of modules solving [#208](https://github.com/genomic-medicine-sweden/tomte/issues/208) [#228](https://github.com/genomic-medicine-sweden/tomte/pull/228)
+- Fixed indentation and adapted local modules and subworkflows to follow to correct Nextflow language syntax solving [#189](https://github.com/genomic-medicine-sweden/tomte/issues/189) [#239](https://github.com/genomic-medicine-sweden/tomte/pull/239)
+- Fixed link from README.md to docs/parameters.md, the file has now been created solving [#194](https://github.com/genomic-medicine-sweden/tomte/issues/194) [#246](https://github.com/genomic-medicine-sweden/tomte/pull/246)
+- Fixed output description for bootstrapAnn solving [#238](https://github.com/genomic-medicine-sweden/tomte/issues/238) [#246](https://github.com/genomic-medicine-sweden/tomte/pull/246)
+
 ## 3.0.1 - Snowman [2025-03-26]
 
 ### `Fixed`
@@ -37,6 +130,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | `--monochromeLogs`               | `--monochrome_logs`      |
 |                                  | `--skip_variant_calling` |
 
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
+
 ### `Changed`
 
 - Updated modules ensemblvep/filtervep, ensemblvep/vep [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
@@ -64,6 +162,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | star/genomegenerate            | 2.7.10a     | 2.7.11b     |
 | stringtie/stringtie            | 2.2.1       | 2.2.3       |
 
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
+
 ## 2.2.1 - Scrooge [2024-08-28]
 
 ### `Fixed`
@@ -77,6 +180,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool    | Old version | New version |
 | ------- | ----------- | ----------- |
 | multiqc | 1.24.1      | 1.21        |
+
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
 
 ## 2.2.0 - TioDeNadal [2024-08-27]
 
@@ -116,6 +224,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | tabix/bgziptabix                | 1.19.1      | 1.20        |
 | tabix/tabix                     | 1.19.1      | 1.20        |
 | untar                           | 20.04       | 22.04       |
+
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
 
 ## 2.1.0 - Elf [2024-06-26]
 
@@ -162,7 +275,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | samtools/view    | 1.19.2      | 1.20        |
 | tabix/bgzip      | 1.19.1      |             |
 
-:::note Version has been updated if both old and new version information is present. Version has been added if just the new version information is present. Version has been removed if new version information isn't present. :::
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
 
 ## 2.0.1 - Grinch [2024-04-25]
 
@@ -198,9 +314,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Parameters`
 
 - Removed `--vep_filters`, it will now be automatically extracted from the `--gene_panel_clinical_filter`[#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
-  | Old parameter | New parameter |
-  | --------------- | ------------- |
-  | `--vep_filters` | |
+
+| Old parameter   | New parameter |
+| --------------- | ------------- |
+| `--vep_filters` |               |
+
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
 
 - Updated parameter names to make their use easier and more clear, changing the names from `switch` to `skip` and their default value from `true` to `false` [#108](https://github.com/genomic-medicine-sweden/tomte/pull/108)
 
@@ -214,7 +336,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | `--switch_drop_ae`          | `--skip_drop_ae`          |
 | `--switch_drop_as`          | `--skip_drop_as`          |
 
-:::note Parameter has been updated if both old and new parameter information is present. Parameter has been added if just the new parameter information is present. Parameter has been removed if new parameter information isn't present. :::
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
 
 ## 1.1.0 - Rudolph [2024-03-11]
 

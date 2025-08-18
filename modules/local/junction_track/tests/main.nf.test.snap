@@ -1,0 +1,37 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test_junction.bed:md5,81f54c1735790bdbf89b55d76b2818e8"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,1188acb4f364f95c513ffeb026b17be0"
+                ],
+                "bed": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test_junction.bed:md5,81f54c1735790bdbf89b55d76b2818e8"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,1188acb4f364f95c513ffeb026b17be0"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-04-16T10:31:57.222315"
+    }
+}

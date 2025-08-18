@@ -1,0 +1,37 @@
+nextflow_process {
+
+    name "Test Process RNA_SUBSAMPLE_REGION"
+    script "modules/local/rna_subsample_region/main.nf"
+    process "RNA_SUBSAMPLE_REGION"
+    tag "modules_local"
+    tag "modules"
+    tag "rna_subsample_region"
+
+    test("Should run without failures") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true)
+                    ])
+                input[1] = Channel.of([file("${projectDir}/test_data/subsample.bed", checkIfExists: true)])
+                input[2] = 0.001
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert snapshot(
+                    bam(process.out.bai.get(0).get(1)).getHeader(),
+                    bam(process.out.bam.get(0).get(1)).getStatistics(),
+                    process.out.versions,
+                ).match()}
+            )
+        }
+
+    }
+
+}

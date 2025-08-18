@@ -1,0 +1,62 @@
+{
+    "Should run with two samples": {
+        "content": [
+            [
+                "VcfFile [chromosomes=[chr21], sampleCount=2, variantCount=805, phased=false, phasedAutodetect=false]"
+            ],
+            [
+                [
+                    "chr21\t9656524\t.\tA\tG\t7.30814\t.\tVDB=0.18;SGB=-0.453602;MQ0F=0;MQ=20;FOUND_IN=bcftools;DP=6;DP4=0,0,4,0;AN=4;AC=4\tGT:PL\t1/1:36,6,0\t1/1:36,6,0",
+                    "chr21\t9656547\t.\tG\tA\t7.30814\t.\tVDB=0.22;SGB=-0.453602;MQ0F=0;MQ=20;FOUND_IN=bcftools;DP=8;DP4=0,0,4,0;AN=4;AC=4\tGT:PL\t1/1:36,6,0\t1/1:36,6,0"
+                ]
+            ],
+            "finequagga_split_rmdup.vcf.gz.tbi",
+            [
+                "versions.yml:md5,4260f81272bc7976004cb71c220ac7c4",
+                "versions.yml:md5,53dc76802ccd9d3604c413cea5810d43",
+                "versions.yml:md5,938667310a4b39815b7d6c59e90be868",
+                "versions.yml:md5,a0fd1d34c375ce6de3c12f7677455568",
+                "versions.yml:md5,a265f17fbd2eeb9eda1f4e876bc1ebcc",
+                "versions.yml:md5,d2143d7224a883879775c66b56ca2912",
+                "versions.yml:md5,dfa95053efa28dd1e5be7fa129fe83b9",
+                "versions.yml:md5,f375509729cb99d7a6f8073446f84f00",
+                "versions.yml:md5,ff29ff5a2e422142521dd23401bb87f8"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.5"
+        },
+        "timestamp": "2025-07-29T15:37:21.545753406"
+    },
+    "Should run without failures": {
+        "content": [
+            [
+                "VcfFile [chromosomes=[chr21], sampleCount=1, variantCount=805, phased=false, phasedAutodetect=false]"
+            ],
+            [
+                [
+                    "chr21\t9656524\t.\tA\tG\t7.30814\t.\tDP=3;VDB=0.18;SGB=-0.453602;MQ0F=0;AC=2;AN=2;DP4=0,0,2,0;MQ=20;FOUND_IN=bcftools\tGT:PL\t1/1:36,6,0",
+                    "chr21\t9656547\t.\tG\tA\t7.30814\t.\tDP=4;VDB=0.22;SGB=-0.453602;MQ0F=0;AC=2;AN=2;DP4=0,0,2,0;MQ=20;FOUND_IN=bcftools\tGT:PL\t1/1:36,6,0"
+                ]
+            ],
+            "finequagga_split_rmdup.vcf.gz.tbi",
+            [
+                "versions.yml:md5,00ddd8c72d45720f971db98815fbfc0e",
+                "versions.yml:md5,4260f81272bc7976004cb71c220ac7c4",
+                "versions.yml:md5,53dc76802ccd9d3604c413cea5810d43",
+                "versions.yml:md5,938667310a4b39815b7d6c59e90be868",
+                "versions.yml:md5,a0fd1d34c375ce6de3c12f7677455568",
+                "versions.yml:md5,a265f17fbd2eeb9eda1f4e876bc1ebcc",
+                "versions.yml:md5,d2143d7224a883879775c66b56ca2912",
+                "versions.yml:md5,f375509729cb99d7a6f8073446f84f00",
+                "versions.yml:md5,ff29ff5a2e422142521dd23401bb87f8"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.5"
+        },
+        "timestamp": "2025-07-29T15:36:43.313979082"
+    }
+}

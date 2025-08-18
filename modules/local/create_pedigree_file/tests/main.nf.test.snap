@@ -1,0 +1,48 @@
+{
+    "Trio": {
+        "content": [
+            [
+                "#family_id\tsample_id\tfather\tmother\tsex\tphenotype",
+                "finequagga\tACC5963A1\tACC5963A2\tACC5963A3\t1\tnull",
+                "finequagga\tACC5963A2\t0\t0\t1\tnull",
+                "finequagga\tACC5963A3\t0\t0\t2\tnull"
+            ],
+            "versions.yml:md5,7b861aa9c6736cf73ca9f7f18c3521de"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.5"
+        },
+        "timestamp": "2025-08-13T09:01:33.251635263"
+    },
+    "No parents or sex": {
+        "content": [
+            [
+                "#family_id\tsample_id\tfather\tmother\tsex\tphenotype",
+                "finequagga\tACC5963A1\t0\t0\t0\tnull",
+                "finequagga\tACC5963A2\t0\t0\t0\tnull",
+                "finequagga\tACC5963A3\t0\t0\t0\tnull"
+            ],
+            "versions.yml:md5,7b861aa9c6736cf73ca9f7f18c3521de"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.5"
+        },
+        "timestamp": "2025-08-13T09:03:38.3611031"
+    },
+    "Single sample": {
+        "content": [
+            [
+                "#family_id\tsample_id\tfather\tmother\tsex\tphenotype",
+                "finequagga\tACC5963A1\tACC5963A2\tACC5963A3\t1\tnull"
+            ],
+            "versions.yml:md5,7b861aa9c6736cf73ca9f7f18c3521de"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.5"
+        },
+        "timestamp": "2025-08-13T09:03:30.376902716"
+    }
+}
