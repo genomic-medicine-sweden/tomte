@@ -61,6 +61,34 @@
                 "enum": ["unstranded", "forward", "reverse"],
                 "errorMessage": "Sample strandness valid input is unstranded,forward or reverse"
             },
+            "paternal": {
+                "meta": ["paternal"],
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "enum": [0]
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
+                "default": "0"
+            },
+            "maternal": {
+                "meta": ["maternal"],
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "enum": [0]
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
+                "default": "0"
+            },
             "sex": {
                 "meta": ["sex"],
                 "oneOf": [
@@ -85,7 +113,8 @@
             },
             {
                 "dependentRequired": {
-                    "case": ["bam_cram"]
+                    "case": ["bam_cram"],
+                    "bam_cram": ["bai_crai"]
                 }
             }
         ],

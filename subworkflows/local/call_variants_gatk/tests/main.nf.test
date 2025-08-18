@@ -48,7 +48,6 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                // define inputs of the workflow here. Example:
                 input[0] = Channel.of([
                     [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
                     file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),

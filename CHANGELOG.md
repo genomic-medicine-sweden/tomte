@@ -26,7 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nf-test for all drop modules [#226](https://github.com/genomic-medicine-sweden/tomte/pull/226)
 - Nf-test for build_vep_cache, gencode_download, vep_gnomad_download, and wget_download modules [#228](https://github.com/genomic-medicine-sweden/tomte/pull/228)
 - Nf-test for call_variants_gatk [#229](https://github.com/genomic-medicine-sweden/tomte/pull/229)
-- Solve [#230](https://github.com/genomic-medicine-sweden/tomte/issues/230) by running only tests for processes/workflows that have been modified [#231](https://github.com/genomic-medicine-sweden/tomte/pull/231)
 
 ### `Parameters`
 
@@ -37,6 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |               | `--hb_genes`               |
 |               | `--trace_report_suffix`    |
 
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
+
 ### `Changed`
 
 - Updated nf-core/tools template to v3.1.2 [#204](https://github.com/genomic-medicine-sweden/tomte/pull/204)
@@ -44,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated multiqc module [#205](https://github.com/genomic-medicine-sweden/tomte/pull/205)
 - Updated gatk4/splitncigarreads module [#206](https://github.com/genomic-medicine-sweden/tomte/pull/206)
 - Updated local gffread and gtftorefflat modules solving [#224](https://github.com/genomic-medicine-sweden/tomte/issues/224) to nf-core ones [#227](https://github.com/genomic-medicine-sweden/tomte/pull/227)
+- Solve [#230](https://github.com/genomic-medicine-sweden/tomte/issues/230) by running only tests for processes/workflows that have been modified [#231](https://github.com/genomic-medicine-sweden/tomte/pull/231)
 - Substitute ext.when by if statements on prepare references subworkflow [#232](https://github.com/genomic-medicine-sweden/tomte/pull/232)
 - Substitute ext.when by if statements on download_references subworkflow [#233](https://github.com/genomic-medicine-sweden/tomte/pull/233)
 - Substitute ext.when by if statements on alignment subworkflow [#234](https://github.com/genomic-medicine-sweden/tomte/pull/234)
@@ -74,6 +79,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | multiqc                        | 1.25.1      | 1.30        |
 | tabix/bgziptabix               | 1.2         | 1.21        |
 | tabix/tabix                    | 1.2         | 1.21        |
+
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
 
 ### `Fixed`
 
@@ -120,6 +130,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | `--monochromeLogs`               | `--monochrome_logs`      |
 |                                  | `--skip_variant_calling` |
 
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
+
 ### `Changed`
 
 - Updated modules ensemblvep/filtervep, ensemblvep/vep [#159](https://github.com/genomic-medicine-sweden/tomte/pull/159)
@@ -147,6 +162,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | star/genomegenerate            | 2.7.10a     | 2.7.11b     |
 | stringtie/stringtie            | 2.2.1       | 2.2.3       |
 
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
+
 ## 2.2.1 - Scrooge [2024-08-28]
 
 ### `Fixed`
@@ -160,6 +180,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool    | Old version | New version |
 | ------- | ----------- | ----------- |
 | multiqc | 1.24.1      | 1.21        |
+
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
 
 ## 2.2.0 - TioDeNadal [2024-08-27]
 
@@ -199,6 +224,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | tabix/bgziptabix                | 1.19.1      | 1.20        |
 | tabix/tabix                     | 1.19.1      | 1.20        |
 | untar                           | 20.04       | 22.04       |
+
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
 
 ## 2.1.0 - Elf [2024-06-26]
 
@@ -245,7 +275,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | samtools/view    | 1.19.2      | 1.20        |
 | tabix/bgzip      | 1.19.1      |             |
 
-:::note Version has been updated if both old and new version information is present. Version has been added if just the new version information is present. Version has been removed if new version information isn't present. :::
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
 
 ## 2.0.1 - Grinch [2024-04-25]
 
@@ -281,9 +314,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Parameters`
 
 - Removed `--vep_filters`, it will now be automatically extracted from the `--gene_panel_clinical_filter`[#109](https://github.com/genomic-medicine-sweden/tomte/pull/109)
-  | Old parameter | New parameter |
-  | --------------- | ------------- |
-  | `--vep_filters` | |
+
+| Old parameter   | New parameter |
+| --------------- | ------------- |
+| `--vep_filters` |               |
+
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
 
 - Updated parameter names to make their use easier and more clear, changing the names from `switch` to `skip` and their default value from `true` to `false` [#108](https://github.com/genomic-medicine-sweden/tomte/pull/108)
 
@@ -297,7 +336,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | `--switch_drop_ae`          | `--skip_drop_ae`          |
 | `--switch_drop_as`          | `--skip_drop_as`          |
 
-:::note Parameter has been updated if both old and new parameter information is present. Parameter has been added if just the new parameter information is present. Parameter has been removed if new parameter information isn't present. :::
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
 
 ## 1.1.0 - Rudolph [2024-03-11]
 

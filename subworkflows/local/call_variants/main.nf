@@ -52,7 +52,7 @@ workflow CALL_VARIANTS {
         ch_versions = ch_versions.mix(BCFTOOLS_MPILEUP.out.versions.first())
 
     } else {
-        exit 1, "Unknown variantcaller: ${variant_caller}"
+        error "Unknown variantcaller: ${variant_caller}"
     }
 
     ch_in_split_multi = ch_vcf.join(ch_tbi)

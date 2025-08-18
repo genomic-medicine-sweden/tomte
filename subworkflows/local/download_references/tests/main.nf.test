@@ -7,6 +7,7 @@ nextflow_workflow {
     tag "download_references"
 
     test("Should run without failures") {
+        options "-stub"
 
         when {
             params {
@@ -36,5 +37,4 @@ nextflow_workflow {
         }
 
     }
-    options "-stub FASTA_DOWNLOAD,GTF_DOWNLOAD,WGET_DOWNLOAD,VEP_GNOMAD_DOWNLOAD"
 }

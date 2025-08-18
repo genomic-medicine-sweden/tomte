@@ -1,7 +1,6 @@
 process DROP_FILTER_RESULTS {
     tag "DROP_FILTER_RESULTS"
     label 'process_low'
-    errorStrategy 'terminate'
 
     container "docker.io/clinicalgenomics/drop:1.4.0"
 

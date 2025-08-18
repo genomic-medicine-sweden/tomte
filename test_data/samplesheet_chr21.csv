@@ -1,4 +1,4 @@
-case,sample,strandedness,fastq_1,fastq_2,bam_cram,bai_crai
-finequagga,ACC5963A1,reverse,,,https://github.com/genomic-medicine-sweden/tomte/raw/dev/test_data/ACC5963A1.bam,https://github.com/genomic-medicine-sweden/tomte/raw/dev/test_data/ACC5963A1.bam.bai
-finequagga,ACC5963A2,reverse,https://github.com/genomic-medicine-sweden/tomte/raw/master/test_data/ACC5963A1_sub_1.fastq.gz,https://github.com/genomic-medicine-sweden/tomte/raw/master/test_data/ACC5963A1_sub_2.fastq.gz,,
-finequagga,ACC5963A3,reverse,,,https://github.com/genomic-medicine-sweden/tomte/raw/dev/test_data/ACC5963A3.cram,https://github.com/genomic-medicine-sweden/tomte/raw/dev/test_data/ACC5963A3.cram.crai
+case,sample,strandedness,fastq_1,fastq_2,bam_cram,bai_crai,paternal,maternal,sex
+finequagga,ACC5963A1,reverse,,,https://github.com/genomic-medicine-sweden/tomte/raw/dev/test_data/ACC5963A1.bam,https://github.com/genomic-medicine-sweden/tomte/raw/dev/test_data/ACC5963A1.bam.bai,ACC5963A2,ACC5963A3,M
+finequagga,ACC5963A2,reverse,https://github.com/genomic-medicine-sweden/tomte/raw/master/test_data/ACC5963A1_sub_1.fastq.gz,https://github.com/genomic-medicine-sweden/tomte/raw/master/test_data/ACC5963A1_sub_2.fastq.gz,,,0,,M
+finequagga,ACC5963A3,reverse,,,https://github.com/genomic-medicine-sweden/tomte/raw/dev/test_data/ACC5963A3.cram,https://github.com/genomic-medicine-sweden/tomte/raw/dev/test_data/ACC5963A3.cram.crai,,0,F

@@ -1,7 +1,6 @@
 process DROP_CONFIG_RUN_AS {
     tag "DROP_CONFIG_RUN_AS"
     label 'process_drop'
-    errorStrategy 'terminate'
 
     container "docker.io/clinicalgenomics/drop:1.4.0"
 
