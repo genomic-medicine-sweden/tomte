@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Parameters`
 
-| Old parameter | New parameter  |
-| ------------- | -------------- |
+| Old parameter | New parameter |
+| ------------- | ------------- |
+|               |               |
 
 > [!NOTE]
 > Parameter has been updated if both old and new parameter information is present.
