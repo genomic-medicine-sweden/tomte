@@ -8,7 +8,7 @@ include { GATK4_CREATESEQUENCEDICTIONARY as BUILD_DICT } from '../../../modules/
 include { GUNZIP as GUNZIP_GTF                         } from '../../../modules/nf-core/gunzip'
 include { GET_RRNA_TRANSCRIPTS                         } from '../../../modules/local/get_rrna_transcripts'
 include { UCSC_GTFTOGENEPRED                           } from '../../../modules/nf-core/ucsc/gtftogenepred'
-include { GET_CHROM_SIZES                              } from '../../../modules/local/get_chrom_sizes'
+include { SAMTOOLS_FAIDX as GET_CHROM_SIZES            } from '../../../modules/nf-core/samtools/faidx'
 include { GUNZIP as GUNZIP_TRFASTA                     } from '../../../modules/nf-core/gunzip'
 include { GFFREAD                                      } from '../../../modules/nf-core/gffread'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME      } from '../../../modules/nf-core/samtools/faidx'
@@ -71,7 +71,11 @@ workflow PREPARE_REFERENCES {
     }
 
     // Get chrom sizes
-    GET_CHROM_SIZES( ch_fai )
+    GET_CHROM_SIZES(
+        ch_fasta_final,
+        ch_fai,
+        true
+        )
 
     // Gunzip gtf if necessary
     if ( gunzip_gtf ) {
@@ -157,7 +161,8 @@ workflow PREPARE_REFERENCES {
     ch_versions = ch_versions.mix(BEDTOINTERVALLIST.out.versions)
 
     emit:
-    chrom_sizes   = GET_CHROM_SIZES.out.sizes.collect()    // channel: [ path(sizes) ]
+    chrom_sizes   = GET_CHROM_SIZES.out.sizes
+        .map{ _meta, sizes -> sizes }.collect()            // channel: [ path(sizes) ]
     fasta         = ch_fasta_final                         // channel: [ val(meta), path(fasta) ]
     fai           = ch_fai                                 // channel: [ val(meta), path(fai) ]
     fasta_fai     = ch_fasta_fai                           // channel: [ val(meta), path(fasta), path(fai) ]

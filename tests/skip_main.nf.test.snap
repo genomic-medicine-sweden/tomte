@@ -21,7 +21,7 @@
                     "fastqc": "0.12.1"
                 },
                 "GET_CHROM_SIZES": {
-                    "cut": "BusyBox v1.32.1"
+                    "samtools": 1.21
                 },
                 "GET_RRNA_TRANSCRIPTS": {
                     "get_rrna_transcripts": "v1.0"
@@ -195,7 +195,7 @@
                 "references/grch37_chr21.dict",
                 "references/grch37_chr21.fa",
                 "references/grch37_chr21.fa.fai",
-                "references/grch37_chr21.fa.fai.sizes",
+                "references/grch37_chr21.fa.sizes",
                 "references/grch37_chr21.gtf",
                 "references/grch37_chr21.refflat",
                 "references/rrna.bed",
@@ -251,7 +251,7 @@
                 "grch37_chr21.dict:md5,53d95c36db0422d29db02c8a8da56e43",
                 "grch37_chr21.fa:md5,e9ce36e75cd57d255ad64eb2ecca4dd0",
                 "grch37_chr21.fa.fai:md5,93c052a6e351d5db0d7a0156816f51fb",
-                "grch37_chr21.fa.fai.sizes:md5,ffd90da532db7928daa1591d45dc26c4",
+                "grch37_chr21.fa.sizes:md5,ffd90da532db7928daa1591d45dc26c4",
                 "grch37_chr21.gtf:md5,01924b6ce7016e41d5e2b22e478ca12f",
                 "grch37_chr21.refflat:md5,9c34a780a2505949c4c613dfc79f8d2d",
                 "rrna.bed:md5,1c99687a18201c904edc40fb03088787",
@@ -305,6 +305,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-08-19T09:57:10.29212385"
+        "timestamp": "2025-08-20T13:41:11.146647103"
     }
 }
