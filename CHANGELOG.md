@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- Solved issue [#253](https://github.com/genomic-medicine-sweden/tomte/issues/258) by substituting local/get_chrom_sizes by the nf-core module samtools/faidx [#257](https://github.com/genomic-medicine-sweden/tomte/pull/257)
+- Solved issue [#253](https://github.com/genomic-medicine-sweden/tomte/issues/258) by substituting local/get_chrom_sizes by the nf-core module samtools/faidx [#258](https://github.com/genomic-medicine-sweden/tomte/pull/258)
 
 | Tool                  | Old version | New version |
 | --------------------- | ----------- | ----------- |
