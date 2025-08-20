@@ -71,7 +71,7 @@ workflow PREPARE_REFERENCES {
     }
 
     // Get chrom sizes
-    GET_CHROM_SIZES( 
+    GET_CHROM_SIZES(
         ch_fasta_final,
         ch_fai,
         true
