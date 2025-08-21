@@ -50,7 +50,7 @@ workflow ALIGNMENT {
     FASTP(ch_cat_fastq, [], false, false, false)
 
     STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, ch_platform, false)
-    
+
     // Process BAM inputs - extract BAM files and convert to FASTQ
     ch_bam_input_reads = ch_inputs_branched.bam.map { meta, bambai -> [ meta, bambai[0] ] }
     ch_bai_input_reads = ch_inputs_branched.bam.map { meta, bambai -> [ meta, bambai[1] ] }
