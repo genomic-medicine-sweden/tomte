@@ -30,31 +30,31 @@ workflow ALIGNMENT {
 
     main:
     ch_versions = Channel.empty()
-    
+
     // Branch inputs based on meta.is_fastq flag
     ch_all_inputs = ch_fastq_input_reads.mix(ch_bam_bai_input_reads)
-    
+
     ch_inputs_branched = ch_all_inputs.branch { meta, files ->
         fastq: meta.is_fastq == true
             return [meta, files]
         bam: meta.is_fastq == false
             return [meta, files]
     }
-    
+
     // Process FASTQ inputs
     ch_fastq = branchFastqToSingleAndMulti(ch_inputs_branched.fastq)
-    
+
     CAT_FASTQ(ch_fastq.multiple_fq)
     ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_fastq.single_fq)
-    
+
     FASTP(ch_cat_fastq, [], false, false, false)
-    
+
     STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, ch_platform, false)
     
     // Process BAM inputs - extract BAM files and convert to FASTQ
     ch_bam_input_reads = ch_inputs_branched.bam.map { meta, bambai -> [ meta, bambai[0] ] }
     ch_bai_input_reads = ch_inputs_branched.bam.map { meta, bambai -> [ meta, bambai[1] ] }
-    
+
     SAMTOOLS_FASTQ(ch_bam_input_reads, false)
 
     // Combine all FASTQ inputs for Salmon

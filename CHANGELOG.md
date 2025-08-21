@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool                  | Old version | New version |
 | --------------------- | ----------- | ----------- |
 | local/get_chrom_sizes | 1.18        |             |
-| samtools/fastq |             | 1.21        |
+| samtools/fastq        |             | 1.21        |
 
 > [!NOTE]
 > Version has been updated if both old and new version information is present.
