@@ -20,9 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-| Tool | Old version | New version |
-| ---- | ----------- | ----------- |
-|      |             |             |
+- Installed samtools/fastq to convert input BAM/CRAM files to FASTQ format to obtain Salmon counts solving issue [#252](https://github.com/genomic-medicine-sweden/tomte/issues/252) [#259](https://github.com/genomic-medicine-sweden/tomte/pull/259)
+
+| Tool           | Old version | New version |
+| -------------- | ----------- | ----------- |
+| samtools/fastq |             | 1.21        |
 
 > [!NOTE]
 > Version has been updated if both old and new version information is present.
