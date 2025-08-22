@@ -36,9 +36,7 @@ workflow ALIGNMENT {
 
     ch_inputs_branched = ch_all_inputs.branch { meta, files ->
         fastq: meta.is_fastq == true
-            return [meta, files]
         bam: meta.is_fastq == false
-            return [meta, files]
     }
 
     // Process FASTQ inputs
