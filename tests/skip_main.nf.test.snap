@@ -1,7 +1,7 @@
 {
     "test profile": {
         "content": [
-            28,
+            32,
             {
                 "BEDTOINTERVALLIST": {
                     "gatk4": "4.6.1.0"
@@ -50,6 +50,9 @@
                 "SAMTOOLS_FAIDX_GENOME": {
                     "samtools": 1.21
                 },
+                "SAMTOOLS_FASTQ": {
+                    "samtools": 1.21
+                },
                 "SAMTOOLS_INDEX": {
                     "samtools": 1.21
                 },
@@ -73,9 +76,30 @@
             },
             [
                 "alignment",
+                "alignment/ACC5963A1",
                 "alignment/ACC5963A1.bam",
                 "alignment/ACC5963A1.cram",
                 "alignment/ACC5963A1.cram.crai",
+                "alignment/ACC5963A1/aux_info",
+                "alignment/ACC5963A1/aux_info/ambig_info.tsv",
+                "alignment/ACC5963A1/aux_info/exp_gc.gz",
+                "alignment/ACC5963A1/aux_info/expected_bias.gz",
+                "alignment/ACC5963A1/aux_info/fld.gz",
+                "alignment/ACC5963A1/aux_info/meta_info.json",
+                "alignment/ACC5963A1/aux_info/obs_gc.gz",
+                "alignment/ACC5963A1/aux_info/observed_bias.gz",
+                "alignment/ACC5963A1/aux_info/observed_bias_3p.gz",
+                "alignment/ACC5963A1/cmd_info.json",
+                "alignment/ACC5963A1/libParams",
+                "alignment/ACC5963A1/libParams/flenDist.txt",
+                "alignment/ACC5963A1/lib_format_counts.json",
+                "alignment/ACC5963A1/logs",
+                "alignment/ACC5963A1/logs/salmon_quant.log",
+                "alignment/ACC5963A1/quant.genes.sf",
+                "alignment/ACC5963A1/quant.sf",
+                "alignment/ACC5963A1_lib_format_counts.json",
+                "alignment/ACC5963A1_meta_info.json",
+                "alignment/ACC5963A1_quant.sf",
                 "alignment/ACC5963A2",
                 "alignment/ACC5963A2.Aligned.sortedByCoord.out.bam",
                 "alignment/ACC5963A2.Log.final.out",
@@ -107,9 +131,30 @@
                 "alignment/ACC5963A2_lib_format_counts.json",
                 "alignment/ACC5963A2_meta_info.json",
                 "alignment/ACC5963A2_quant.sf",
+                "alignment/ACC5963A3",
                 "alignment/ACC5963A3.bam",
                 "alignment/ACC5963A3.cram",
                 "alignment/ACC5963A3.cram.crai",
+                "alignment/ACC5963A3/aux_info",
+                "alignment/ACC5963A3/aux_info/ambig_info.tsv",
+                "alignment/ACC5963A3/aux_info/exp_gc.gz",
+                "alignment/ACC5963A3/aux_info/expected_bias.gz",
+                "alignment/ACC5963A3/aux_info/fld.gz",
+                "alignment/ACC5963A3/aux_info/meta_info.json",
+                "alignment/ACC5963A3/aux_info/obs_gc.gz",
+                "alignment/ACC5963A3/aux_info/observed_bias.gz",
+                "alignment/ACC5963A3/aux_info/observed_bias_3p.gz",
+                "alignment/ACC5963A3/cmd_info.json",
+                "alignment/ACC5963A3/libParams",
+                "alignment/ACC5963A3/libParams/flenDist.txt",
+                "alignment/ACC5963A3/lib_format_counts.json",
+                "alignment/ACC5963A3/logs",
+                "alignment/ACC5963A3/logs/salmon_quant.log",
+                "alignment/ACC5963A3/quant.genes.sf",
+                "alignment/ACC5963A3/quant.sf",
+                "alignment/ACC5963A3_lib_format_counts.json",
+                "alignment/ACC5963A3_meta_info.json",
+                "alignment/ACC5963A3_quant.sf",
                 "bam_qc",
                 "bam_qc/ACC5963A1.rna_metrics",
                 "bam_qc/ACC5963A1_insert_size.pdf",
@@ -305,6 +350,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-08-20T13:41:11.146647103"
+        "timestamp": "2025-08-21T09:29:06.426910146"
+
     }
 }
