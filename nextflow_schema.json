@@ -20,7 +20,7 @@
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with three mandatory columns (case, sample, strandedness), followed by fastq_1 (mandatory unless bam_cram and bai_crai are filled in), fastq_2 (optional), bam_cram (mandatory if fastq_1 is not given), bai_crai columns (mandatory if bam_cram is given), one optional (sex), and a header row.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with three mandatory columns (case, sample, strandedness), followed by fastq_1 (mandatory unless bam_cram and bai_crai are filled in), fastq_2 (optional), bam_cram (mandatory if fastq_1 is not given), bai_crai columns (mandatory if bam_cram is given), several more optional (paternal,maternal,sex,dna_vcf_gz,dna_vcf_gz_tbi) and a header row.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {

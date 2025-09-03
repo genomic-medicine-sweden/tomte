@@ -54,6 +54,7 @@ workflow ANALYSE_TRANSCRIPTS {
     if ( !skip_drop_ae | !skip_drop_as ) {
         // Generates count files for samples and merges them with reference count file
         DROP_SAMPLE_ANNOT(
+            ch_gtf,
             ch_bam_files_annot,
             ch_ref_drop_count_file.ifEmpty([]),
             ch_ref_drop_annot_file.ifEmpty([]),

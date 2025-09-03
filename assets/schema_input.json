@@ -103,6 +103,20 @@
                 ],
                 "default": "NA",
                 "errorMessage": "The valid input for sample sex is M, F, NA, other, 0, 1 or 2"
+            },
+            "dna_vcf_gz": {
+                "errorMessage": "DNA vcf file cannot contain spaces and must have extension '.vcf' or '.vcf.gz'",
+                "type": "string",
+                "pattern": "^\\S+(\\.vcf$|\\.vcf.gz$)",
+                "format": "file-path",
+                "exists": true
+            },
+            "dna_vcf_gz_tbi": {
+                "errorMessage": "DNA vcf index file cannot contain spaces and must have extension '.vcf.tbi' or '.vcf.gz.tbi'",
+                "type": "string",
+                "pattern": "^\\S+(\\.vcf.tbi$|\\.vcf.gz.tbi$)",
+                "format": "file-path",
+                "exists": true
             }
         },
         "anyOf": [

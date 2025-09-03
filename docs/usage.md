@@ -112,15 +112,17 @@ genomic-medicine-sweden/tomte will requires the information given bellow.
 | `Paternal`     | Father's custom sample name. If there is no paternal sample available, it can be left empty.                                                                                           | Optional                           |
 | `Maternal`     | Mother's custom sample name. If there is no maternal sample available, it can be left empty.                                                                                           | Optional                           |
 | `Sex`          | Sample sex. The valid input is M or 1 for male; F or 2 for female; NA, 0, or other if unknown                                                                                          | Optional                           |
+| `dna_vcf_gz`     | Full path to DNA vcf file to run DROP's Mono Allelic expression (MAE) module file.                                                                                                                                                            | Only if you want to run MAE |
+| `dna_vcf_gz_tbi`     | Full path to DNA vcf file's index file.                                                                                                                                                      | Only if you want to run MAE     |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
-| case  | sample       | strandedness | fastq_1                          | fastq_2                          | Paternal     | Maternal     | Sex |
-| ----- | ------------ | ------------ | -------------------------------- | -------------------------------- | ------------ | ------------ | --- |
-| fam_1 | CONTROL_REP1 | reverse      | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz |              |              | M   |
-| fam_1 | CONTROL_REP2 | reverse      | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz |              |              | F   |
-| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   |
-| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   |
+| case  | sample       | strandedness | fastq_1                          | fastq_2                          | Paternal     | Maternal     | Sex | dna_vcf_gz | dna_vcf_gz_tbi |
+| ----- | ------------ | ------------ | -------------------------------- | -------------------------------- | ------------ | ------------ | --- | ---------- | ---------------|
+| fam_1 | CONTROL_REP1 | reverse      | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz |              |              | M   | AEG588A1_DNA.vcf.gz | AEG588A1_DNA.vcf.gz.tbi |
+| fam_1 | CONTROL_REP2 | reverse      | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz |              |              | F   | | |
+| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   | | |
+| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   | | |
 
 Here is an example of a samplesheet where BAM files are provided:
 
@@ -293,6 +295,8 @@ DROP - aberrant splicing
 ##### Preparing input for DROP
 
 If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference counts, splice counts, and a sample sheet. The sample sheet should contain the columns as those in the [test sample annotation](../test_data/drop_data/sampleAnnotation.tsv), you can also add an optional sex column. You do not need to include the samples you are running through the pipeline in the sample sheet.
+
+If you want to run the DROP Mono Allelic Expression (MAE) module, you do NOT need to provide reference counts, splice counts, or a traditional sample sheet. Instead, your pipeline input sample sheet should include the VCF or VCF.GZ file obtained from the DNA sample corresponding to your RNA samples. Additionally, you can provide a file specifying regions used to confirm that both DNA and RNA are from the same individual. If this file is not provided, it will be downloaded automatically.
 
 ###### Preparing your DROP control database
 

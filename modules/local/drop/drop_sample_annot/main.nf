@@ -5,6 +5,7 @@ process DROP_SAMPLE_ANNOT {
     container "docker.io/clinicalgenomics/drop:1.4.0"
 
     input:
+    tuple val(meta2), path(gtf)
     tuple val(ids), val(single_ends), val(strandednesses), val(sex), path(bam), path(bai)
     path(ref_gene_counts)
     path(ref_annot)
@@ -56,6 +57,7 @@ process DROP_SAMPLE_ANNOT {
         $reference_count_file \\
         $reference_annotation \\
         --drop_group_sample $drop_group \\
+        --gtf ${gtf} \\
         --output sample_annotation.tsv
 
     cat <<-END_VERSIONS > versions.yml

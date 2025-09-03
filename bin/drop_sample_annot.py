@@ -5,7 +5,7 @@ import csv
 from pandas import read_csv, DataFrame, concat, isna
 import os
 
-SCRIPT_VERSION = "1.2"
+SCRIPT_VERSION = "1.3"
 SAMPLE_ANNOTATION_COLUMNS = [
     "RNA_ID",
     "RNA_BAM_FILE",
@@ -33,6 +33,7 @@ def write_sample_annotation_to_tsv(
     sex: str,
     drop_group_sample: str,
     out_file: str,
+    gtf: str,
 ):
     """Write the Sample Annotation tsv file."""
     with open(out_file, "w") as tsv_file:
@@ -41,11 +42,13 @@ def write_sample_annotation_to_tsv(
         for index, id in enumerate(samples):
             sa_dict: dict = {}.fromkeys(SAMPLE_ANNOTATION_COLUMNS, "NA")
             sa_dict["RNA_ID"] = id
+            sa_dict["DNA_ID"] = id
             sa_dict["DROP_GROUP"] = drop_group_sample
             sa_dict["STRAND"] = is_stranded(strandedness[index])
             sa_dict["SEX"] = sex[index]
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
             sa_dict["RNA_BAM_FILE"] = bam[index]
+            sa_dict["GENE_ANNOTATION"] = gtf
             writer.writerow(sa_dict)
 
 
@@ -178,6 +181,12 @@ def parse_args(argv=None):
         help="Drop group of analyzed samples",
         required=False,
     )
+    parser.add_argument(
+        "--gtf",
+        type=str,
+        help="Specify gtf file name used to run",
+        required=True,
+    )
     parser.add_argument("--output", type=str, help="Path to save to", required=True)
     parser.add_argument("--version", action="version", version=SCRIPT_VERSION)
     return parser.parse_args(argv)
@@ -192,6 +201,7 @@ def main():
         strandedness=args.strandedness,
         single_end=args.single_end,
         sex=args.sex,
+        gtf=args.gtf,
         drop_group_sample=args.drop_group_sample,
         out_file="drop_annotation_given_samples.tsv",
     )
