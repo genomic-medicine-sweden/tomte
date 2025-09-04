@@ -37,7 +37,7 @@ workflow ANALYSE_TRANSCRIPTS {
 
     ch_bam_ds_bai
         .map { meta, bam, bai ->
-        [ meta.id, meta.single_end, meta.strandedness, meta.sex, bam, bai ]
+        [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.vcf, meta.vcf_tbi, bam, bai ]
         }
         .collect(flat:false)
         .map { it.sort { a, b -> a[0] <=> b[0] } } // Sort on ID
@@ -45,12 +45,13 @@ workflow ANALYSE_TRANSCRIPTS {
         .set { ch_bam_files_annot }
 
     ch_bam_files_annot
-        .map { _id, _single_end, _strandedness, _sex, bam, bai ->
+        .map { _id, _single_end, _strandedness, _sex, _vcf, _vcf_tbi, bam, bai ->
             [ bam, bai ]
         }
         .set{ ch_bam_bai_files }
 
     // DROP
+    ch_bam_files_annot.view()
     if ( !skip_drop_ae | !skip_drop_as ) {
         // Generates count files for samples and merges them with reference count file
         DROP_SAMPLE_ANNOT(

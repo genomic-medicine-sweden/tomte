@@ -6,7 +6,7 @@ process DROP_SAMPLE_ANNOT {
 
     input:
     tuple val(meta2), path(gtf)
-    tuple val(ids), val(single_ends), val(strandednesses), val(sex), path(bam), path(bai)
+    tuple val(ids), val(single_ends), val(strandednesses), val(sex), val(vcf), val(tbi), path(bam), path(bai)
     path(ref_gene_counts)
     path(ref_annot)
     val(drop_group_samples_ae)
@@ -29,6 +29,7 @@ process DROP_SAMPLE_ANNOT {
     def drop_group = "${drop_group_samples_ae},${drop_group_samples_as}".replace(" ","").replace("[","").replace("]","")
     def reference_count_file = ref_gene_counts ? "--ref_count_file ${ref_gene_counts}" : ''
     def reference_annotation = ref_annot ? "--ref_annot ${ref_annot}" : ''
+    def dna_vcf_clean = vcf.collect { it.toString() == "" || it.toString().trim() == "" ? "NA" : it }.join(' ')
     """
     # Single_end values are only provided if you start from fastq
     SINGLE_ENDS=(${single_end})
@@ -50,6 +51,7 @@ process DROP_SAMPLE_ANNOT {
 
     drop_sample_annot.py \\
         --bam ${bam.join(' ')} \\
+        --dna_vcf $dna_vcf_clean \\
         --samples $id \\
         --strandedness $strandedness \\
         --single_end \$(cat updated_single_ends.txt) \\

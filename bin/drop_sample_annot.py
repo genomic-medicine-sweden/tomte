@@ -27,6 +27,7 @@ SAMPLE_ANNOTATION_COLUMNS = [
 
 def write_sample_annotation_to_tsv(
     bam: str,
+    dna_vcf: str,
     samples: str,
     strandedness: str,
     single_end: str,
@@ -48,6 +49,7 @@ def write_sample_annotation_to_tsv(
             sa_dict["SEX"] = sex[index]
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
             sa_dict["RNA_BAM_FILE"] = bam[index]
+            sa_dict["DNA_VCF_FILE"] = os.path.basename(dna_vcf[index].strip()) if dna_vcf[index].strip() not in ("", "NA") else "NA"
             sa_dict["GENE_ANNOTATION"] = gtf
             writer.writerow(sa_dict)
 
@@ -101,9 +103,7 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
             "No reference samples were provided by the user see usage of --ref_count_file and --ref_annot if you want to provide reference samples"
         )
         if df_samples.shape[0] < 50:
-            print(
-                "At least 30 samples are required for Aberrant Splicing and 50 for Aberrant expression"
-            )
+            print("At least 30 samples are required for Aberrant Splicing and 50 for Aberrant expression")
             print(f"Only {df_samples.shape[0]} samples were provided by the user")
         df_samples.fillna("NA", inplace=True)
         df_samples["COUNT_MODE"] = "IntersectionStrict"
@@ -143,15 +143,20 @@ def parse_args(argv=None):
         required=True,
     )
     parser.add_argument(
+        "--dna_vcf",
+        type=str,
+        nargs="+",
+        help="DNA VCF files to perform MAE on the analyzed samples",
+        required=True,
+    )
+    parser.add_argument(
         "--samples",
         type=str,
         nargs="+",
         help="corresponding sample name",
         required=True,
     )
-    parser.add_argument(
-        "--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True
-    )
+    parser.add_argument("--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True)
     parser.add_argument("--sex", type=str, nargs="+", help="Sex of samples", required=True)
     parser.add_argument(
         "--single_end",
@@ -197,6 +202,7 @@ def main():
     args = parse_args()
     write_sample_annotation_to_tsv(
         bam=args.bam,
+        dna_vcf=args.dna_vcf,
         samples=args.samples,
         strandedness=args.strandedness,
         single_end=args.single_end,

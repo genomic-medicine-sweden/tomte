@@ -106,17 +106,35 @@
             },
             "dna_vcf_gz": {
                 "errorMessage": "DNA vcf file cannot contain spaces and must have extension '.vcf' or '.vcf.gz'",
-                "type": "string",
-                "pattern": "^\\S+(\\.vcf$|\\.vcf.gz$)",
-                "format": "file-path",
-                "exists": true
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+(\\.vcf$|\\.vcf.gz$)",
+                        "format": "file-path"
+                    },
+                    {
+                        "type": "string",
+                        "enum": [""]
+                    }
+                ],
+                "meta": ["vcf"],
+                "default": ""
             },
             "dna_vcf_gz_tbi": {
                 "errorMessage": "DNA vcf index file cannot contain spaces and must have extension '.vcf.tbi' or '.vcf.gz.tbi'",
-                "type": "string",
-                "pattern": "^\\S+(\\.vcf.tbi$|\\.vcf.gz.tbi$)",
-                "format": "file-path",
-                "exists": true
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+(\\.vcf.tbi$|\\.vcf.gz.tbi$)",
+                        "format": "file-path"
+                    },
+                    {
+                        "type": "string",
+                        "enum": [""]
+                    }
+                ],
+                "meta": ["vcf_tbi"],
+                "default": ""
             }
         },
         "anyOf": [
