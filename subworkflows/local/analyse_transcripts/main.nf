@@ -7,6 +7,7 @@ include { GFFCOMPARE                        } from '../../../modules/nf-core/gff
 include { DROP_SAMPLE_ANNOT                 } from '../../../modules/local/drop/drop_sample_annot'
 include { DROP_CONFIG_RUN_AE                } from '../../../modules/local/drop/drop_config_runAE'
 include { DROP_CONFIG_RUN_AS                } from '../../../modules/local/drop/drop_config_runAS'
+include { DROP_CONFIG_RUN_MAE                } from '../../../modules/local/drop/drop_config_runMAE'
 include { DROP_FILTER_RESULTS               } from '../../../modules/local/drop/drop_filter_results'
 include { DROP_PUT_TOGETHER_EXPORTED_COUNTS } from '../../../modules/local/drop/drop_put_together_exported_counts'
 
@@ -29,7 +30,9 @@ workflow ANALYSE_TRANSCRIPTS {
     case_info                     //   channel: [optional]  [ val(case_id) ]
     skip_drop_ae                  // parameter: [mandatory] default: false
     skip_drop_as                  // parameter: [mandatory] default: false
+    skip_drop_mae                 // parameter: [mandatory] calculated from samplesheet
     skip_export_counts_drop       // parameter: [mandatory] default: true
+    ch_drop_mae_high_q_vcf        //   channel: [ path(ch_high_q_vcf), path(ch_high_q_vcf_tbi) ]
     skip_stringtie                // parameter: [mandatory] default: false
 
     main:
@@ -50,9 +53,17 @@ workflow ANALYSE_TRANSCRIPTS {
         }
         .set{ ch_bam_bai_files }
 
+    ch_bam_ds_bai
+        .filter { meta, bam, bai ->
+            meta.vcf && meta.vcf != "NA" && meta.vcf.toString() != "" && meta.vcf.toString().trim() != ""
+        }
+        .map { meta, bam, bai ->
+            [ meta.vcf, meta.vcf_tbi ]
+        }
+        .set { ch_vcf_tbi_files }
+
     // DROP
-    ch_bam_files_annot.view()
-    if ( !skip_drop_ae | !skip_drop_as ) {
+    if ( !skip_drop_ae | !skip_drop_as |!skip_drop_mae ) {
         // Generates count files for samples and merges them with reference count file
         DROP_SAMPLE_ANNOT(
             ch_gtf,
@@ -63,6 +74,7 @@ workflow ANALYSE_TRANSCRIPTS {
             drop_group_samples_as
         )
 
+        // Generates config file and runs Aberrant expression module
         if ( !skip_drop_ae ) {
             DROP_CONFIG_RUN_AE(
                 ch_fasta_fai,
@@ -97,6 +109,20 @@ workflow ANALYSE_TRANSCRIPTS {
                 skip_export_counts_drop
             )
             ch_versions = ch_versions.mix( DROP_CONFIG_RUN_AS.out.versions )
+        }
+
+        // Generates config file and runs monoallelic expression module
+        if ( !skip_drop_mae ) {
+            DROP_CONFIG_RUN_MAE(
+                ch_fasta_fai,
+                ch_gtf,
+                DROP_SAMPLE_ANNOT.out.drop_annot,
+                genome,
+                ch_bam_bai_files,
+                ch_vcf_tbi_files,
+                ch_drop_mae_high_q_vcf
+            )
+            ch_versions = ch_versions.mix( DROP_CONFIG_RUN_MAE.out.versions )
         }
 
         ch_out_drop_gene_name = !skip_drop_ae ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()

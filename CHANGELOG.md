@@ -6,12 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## X.X.X - [XXXX-XX-XX]
 
 ### `Added`
+- Added the possibility to run drop MAE by providing WGS vcfs in the samplesheet [#260](https://github.com/genomic-medicine-sweden/tomte/pull/260)
 
 ### `Parameters`
+- Added parameters drop_mae_high_q_vcf, drop_mae_high_q_vcf_tbi and skip_download_drop_mae_high_q_vcf to provide/download files required to run DROP MAE module [#260](https://github.com/genomic-medicine-sweden/tomte/pull/260)
 
-| Old parameter | New parameter |
-| ------------- | ------------- |
-|               |               |
+| Old parameter | New parameter                     |
+| ------------- | --------------------------------- |
+|               | drop_mae_high_q_vcf               |
+|               | drop_mae_high_q_vcf_tbi           |
+|               | skip_download_drop_mae_high_q_vcf |
 
 > [!NOTE]
 > Parameter has been updated if both old and new parameter information is present.

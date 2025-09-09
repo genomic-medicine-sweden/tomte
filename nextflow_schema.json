@@ -195,9 +195,31 @@
                     "description": "Skip gnomad reference download for vep.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_download_drop_mae_high_q_vcf": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Skip high quality VCF reference download for DROP MAE.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "vep_refs_download": {
                     "type": "string",
                     "description": "Path to comma separated csv with paths to vep references to download, see example in test_data/vep_to_download.csv",
+                    "fa_icon": "fas fa-file-csv",
+                    "format": "file-path"
+                },
+                "drop_mae_high_q_vcf": {
+                    "type": "string",
+                    "description": "Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual",
+                    "help_text": "Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual. It is mandatory to run DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.",
+                    "pattern": ".*\\.vcf(\\.gz)?$",
+                    "fa_icon": "fas fa-file-csv",
+                    "format": "file-path"
+                },
+                "drop_mae_high_q_vcf_tbi": {
+                    "type": "string",
+                    "description": "Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual",
+                    "help_text": "Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual. It is mandatory to run DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.",
+                    "pattern": "^\\S+(\\.vcf.tbi$|\\.vcf.gz.tbi$)",
                     "fa_icon": "fas fa-file-csv",
                     "format": "file-path"
                 }

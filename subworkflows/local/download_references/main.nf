@@ -7,6 +7,8 @@ include { GENCODE_DOWNLOAD as GTF_DOWNLOAD   } from '../../../modules/local/down
 include { WGET_DOWNLOAD                      } from '../../../modules/local/download/wget_download'
 include { VEP_GNOMAD_DOWNLOAD                } from '../../../modules/local/download/vep_gnomad_download'
 include { BUILD_VEP_CACHE                    } from '../../../modules/local/build_vep_cache'
+include { WGET_DOWNLOAD as WGET_VCF_MAE      } from '../../../modules/local/download/wget_download'
+include { WGET_DOWNLOAD as WGET_VCF_MAE_TBI  } from '../../../modules/local/download/wget_download'
 
 workflow DOWNLOAD_REFERENCES {
     take:
@@ -14,10 +16,11 @@ workflow DOWNLOAD_REFERENCES {
     ch_gencode_annotation_version    // channel: [mandatory]  val(gencode_annotation_version)
     ch_vep_refs_download_unprocessed // channel: [optional]   val(path_to_csv)
     ch_vep_cache_version             // channel: [optional]   val(vep_cache_version)
-    download_fasta                   // boolean: should we download the fasta file
-    download_gtf                     // boolean: should we download the gtf file
-    download_vep_cache               // boolean: should we download the vep cache
-    download_gnomad                  // boolean: should we download gnomad
+    download_fasta                   // boolean: should we download the fasta file?
+    download_gtf                     // boolean: should we download the gtf file?
+    download_vep_cache               // boolean: should we download the vep cache?
+    download_gnomad                  // boolean: should we download gnomad?
+    download_drop_mae_high_q_vcf     // boolean: should we download high quality vcf?
 
     main:
     ch_versions = Channel.empty()
@@ -62,11 +65,30 @@ workflow DOWNLOAD_REFERENCES {
         ch_built_vep_plugin_file = Channel.empty()
     }
 
+    if ( download_drop_mae_high_q_vcf ) {
+        if (ch_genome.contains('38')) {
+            ch_input_hg38 = Channel.of( tuple('qc_vcf_1000G_hg38.vcf.gz', 'https://www.cmm.in.tum.de/public/paper/drop_analysis/resource/qc_vcf_1000G_hg38.vcf.gz') )
+            ch_input_hg38_tbi = Channel.of( tuple('qc_vcf_1000G_hg38.vcf.gz.tbi', 'https://www.cmm.in.tum.de/public/paper/drop_analysis/resource/qc_vcf_1000G_hg38.vcf.gz.tbi') )
+            WGET_VCF_MAE(ch_input_hg38)
+            WGET_VCF_MAE_TBI(ch_input_hg38_tbi)
+        } else {
+            ch_input_hg19 = Channel.of( tuple('qc_vcf_1000G_hg19.vcf.gz', 'https://www.cmm.in.tum.de/public/paper/drop_analysis/resource/qc_vcf_1000G_hg19.vcf.gz') )
+            ch_input_hg19_tbi = Channel.of( tuple('qc_vcf_1000G_hg19.vcf.gz.tbi', 'https://www.cmm.in.tum.de/public/paper/drop_analysis/resource/qc_vcf_1000G_hg19.vcf.gz.tbi') )
+            WGET_VCF_MAE(ch_input_hg19)
+            WGET_VCF_MAE_TBI(ch_input_hg19_tbi)
+        }
+
+        ch_high_q_vcf = WGET_VCF_MAE.out.downloaded_file.mix(WGET_VCF_MAE_TBI.out.downloaded_file)
+    } else {
+        ch_high_q_vcf = Channel.empty()
+    }
+    
 
     emit:
     fasta      = ch_downloaded_fasta      // channel: [ path(fasta) ]
     gtf        = ch_downloaded_gtf        // channel: [ path(gtf) ]
     vep_cache  = ch_built_vep_cache       // channel: [ path(vep_cache) ]
     vep_plugin = ch_built_vep_plugin_file // channel: [ path(vep_plugin) ]
+    high_q_vcf = ch_high_q_vcf            // channel: [ path(ch_high_q_vcf), path(ch_high_q_vcf_tbi) ]
     versions   = ch_versions              // channel: [ path(versions.yml) ]
 }

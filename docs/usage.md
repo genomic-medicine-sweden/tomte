@@ -319,6 +319,14 @@ If you want to add samples to an existing database, follow the same steps descri
 
 If you prefer to run DROP locally outside from Tomte follow instructions given by the [authors of DROP](https://github.com/gagneurlab/drop)
 
+###### Running MonoAllelic Expression module
+
+To run DROP MAE, you must provide the following files for each sample, generated after variant calling on Whole Genome Sequencing (WGS) data:
+`vcf/vcf.gz` and `vcf.tbi/vcf.gz.tbi`. Tomte will automatically attempt to run MAE for any sample in the samplesheet that includes these files.
+Additionally, DROP MAE requires a high-quality VCF and index file to verify that the WGS VCF and BAM file originate from the same individual. To obtain these files you can:
+- Download them yourself from [TUM's publid repository](https://www.cmm.in.tum.de/public/paper/drop_analysis/resource/) and provide them via `--drop_mae_high_q_vcf` and `--drop_mae_high_q_vcf_tbi`
+- Set `--skip_download_drop_mae_high_q_vcf false` and have the pipeline do it for you
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:

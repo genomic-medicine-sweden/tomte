@@ -2,8 +2,6 @@ process DROP_FILTER_RESULTS {
     tag "DROP_FILTER_RESULTS"
     label 'process_low'
 
-    container "docker.io/clinicalgenomics/drop:1.4.0"
-
     input:
     val(case_info)
     path gene_panel_clinical_filter

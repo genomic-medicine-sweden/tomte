@@ -2,8 +2,6 @@ process DROP_SAMPLE_ANNOT {
     tag "DROP_annot_file"
     label 'process_low'
 
-    container "docker.io/clinicalgenomics/drop:1.4.0"
-
     input:
     tuple val(meta2), path(gtf)
     tuple val(ids), val(single_ends), val(strandednesses), val(sex), val(vcf), val(tbi), path(bam), path(bai)

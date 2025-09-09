@@ -59,7 +59,8 @@ workflow TOMTE {
         !params.fasta,
         !params.gtf,
         !params.skip_download_vep && !params.vep_cache,
-        !params.skip_download_gnomad
+        !params.skip_download_gnomad,
+        !params.skip_download_drop_mae_high_q_vcf
     ).set { downloads }
     ch_versions = ch_versions.mix(DOWNLOAD_REFERENCES.out.versions)
 
@@ -68,6 +69,8 @@ workflow TOMTE {
                                                                         : downloads.fasta.map {it -> [[id:it.getSimpleName()], it]}.collect()
     ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : downloads.gtf.map {it -> [[id:it.getSimpleName()], it]}.collect()
+    ch_drop_mae_high_q_vcf        = params.drop_mae_high_q_vcf          ? Channel.fromPath(params.drop_mae_high_q_vcf).mix(Channel.fromPath(params.drop_mae_high_q_vcf_tbi)).collect()
+                                                                        : downloads.high_q_vcf.collect()
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
                                                                         : Channel.empty().mix(downloads.vep_cache)
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
@@ -185,6 +188,7 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(BAM_QC.out.versions)
 
+    def skip_drop_mae = computeSkipMaeFromSamplesheet(params.input as String)
 
     ANALYSE_TRANSCRIPTS(
         ch_alignment.bam_bai,
@@ -204,7 +208,9 @@ workflow TOMTE {
         ch_case_info,
         params.skip_drop_ae,
         params.skip_drop_as,
+        skip_drop_mae,
         params.skip_export_counts_drop,
+        ch_drop_mae_high_q_vcf,
         params.skip_stringtie
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)
@@ -369,6 +375,26 @@ def create_case_channel(List rows) {
     return case_info
 }
 
+// Function to decide skip_drop_mae from the samplesheet file
+def computeSkipMaeFromSamplesheet(String path) {
+    if (!path) return true
+    def f = new File(path)
+    if (!f.exists()) return true
+    def sep = path.toLowerCase().endsWith('.tsv') ? '\t' : ','
+    def lines = f.readLines()
+    if (!lines || lines.size() < 2) return true
+    def header = lines[0].split(sep, -1)*.trim()
+    def vcfIdx = header.indexOf('dna_vcf_gz')
+    if (vcfIdx < 0) return true
+
+    int present = lines.tail().count { ln ->
+        if (!ln?.trim()) return false
+        def fields = ln.split(sep, -1)
+        def v = (vcfIdx < fields.size()) ? fields[vcfIdx].trim() : ''
+        v && v != 'NA'
+    }
+    return present == 0  // true only when 0 VCFs; false when ≥1
+}
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     THE END

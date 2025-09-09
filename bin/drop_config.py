@@ -51,7 +51,7 @@ CONFIG_YAML = {
         "run": False,
         "groups": ["mae"],
         "gatkIgnoreHeaderCheck": True,
-        "padjCutoff": 0.05,
+        "padjCutoff": 0.2,
         "allelicRatioCutoff": 0.8,
         "addAF": True,
         "maxAF": 0.001,
@@ -90,6 +90,7 @@ def update_config(
     padjcutoff: float,
     zscorecutoff: float,
     drop_module: str,
+    ref_vcf: str,
 ) -> Dict:
     """
     Updates config file to add correct genome, gtf,
@@ -121,6 +122,7 @@ def update_config(
         config_copy["aberrantSplicing"]["padjCutoff"] = padjcutoff
     elif drop_module == "MAE":
         config_copy["mae"]["run"] = ["true"]
+        config_copy["mae"]["qcVcf"] = [ref_vcf]
     return config_copy
 
 
@@ -165,19 +167,19 @@ def parse_args(argv=None):
         "--drop_group_samples",
         type=str,
         help="Specify drop group to analyse",
-        required=True,
+        required=False,
     )
     parser.add_argument(
         "--drop_other_group_samples",
         type=str,
         help="Specify the drop group to exclude in exportCounts",
-        required=True,
+        required=False,
     )
     parser.add_argument(
         "--padjcutoff",
         type=float,
         help="Specify adjusted p-value cut-off",
-        required=True,
+        required=False,
     )
     parser.add_argument(
         "--zscorecutoff",
@@ -191,6 +193,12 @@ def parse_args(argv=None):
         type=str,
         help="Specify module to run: AE, AS or MAE",
         required=True,
+    )
+    parser.add_argument(
+        "--ref_vcf",
+        type=str,
+        help="Path to vcf used by MAE to make sure WGS vcf and bam file come from same individual",
+        required=False,
     )
     parser.add_argument(
         "--version",
@@ -212,6 +220,7 @@ def main():
         padjcutoff=args.padjcutoff,
         zscorecutoff=args.zscorecutoff,
         drop_module=args.drop_module,
+        ref_vcf=args.ref_vcf,
     )
     write_yaml(out_path=args.output, yaml_object=master_config)
 
