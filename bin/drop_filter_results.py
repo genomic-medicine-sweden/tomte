@@ -45,7 +45,7 @@ def annotate_with_drop_gene_name(
 ) -> DataFrame:
     """Annotate results from DROP with hgnc symbols."""
     df_genes: DataFrame = read_csv(out_drop_gene_name)
-    
+
     df_genes.rename(columns={"gene_name": "hgncSymbol"}, inplace=True)
     df_genes.rename(columns={"gene_id": "geneID"}, inplace=True)
 

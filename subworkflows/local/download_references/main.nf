@@ -82,7 +82,7 @@ workflow DOWNLOAD_REFERENCES {
     } else {
         ch_high_q_vcf = Channel.empty()
     }
-    
+
 
     emit:
     fasta      = ch_downloaded_fasta      // channel: [ path(fasta) ]
