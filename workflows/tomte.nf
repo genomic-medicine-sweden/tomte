@@ -385,7 +385,7 @@ def computeSkipMaeFromSamplesheet(String path) {
     def lines = f.readLines()
     if (!lines || lines.size() < 2) return true
     def header = lines[0].split(sep, -1)*.trim()
-    def vcfIdx = header.indexOf('dna_vcf_gz')
+    def vcfIdx = header.indexOf('dna_vcf')
     if (vcfIdx < 0) return true
 
     int present = lines.tail().count { ln ->

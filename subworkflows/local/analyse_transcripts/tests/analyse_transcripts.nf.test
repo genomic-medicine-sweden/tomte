@@ -79,7 +79,7 @@ nextflow_workflow {
                 ch_cram_converted = CRAM_TO_BAM.out.bam.collect().join(CRAM_TO_BAM.out.bai.collect())
                 // Channel for the BAM sample
                 ch_bam = Channel.of([
-                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false, dna_vcf_gz:"${projectDir}/test_data/test_ACC5963A1.vcf.gz", dna_vcf_gz_tbi:"${projectDir}/test_data/test_ACC5963A1.vcf.gz.tbi" ],
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false, dna_vcf:"${projectDir}/test_data/test_ACC5963A1.vcf.gz", dna_vcf_tbi:"${projectDir}/test_data/test_ACC5963A1.vcf.gz.tbi" ],
                         file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
                         file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
                     ])

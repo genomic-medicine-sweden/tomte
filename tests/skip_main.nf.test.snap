@@ -1,7 +1,7 @@
 {
     "test profile": {
         "content": [
-            31,
+            35,
             {
                 "BEDTOINTERVALLIST": {
                     "gatk4": "4.6.1.0"
@@ -146,12 +146,6 @@
                 "alignment/ACC5963A3.bam",
                 "alignment/ACC5963A3.cram",
                 "alignment/ACC5963A3.cram.crai",
-                "analyse_transcripts",
-                "analyse_transcripts/drop",
-                "analyse_transcripts/drop/MAE",
-                "analyse_transcripts/drop/finequagga_mae_top_hits_clinical.tsv",
-                "analyse_transcripts/drop/finequagga_mae_top_hits_research.tsv",
-                "analyse_transcripts/drop/sample_annotation.tsv",
                 "alignment/ACC5963A3/aux_info",
                 "alignment/ACC5963A3/aux_info/ambig_info.tsv",
                 "alignment/ACC5963A3/aux_info/exp_gc.gz",
@@ -172,6 +166,12 @@
                 "alignment/ACC5963A3_lib_format_counts.json",
                 "alignment/ACC5963A3_meta_info.json",
                 "alignment/ACC5963A3_quant.sf",
+                "analyse_transcripts",
+                "analyse_transcripts/drop",
+                "analyse_transcripts/drop/MAE",
+                "analyse_transcripts/drop/finequagga_mae_top_hits_clinical.tsv",
+                "analyse_transcripts/drop/finequagga_mae_top_hits_research.tsv",
+                "analyse_transcripts/drop/sample_annotation.tsv",
                 "bam_qc",
                 "bam_qc/ACC5963A1.rna_metrics",
                 "bam_qc/ACC5963A1_insert_size.pdf",
@@ -374,6 +374,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-09-10T21:27:04.549655105"
+        "timestamp": "2025-09-10T22:20:02.602668336"
     }
 }

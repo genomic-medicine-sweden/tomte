@@ -16,8 +16,8 @@
                         "single_end": false,
                         "fq_pairs": 1,
                         "is_fastq": false,
-                        "dna_vcf_gz": "test_ACC5963A1.vcf.gz:md5,fcd2c0bc89d79d38e563b3d949180c4f",
-                        "dna_vcf_gz_tbi": "test_ACC5963A1.vcf.gz.tbi:md5,086303970052512598af8052900018eb"
+                        "dna_vcf": "test_ACC5963A1.vcf.gz:md5,fcd2c0bc89d79d38e563b3d949180c4f",
+                        "dna_vcf_tbi": "test_ACC5963A1.vcf.gz.tbi:md5,086303970052512598af8052900018eb"
                     },
                     "ACC5963A1.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
@@ -70,7 +70,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-09-10T19:22:29.351800743"
+        "timestamp": "2025-09-10T22:21:18.250764933"
     },
     "Should run with one sample": {
         "content": [
