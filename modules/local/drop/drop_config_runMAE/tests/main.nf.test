@@ -1,12 +1,13 @@
 nextflow_process {
 
-    name "Test Process DROP_CONFIG_RUN_AE"
+    name "Test Process DROP_CONFIG_RUN_MAE"
     script "../main.nf"
-    process "DROP_CONFIG_RUN_AE"
+    process "DROP_CONFIG_RUN_MAE"
+    config "./nextflow.config"
     tag "modules"
     tag "modules_local"
     tag "drop"
-    tag "drop_config_runAE"
+    tag "drop_config_runMAE"
 
     setup {
         run("GUNZIP", alias: "GUNZIP_FASTA") {
@@ -45,18 +46,28 @@ nextflow_process {
         }
 
         run("DROP_SAMPLE_ANNOT") {
-        script "../../../../../modules/local/drop/drop_sample_annot/main.nf"
+            script "../../../../../modules/local/drop/drop_sample_annot/main.nf"
+            process {
+                """
+                input[0] = GUNZIP_FASTA.out.gunzip
+                input[1] = Channel.of([
+                            ['ACC5963A1'], [false], ['reverse'], ['NA'], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz"], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz.tbi"],
+                            file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                            file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                        ])
+                input[2] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
+                input[3] = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true)
+                input[4] = 'outrider'
+                input[5] = 'fraser'
+                """
+            }
+        }
+
+        run("GATK4_CREATESEQUENCEDICTIONARY", alias: "BUILD_DICT") {
+        script "../../../../../modules/nf-core/gatk4/createsequencedictionary/main.nf"
         process {
             """
-            input[0] = Channel.of([
-                        ['ACC5963A1'], [false], ['reverse'], ['NA'],
-                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
-                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
-                    ])
-            input[1] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
-            input[2] = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true)
-            input[3] = 'outrider'
-            input[4] = 'fraser'
+            input[0] = GUNZIP_FASTA.out.gunzip
             """
             }
         }
@@ -70,19 +81,21 @@ nextflow_process {
                 """
                 input[0] = GUNZIP_FASTA.out.gunzip.join(SAMTOOLS_FAIDX.out.fai).collect()
                 input[1] = GUNZIP_GTF.out.gunzip.collect()
-                input[2] = DROP_SAMPLE_ANNOT.out.drop_annot
-                input[3] = Channel.of([
+                input[2] = BUILD_DICT.out.dict.collect()
+                input[3] = DROP_SAMPLE_ANNOT.out.drop_annot
+                input[4] = 'GRCh37'
+                input[5] = Channel.of([
                         file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
                         file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
                     ])
-                input[4] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
-                input[5] = channel.fromPath("${projectDir}/test_data/drop_data", checkIfExists: true)
-                input[6] = 'GRCh37'
-                input[7] = 'outrider'
-                input[8] = 'fraser'
-                input[9] = 1
-                input[10] = 2.5
-                input[11] = true
+                input[6] = Channel.of([
+                        file("${projectDir}/test_data/test_ACC5963A1.vcf.gz", checkIfExists: true),
+                        file("${projectDir}/test_data/test_ACC5963A1.vcf.gz.tbi", checkIfExists: true)
+                    ])
+                input[7] = Channel.of([
+                        file("${projectDir}/test_data/qc_vcf_1000G_hg19_chr21.vcf.gz", checkIfExists: true),
+                        file("${projectDir}/test_data/qc_vcf_1000G_hg19_chr21.vcf.gz.tbi", checkIfExists: true)
+                    ])
                 """
             }
         }
@@ -93,8 +106,8 @@ nextflow_process {
                 { assert snapshot(
                     process.out.config_drop.collect{ file(it).name },
                     process.out.drop_gene_name,
-                    process.out.drop_ae_rds.collect{ file(it).name },
-                    process.out.drop_ae_out.collect{ file(it).name },
+                    process.out.drop_mae_out.collect{ file(it).name },
+                    process.out.drop_mae_tsv.collect{ file(it).name },
                     process.out.versions,
                 ).match()}
             )

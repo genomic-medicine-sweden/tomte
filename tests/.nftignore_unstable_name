@@ -1,4 +1,5 @@
 pipeline_info/*.{html,json,txt}
 analyse_transcripts/drop/AE/**
 analyse_transcripts/drop/AS/**
+analyse_transcripts/drop/MAE/**
 multiqc/multiqc_plots/**

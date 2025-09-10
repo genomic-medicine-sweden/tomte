@@ -44,32 +44,33 @@ def annotate_with_drop_gene_name(
     df_family_results: DataFrame, out_drop_gene_name: str
 ) -> DataFrame:
     """Annotate results from DROP with hgnc symbols."""
-    if df_family_results.empty:
-        # Read gene name table just to get the correct columns
-        df_genes = read_csv(out_drop_gene_name)
-        df_genes.rename(columns={"gene_name": "hgncSymbol"}, inplace=True)
-        df_genes.rename(columns={"gene_id": "geneID"}, inplace=True)
+    df_genes: DataFrame = read_csv(out_drop_gene_name)
+    
+    df_genes.rename(columns={"gene_name": "hgncSymbol"}, inplace=True)
+    df_genes.rename(columns={"gene_id": "geneID"}, inplace=True)
 
+    if "gene_name" in df_family_results.columns:
+        df_family_results.rename(columns={"gene_name": "hgncSymbol"}, inplace=True)
+
+    common_columns = list(set(df_genes.columns) & set(df_family_results.columns))
+
+    if df_family_results.shape[0] == 0:
         # Create empty DataFrame with the final expected columns
         common_cols = ["hgncSymbol", "geneID"]
         result_columns = list(df_genes.columns) + [
             col for col in df_family_results.columns if col not in common_cols
         ]
         return DataFrame(columns=result_columns)
-
-    df_genes: DataFrame = read_csv(out_drop_gene_name)
-    common_columns = list(set(df_genes.columns) & set(df_family_results.columns))
-    df_genes.rename(columns={"gene_name": "hgncSymbol"}, inplace=True)
-    df_genes.rename(columns={"gene_id": "geneID"}, inplace=True)
-    if common_columns:
-        df_merged = df_genes.drop(common_columns, axis=1).merge(
-            df_family_results, left_on="hgncSymbol", right_on="hgncSymbol"
-        )
     else:
-        df_merged = df_genes.merge(
-            df_family_results, left_on="geneID", right_on="geneID"
-        )
-    return df_merged
+        if "hgncSymbol" in df_family_results.columns:
+            df_merged = df_genes.drop(
+                [col for col in common_columns if col != "hgncSymbol"], axis=1
+            ).merge(df_family_results, left_on="hgncSymbol", right_on="hgncSymbol")
+        else:
+            df_merged = df_genes.merge(
+                df_family_results, left_on="geneID", right_on="geneID"
+            )
+        return df_merged
 
 
 def filter_by_gene_panel(

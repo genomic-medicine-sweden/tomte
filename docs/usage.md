@@ -100,29 +100,29 @@ A samplesheet is used to pass the information about the sample(s), such as the p
 
 genomic-medicine-sweden/tomte will requires the information given bellow.
 
-| Fields         | Description                                                                                                                                                                            | Mandatory?                         |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `case`         | Case ID, for the analysis used when generating a family VCF.                                                                                                                           | Mandatory                          |
-| `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). | Mandatory                          |
-| `strandedness` | Sample strandness                                                                                                                                                                      | Mandatory                          |
-| `fastq_1`      | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Provide either fastq_1 or bam/cram |
-| `fastq_2`      | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Only if paired fastqs are provided |
-| `bam_cram`     | Full path to BAM/CRAM file.                                                                                                                                                            | Provide either fastq_1 or bam/cram |
-| `bai_crai`     | Full path to BAM/CRAM index file.                                                                                                                                                      | Only when bam/cram is provided     |
-| `Paternal`     | Father's custom sample name. If there is no paternal sample available, it can be left empty.                                                                                           | Optional                           |
-| `Maternal`     | Mother's custom sample name. If there is no maternal sample available, it can be left empty.                                                                                           | Optional                           |
-| `Sex`          | Sample sex. The valid input is M or 1 for male; F or 2 for female; NA, 0, or other if unknown                                                                                          | Optional                           |
-| `dna_vcf_gz`     | Full path to DNA vcf file to run DROP's Mono Allelic expression (MAE) module file.                                                                                                                                                            | Only if you want to run MAE |
-| `dna_vcf_gz_tbi`     | Full path to DNA vcf file's index file.                                                                                                                                                      | Only if you want to run MAE     |
+| Fields           | Description                                                                                                                                                                            | Mandatory?                         |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `case`           | Case ID, for the analysis used when generating a family VCF.                                                                                                                           | Mandatory                          |
+| `sample`         | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). | Mandatory                          |
+| `strandedness`   | Sample strandness                                                                                                                                                                      | Mandatory                          |
+| `fastq_1`        | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Provide either fastq_1 or bam/cram |
+| `fastq_2`        | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         | Only if paired fastqs are provided |
+| `bam_cram`       | Full path to BAM/CRAM file.                                                                                                                                                            | Provide either fastq_1 or bam/cram |
+| `bai_crai`       | Full path to BAM/CRAM index file.                                                                                                                                                      | Only when bam/cram is provided     |
+| `Paternal`       | Father's custom sample name. If there is no paternal sample available, it can be left empty.                                                                                           | Optional                           |
+| `Maternal`       | Mother's custom sample name. If there is no maternal sample available, it can be left empty.                                                                                           | Optional                           |
+| `Sex`            | Sample sex. The valid input is M or 1 for male; F or 2 for female; NA, 0, or other if unknown                                                                                          | Optional                           |
+| `dna_vcf_gz`     | Full path to DNA vcf file to run DROP's Mono Allelic expression (MAE) module file.                                                                                                     | Only if you want to run MAE        |
+| `dna_vcf_gz_tbi` | Full path to DNA vcf file's index file.                                                                                                                                                | Only if you want to run MAE        |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
-| case  | sample       | strandedness | fastq_1                          | fastq_2                          | Paternal     | Maternal     | Sex | dna_vcf_gz | dna_vcf_gz_tbi |
-| ----- | ------------ | ------------ | -------------------------------- | -------------------------------- | ------------ | ------------ | --- | ---------- | ---------------|
+| case  | sample       | strandedness | fastq_1                          | fastq_2                          | Paternal     | Maternal     | Sex | dna_vcf_gz          | dna_vcf_gz_tbi          |
+| ----- | ------------ | ------------ | -------------------------------- | -------------------------------- | ------------ | ------------ | --- | ------------------- | ----------------------- |
 | fam_1 | CONTROL_REP1 | reverse      | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz |              |              | M   | AEG588A1_DNA.vcf.gz | AEG588A1_DNA.vcf.gz.tbi |
-| fam_1 | CONTROL_REP2 | reverse      | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz |              |              | F   | | |
-| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   | | |
-| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   | | |
+| fam_1 | CONTROL_REP2 | reverse      | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz |              |              | F   |                     |                         |
+| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   |                     |                         |
+| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   |                     |                         |
 
 Here is an example of a samplesheet where BAM files are provided:
 
@@ -294,15 +294,15 @@ DROP - aberrant splicing
 
 DROP - monoallelic expression
 
-| Mandatory                             | Optional                            |
-| ------------------------------------- | ----------------------------------- |
-| reference_drop_annot_file<sup>1</sup> | drop_mae_high_q_vcf<sup>2</sup>     |
-| variant calling from WGS (vcf/vcf.gz) | drop_mae_high_q_vcf_tbi<sup>2</sup> |
+| Mandatory                                     | Optional                            |
+| --------------------------------------------- | ----------------------------------- |
+| reference_drop_annot_file<sup>1</sup>         | drop_mae_high_q_vcf<sup>2</sup>     |
+| variant calling from WGS (vcf/vcf.gz)         | drop_mae_high_q_vcf_tbi<sup>2</sup> |
 | variant calling from WGS (vcf.tbi/vcf.gz.tbi) | gene_panel_clinical_filter          |
-|                                       | genome<sup>3</sup>                  |
+|                                               | genome<sup>3</sup>                  |
 
 <sup>1</sup> To get more information on how to format it, see below<br />
-<sup>2</sup> If it is not provided by the user, the user can chose to download it by  ` --skip_download_drop_mae_high_q_vcf false`<br />
+<sup>2</sup> If it is not provided by the user, the user can chose to download it by ` --skip_download_drop_mae_high_q_vcf false`<br />
 <sup>7</sup> If it is not provided by the user, the default value is GRCh38
 
 ##### Preparing input for DROP
@@ -337,6 +337,7 @@ If you prefer to run DROP locally outside from Tomte follow instructions given b
 To run DROP MAE, you must provide the following files for each sample, generated after variant calling on Whole Genome Sequencing (WGS) data:
 `vcf/vcf.gz` and `vcf.tbi/vcf.gz.tbi`. Tomte will automatically attempt to run MAE for any sample in the samplesheet that includes these files.
 Additionally, DROP MAE requires a high-quality VCF and index file to verify that the WGS VCF and BAM file originate from the same individual. To obtain these files you can:
+
 - Download them yourself from [TUM's publid repository](https://www.cmm.in.tum.de/public/paper/drop_analysis/resource/) and provide them via `--drop_mae_high_q_vcf` and `--drop_mae_high_q_vcf_tbi`
 - Set `--skip_download_drop_mae_high_q_vcf false` and have the pipeline do it for you
 
