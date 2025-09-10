@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Added the possibility to run drop MAE by providing WGS vcfs in the samplesheet [#260](https://github.com/genomic-medicine-sweden/tomte/pull/260)
+- Added test data for mae (qc_vcf_1000G_hg19_chr21.vcf.gz, qc_vcf_1000G_hg19_chr21.vcf.gz.tbi, test_ACC5963A1.vcf.gz and test_ACC5963A1.vcf.gz.tbi) [#261](https://github.com/genomic-medicine-sweden/tomte/pull/261)
 
 ### `Parameters`
 
@@ -27,10 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Solved issue [#253](https://github.com/genomic-medicine-sweden/tomte/issues/258) by substituting local/get_chrom_sizes by the nf-core module samtools/faidx [#258](https://github.com/genomic-medicine-sweden/tomte/pull/258)
+- Installed samtools/fastq to convert input BAM/CRAM files to FASTQ format to obtain Salmon counts solving issue [#252](https://github.com/genomic-medicine-sweden/tomte/issues/252) [#259](https://github.com/genomic-medicine-sweden/tomte/pull/259)
 
 | Tool                  | Old version | New version |
 | --------------------- | ----------- | ----------- |
 | local/get_chrom_sizes | 1.18        |             |
+| samtools/fastq        |             | 1.21        |
 
 > [!NOTE]
 > Version has been updated if both old and new version information is present.
