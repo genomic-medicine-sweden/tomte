@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Added test data for mae (qc_vcf_1000G_hg19_chr21.vcf.gz, qc_vcf_1000G_hg19_chr21.vcf.gz.tbi, test_ACC5963A1.vcf.gz and test_ACC5963A1.vcf.gz.tbi) [#261](https://github.com/genomic-medicine-sweden/tomte/pull/261)
+
 ### `Parameters`
 
 | Old parameter | New parameter |
