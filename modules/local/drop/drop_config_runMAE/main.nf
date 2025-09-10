@@ -5,6 +5,7 @@ process DROP_CONFIG_RUN_MAE {
     input:
     tuple val(meta), path(fasta), path(fai)
     tuple val(meta2), path(gtf)
+    tuple val(meta), path(dict)
     path sample_annotation
     val(genome)
     tuple path(bam), path(bai)
@@ -13,8 +14,9 @@ process DROP_CONFIG_RUN_MAE {
 
     output:
     path('config.yaml')             , emit: config_drop
-    path('output')                  , emit: drop_ae_out
-    path('exported_counts_ae')      , emit: gene_counts_ae, optional: true
+    path('output')                  , emit: drop_mae_out
+    path('MAE_results_*')           , emit: drop_mae_tsv
+    path('gene_name_mapping*')      , emit: drop_gene_name
     path "versions.yml"             , emit: versions
 
     when:
@@ -25,10 +27,17 @@ process DROP_CONFIG_RUN_MAE {
     script:
     def args = task.ext.args ?: ''
     def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
+    def gtf_basename = gtf.getName().replaceAll(/\.(gtf|gff3?|GTF|GFF3?)$/, '')
 
     """
     TMPDIR=\$PWD
     HOME=\$PWD
+
+    awk -v val="${gtf_basename}" 'BEGIN{FS=OFS="\t"}
+    NR==1 {for(i=1;i<=NF;i++) if(\$i=="GENE_ANNOTATION") col=i}
+    NR>1 && \$col=="NA" {\$col=val}
+    {print}
+    ' ${sample_annotation} > tmp && mv tmp ${sample_annotation}
 
     drop init
 
@@ -42,7 +51,9 @@ process DROP_CONFIG_RUN_MAE {
 
     snakemake mae --cores ${task.cpus} --rerun-triggers mtime $args
 
-    cp output/processed_results/mae/mae/MAE_results_* .
+    cp output/processed_results/mae/mae/MAE_results_*.tsv .
+    rm MAE_results_*_rare.tsv
+    cp output/processed_data/*/gene_name_mapping_*.tsv .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -55,8 +66,7 @@ process DROP_CONFIG_RUN_MAE {
     """
     touch config.yaml
     touch MAE_results_genome.tsv
-    touch MAE_results_genome.tsv.gz
-    touch MAE_results_genome_rare.tsv
+    touch gene_name_mapping_.tsv
     mkdir output
 
     cat <<-END_VERSIONS > versions.yml

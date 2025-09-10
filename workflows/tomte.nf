@@ -195,6 +195,7 @@ workflow TOMTE {
         ch_alignment.bam_ds_bai,
         ch_references.gtf,
         ch_references.fasta_fai,
+        ch_references.sequence_dict,
         ch_ref_drop_count_file,
         ch_ref_drop_annot_file,
         ch_ref_drop_splice_folder,

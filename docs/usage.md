@@ -292,6 +292,19 @@ DROP - aberrant splicing
 <sup>7</sup> If it is not provided by the user, the default value is GRCh38
 <sup>8</sup> If it is not provided by the user, the default value is true<br />
 
+DROP - monoallelic expression
+
+| Mandatory                             | Optional                            |
+| ------------------------------------- | ----------------------------------- |
+| reference_drop_annot_file<sup>1</sup> | drop_mae_high_q_vcf<sup>2</sup>     |
+| variant calling from WGS (vcf/vcf.gz) | drop_mae_high_q_vcf_tbi<sup>2</sup> |
+| variant calling from WGS (vcf.tbi/vcf.gz.tbi) | gene_panel_clinical_filter          |
+|                                       | genome<sup>3</sup>                  |
+
+<sup>1</sup> To get more information on how to format it, see below<br />
+<sup>2</sup> If it is not provided by the user, the user can chose to download it by  ` --skip_download_drop_mae_high_q_vcf false`<br />
+<sup>7</sup> If it is not provided by the user, the default value is GRCh38
+
 ##### Preparing input for DROP
 
 If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference counts, splice counts, and a sample sheet. The sample sheet should contain the columns as those in the [test sample annotation](../test_data/drop_data/sampleAnnotation.tsv), you can also add an optional sex column. You do not need to include the samples you are running through the pipeline in the sample sheet.

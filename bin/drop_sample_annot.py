@@ -4,6 +4,7 @@ import argparse
 import csv
 from pandas import read_csv, DataFrame, concat, isna
 import os
+import re
 
 SCRIPT_VERSION = "1.3"
 SAMPLE_ANNOTATION_COLUMNS = [
@@ -48,7 +49,6 @@ def write_sample_annotation_to_tsv(
             sa_dict["SEX"] = sex[index]
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
             sa_dict["RNA_BAM_FILE"] = bam[index]
-            sa_dict["GENE_ANNOTATION"] = gtf
             value = dna_vcf[index].strip()
             sa_dict["DNA_VCF_FILE"] = os.path.basename(value) if value not in ("", "NA") else "NA"
             sa_dict["DROP_GROUP"] = drop_group_sample + ",mae" if sa_dict["DNA_VCF_FILE"] != "NA" else drop_group_sample

@@ -17,6 +17,7 @@ workflow ANALYSE_TRANSCRIPTS {
     ch_bam_ds_bai                 //   channel: [mandatory] [ val(meta), [ path(bam) , path(bai) ] ]
     ch_gtf                        //   channel: [mandatory] [ val(meta), [ path(gtf) ] ]
     ch_fasta_fai                  //   channel: [mandatory] [ val(meta), [ path(fasta), path(fai) ]
+    ch_dict                       //   channel:   [mandatory] [ val(meta), path(dict) ]
     ch_ref_drop_count_file        //   channel: [optional]  [ path(tsv) ]
     ch_ref_drop_annot_file        //   channel: [optional]  [ path(tsv) ]
     ch_ref_drop_splice_folder     //   channel: [optional]  [ path(folder) ]
@@ -116,6 +117,7 @@ workflow ANALYSE_TRANSCRIPTS {
             DROP_CONFIG_RUN_MAE(
                 ch_fasta_fai,
                 ch_gtf,
+                ch_dict,
                 DROP_SAMPLE_ANNOT.out.drop_annot,
                 genome,
                 ch_bam_bai_files,
@@ -125,11 +127,15 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_versions = ch_versions.mix( DROP_CONFIG_RUN_MAE.out.versions )
         }
 
-        ch_out_drop_gene_name = !skip_drop_ae ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
-            : DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
+        ch_out_drop_gene_name = !skip_drop_ae  ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
+            : !skip_drop_as  ? DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
+            : DROP_CONFIG_RUN_MAE.out.drop_gene_name.collect()
+
         ch_out_drop_ae_rds    = !skip_drop_ae ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()
             : Channel.empty()
         ch_out_drop_as_tsv    = !skip_drop_as ? DROP_CONFIG_RUN_AS.out.drop_as_tsv.collect()
+            : Channel.empty()
+        ch_out_drop_mae_tsv   = !skip_drop_mae ? DROP_CONFIG_RUN_MAE.out.drop_mae_tsv.collect()
             : Channel.empty()
 
         DROP_FILTER_RESULTS(
@@ -137,7 +143,8 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_gene_panel_clinical_filter.ifEmpty([]),
             ch_out_drop_ae_rds.ifEmpty([]),
             ch_out_drop_gene_name,
-            ch_out_drop_as_tsv.ifEmpty([])
+            ch_out_drop_as_tsv.ifEmpty([]),
+            ch_out_drop_mae_tsv.ifEmpty([])
         )
 
         ch_versions = ch_versions.mix( DROP_SAMPLE_ANNOT.out.versions )

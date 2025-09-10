@@ -5,7 +5,7 @@ from re import match, split
 import pyreadr
 from pandas import DataFrame, concat, read_csv
 
-SCRIPT_VERSION = "1.4"
+SCRIPT_VERSION = "1.5"
 GENE_PANEL_HEADER = ["chromosome", "gene_start", "gene_stop", "hgnc_id", "hgnc_symbol"]
 GENE_PANEL_COLUMNS_TO_KEEP = ["hgnc_symbol", "hgnc_id"]
 
@@ -44,6 +44,19 @@ def annotate_with_drop_gene_name(
     df_family_results: DataFrame, out_drop_gene_name: str
 ) -> DataFrame:
     """Annotate results from DROP with hgnc symbols."""
+    if df_family_results.empty:
+        # Read gene name table just to get the correct columns
+        df_genes = read_csv(out_drop_gene_name)
+        df_genes.rename(columns={"gene_name": "hgncSymbol"}, inplace=True)
+        df_genes.rename(columns={"gene_id": "geneID"}, inplace=True)
+
+        # Create empty DataFrame with the final expected columns
+        common_cols = ["hgncSymbol", "geneID"]
+        result_columns = list(df_genes.columns) + [
+            col for col in df_family_results.columns if col not in common_cols
+        ]
+        return DataFrame(columns=result_columns)
+
     df_genes: DataFrame = read_csv(out_drop_gene_name)
     common_columns = list(set(df_genes.columns) & set(df_family_results.columns))
     df_genes.rename(columns={"gene_name": "hgncSymbol"}, inplace=True)
@@ -169,6 +182,33 @@ def filter_fraser_result(
         df_results_family_aberrant_splicing, gene_panel, file_name_research
     )
 
+def filter_mae_result(
+    gene_panel: str,
+    out_drop_mae_tsv: str,
+    out_drop_gene_name: str,
+    case_id: str,
+    output_name_fragment_mae: str,
+):
+    """
+    Two tsvs will be outputed:
+        - One filtered to keep genes in the gene panel (if provided).
+        - Another that is unfiltered.
+    """
+    df_results_family_monoallelic_expression: DataFrame = read_csv(
+        out_drop_mae_tsv, sep="\t"
+    )
+    # Keep only samples provided to tomte
+    df_results_family_monoallelic_expression = annotate_with_drop_gene_name(
+        df_results_family_monoallelic_expression, out_drop_gene_name
+    )
+    file_name_research = f"{case_id}{output_name_fragment_mae}_research.tsv"
+    camelize_dataframe_columns(df_results_family_monoallelic_expression).to_csv(
+        file_name_research, sep="\t", index=False, header=True
+    )
+    filter_by_gene_panel(
+        df_results_family_monoallelic_expression, gene_panel, file_name_research
+    )
+
 
 def camelize(string: str) -> str:
     """
@@ -239,10 +279,24 @@ def parse_args(argv=None):
         required=False,
     )
     parser.add_argument(
+        "--output_name_fragment_mae",
+        type=str,
+        default="mae_top_hits",
+        help="Central fragment of MonoAllelic Expression output file, case will be added at the beginning and clinical/research at end",
+        required=False,
+    )
+    parser.add_argument(
         "--out_drop_as_tsv",
         type=str,
         default="None",
         help="Path to tsv output from DROP Aberrant Splicing",
+        required=False,
+    )
+    parser.add_argument(
+        "--out_drop_mae_tsv",
+        type=str,
+        default="None",
+        help="Path to tsv output from DROP MonoAllelic Expression",
         required=False,
     )
     parser.add_argument(
@@ -282,6 +336,14 @@ def main():
             out_drop_gene_name=args.out_drop_gene_name,
             case_id=args.case_id,
             output_name_fragment_as=args.output_name_fragment_as,
+        )
+    if args.out_drop_mae_tsv != "None":
+        filter_mae_result(
+            gene_panel=args.gene_panel,
+            out_drop_mae_tsv=args.out_drop_mae_tsv,
+            out_drop_gene_name=args.out_drop_gene_name,
+            case_id=args.case_id,
+            output_name_fragment_mae=args.output_name_fragment_mae,
         )
 
 
