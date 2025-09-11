@@ -101,7 +101,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = STAR_ALIGN.out.wig
-                input[1] = GET_CHROM_SIZES.out.sizes.map{ _meta, sizes -> sizes }.collect() 
+                input[1] = GET_CHROM_SIZES.out.sizes.map{ _meta, sizes -> sizes }.collect()
                 input[2] = STAR_ALIGN.out.spl_junc_tab
                 """
             }
