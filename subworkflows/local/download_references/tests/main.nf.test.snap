@@ -25,6 +25,10 @@
                     ]
                 ],
                 "4": [
+                    "/home/lucia.penaperez/github/gms/tomte/.nf-test/tests/3d0ce9abadd4a6a601911a5efaf0d09c/work/4b/93768374513b45609e3cb3504a6cbb/qc_vcf_1000G_hg19.vcf.gz",
+                    "qc_vcf_1000G_hg19.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "5": [
                     "versions.yml:md5,5ad99e0b232f053012067e832e6e1e92",
                     "versions.yml:md5,72932bc4909327e47ed71956c9e1647b",
                     "versions.yml:md5,c620cc71650399ca7595d5e2348c9e44",
@@ -42,6 +46,10 @@
                     [
                         "gencode.v46.primary_assembly.annotation.gtf:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
+                ],
+                "high_q_vcf": [
+                    "/home/lucia.penaperez/github/gms/tomte/.nf-test/tests/3d0ce9abadd4a6a601911a5efaf0d09c/work/4b/93768374513b45609e3cb3504a6cbb/qc_vcf_1000G_hg19.vcf.gz",
+                    "qc_vcf_1000G_hg19.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "vep_cache": [
                     [
@@ -68,8 +76,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.5"
+            "nextflow": "25.04.5"
         },
-        "timestamp": "2025-04-25T16:51:38.989457"
+        "timestamp": "2025-09-11T10:12:37.105541405"
     }
 }
