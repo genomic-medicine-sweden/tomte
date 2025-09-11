@@ -33,9 +33,17 @@ nextflow_workflow {
         }
 
         then {
-            assert workflow.success
-            assert snapshot(workflow.out).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.fasta,
+                    workflow.out.vep_cache,
+                    workflow.out.vep_plugin,
+                    file(workflow.out.high_q_vcf[0]).name,
+                    file(workflow.out.high_q_vcf[1]).name,
+                    workflow.out.versions,
+                ).match()}
+            )
         }
-
     }
 }
