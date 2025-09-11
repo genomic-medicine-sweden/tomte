@@ -43,11 +43,13 @@ nextflow_workflow {
             }
         }
 
-        run("GET_CHROM_SIZES") {
-            script "../../../../modules/local/get_chrom_sizes/main.nf"
+        run("SAMTOOLS_FAIDX", alias: "GET_CHROM_SIZES") {
+            script "../../../../modules/nf-core/samtools/faidx/main.nf"
             process {
                 """
-                input[0] = SAMTOOLS_FAIDX.out.fai
+                input[0] = GUNZIP_FASTA.out.gunzip
+                input[1] = SAMTOOLS_FAIDX.out.fai
+                input[2] = true
                 """
             }
         }
@@ -99,7 +101,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = STAR_ALIGN.out.wig
-                input[1] = GET_CHROM_SIZES.out.sizes.collect()
+                input[1] = GET_CHROM_SIZES.out.sizes.map{ _meta, sizes -> sizes }.collect() 
                 input[2] = STAR_ALIGN.out.spl_junc_tab
                 """
             }
