@@ -68,7 +68,7 @@ def annotate_with_drop_gene_name(
             ).merge(df_family_results, left_on="hgncSymbol", right_on="hgncSymbol")
         else:
             df_merged = df_genes.merge(
-                df_family_results, left_on="geneID", right_on="geneID"
+                df_family_results, on="geneID"
             )
         return df_merged
 

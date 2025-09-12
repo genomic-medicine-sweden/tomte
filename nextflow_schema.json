@@ -198,7 +198,7 @@
                 "skip_download_drop_mae_high_q_vcf": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Skip high quality VCF reference download for DROP MAE.",
+                    "description": "Skip download of reference VCF containing positions of SNPs that are usually called with high quality. Used in DROP MAE.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "vep_refs_download": {

@@ -33,7 +33,7 @@ workflow ANALYSE_TRANSCRIPTS {
     skip_drop_as                  // parameter: [mandatory] default: false
     skip_drop_mae                 // parameter: [mandatory] calculated from samplesheet
     skip_export_counts_drop       // parameter: [mandatory] default: true
-    ch_drop_mae_high_q_vcf        //   channel: [ path(ch_high_q_vcf), path(ch_high_q_vcf_tbi) ]
+    ch_drop_mae_high_q_vcf_tbi        //   channel: [ path(ch_high_q_vcf), path(ch_high_q_vcf_tbi) ]
     skip_stringtie                // parameter: [mandatory] default: false
 
     main:

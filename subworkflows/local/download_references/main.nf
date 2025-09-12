@@ -89,6 +89,6 @@ workflow DOWNLOAD_REFERENCES {
     gtf        = ch_downloaded_gtf        // channel: [ path(gtf) ]
     vep_cache  = ch_built_vep_cache       // channel: [ path(vep_cache) ]
     vep_plugin = ch_built_vep_plugin_file // channel: [ path(vep_plugin) ]
-    high_q_vcf = ch_high_q_vcf            // channel: [ path(ch_high_q_vcf), path(ch_high_q_vcf_tbi) ]
+    high_q_vcf_tbi = ch_high_q_vcf_tbi            // channel: [ path(ch_high_q_vcf), path(ch_high_q_vcf_tbi) ]
     versions   = ch_versions              // channel: [ path(versions.yml) ]
 }
