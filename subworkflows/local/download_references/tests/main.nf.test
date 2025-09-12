@@ -39,8 +39,8 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.vep_cache,
                     workflow.out.vep_plugin,
-                    file(workflow.out.high_q_vcf[0]).name,
-                    file(workflow.out.high_q_vcf[1]).name,
+                    file(workflow.out.high_q_vcf_tbi[0]).name,
+                    file(workflow.out.high_q_vcf_tbi[1]).name,
                     workflow.out.versions,
                 ).match()}
             )

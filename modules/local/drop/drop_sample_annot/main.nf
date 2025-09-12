@@ -4,7 +4,7 @@ process DROP_SAMPLE_ANNOT {
 
     input:
     tuple val(meta2), path(gtf)
-    tuple val(ids), val(single_ends), val(strandednesses), val(sex), val(vcf), val(tbi), path(bam), path(bai)
+    tuple val(ids), val(single_ends), val(strandednesses), val(sex), val(vcf), val(tbi), val(dna_ids), path(bam), path(bai)
     path(ref_gene_counts)
     path(ref_annot)
     val(drop_group_samples_ae)
@@ -12,7 +12,7 @@ process DROP_SAMPLE_ANNOT {
 
     output:
     path('sample_annotation.tsv'), emit: drop_annot
-    path "versions.yml"   , emit: versions
+    path "versions.yml"          , emit: versions
 
     when:
     // Exit if running this module with -profile conda / -profile mamba
@@ -21,6 +21,7 @@ process DROP_SAMPLE_ANNOT {
 
     script:
     def id = ids.join(' ')
+    def dna_id = dna_ids.join(' ')
     def single_end = single_ends.join(' ')
     def sex_drop = sex.collect { it.replace("1","M").replace("2","F").replace("0","NA").replace("other","NA") }.join(' ')
     def strandedness = strandednesses.join(' ')
@@ -51,6 +52,7 @@ process DROP_SAMPLE_ANNOT {
         --bam ${bam.join(' ')} \\
         --dna_vcf $dna_vcf_clean \\
         --samples $id \\
+        --dna_id $dna_id \\
         --strandedness $strandedness \\
         --single_end \$(cat updated_single_ends.txt) \\
         --sex $sex_drop \\

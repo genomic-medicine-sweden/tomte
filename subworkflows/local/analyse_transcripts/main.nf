@@ -41,7 +41,7 @@ workflow ANALYSE_TRANSCRIPTS {
 
     ch_bam_ds_bai
         .map { meta, bam, bai ->
-        [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.vcf, meta.vcf_tbi, bam, bai ]
+        [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.vcf, meta.vcf_tbi, meta.dna_id, bam, bai ]
         }
         .collect(flat:false)
         .map { it.sort { a, b -> a[0] <=> b[0] } } // Sort on ID
@@ -49,7 +49,7 @@ workflow ANALYSE_TRANSCRIPTS {
         .set { ch_bam_files_annot }
 
     ch_bam_files_annot
-        .map { _id, _single_end, _strandedness, _sex, _vcf, _vcf_tbi, bam, bai ->
+        .map { _id, _single_end, _strandedness, _sex, _vcf, _vcf_tbi, _dna_id, bam, bai ->
             [ bam, bai ]
         }
         .set{ ch_bam_bai_files }
@@ -122,7 +122,7 @@ workflow ANALYSE_TRANSCRIPTS {
                 genome,
                 ch_bam_bai_files,
                 ch_vcf_tbi_files,
-                ch_drop_mae_high_q_vcf
+                ch_drop_mae_high_q_vcf_tbi
             )
             ch_versions = ch_versions.mix( DROP_CONFIG_RUN_MAE.out.versions )
         }

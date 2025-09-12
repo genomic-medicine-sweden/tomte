@@ -78,9 +78,9 @@ workflow DOWNLOAD_REFERENCES {
             WGET_VCF_MAE_TBI(ch_input_hg19_tbi)
         }
 
-        ch_high_q_vcf = WGET_VCF_MAE.out.downloaded_file.concat(WGET_VCF_MAE_TBI.out.downloaded_file)
+        ch_high_q_vcf_tbi = WGET_VCF_MAE.out.downloaded_file.concat(WGET_VCF_MAE_TBI.out.downloaded_file)
     } else {
-        ch_high_q_vcf = Channel.empty()
+        ch_high_q_vcf_tbi = Channel.empty()
     }
 
 
@@ -89,6 +89,6 @@ workflow DOWNLOAD_REFERENCES {
     gtf        = ch_downloaded_gtf        // channel: [ path(gtf) ]
     vep_cache  = ch_built_vep_cache       // channel: [ path(vep_cache) ]
     vep_plugin = ch_built_vep_plugin_file // channel: [ path(vep_plugin) ]
-    high_q_vcf_tbi = ch_high_q_vcf_tbi            // channel: [ path(ch_high_q_vcf), path(ch_high_q_vcf_tbi) ]
+    high_q_vcf_tbi = ch_high_q_vcf_tbi    // channel: [ path(ch_high_q_vcf), path(ch_high_q_vcf_tbi) ]
     versions   = ch_versions              // channel: [ path(versions.yml) ]
 }

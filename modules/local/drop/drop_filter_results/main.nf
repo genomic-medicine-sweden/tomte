@@ -11,13 +11,13 @@ process DROP_FILTER_RESULTS {
     path out_drop_mae_tsv_in
 
     output:
-    path('*outrider_top_hits_research.tsv') , optional: true, emit: ae_out_research
-    path('*outrider_top_hits_clinical.tsv') , optional: true, emit: ae_out_clinical
-    path('*fraser_top_hits_research.tsv')   , optional: true, emit: as_out_research
-    path('*fraser_top_hits_clinical.tsv')   , optional: true, emit: as_out_clinical
-    path('*mae_top_hits_research.tsv')      , optional: true, emit: mae_out_research
-    path('*mae_top_hits_clinical.tsv')      , optional: true, emit: mae_out_clinical
-    path "versions.yml"                                      , emit: versions
+    path('*outrider_top_hits_research.tsv'), optional: true, emit: ae_out_research
+    path('*outrider_top_hits_clinical.tsv'), optional: true, emit: ae_out_clinical
+    path('*fraser_top_hits_research.tsv')  , optional: true, emit: as_out_research
+    path('*fraser_top_hits_clinical.tsv')  , optional: true, emit: as_out_clinical
+    path('*mae_top_hits_research.tsv')     , optional: true, emit: mae_out_research
+    path('*mae_top_hits_clinical.tsv')     , optional: true, emit: mae_out_clinical
+    path "versions.yml"                                     , emit: versions
 
     when:
     // Exit if running this module with -profile conda / -profile mamba

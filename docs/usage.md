@@ -114,15 +114,16 @@ genomic-medicine-sweden/tomte will requires the information given bellow.
 | `Sex`          | Sample sex. The valid input is M or 1 for male; F or 2 for female; NA, 0, or other if unknown                                                                                          | Optional                           |
 | `dna_vcf`      | Full path to DNA vcf file to run DROP's Mono Allelic expression (MAE) module file.                                                                                                     | Only if you want to run MAE        |
 | `dna_vcf_tbi`  | Full path to DNA vcf file's index file.                                                                                                                                                | Only if you want to run MAE        |
+| `dna_id_mae`   | ID of sample to use in your dna_vcf                                                                                                                                                    | Only if you want to run MAE        |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
-| case  | sample       | strandedness | fastq_1                          | fastq_2                          | Paternal     | Maternal     | Sex | dna_vcf             | dna_vcf_tbi             |
-| ----- | ------------ | ------------ | -------------------------------- | -------------------------------- | ------------ | ------------ | --- | ------------------- | ----------------------- |
-| fam_1 | CONTROL_REP1 | reverse      | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz |              |              | M   | AEG588A1_DNA.vcf.gz | AEG588A1_DNA.vcf.gz.tbi |
-| fam_1 | CONTROL_REP2 | reverse      | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz |              |              | F   |                     |                         |
-| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   |                     |                         |
-| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   |                     |                         |
+| case  | sample       | strandedness | fastq_1                          | fastq_2                          | Paternal     | Maternal     | Sex | dna_vcf             | dna_vcf_tbi             | dna_id       |
+| ----- | ------------ | ------------ | -------------------------------- | -------------------------------- | ------------ | ------------ | --- | ------------------- | ----------------------- | ------------ |
+| fam_1 | CONTROL_REP1 | reverse      | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz |              |              | M   | AEG588A1_DNA.vcf.gz | AEG588A1_DNA.vcf.gz.tbi | AEG588A1_DNA |
+| fam_1 | CONTROL_REP2 | reverse      | AEG588A2_S1_L003_R1_001.fastq.gz | AEG588A2_S1_L003_R2_001.fastq.gz |              |              | F   |                     |                         |              |
+| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L001_R1_001.fastq.gz | AEG588A3_S1_L001_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   |                     |                         |              |
+| fam_1 | PATIENT_1    | reverse      | AEG588A3_S1_L002_R1_001.fastq.gz | AEG588A3_S1_L002_R2_001.fastq.gz | CONTROL_REP1 | CONTROL_REP2 | M   |                     |                         |              |
 
 Here is an example of a samplesheet where BAM files are provided:
 

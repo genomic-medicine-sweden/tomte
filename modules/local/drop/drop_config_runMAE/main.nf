@@ -13,11 +13,11 @@ process DROP_CONFIG_RUN_MAE {
     tuple path(ref_vcf), path(ref_vcf_tbi)
 
     output:
-    path('config.yaml')             , emit: config_drop
-    path('output')                  , emit: drop_mae_out
-    path('MAE_results_*')           , emit: drop_mae_tsv
-    path('gene_name_mapping*')      , emit: drop_gene_name
-    path "versions.yml"             , emit: versions
+    path('config.yaml')       , emit: config_drop
+    path('output')            , emit: drop_mae_out
+    path('MAE_results_*')     , emit: drop_mae_tsv
+    path('gene_name_mapping*'), emit: drop_gene_name
+    path "versions.yml"       , emit: versions
 
     when:
     // Exit if running this module with -profile conda / -profile mamba

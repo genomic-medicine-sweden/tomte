@@ -69,8 +69,8 @@ workflow TOMTE {
                                                                         : downloads.fasta.map {it -> [[id:it.getSimpleName()], it]}.collect()
     ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : downloads.gtf.map {it -> [[id:it.getSimpleName()], it]}.collect()
-    ch_drop_mae_high_q_vcf        = params.drop_mae_high_q_vcf          ? Channel.fromPath(params.drop_mae_high_q_vcf).concat(Channel.fromPath(params.drop_mae_high_q_vcf_tbi)).collect()
-                                                                        : downloads.high_q_vcf.collect()
+    ch_drop_mae_high_q_vcf_tbi    = params.drop_mae_high_q_vcf          ? Channel.fromPath(params.drop_mae_high_q_vcf).concat(Channel.fromPath(params.drop_mae_high_q_vcf_tbi)).collect()
+                                                                        : downloads.high_q_vcf_tbi.collect()
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
                                                                         : Channel.empty().mix(downloads.vep_cache)
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
@@ -211,7 +211,7 @@ workflow TOMTE {
         params.skip_drop_as,
         skip_drop_mae,
         params.skip_export_counts_drop,
-        ch_drop_mae_high_q_vcf,
+        ch_drop_mae_high_q_vcf_tbi,
         params.skip_stringtie
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)

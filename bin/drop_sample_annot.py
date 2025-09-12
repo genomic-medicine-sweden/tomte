@@ -30,6 +30,7 @@ def write_sample_annotation_to_tsv(
     bam: str,
     dna_vcf: str,
     samples: str,
+    dna_id: str,
     strandedness: str,
     single_end: str,
     sex: str,
@@ -44,7 +45,7 @@ def write_sample_annotation_to_tsv(
         for index, id in enumerate(samples):
             sa_dict: dict = {}.fromkeys(SAMPLE_ANNOTATION_COLUMNS, "NA")
             sa_dict["RNA_ID"] = id
-            sa_dict["DNA_ID"] = id
+            sa_dict["DNA_ID"] = dna_id[index] if dna_id[index] not in ("", "NA") else id
             sa_dict["STRAND"] = is_stranded(strandedness[index])
             sa_dict["SEX"] = sex[index]
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
@@ -157,6 +158,13 @@ def parse_args(argv=None):
         help="corresponding sample name",
         required=True,
     )
+    parser.add_argument(
+        "--dna_id",
+        type=str,
+        nargs="+",
+        help="ID for sample in the vcf",
+        required=False,
+    )
     parser.add_argument("--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True)
     parser.add_argument("--sex", type=str, nargs="+", help="Sex of samples", required=True)
     parser.add_argument(
@@ -205,6 +213,7 @@ def main():
         bam=args.bam,
         dna_vcf=args.dna_vcf,
         samples=args.samples,
+        dna_id=args.dna_id,
         strandedness=args.strandedness,
         single_end=args.single_end,
         sex=args.sex,

@@ -51,7 +51,7 @@ nextflow_process {
                 """
                 input[0] = GUNZIP_FASTA.out.gunzip
                 input[1] = Channel.of([
-                            ['ACC5963A1'], [false], ['reverse'], ['NA'], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz"], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz.tbi"],
+                            ['ACC5963A1'], [false], ['reverse'], ['NA'], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz"], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz.tbi"],  ['ACC5963A1'],
                             file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
                             file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
                         ])

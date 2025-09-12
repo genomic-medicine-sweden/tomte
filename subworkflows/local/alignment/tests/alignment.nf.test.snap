@@ -62,8 +62,8 @@
                             "is_fastq": true
                         }
                     },
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,c51f22ea2c0e6e905e2a0c7038f3d3c9",
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,e67b4e66e52982d33cf06b099ebc29c6"
                 ]
             ],
             [
@@ -81,8 +81,8 @@
                             "is_fastq": true
                         }
                     },
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,c51f22ea2c0e6e905e2a0c7038f3d3c9",
+                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,e67b4e66e52982d33cf06b099ebc29c6"
                 ]
             ],
             "ACC5963A2.cram.crai",
@@ -109,6 +109,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-08-20T16:14:00.978870776"
+        "timestamp": "2025-09-12T18:05:03.867072564"
     }
 }

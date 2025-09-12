@@ -135,6 +135,11 @@
                 ],
                 "meta": ["vcf_tbi"],
                 "default": ""
+            },
+            "dna_id_mae": {
+                "type": "string",
+                "meta": ["dna_id"],
+                "default": "NA"
             }
         },
         "anyOf": [
