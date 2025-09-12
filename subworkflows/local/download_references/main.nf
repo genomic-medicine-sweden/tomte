@@ -78,7 +78,7 @@ workflow DOWNLOAD_REFERENCES {
             WGET_VCF_MAE_TBI(ch_input_hg19_tbi)
         }
 
-        ch_high_q_vcf = WGET_VCF_MAE.out.downloaded_file.zip(WGET_VCF_MAE_TBI.out.downloaded_file)
+        ch_high_q_vcf = WGET_VCF_MAE.out.downloaded_file.combine(WGET_VCF_MAE_TBI.out.downloaded_file)
     } else {
         ch_high_q_vcf = Channel.empty()
     }
