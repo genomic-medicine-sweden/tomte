@@ -69,7 +69,7 @@ workflow TOMTE {
                                                                         : downloads.fasta.map {it -> [[id:it.getSimpleName()], it]}.collect()
     ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : downloads.gtf.map {it -> [[id:it.getSimpleName()], it]}.collect()
-    ch_drop_mae_high_q_vcf        = params.drop_mae_high_q_vcf          ? Channel.fromPath(params.drop_mae_high_q_vcf).mix(Channel.fromPath(params.drop_mae_high_q_vcf_tbi)).collect()
+    ch_drop_mae_high_q_vcf        = params.drop_mae_high_q_vcf          ? Channel.fromPath(params.drop_mae_high_q_vcf).zip(Channel.fromPath(params.drop_mae_high_q_vcf_tbi)).collect()
                                                                         : downloads.high_q_vcf.collect()
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
                                                                         : Channel.empty().mix(downloads.vep_cache)
