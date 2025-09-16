@@ -10,7 +10,7 @@ process DROP_CONFIG_RUN_MAE {
     val(genome)
     tuple path(bam), path(bai)
     tuple path(vcf), path(vcf_tbi)
-    tuple path(ref_vcf), path(ref_vcf_tbi)
+    tuple path(drop_mae_high_q_vcf), path(drop_mae_high_q_vcf_tbi)
 
     output:
     path('config.yaml')       , emit: config_drop
@@ -46,7 +46,7 @@ process DROP_CONFIG_RUN_MAE {
         --gtf ${gtf} \\
         --drop_module MAE \\
         --genome_assembly $genome_assembly \\
-        --ref_vcf $ref_vcf \\
+        --drop_mae_high_q_vcf $drop_mae_high_q_vcf \\
         --output config.yaml
 
     snakemake mae --cores ${task.cpus} --rerun-triggers mtime $args

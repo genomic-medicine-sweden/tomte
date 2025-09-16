@@ -90,7 +90,7 @@ def update_config(
     padjcutoff: float,
     zscorecutoff: float,
     drop_module: str,
-    ref_vcf: str,
+    drop_mae_high_q_vcf: str,
 ) -> Dict:
     """
     Updates config file to add correct genome, gtf,
@@ -122,7 +122,7 @@ def update_config(
         config_copy["aberrantSplicing"]["padjCutoff"] = padjcutoff
     elif drop_module == "MAE":
         config_copy["mae"]["run"] = ["true"]
-        config_copy["mae"]["qcVcf"] = [ref_vcf]
+        config_copy["mae"]["qcVcf"] = [drop_mae_high_q_vcf]
     return config_copy
 
 
@@ -195,7 +195,7 @@ def parse_args(argv=None):
         required=True,
     )
     parser.add_argument(
-        "--ref_vcf",
+        "--drop_mae_high_q_vcf",
         type=str,
         help="Path to vcf used by MAE to make sure WGS vcf and bam file come from same individual",
         required=False,
@@ -220,7 +220,7 @@ def main():
         padjcutoff=args.padjcutoff,
         zscorecutoff=args.zscorecutoff,
         drop_module=args.drop_module,
-        ref_vcf=args.ref_vcf,
+        drop_mae_high_q_vcf=args.drop_mae_high_q_vcf,
     )
     write_yaml(out_path=args.output, yaml_object=master_config)
 
