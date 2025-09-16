@@ -310,7 +310,7 @@ DROP - monoallelic expression
 
 If you want to run [DROP](https://github.com/gagneurlab/drop) aberrant expression or aberrant splicing you have to provide reference counts, splice counts, and a sample sheet. The sample sheet should contain the columns as those in the [test sample annotation](../test_data/drop_data/sampleAnnotation.tsv), you can also add an optional sex column. You do not need to include the samples you are running through the pipeline in the sample sheet.
 
-IIf you want to run the DROP Mono Allelic Expression (MAE) module, you do NOT need to provide reference counts, splice counts, or a traditional sample sheet. Instead, the sample sheet should include the VCF or VCF.GZ file obtained from the DNA sample corresponding to your RNA samples. Additionally, you can provide a file specifying regions used to confirm that both DNA and RNA are from the same individual. If this file is not provided, it will be downloaded automatically if `--skip_download_drop_mae_high_q_vcf false` is specified
+If you only want to run the DROP Mono Allelic Expression (MAE) module, you do NOT need to provide reference counts, splice counts, or a traditional sample sheet. Instead, the sample sheet should include the VCF or VCF.GZ file obtained from the DNA sample corresponding to your RNA samples. Additionally, you can provide a file specifying regions used to confirm that both DNA and RNA are from the same individual. If this file is not provided, it will be downloaded automatically if `--skip_download_drop_mae_high_q_vcf false` is specified
 
 ###### Preparing your DROP control database
 
