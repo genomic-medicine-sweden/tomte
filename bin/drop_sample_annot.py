@@ -50,8 +50,8 @@ def write_sample_annotation_to_tsv(
             sa_dict["SEX"] = sex[index]
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
             sa_dict["RNA_BAM_FILE"] = bam[index]
-            value = dna_vcf[index].strip()
-            sa_dict["DNA_VCF_FILE"] = os.path.basename(value) if value not in ("", "NA") else "NA"
+            dna_vcf_for_index = dna_vcf[index].strip()
+            sa_dict["DNA_VCF_FILE"] = os.path.basename(dna_vcf_for_index) if dna_vcf_for_index not in ("", "NA") else "NA"
             sa_dict["DROP_GROUP"] = drop_group_sample + ",mae" if sa_dict["DNA_VCF_FILE"] != "NA" else drop_group_sample
             writer.writerow(sa_dict)
 
