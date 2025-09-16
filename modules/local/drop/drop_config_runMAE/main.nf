@@ -33,7 +33,7 @@ process DROP_CONFIG_RUN_MAE {
     TMPDIR=\$PWD
     HOME=\$PWD
 
-# Add the gtf to GENE_ANNOTATION column (necessary for samples that will be run through MAE)
+    # Fill missing GENE_ANNOTATION entries with the GTF basename (required for MAE analysis)
     awk -v val="${gtf_basename}" 'BEGIN{FS=OFS="\t"}
     NR==1 {for(i=1;i<=NF;i++) if(\$i=="GENE_ANNOTATION") col=i}
     NR>1 && \$col=="NA" {\$col=val}
