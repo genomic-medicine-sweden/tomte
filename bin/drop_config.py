@@ -6,7 +6,7 @@ import yaml
 from typing import Dict, Any
 from copy import deepcopy
 
-SCRIPT_VERSION = "2.1"
+SCRIPT_VERSION = "2.2"
 CONFIG_YAML = {
     "projectTitle": "DROP: Detection of RNA Outliers Pipeline",
     "root": None,

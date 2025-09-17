@@ -4,7 +4,6 @@ import argparse
 import csv
 from pandas import read_csv, DataFrame, concat, isna
 import os
-import re
 
 SCRIPT_VERSION = "1.3"
 SAMPLE_ANNOTATION_COLUMNS = [
@@ -36,7 +35,6 @@ def write_sample_annotation_to_tsv(
     sex: str,
     drop_group_sample: str,
     out_file: str,
-    gtf: str,
 ):
     """Write the Sample Annotation tsv file."""
     with open(out_file, "w") as tsv_file:

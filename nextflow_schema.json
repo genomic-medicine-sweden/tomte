@@ -210,17 +210,17 @@
                 "drop_mae_high_q_vcf": {
                     "type": "string",
                     "description": "Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual",
-                    "help_text": "Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual. It is mandatory to run DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.",
+                    "help_text": "Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual. The file is mandatory when running DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.",
                     "pattern": ".*\\.vcf(\\.gz)?$",
-                    "fa_icon": "fas fa-file-csv",
+                    "fa_icon": "fas fa-file",
                     "format": "file-path"
                 },
                 "drop_mae_high_q_vcf_tbi": {
                     "type": "string",
                     "description": "Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual",
-                    "help_text": "Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual. It is mandatory to run DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.",
+                    "help_text": "Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual. The file is mandatory when running DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.",
                     "pattern": "^\\S+(\\.vcf.tbi$|\\.vcf.gz.tbi$)",
-                    "fa_icon": "fas fa-file-csv",
+                    "fa_icon": "fas fa-file",
                     "format": "file-path"
                 }
             }

@@ -24,14 +24,17 @@ workflow DOWNLOAD_REFERENCES {
 
     main:
     ch_versions = Channel.empty()
+    ch_downloaded_fasta = Channel.empty()
+    ch_downloaded_gtf = Channel.empty()
+    ch_built_vep_cache = Channel.empty()
+    ch_built_vep_plugin_file = Channel.empty()
+    ch_high_q_vcf_tbi = Channel.empty()
 
     // Download fasta if not provided
     if ( download_fasta ) {
         FASTA_DOWNLOAD(ch_genome, ch_gencode_annotation_version, "fasta")
         ch_downloaded_fasta = FASTA_DOWNLOAD.out.fasta.collect()
         ch_versions = ch_versions.mix(FASTA_DOWNLOAD.out.versions)
-    } else {
-        ch_downloaded_fasta = Channel.empty()
     }
 
     // Download gtf if not provided
@@ -39,8 +42,6 @@ workflow DOWNLOAD_REFERENCES {
         GTF_DOWNLOAD(ch_genome, ch_gencode_annotation_version, "gtf")
         ch_downloaded_gtf = GTF_DOWNLOAD.out.gtf.collect()
         ch_versions = ch_versions.mix(GTF_DOWNLOAD.out.versions)
-    } else {
-        ch_downloaded_gtf = Channel.empty()
     }
 
     if ( download_gnomad ) {
@@ -60,9 +61,6 @@ workflow DOWNLOAD_REFERENCES {
         ch_built_vep_plugin_file = BUILD_VEP_CACHE.out.vep_plugin_file.collect()
         ch_versions = ch_versions.mix(WGET_DOWNLOAD.out.versions)
         ch_versions = ch_versions.mix(BUILD_VEP_CACHE.out.versions)
-    } else {
-        ch_built_vep_cache = Channel.empty()
-        ch_built_vep_plugin_file = Channel.empty()
     }
 
     if ( download_drop_mae_high_q_vcf ) {
@@ -77,12 +75,8 @@ workflow DOWNLOAD_REFERENCES {
             WGET_VCF_MAE(ch_input_hg19)
             WGET_VCF_MAE_TBI(ch_input_hg19_tbi)
         }
-
         ch_high_q_vcf_tbi = WGET_VCF_MAE.out.downloaded_file.concat(WGET_VCF_MAE_TBI.out.downloaded_file)
-    } else {
-        ch_high_q_vcf_tbi = Channel.empty()
     }
-
 
     emit:
     fasta      = ch_downloaded_fasta      // channel: [ path(fasta) ]

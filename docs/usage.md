@@ -114,7 +114,7 @@ genomic-medicine-sweden/tomte will requires the information given bellow.
 | `Sex`          | Sample sex. The valid input is M or 1 for male; F or 2 for female; NA, 0, or other if unknown                                                                                          | Optional                           |
 | `dna_vcf`      | Full path to DNA vcf file to run DROP's Mono Allelic expression (MAE) module file.                                                                                                     | Only if you want to run MAE        |
 | `dna_vcf_tbi`  | Full path to DNA vcf file's index file.                                                                                                                                                | Only if you want to run MAE        |
-| `dna_id_mae`   | ID of sample to use in your dna_vcf                                                                                                                                                    | Only if you want to run MAE        |
+| `dna_id_mae`   | ID of sample in the dna_vcf that matches the RNA in question                                                                                                                           | Only if you want to run MAE        |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 

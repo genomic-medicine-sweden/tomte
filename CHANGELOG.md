@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Parameters`
 
-- Added parameters drop_mae_high_q_vcf, drop_mae_high_q_vcf_tbi and skip_download_drop_mae_high_q_vcf to provide/download files required to run DROP MAE module [#260](https://github.com/genomic-medicine-sweden/tomte/pull/260)
+- Added parameters `drop_mae_high_q_vcf`, `drop_mae_high_q_vcf_tbi` and `skip_download_drop_mae_high_q_vcf` to provide/download files required to run DROP MAE module [#260](https://github.com/genomic-medicine-sweden/tomte/pull/260)
 
 | Old parameter | New parameter                     |
 | ------------- | --------------------------------- |
