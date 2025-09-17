@@ -13,6 +13,8 @@ include { paramsSummaryMultiqc            } from '../subworkflows/nf-core/utils_
 include { softwareVersionsToYAML          } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText          } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
 include { SAMTOOLS_CONVERT as CRAM_TO_BAM } from '../modules/nf-core/samtools/convert/main'
+include { VcfInSamplesheet                } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
+
 
 //
 // SUBWORKFLOW: local
@@ -188,7 +190,7 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(BAM_QC.out.versions)
 
-    def skip_drop_mae = computeSkipMaeFromSamplesheet(params.input as String)
+    def skip_drop_mae = !VcfInSamplesheet(params.input as String)
 
     ANALYSE_TRANSCRIPTS(
         ch_alignment.bam_bai,
@@ -376,26 +378,6 @@ def create_case_channel(List rows) {
     return case_info
 }
 
-// Function to decide skip_drop_mae from the samplesheet file
-def computeSkipMaeFromSamplesheet(String path) {
-    if (!path) return true
-    def f = new File(path)
-    if (!f.exists()) return true
-    def sep = path.toLowerCase().endsWith('.tsv') ? '\t' : ','
-    def lines = f.readLines()
-    if (!lines || lines.size() < 2) return true
-    def header = lines[0].split(sep, -1)*.trim()
-    def vcfIdx = header.indexOf('dna_vcf')
-    if (vcfIdx < 0) return true
-
-    int present = lines.tail().count { ln ->
-        if (!ln?.trim()) return false
-        def fields = ln.split(sep, -1)
-        def v = (vcfIdx < fields.size()) ? fields[vcfIdx].trim() : ''
-        v && v != 'NA'
-    }
-    return present == 0  // true only when 0 VCFs; false when ≥1
-}
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     THE END
