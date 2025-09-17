@@ -9,35 +9,20 @@ nextflow_process {
     tag "drop"
     tag "drop_sample_annot"
 
-    setup {
-        run("GUNZIP", alias: "GUNZIP_FASTA") {
-            script "../../../../../modules/nf-core/gunzip/main.nf"
-            process {
-                """
-                input[0] = Channel.of([
-                    [ id:'fasta' ],
-                    file("${projectDir}/test_data/grch37_chr21.fa.gz", checkIfExists: true)
-                ])
-                """
-            }
-        }
-    }
-
     test("Should run without failures") {
 
         when {
             process {
                 """
-                input[0] = GUNZIP_FASTA.out.gunzip
-                input[1] = Channel.of([
+                input[0] = Channel.of([
                             ['ACC5963A1'], [false], ['reverse'], ['NA'], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz"], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz.tbi"], ['ACC5963A1'],
                             file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
                             file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
                         ])
-                input[2] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
-                input[3] = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true)
-                input[4] = 'outrider'
-                input[5] = 'fraser'
+                input[1] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
+                input[2] = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true)
+                input[3] = 'outrider'
+                input[4] = 'fraser'
                 """
             }
         }

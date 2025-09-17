@@ -14,13 +14,13 @@
                 "FRASER_results_fraser--grch37_chr21.tsv"
             ],
             [
-                "versions.yml:md5,23ff4da7b53e5b375d67430636296c76"
+                "versions.yml:md5,9168f99c2936476f6d4cf56158e8accf"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-09-10T15:23:10.084983591"
+        "timestamp": "2025-09-17T10:01:34.279128034"
     }
 }

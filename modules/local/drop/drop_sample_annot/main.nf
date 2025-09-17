@@ -3,7 +3,6 @@ process DROP_SAMPLE_ANNOT {
     label 'process_low'
 
     input:
-    tuple val(meta2), path(gtf)
     tuple val(ids), val(single_ends), val(strandednesses), val(sex), val(vcf), val(tbi), val(dna_ids), path(bam), path(bai)
     path(ref_gene_counts)
     path(ref_annot)
@@ -59,7 +58,6 @@ process DROP_SAMPLE_ANNOT {
         $reference_count_file \\
         $reference_annotation \\
         --drop_group_sample $drop_group \\
-        --gtf ${gtf} \\
         --output sample_annotation.tsv
 
     cat <<-END_VERSIONS > versions.yml

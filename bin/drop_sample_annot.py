@@ -193,12 +193,7 @@ def parse_args(argv=None):
         help="Drop group of analyzed samples",
         required=False,
     )
-    parser.add_argument(
-        "--gtf",
-        type=str,
-        help="Specify gtf file name used to run",
-        required=True,
-    )
+
     parser.add_argument("--output", type=str, help="Path to save to", required=True)
     parser.add_argument("--version", action="version", version=SCRIPT_VERSION)
     return parser.parse_args(argv)
@@ -215,7 +210,6 @@ def main():
         strandedness=args.strandedness,
         single_end=args.single_end,
         sex=args.sex,
-        gtf=args.gtf,
         drop_group_sample=args.drop_group_sample,
         out_file="drop_annotation_given_samples.tsv",
     )

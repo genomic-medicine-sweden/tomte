@@ -60,19 +60,19 @@
             ],
             [
                 "versions.yml:md5,205c586a4c68fb4299b3bac50b12d80a",
-                "versions.yml:md5,31b05e908f6d6fbf36e1f2406222fa4f",
+                "versions.yml:md5,44fd2150acc4110438af373944242bd2",
                 "versions.yml:md5,4a8ef69b45dec5c4a3022e258e6b9b7f",
                 "versions.yml:md5,4be0342d9b24a9f0082899b1ef7728f2",
+                "versions.yml:md5,a670486c09affed32ebf95198e0a9a9a",
                 "versions.yml:md5,af99797f66dd8e19bde4746d8b5867fb",
-                "versions.yml:md5,d0db2ae9cd9907e53e164eb5dd290eed",
-                "versions.yml:md5,f7c74225a1706aafc3c0a1e40793293b"
+                "versions.yml:md5,d0db2ae9cd9907e53e164eb5dd290eed"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-09-12T18:43:21.356479106"
+        "timestamp": "2025-09-17T09:40:11.660165057"
     },
     "Should run with one sample": {
         "content": [
@@ -89,15 +89,15 @@
                 "finequagga_outrider_top_hits_research.tsv"
             ],
             [
+                "versions.yml:md5,44fd2150acc4110438af373944242bd2",
                 "versions.yml:md5,4be0342d9b24a9f0082899b1ef7728f2",
-                "versions.yml:md5,d0db2ae9cd9907e53e164eb5dd290eed",
-                "versions.yml:md5,f7c74225a1706aafc3c0a1e40793293b"
+                "versions.yml:md5,d0db2ae9cd9907e53e164eb5dd290eed"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-09-12T18:52:20.675436263"
+        "timestamp": "2025-09-17T09:43:21.846394897"
     }
 }
