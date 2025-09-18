@@ -9,7 +9,7 @@
    id="svg24936"
    xml:space="preserve"
    inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
-   sodipodi:docname="tomte_pipeline_metromap_2.svg"
+   sodipodi:docname="tomte_pipeline_metromap copy.svg"
    inkscape:export-filename="tomte_pipeline_metromap_2.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
@@ -28,8 +28,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.97070192"
-     inkscape:cx="826.20626"
-     inkscape:cy="522.81755"
+     inkscape:cx="655.71108"
+     inkscape:cy="523.84773"
      inkscape:window-width="2358"
      inkscape:window-height="1253"
      inkscape:window-x="119"
@@ -80,7 +80,7 @@
            id="tspan16-39"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.69195px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.25175;stroke-dasharray:none"
            x="155.24855"
-           y="135.62865">DROP- AE &amp; AS </tspan></text><text
+           y="135.62865">DROP </tspan></text><text
          xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.69195px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25175;stroke-dasharray:none"
          x="-51.7328"
@@ -614,7 +614,7 @@
            id="tspan16-39-1-3"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.69195px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.25175;stroke-dasharray:none"
            x="172.19131"
-           y="146.3392">filter drop results</tspan></text><g
+           y="146.3392">filter DROP results</tspan></text><g
          id="g37-9-3-9-0"
          transform="matrix(0.12884639,0,0,-0.12884639,-158.44632,304.07702)"><path
            id="path5862-5-0-1-1"
