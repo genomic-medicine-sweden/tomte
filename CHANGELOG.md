@@ -7,13 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Added the possibility to run drop monoallelic expression (MAE) analysis by providing DNA VCFs in the samplesheet [#260](https://github.com/genomic-medicine-sweden/tomte/pull/260)
 - Added test data for mae (qc_vcf_1000G_hg19_chr21.vcf.gz, qc_vcf_1000G_hg19_chr21.vcf.gz.tbi, test_ACC5963A1.vcf.gz and test_ACC5963A1.vcf.gz.tbi) [#261](https://github.com/genomic-medicine-sweden/tomte/pull/261)
 
 ### `Parameters`
 
-| Old parameter | New parameter |
-| ------------- | ------------- |
-|               |               |
+- Added parameters `drop_mae_high_q_vcf`, `drop_mae_high_q_vcf_tbi` and `skip_download_drop_mae_high_q_vcf` to provide/download files required to run DROP MAE module [#260](https://github.com/genomic-medicine-sweden/tomte/pull/260)
+
+| Old parameter | New parameter                     |
+| ------------- | --------------------------------- |
+|               | drop_mae_high_q_vcf               |
+|               | drop_mae_high_q_vcf_tbi           |
+|               | skip_download_drop_mae_high_q_vcf |
 
 > [!NOTE]
 > Parameter has been updated if both old and new parameter information is present.

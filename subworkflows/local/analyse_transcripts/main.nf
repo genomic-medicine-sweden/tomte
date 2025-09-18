@@ -7,6 +7,7 @@ include { GFFCOMPARE                        } from '../../../modules/nf-core/gff
 include { DROP_SAMPLE_ANNOT                 } from '../../../modules/local/drop/drop_sample_annot'
 include { DROP_CONFIG_RUN_AE                } from '../../../modules/local/drop/drop_config_runAE'
 include { DROP_CONFIG_RUN_AS                } from '../../../modules/local/drop/drop_config_runAS'
+include { DROP_CONFIG_RUN_MAE                } from '../../../modules/local/drop/drop_config_runMAE'
 include { DROP_FILTER_RESULTS               } from '../../../modules/local/drop/drop_filter_results'
 include { DROP_PUT_TOGETHER_EXPORTED_COUNTS } from '../../../modules/local/drop/drop_put_together_exported_counts'
 
@@ -16,6 +17,7 @@ workflow ANALYSE_TRANSCRIPTS {
     ch_bam_ds_bai                 //   channel: [mandatory] [ val(meta), [ path(bam) , path(bai) ] ]
     ch_gtf                        //   channel: [mandatory] [ val(meta), [ path(gtf) ] ]
     ch_fasta_fai                  //   channel: [mandatory] [ val(meta), [ path(fasta), path(fai) ]
+    ch_dict                       //   channel:   [mandatory] [ val(meta), path(dict) ]
     ch_ref_drop_count_file        //   channel: [optional]  [ path(tsv) ]
     ch_ref_drop_annot_file        //   channel: [optional]  [ path(tsv) ]
     ch_ref_drop_splice_folder     //   channel: [optional]  [ path(folder) ]
@@ -29,7 +31,9 @@ workflow ANALYSE_TRANSCRIPTS {
     case_info                     //   channel: [optional]  [ val(case_id) ]
     skip_drop_ae                  // parameter: [mandatory] default: false
     skip_drop_as                  // parameter: [mandatory] default: false
+    skip_drop_mae                 // parameter: [mandatory] calculated from samplesheet
     skip_export_counts_drop       // parameter: [mandatory] default: true
+    ch_drop_mae_high_q_vcf_tbi    //   channel: [ path(ch_high_q_vcf), path(ch_high_q_vcf_tbi) ]
     skip_stringtie                // parameter: [mandatory] default: false
 
     main:
@@ -37,7 +41,7 @@ workflow ANALYSE_TRANSCRIPTS {
 
     ch_bam_ds_bai
         .map { meta, bam, bai ->
-        [ meta.id, meta.single_end, meta.strandedness, meta.sex, bam, bai ]
+        [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.vcf, meta.vcf_tbi, meta.dna_id, bam, bai ]
         }
         .collect(flat:false)
         .map { it.sort { a, b -> a[0] <=> b[0] } } // Sort on ID
@@ -45,13 +49,23 @@ workflow ANALYSE_TRANSCRIPTS {
         .set { ch_bam_files_annot }
 
     ch_bam_files_annot
-        .map { _id, _single_end, _strandedness, _sex, bam, bai ->
+        .map { _id, _single_end, _strandedness, _sex, _vcf, _vcf_tbi, _dna_id, bam, bai ->
             [ bam, bai ]
         }
         .set{ ch_bam_bai_files }
 
+    // Make channel containing only vcf and its index, removing NAs in case those files are present only for some samples
+    ch_bam_ds_bai
+        .filter { meta, bam, bai ->
+            meta.vcf && meta.vcf != "NA" && meta.vcf.toString() != "" && meta.vcf.toString().trim() != ""
+        }
+        .map { meta, bam, bai ->
+            [ meta.vcf, meta.vcf_tbi ]
+        }
+        .set { ch_vcf_tbi_files }
+
     // DROP
-    if ( !skip_drop_ae | !skip_drop_as ) {
+    if ( !skip_drop_ae | !skip_drop_as | !skip_drop_mae ) {
         // Generates count files for samples and merges them with reference count file
         DROP_SAMPLE_ANNOT(
             ch_bam_files_annot,
@@ -61,6 +75,7 @@ workflow ANALYSE_TRANSCRIPTS {
             drop_group_samples_as
         )
 
+        // Generates config file and runs Aberrant expression module
         if ( !skip_drop_ae ) {
             DROP_CONFIG_RUN_AE(
                 ch_fasta_fai,
@@ -97,11 +112,30 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_versions = ch_versions.mix( DROP_CONFIG_RUN_AS.out.versions )
         }
 
+        // Generates config file and runs monoallelic expression module
+        if ( !skip_drop_mae ) {
+            DROP_CONFIG_RUN_MAE(
+                ch_fasta_fai,
+                ch_gtf,
+                ch_dict,
+                DROP_SAMPLE_ANNOT.out.drop_annot,
+                genome,
+                ch_bam_bai_files,
+                ch_vcf_tbi_files,
+                ch_drop_mae_high_q_vcf_tbi
+            )
+            ch_versions = ch_versions.mix( DROP_CONFIG_RUN_MAE.out.versions )
+        }
+
         ch_out_drop_gene_name = !skip_drop_ae ? DROP_CONFIG_RUN_AE.out.drop_gene_name.collect()
-            : DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
+            : !skip_drop_as  ? DROP_CONFIG_RUN_AS.out.drop_gene_name.collect()
+            : DROP_CONFIG_RUN_MAE.out.drop_gene_name.collect()
+
         ch_out_drop_ae_rds    = !skip_drop_ae ? DROP_CONFIG_RUN_AE.out.drop_ae_rds.collect()
             : Channel.empty()
         ch_out_drop_as_tsv    = !skip_drop_as ? DROP_CONFIG_RUN_AS.out.drop_as_tsv.collect()
+            : Channel.empty()
+        ch_out_drop_mae_tsv   = !skip_drop_mae ? DROP_CONFIG_RUN_MAE.out.drop_mae_tsv.collect()
             : Channel.empty()
 
         DROP_FILTER_RESULTS(
@@ -109,7 +143,8 @@ workflow ANALYSE_TRANSCRIPTS {
             ch_gene_panel_clinical_filter.ifEmpty([]),
             ch_out_drop_ae_rds.ifEmpty([]),
             ch_out_drop_gene_name,
-            ch_out_drop_as_tsv.ifEmpty([])
+            ch_out_drop_as_tsv.ifEmpty([]),
+            ch_out_drop_mae_tsv.ifEmpty([])
         )
 
         ch_versions = ch_versions.mix( DROP_SAMPLE_ANNOT.out.versions )

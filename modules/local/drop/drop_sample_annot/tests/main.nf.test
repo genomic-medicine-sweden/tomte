@@ -3,6 +3,7 @@ nextflow_process {
     name "Test Process DROP_SAMPLE_ANNOT"
     script "../main.nf"
     process "DROP_SAMPLE_ANNOT"
+    config "./nextflow.config"
     tag "modules"
     tag "modules_local"
     tag "drop"
@@ -14,10 +15,10 @@ nextflow_process {
             process {
                 """
                 input[0] = Channel.of([
-                        ['ACC5963A1'], [false], ['reverse'], ['NA'],
-                        file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
-                        file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
-                    ])
+                            ['ACC5963A1'], [false], ['reverse'], ['NA'], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz"], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz.tbi"], ['ACC5963A1'],
+                            file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
+                            file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
+                        ])
                 input[1] = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true)
                 input[2] = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true)
                 input[3] = 'outrider'

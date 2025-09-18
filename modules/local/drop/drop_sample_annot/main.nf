@@ -2,10 +2,8 @@ process DROP_SAMPLE_ANNOT {
     tag "DROP_annot_file"
     label 'process_low'
 
-    container "docker.io/clinicalgenomics/drop:1.4.0"
-
     input:
-    tuple val(ids), val(single_ends), val(strandednesses), val(sex), path(bam), path(bai)
+    tuple val(ids), val(single_ends), val(strandednesses), val(sex), val(vcf), val(tbi), val(dna_ids), path(bam), path(bai)
     path(ref_gene_counts)
     path(ref_annot)
     val(drop_group_samples_ae)
@@ -13,7 +11,7 @@ process DROP_SAMPLE_ANNOT {
 
     output:
     path('sample_annotation.tsv'), emit: drop_annot
-    path "versions.yml"   , emit: versions
+    path "versions.yml"          , emit: versions
 
     when:
     // Exit if running this module with -profile conda / -profile mamba
@@ -22,12 +20,14 @@ process DROP_SAMPLE_ANNOT {
 
     script:
     def id = ids.join(' ')
+    def dna_id = dna_ids.join(' ')
     def single_end = single_ends.join(' ')
     def sex_drop = sex.collect { it.replace("1","M").replace("2","F").replace("0","NA").replace("other","NA") }.join(' ')
     def strandedness = strandednesses.join(' ')
     def drop_group = "${drop_group_samples_ae},${drop_group_samples_as}".replace(" ","").replace("[","").replace("]","")
     def reference_count_file = ref_gene_counts ? "--ref_count_file ${ref_gene_counts}" : ''
     def reference_annotation = ref_annot ? "--ref_annot ${ref_annot}" : ''
+    def dna_vcf_clean = vcf.collect { it.toString() == "" || it.toString().trim() == "" ? "NA" : it }.join(' ')
     """
     # Single_end values are only provided if you start from fastq
     SINGLE_ENDS=(${single_end})
@@ -49,7 +49,9 @@ process DROP_SAMPLE_ANNOT {
 
     drop_sample_annot.py \\
         --bam ${bam.join(' ')} \\
+        --dna_vcf $dna_vcf_clean \\
         --samples $id \\
+        --dna_id $dna_id \\
         --strandedness $strandedness \\
         --single_end \$(cat updated_single_ends.txt) \\
         --sex $sex_drop \\

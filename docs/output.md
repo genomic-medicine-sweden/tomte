@@ -19,7 +19,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [`Tracks`](#tracks)
   - [`Tracks`](#tracks-1) outputs tracks
 - [`Transcript analysis`](#transcript-analysis)
-  - [`DROP`](#drop) aberrant expression and aberrant splicing discovery
+  - [`DROP`](#drop) aberrant expression, aberrant splicing, and monoallelic expression discovery
   - [`StringTie`](#stringtie) guided transcript assembly
   - [`GffCompare`](#gffcompare) annnotation of guided transcript assembly
 - [`Variant Calling`](#variant-calling)
@@ -111,7 +111,7 @@ Outputs both junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
 
 #### DROP
 
-[`DROP`](https://github.com/gagneurlab/drop/) is a pipeline that detects aberrant expression, aberrant splicing, and monoallelic expression. For the time being, aberrant expression and aberrant splicing modules are run. Afterwards another script is run to filter results.
+[`DROP`](https://github.com/gagneurlab/drop/) is a pipeline that detects aberrant expression, aberrant splicing, and monoallelic expression. Afterwards another script is run to filter results.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -121,6 +121,8 @@ Outputs both junction tracks and bigwig files. For wigToBigWig [`UCSC wigToBigWi
   - `OUTRIDER_provided_samples_top_hits_filtered.tsv`: filters OUTRIDER_provided_samples_top_hits according to genes provided by gene_panel_clinical_filter.
   - `FRASER_provided_samples_top_hits.tsv`: provides the aberrant spliced events reported by FRASER.
   - `FRASER_provided_samples_top_hits_filtered.tsv`: filters FRASER_provided_samples_top_hits according to genes provided by gene_panel_clinical_filter.
+  - `MAE_provided_samples_top_hits.tsv`: provides the monoallelic expression events reported by MAE.
+  - `MAE_provided_samples_top_hits_filtered.tsv`: filters MAE_provided_samples_top_hits according to genes provided by gene_panel_clinical_filter.
 
 </details>
 

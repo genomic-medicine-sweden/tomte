@@ -5,7 +5,7 @@ import csv
 from pandas import read_csv, DataFrame, concat, isna
 import os
 
-SCRIPT_VERSION = "1.2"
+SCRIPT_VERSION = "1.3"
 SAMPLE_ANNOTATION_COLUMNS = [
     "RNA_ID",
     "RNA_BAM_FILE",
@@ -27,7 +27,9 @@ SAMPLE_ANNOTATION_COLUMNS = [
 
 def write_sample_annotation_to_tsv(
     bam: str,
+    dna_vcf: str,
     samples: str,
+    dna_id: str,
     strandedness: str,
     single_end: str,
     sex: str,
@@ -41,11 +43,14 @@ def write_sample_annotation_to_tsv(
         for index, id in enumerate(samples):
             sa_dict: dict = {}.fromkeys(SAMPLE_ANNOTATION_COLUMNS, "NA")
             sa_dict["RNA_ID"] = id
-            sa_dict["DROP_GROUP"] = drop_group_sample
+            sa_dict["DNA_ID"] = dna_id[index] if dna_id[index] not in ("", "NA") else id
             sa_dict["STRAND"] = is_stranded(strandedness[index])
             sa_dict["SEX"] = sex[index]
             sa_dict["PAIRED_END"] = is_paired_end(single_end[index])
             sa_dict["RNA_BAM_FILE"] = bam[index]
+            dna_vcf_for_index = dna_vcf[index].strip()
+            sa_dict["DNA_VCF_FILE"] = os.path.basename(dna_vcf_for_index) if dna_vcf_for_index not in ("", "NA") else "NA"
+            sa_dict["DROP_GROUP"] = drop_group_sample + ",mae" if sa_dict["DNA_VCF_FILE"] != "NA" else drop_group_sample
             writer.writerow(sa_dict)
 
 
@@ -98,9 +103,7 @@ def write_final_annot_to_tsv(ref_count_file: str, ref_annot: str, out_file: str)
             "No reference samples were provided by the user see usage of --ref_count_file and --ref_annot if you want to provide reference samples"
         )
         if df_samples.shape[0] < 50:
-            print(
-                "At least 30 samples are required for Aberrant Splicing and 50 for Aberrant expression"
-            )
+            print("At least 30 samples are required for Aberrant Splicing and 50 for Aberrant expression")
             print(f"Only {df_samples.shape[0]} samples were provided by the user")
         df_samples.fillna("NA", inplace=True)
         df_samples["COUNT_MODE"] = "IntersectionStrict"
@@ -140,6 +143,13 @@ def parse_args(argv=None):
         required=True,
     )
     parser.add_argument(
+        "--dna_vcf",
+        type=str,
+        nargs="+",
+        help="DNA VCF file(s) to perform MAE on the analyzed sample(s)",
+        required=True,
+    )
+    parser.add_argument(
         "--samples",
         type=str,
         nargs="+",
@@ -147,8 +157,13 @@ def parse_args(argv=None):
         required=True,
     )
     parser.add_argument(
-        "--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True
+        "--dna_id",
+        type=str,
+        nargs="+",
+        help="ID(s) for sample(s) in the vcf(s)",
+        required=False,
     )
+    parser.add_argument("--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True)
     parser.add_argument("--sex", type=str, nargs="+", help="Sex of samples", required=True)
     parser.add_argument(
         "--single_end",
@@ -178,6 +193,7 @@ def parse_args(argv=None):
         help="Drop group of analyzed samples",
         required=False,
     )
+
     parser.add_argument("--output", type=str, help="Path to save to", required=True)
     parser.add_argument("--version", action="version", version=SCRIPT_VERSION)
     return parser.parse_args(argv)
@@ -188,7 +204,9 @@ def main():
     args = parse_args()
     write_sample_annotation_to_tsv(
         bam=args.bam,
+        dna_vcf=args.dna_vcf,
         samples=args.samples,
+        dna_id=args.dna_id,
         strandedness=args.strandedness,
         single_end=args.single_end,
         sex=args.sex,

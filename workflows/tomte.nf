@@ -13,6 +13,8 @@ include { paramsSummaryMultiqc            } from '../subworkflows/nf-core/utils_
 include { softwareVersionsToYAML          } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText          } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
 include { SAMTOOLS_CONVERT as CRAM_TO_BAM } from '../modules/nf-core/samtools/convert/main'
+include { VcfInSamplesheet                } from '../subworkflows/local/utils_nfcore_tomte_pipeline'
+
 
 //
 // SUBWORKFLOW: local
@@ -59,7 +61,8 @@ workflow TOMTE {
         !params.fasta,
         !params.gtf,
         !params.skip_download_vep && !params.vep_cache,
-        !params.skip_download_gnomad
+        !params.skip_download_gnomad,
+        !params.skip_download_drop_mae_high_q_vcf
     ).set { downloads }
     ch_versions = ch_versions.mix(DOWNLOAD_REFERENCES.out.versions)
 
@@ -68,6 +71,8 @@ workflow TOMTE {
                                                                         : downloads.fasta.map {it -> [[id:it.getSimpleName()], it]}.collect()
     ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : downloads.gtf.map {it -> [[id:it.getSimpleName()], it]}.collect()
+    ch_drop_mae_high_q_vcf_tbi    = params.drop_mae_high_q_vcf          ? Channel.fromPath(params.drop_mae_high_q_vcf).concat(Channel.fromPath(params.drop_mae_high_q_vcf_tbi)).collect()
+                                                                        : downloads.high_q_vcf_tbi.collect()
     ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
                                                                         : Channel.empty().mix(downloads.vep_cache)
     ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
@@ -185,12 +190,14 @@ workflow TOMTE {
     )
     ch_versions = ch_versions.mix(BAM_QC.out.versions)
 
+    def skip_drop_mae = !VcfInSamplesheet(params.input as String)
 
     ANALYSE_TRANSCRIPTS(
         ch_alignment.bam_bai,
         ch_alignment.bam_ds_bai,
         ch_references.gtf,
         ch_references.fasta_fai,
+        ch_references.sequence_dict,
         ch_ref_drop_count_file,
         ch_ref_drop_annot_file,
         ch_ref_drop_splice_folder,
@@ -204,7 +211,9 @@ workflow TOMTE {
         ch_case_info,
         params.skip_drop_ae,
         params.skip_drop_as,
+        skip_drop_mae,
         params.skip_export_counts_drop,
+        ch_drop_mae_high_q_vcf_tbi,
         params.skip_stringtie
     )
     ch_versions = ch_versions.mix(ANALYSE_TRANSCRIPTS.out.versions)

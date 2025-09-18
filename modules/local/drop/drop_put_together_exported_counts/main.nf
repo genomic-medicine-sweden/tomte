@@ -2,8 +2,6 @@ process DROP_PUT_TOGETHER_EXPORTED_COUNTS {
     tag "DROP_put_together_exported_counts"
     label 'process_low'
 
-    container "docker.io/clinicalgenomics/drop:1.4.0"
-
     input:
     path(exported_counts_ae)
     path(exported_counts_as)
