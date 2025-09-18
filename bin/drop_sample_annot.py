@@ -146,7 +146,7 @@ def parse_args(argv=None):
         "--dna_vcf",
         type=str,
         nargs="+",
-        help="DNA VCF files to perform MAE on the analyzed samples",
+        help="DNA VCF file(s) to perform MAE on the analyzed sample(s)",
         required=True,
     )
     parser.add_argument(
@@ -160,7 +160,7 @@ def parse_args(argv=None):
         "--dna_id",
         type=str,
         nargs="+",
-        help="ID for sample in the vcf",
+        help="ID(s) for sample(s) in the vcf(s)",
         required=False,
     )
     parser.add_argument("--strandedness", type=str, nargs="+", help="strandedness of RNA", required=True)
