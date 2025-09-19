@@ -12,22 +12,22 @@
             ],
             "finequagga_split_rmdup.vcf.gz.tbi",
             [
+                "versions.yml:md5,03409a4813868edf53a087d36bad926d",
+                "versions.yml:md5,18e566dd95659514efef90bdebc5f255",
                 "versions.yml:md5,4260f81272bc7976004cb71c220ac7c4",
-                "versions.yml:md5,53dc76802ccd9d3604c413cea5810d43",
-                "versions.yml:md5,938667310a4b39815b7d6c59e90be868",
-                "versions.yml:md5,a0fd1d34c375ce6de3c12f7677455568",
+                "versions.yml:md5,58703c201a665a0c1ffa390bed39ffb7",
+                "versions.yml:md5,9820df92df8bab4d4edace8f22304025",
                 "versions.yml:md5,a265f17fbd2eeb9eda1f4e876bc1ebcc",
-                "versions.yml:md5,d2143d7224a883879775c66b56ca2912",
-                "versions.yml:md5,dfa95053efa28dd1e5be7fa129fe83b9",
+                "versions.yml:md5,ba0f18a14d11975cd9948c3e45020159",
                 "versions.yml:md5,f375509729cb99d7a6f8073446f84f00",
-                "versions.yml:md5,ff29ff5a2e422142521dd23401bb87f8"
+                "versions.yml:md5,fbd1d763582bd3c53ed1c0e81d00c1b9"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-07-29T15:37:21.545753406"
+        "timestamp": "2025-09-19T11:09:27.570770888"
     },
     "Should run without failures": {
         "content": [
@@ -43,20 +43,20 @@
             "finequagga_split_rmdup.vcf.gz.tbi",
             [
                 "versions.yml:md5,00ddd8c72d45720f971db98815fbfc0e",
+                "versions.yml:md5,03409a4813868edf53a087d36bad926d",
+                "versions.yml:md5,18e566dd95659514efef90bdebc5f255",
                 "versions.yml:md5,4260f81272bc7976004cb71c220ac7c4",
-                "versions.yml:md5,53dc76802ccd9d3604c413cea5810d43",
-                "versions.yml:md5,938667310a4b39815b7d6c59e90be868",
-                "versions.yml:md5,a0fd1d34c375ce6de3c12f7677455568",
+                "versions.yml:md5,58703c201a665a0c1ffa390bed39ffb7",
                 "versions.yml:md5,a265f17fbd2eeb9eda1f4e876bc1ebcc",
-                "versions.yml:md5,d2143d7224a883879775c66b56ca2912",
+                "versions.yml:md5,ba0f18a14d11975cd9948c3e45020159",
                 "versions.yml:md5,f375509729cb99d7a6f8073446f84f00",
-                "versions.yml:md5,ff29ff5a2e422142521dd23401bb87f8"
+                "versions.yml:md5,fbd1d763582bd3c53ed1c0e81d00c1b9"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-07-29T15:36:43.313979082"
+        "timestamp": "2025-09-19T11:08:52.808786305"
     }
 }
