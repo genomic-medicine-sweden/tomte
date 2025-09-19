@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Solved issue [#253](https://github.com/genomic-medicine-sweden/tomte/issues/258) by substituting local/get_chrom_sizes by the nf-core module samtools/faidx [#258](https://github.com/genomic-medicine-sweden/tomte/pull/258)
 - Installed samtools/fastq to convert input BAM/CRAM files to FASTQ format to obtain Salmon counts solving issue [#252](https://github.com/genomic-medicine-sweden/tomte/issues/252) [#259](https://github.com/genomic-medicine-sweden/tomte/pull/259)
 - Updated pipeline metromap [#263](https://github.com/genomic-medicine-sweden/tomte/pull/263)
-- Updated bcftools/merge, bcftools/mpileup, bcftools/norm, bcftools/stats, bcftools/view, ensemblvep/filtervep, ensemblvep/vep, fastp, gatk4/asereadcounter, gatk4/bedtointervallist, gatk4/createsequencedictionary, gatk4/haplotypecaller, gatk4/splitncigarreads, gatk4/variantfiltration, multiqc, picard/collectinsertsizemetrics, picard/collectrnaseqmetrics, samtools/convert, samtools/faidx, samtools/fastq, samtools/index, samtools/view
+- Updated bcftools/merge, bcftools/mpileup, bcftools/norm, bcftools/stats, bcftools/view, ensemblvep/filtervep, ensemblvep/vep, fastp, gatk4/asereadcounter, gatk4/bedtointervallist, gatk4/createsequencedictionary, gatk4/haplotypecaller, gatk4/splitncigarreads, gatk4/variantfiltration, multiqc, picard/collectinsertsizemetrics, picard/collectrnaseqmetrics, samtools/convert, samtools/faidx, samtools/fastq, samtools/index, samtools/view [#263](https://github.com/genomic-medicine-sweden/tomte/pull/263)
 
 | Tool                            | Old version | New version |
 | ------------------------------- | ----------- | ----------- |
