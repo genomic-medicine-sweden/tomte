@@ -4,10 +4,10 @@
             35,
             {
                 "BEDTOINTERVALLIST": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "BUILD_DICT": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "BUILD_STAR_GENOME": {
                     "star": "2.7.11b",
@@ -26,13 +26,13 @@
                     "samtools": 1.21
                 },
                 "FASTP": {
-                    "fastp": "0.24.0"
+                    "fastp": "1.0.1"
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
                 },
                 "GET_CHROM_SIZES": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "GET_RRNA_TRANSCRIPTS": {
                     "get_rrna_transcripts": "v1.0"
@@ -47,10 +47,10 @@
                     "gunzip": 1.13
                 },
                 "PICARD_COLLECTINSERTSIZEMETRICS": {
-                    "picard": "3.3.0"
+                    "picard": "3.4.0"
                 },
                 "PICARD_COLLECTRNASEQMETRICS": {
-                    "picard": "3.3.0"
+                    "picard": "3.4.0"
                 },
                 "SALMON_INDEX": {
                     "salmon": "1.10.3"
@@ -59,16 +59,16 @@
                     "salmon": "1.10.3"
                 },
                 "SAMTOOLS_FAIDX_GENOME": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_FASTQ": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_VIEW": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "STAR_ALIGN": {
                     "star": "2.7.11b",
@@ -82,7 +82,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "genomic-medicine-sweden/tomte": "v4.1.0dev"
+                    "genomic-medicine-sweden/tomte": "v4.1.0"
                 }
             },
             [
@@ -192,7 +192,6 @@
                 "fastqc/ACC5963A2_id1_2_fastqc.zip",
                 "multiqc",
                 "multiqc/multiqc_data",
-                "multiqc/multiqc_data/BETA-multiqc.parquet",
                 "multiqc/multiqc_data/fastp-insert-size-plot.txt",
                 "multiqc/multiqc_data/fastp-seq-content-gc-plot_Read_1_After_filtering.txt",
                 "multiqc/multiqc_data/fastp-seq-content-gc-plot_Read_1_Before_filtering.txt",
@@ -225,6 +224,7 @@
                 "multiqc/multiqc_data/fastqc_top_overrepresented_sequences_table.txt",
                 "multiqc/multiqc_data/llms-full.txt",
                 "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
                 "multiqc/multiqc_data/multiqc_citations.txt",
                 "multiqc/multiqc_data/multiqc_data.json",
                 "multiqc/multiqc_data/multiqc_fastp.txt",
@@ -237,6 +237,7 @@
                 "multiqc/multiqc_data/multiqc_star.txt",
                 "multiqc/multiqc_data/picard_MarkIlluminaAdapters_histogram.txt",
                 "multiqc/multiqc_data/picard_MeanQualityByCycle_histogram.txt",
+                "multiqc/multiqc_data/picard_MeanQualityByCycle_histogram_1.txt",
                 "multiqc/multiqc_data/picard_QualityScoreDistribution_histogram.txt",
                 "multiqc/multiqc_data/picard_insert_size_Counts.txt",
                 "multiqc/multiqc_data/picard_insert_size_Percentages.txt",
@@ -307,8 +308,8 @@
             [
                 "ACC5963A2.ReadsPerGene.out.tab:md5,ec7fa257059d2545e07635a3e6101997",
                 "ACC5963A2.SJ.out.tab:md5,dea5d6b61390b2e01699441ad0c56b05",
-                "ACC5963A2.Signal.Unique.str1.out.wig:md5,57216a6d909e526d0447c1967eae177c",
-                "ACC5963A2.Signal.UniqueMultiple.str1.out.wig:md5,0a82d7eba84b95ae25d135e994a44c28",
+                "ACC5963A2.Signal.Unique.str1.out.wig:md5,75d340d4376d489b0333e86b71cd6abc",
+                "ACC5963A2.Signal.UniqueMultiple.str1.out.wig:md5,cd24fce0ca9d2cde46af931c5afaa69d",
                 "GRCh37_gffread_output.fasta:md5,7dbf3195d06f480fa5b2421004580bdd",
                 "grch37_chr21.dict:md5,53d95c36db0422d29db02c8a8da56e43",
                 "grch37_chr21.fa:md5,e9ce36e75cd57d255ad64eb2ecca4dd0",
@@ -337,9 +338,9 @@
                 "sjdbList.fromGTF.out.tab:md5,e394912ab5667171a27e8897d116f8f0",
                 "sjdbList.out.tab:md5,12efd0795aa3db892113dcc09c5843f1",
                 "transcriptInfo.tab:md5,b2726efcc116cb22abd4479168dba574",
-                "ACC5963A2.fastp.json:md5,6b9755d6b949a5af8167785849fb6424",
+                "ACC5963A2.fastp.json:md5,eae41c2566564a41ca34fd3d7a4c7df4",
                 "ACC5963A2_1.fastp.fastq.gz:md5,35894d5840555bc9360f7f81adf953e2",
-                "ACC5963A2_2.fastp.fastq.gz:md5,6e8779ccbfdf584f2daf3aa33999f593"
+                "ACC5963A2_2.fastp.fastq.gz:md5,11ba65c74648e7749a21ed7630451fe4"
             ],
             [
                 [
@@ -348,7 +349,7 @@
                 ],
                 [
                     "ACC5963A2.Aligned.sortedByCoord.out.bam",
-                    "87218b31373548955734d112cda151f"
+                    "7f18073697ac0331975ab247307f546b"
                 ],
                 [
                     "ACC5963A3.bam",
@@ -374,6 +375,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-09-17T09:23:58.951175793"
+        "timestamp": "2025-09-18T16:16:54.479365567"
     }
 }
