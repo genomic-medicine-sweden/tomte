@@ -57,7 +57,7 @@ TrancriptOMe Total Evaluation (TOMTE):
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-First, prepare a samplesheet with your input data. It should at least contain the information that follows (for further information read [usage documentaiton](https://github.com/genomic-medicine-sweden/tomte/blob/master/docs/usage.md) ):
+First, prepare a samplesheet with your input data. It should at least contain the information that follows (for further information read [usage documentation](https://github.com/genomic-medicine-sweden/tomte/blob/master/docs/usage.md) ):
 
 `samplesheet.csv`:
 
