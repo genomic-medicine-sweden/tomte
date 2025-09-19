@@ -550,7 +550,9 @@
                         "maxQuality": 255,
                         "minQuality": 0,
                         "meanQuality": 253,
-                        "readCount": 209135
+                        "readCount": 209135,
+                        "duplicateReadCount": 0,
+                        "sorted": true
                     }
                 ],
                 [
@@ -562,7 +564,9 @@
                         "maxQuality": 255,
                         "minQuality": 1,
                         "meanQuality": 253,
-                        "readCount": 20144
+                        "readCount": 20144,
+                        "duplicateReadCount": 0,
+                        "sorted": true
                     }
                 ],
                 [
@@ -574,7 +578,9 @@
                         "maxQuality": 255,
                         "minQuality": 0,
                         "meanQuality": 253,
-                        "readCount": 209135
+                        "readCount": 209135,
+                        "duplicateReadCount": 0,
+                        "sorted": true
                     }
                 ],
                 [
@@ -586,7 +592,9 @@
                         "maxQuality": 255,
                         "minQuality": 1,
                         "meanQuality": 253,
-                        "readCount": 20144
+                        "readCount": 20144,
+                        "duplicateReadCount": 0,
+                        "sorted": true
                     }
                 ],
                 [
@@ -598,7 +606,9 @@
                         "maxQuality": 255,
                         "minQuality": 0,
                         "meanQuality": 253,
-                        "readCount": 209135
+                        "readCount": 209135,
+                        "duplicateReadCount": 0,
+                        "sorted": true
                     }
                 ],
                 [
@@ -610,7 +620,9 @@
                         "maxQuality": 255,
                         "minQuality": 1,
                         "meanQuality": 253,
-                        "readCount": 20144
+                        "readCount": 20144,
+                        "duplicateReadCount": 0,
+                        "sorted": true
                     }
                 ],
                 [
@@ -622,7 +634,9 @@
                         "maxQuality": 255,
                         "minQuality": 0,
                         "meanQuality": 253,
-                        "readCount": 209135
+                        "readCount": 209135,
+                        "duplicateReadCount": 0,
+                        "sorted": true
                     }
                 ]
             ],
@@ -669,6 +683,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-09-18T16:08:48.340529169"
+        "timestamp": "2025-09-19T14:22:05.633181648"
     }
 }
