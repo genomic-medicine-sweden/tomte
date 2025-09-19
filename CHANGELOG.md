@@ -32,31 +32,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated pipeline metromap [#263](https://github.com/genomic-medicine-sweden/tomte/pull/263)
 - Updated bcftools/merge, bcftools/mpileup, bcftools/norm, bcftools/stats, bcftools/view, ensemblvep/filtervep, ensemblvep/vep, fastp, gatk4/asereadcounter, gatk4/bedtointervallist, gatk4/createsequencedictionary, gatk4/haplotypecaller, gatk4/splitncigarreads, gatk4/variantfiltration, multiqc, picard/collectinsertsizemetrics, picard/collectrnaseqmetrics, samtools/convert, samtools/faidx, samtools/fastq, samtools/index, samtools/view
 
-| Tool | Old version | New version |
-| --------------------- | ----------- | ----------- |
-| local/get_chrom_sizes | 1.18 | |
-| samtools/fastq | | 1.22.1 |
-| bcftools/merge | 1.21  | 1.22 |
-| bcftools/mpileup | 1.21  | 1.22 |
-| bcftools/norm | 1.21  | 1.22 |
-| bcftools/stats | 1.21  | 1.22 |
-| bcftools/view | 1.21  | 1.22 |
-| ensemblvep/filtervep | 113.0  | 115.1 |
-| ensemblvep/vep | 113.0  | 115.1 |
-| fastp | 0.24.0  | 1.0.1 |
-| gatk4/asereadcounter | 4.6.1.0  | 4.6.2.0 |
-| gatk4/bedtointervallist | 4.6.1.0  | 4.6.2.0 |
-| gatk4/createsequencedictionary | 4.6.1.0  | 4.6.2.0 |
-| gatk4/haplotypecaller | 4.6.1.0  | 4.6.2.0 |
-| gatk4/splitncigarreads | 4.6.1.0  | 4.6.2.0 |
-| gatk4/variantfiltration | 4.6.1.0  | 4.6.2.0 |
-| multiqc | 1.30  | 1.31 |
-| picard/collectinsertsizemetrics | 3.3.0 | 3.4.0 |
-| picard/collectrnaseqmetrics | 3.3.0 | 3.4.0 |
-| samtools/convert | 1.21 | 1.22.1 |
-| samtools/faidx | 1.21 | 1.22.1 |
-| samtools/index | 1.21 | 1.22.1 |
-| samtools/view | 1.21 | 1.22.1 |
+| Tool                            | Old version | New version |
+| ------------------------------- | ----------- | ----------- |
+| local/get_chrom_sizes           | 1.18        |             |
+| samtools/fastq                  |             | 1.22.1      |
+| bcftools/merge                  | 1.21        | 1.22        |
+| bcftools/mpileup                | 1.21        | 1.22        |
+| bcftools/norm                   | 1.21        | 1.22        |
+| bcftools/stats                  | 1.21        | 1.22        |
+| bcftools/view                   | 1.21        | 1.22        |
+| ensemblvep/filtervep            | 113.0       | 115.1       |
+| ensemblvep/vep                  | 113.0       | 115.1       |
+| fastp                           | 0.24.0      | 1.0.1       |
+| gatk4/asereadcounter            | 4.6.1.0     | 4.6.2.0     |
+| gatk4/bedtointervallist         | 4.6.1.0     | 4.6.2.0     |
+| gatk4/createsequencedictionary  | 4.6.1.0     | 4.6.2.0     |
+| gatk4/haplotypecaller           | 4.6.1.0     | 4.6.2.0     |
+| gatk4/splitncigarreads          | 4.6.1.0     | 4.6.2.0     |
+| gatk4/variantfiltration         | 4.6.1.0     | 4.6.2.0     |
+| multiqc                         | 1.30        | 1.31        |
+| picard/collectinsertsizemetrics | 3.3.0       | 3.4.0       |
+| picard/collectrnaseqmetrics     | 3.3.0       | 3.4.0       |
+| samtools/convert                | 1.21        | 1.22.1      |
+| samtools/faidx                  | 1.21        | 1.22.1      |
+| samtools/index                  | 1.21        | 1.22.1      |
+| samtools/view                   | 1.21        | 1.22.1      |
 
 > [!NOTE]
 > Version has been updated if both old and new version information is present.
