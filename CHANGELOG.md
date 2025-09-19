@@ -29,11 +29,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Solved issue [#253](https://github.com/genomic-medicine-sweden/tomte/issues/258) by substituting local/get_chrom_sizes by the nf-core module samtools/faidx [#258](https://github.com/genomic-medicine-sweden/tomte/pull/258)
 - Installed samtools/fastq to convert input BAM/CRAM files to FASTQ format to obtain Salmon counts solving issue [#252](https://github.com/genomic-medicine-sweden/tomte/issues/252) [#259](https://github.com/genomic-medicine-sweden/tomte/pull/259)
-
-| Tool                  | Old version | New version |
-| --------------------- | ----------- | ----------- |
-| local/get_chrom_sizes | 1.18        |             |
-| samtools/fastq        |             | 1.21        |
+- Updated pipeline metromap [#263](https://github.com/genomic-medicine-sweden/tomte/pull/263)
+  | Tool | Old version | New version |
+  | --------------------- | ----------- | ----------- |
+  | local/get_chrom_sizes | 1.18 | |
+  | samtools/fastq | | 1.21 |
 
 > [!NOTE]
 > Version has been updated if both old and new version information is present.
