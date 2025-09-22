@@ -1,9 +1,5 @@
 name: Test successful pipeline download with 'nf-core pipelines download'
 
-# Run the workflow when:
-#  - dispatched manually
-#  - when a PR is opened or reopened to main/master branch
-#  - the head branch of the pull request is updated, i.e. if fixes for a release are pushed last minute to dev.
 on:
   workflow_dispatch:
     inputs:
@@ -95,6 +91,13 @@ jobs:
           echo "Initial container image count: $image_count"
           echo "IMAGE_COUNT_INITIAL=$image_count" >> "$GITHUB_OUTPUT"
 
+      - name: Aggressive disk space cleanup
+        run: |
+          sudo rm -rf /var/lib/docker /var/lib/containerd
+          sudo rm -rf /home/runner/work/* /home/runner/.cache/*
+          sudo apt-get autoremove -y
+          sudo apt-get clean
+
       - name: Run the downloaded pipeline (stub)
         id: stub_run_pipeline
         continue-on-error: true
@@ -102,6 +105,7 @@ jobs:
           NXF_SINGULARITY_CACHEDIR: ./singularity_container_images
           NXF_SINGULARITY_HOME_MOUNT: true
         run: nextflow run ./${{needs.configure.outputs.REPOTITLE_LOWERCASE }}/$( sed 's/\W/_/g' <<< ${{ needs.configure.outputs.REPO_BRANCH }}) --skip_drop_as true --skip_drop_ae true -stub -profile test,singularity --outdir ./results
+
       - name: Run the downloaded pipeline (stub run not supported)
         id: run_pipeline
         if: ${{ steps.stub_run_pipeline.outcome == 'failure' }}
