@@ -101,14 +101,14 @@ jobs:
         env:
           NXF_SINGULARITY_CACHEDIR: ./singularity_container_images
           NXF_SINGULARITY_HOME_MOUNT: true
-        run: nextflow run ./${{needs.configure.outputs.REPOTITLE_LOWERCASE }}/$( sed 's/\W/_/g' <<< ${{ needs.configure.outputs.REPO_BRANCH }}) --skip_drop_as true --skip_drop_ae true -stub -profile test,singularity --outdir ./results --input test_data/samplesheet_chr21_no_vcf.csv
+        run: nextflow run ./${{needs.configure.outputs.REPOTITLE_LOWERCASE }}/$( sed 's/\W/_/g' <<< ${{ needs.configure.outputs.REPO_BRANCH }}) --skip_drop_as true --skip_drop_ae true -stub -profile test,singularity --outdir ./results --input https://raw.githubusercontent.com/genomic-medicine-sweden/tomte/a3bedfab7d4f3b38a63b438ea27aaaef8d00cd47/test_data/samplesheet_chr21_no_vcf.csv
       - name: Run the downloaded pipeline (stub run not supported)
         id: run_pipeline
         if: ${{ steps.stub_run_pipeline.outcome == 'failure' }}
         env:
           NXF_SINGULARITY_CACHEDIR: ./singularity_container_images
           NXF_SINGULARITY_HOME_MOUNT: true
-        run: nextflow run ./${{ needs.configure.outputs.REPOTITLE_LOWERCASE }}/$( sed 's/\W/_/g' <<< ${{ needs.configure.outputs.REPO_BRANCH }}) --skip_drop_as true --skip_drop_ae true -profile test,singularity --outdir ./results --input test_data/samplesheet_chr21_no_vcf.csv
+        run: nextflow run ./${{ needs.configure.outputs.REPOTITLE_LOWERCASE }}/$( sed 's/\W/_/g' <<< ${{ needs.configure.outputs.REPO_BRANCH }}) --skip_drop_as true --skip_drop_ae true -profile test,singularity --outdir ./results --input https://raw.githubusercontent.com/genomic-medicine-sweden/tomte/a3bedfab7d4f3b38a63b438ea27aaaef8d00cd47/test_data/samplesheet_chr21_no_vcf.csv
 
       - name: Count the downloaded number of container images
         id: count_afterwards
