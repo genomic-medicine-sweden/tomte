@@ -3,6 +3,68 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 4.1.0 - [2025-09-22]
+
+### `Added`
+
+- Added the possibility to run drop monoallelic expression (MAE) analysis by providing DNA VCFs in the samplesheet [#260](https://github.com/genomic-medicine-sweden/tomte/pull/260)
+- Added test data for mae (qc_vcf_1000G_hg19_chr21.vcf.gz, qc_vcf_1000G_hg19_chr21.vcf.gz.tbi, test_ACC5963A1.vcf.gz and test_ACC5963A1.vcf.gz.tbi) [#261](https://github.com/genomic-medicine-sweden/tomte/pull/261)
+
+### `Parameters`
+
+- Added parameters `drop_mae_high_q_vcf`, `drop_mae_high_q_vcf_tbi` and `skip_download_drop_mae_high_q_vcf` to provide/download files required to run DROP MAE module [#260](https://github.com/genomic-medicine-sweden/tomte/pull/260)
+
+| Old parameter | New parameter                     |
+| ------------- | --------------------------------- |
+|               | drop_mae_high_q_vcf               |
+|               | drop_mae_high_q_vcf_tbi           |
+|               | skip_download_drop_mae_high_q_vcf |
+
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
+
+### `Changed`
+
+- Solved issue [#253](https://github.com/genomic-medicine-sweden/tomte/issues/258) by substituting local/get_chrom_sizes by the nf-core module samtools/faidx [#258](https://github.com/genomic-medicine-sweden/tomte/pull/258)
+- Installed samtools/fastq to convert input BAM/CRAM files to FASTQ format to obtain Salmon counts solving issue [#252](https://github.com/genomic-medicine-sweden/tomte/issues/252) [#259](https://github.com/genomic-medicine-sweden/tomte/pull/259)
+- Updated pipeline metromap [#263](https://github.com/genomic-medicine-sweden/tomte/pull/263)
+- Updated bcftools/merge, bcftools/mpileup, bcftools/norm, bcftools/stats, bcftools/view, ensemblvep/filtervep, ensemblvep/vep, fastp, gatk4/asereadcounter, gatk4/bedtointervallist, gatk4/createsequencedictionary, gatk4/haplotypecaller, gatk4/splitncigarreads, gatk4/variantfiltration, multiqc, picard/collectinsertsizemetrics, picard/collectrnaseqmetrics, samtools/convert, samtools/faidx, samtools/fastq, samtools/index, samtools/view [#263](https://github.com/genomic-medicine-sweden/tomte/pull/263)
+
+| Tool                            | Old version | New version |
+| ------------------------------- | ----------- | ----------- |
+| local/get_chrom_sizes           | 1.18        |             |
+| samtools/fastq                  |             | 1.22.1      |
+| bcftools/merge                  | 1.21        | 1.22        |
+| bcftools/mpileup                | 1.21        | 1.22        |
+| bcftools/norm                   | 1.21        | 1.22        |
+| bcftools/stats                  | 1.21        | 1.22        |
+| bcftools/view                   | 1.21        | 1.22        |
+| ensemblvep/filtervep            | 113.0       | 115.1       |
+| ensemblvep/vep                  | 113.0       | 115.1       |
+| fastp                           | 0.24.0      | 1.0.1       |
+| gatk4/asereadcounter            | 4.6.1.0     | 4.6.2.0     |
+| gatk4/bedtointervallist         | 4.6.1.0     | 4.6.2.0     |
+| gatk4/createsequencedictionary  | 4.6.1.0     | 4.6.2.0     |
+| gatk4/haplotypecaller           | 4.6.1.0     | 4.6.2.0     |
+| gatk4/splitncigarreads          | 4.6.1.0     | 4.6.2.0     |
+| gatk4/variantfiltration         | 4.6.1.0     | 4.6.2.0     |
+| multiqc                         | 1.30        | 1.31        |
+| picard/collectinsertsizemetrics | 3.3.0       | 3.4.0       |
+| picard/collectrnaseqmetrics     | 3.3.0       | 3.4.0       |
+| samtools/convert                | 1.21        | 1.22.1      |
+| samtools/faidx                  | 1.21        | 1.22.1      |
+| samtools/index                  | 1.21        | 1.22.1      |
+| samtools/view                   | 1.21        | 1.22.1      |
+
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
+
+### `Fixed`
+
 ## 4.0.0 - Snowball [2025-08-18]
 
 ### `Added`

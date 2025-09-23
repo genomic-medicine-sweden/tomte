@@ -33,7 +33,7 @@ nextflow_workflow {
         }
 
         run("UCSC_GTFTOGENEPRED") {
-            script "../../../../modules/nf-core/ucsc/gtftogenepred"
+            script "../../../../modules/nf-core/ucsc/gtftogenepred/main.nf"
             process {
                 """
                 input[0] = GUNZIP_GTF.out.gunzip.collect()
@@ -42,7 +42,7 @@ nextflow_workflow {
         }
 
         run("GET_RRNA_TRANSCRIPTS") {
-            script "../../../../modules/local/get_rrna_transcripts"
+            script "../../../../modules/local/get_rrna_transcripts/main.nf"
             process {
                 """
                 input[0] = GUNZIP_GTF.out.gunzip.collect()
@@ -60,7 +60,7 @@ nextflow_workflow {
         }
 
         run("GATK4_BEDTOINTERVALLIST", alias:"BEDTOINTERVALLIST") {
-            script "../../../../modules/nf-core/gatk4/bedtointervallist/main"
+            script "../../../../modules/nf-core/gatk4/bedtointervallist/main.nf"
             process {
                 """
                 input[0] = GET_RRNA_TRANSCRIPTS.out.bed.map { it -> [ [id:it.name], it ] }

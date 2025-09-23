@@ -3,6 +3,7 @@ nextflow_process {
     name "Test Process DROP_PUT_TOGETHER_EXPORTED_COUNTS"
     script "../main.nf"
     process "DROP_PUT_TOGETHER_EXPORTED_COUNTS"
+    config "./nextflow.config"
     tag "modules"
     tag "modules_local"
     tag "drop"
@@ -49,7 +50,7 @@ nextflow_process {
             process {
                 """
                 input[0] = Channel.of([
-                            ['ACC5963A1'], [false], ['reverse'], ['NA'],
+                            ['ACC5963A1'], [false], ['reverse'], ['NA'], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz"], ["${projectDir}/test_data/test_ACC5963A1.vcf.gz.tbi"], ['NA'],
                             file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
                             file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
                         ])

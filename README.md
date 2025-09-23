@@ -34,29 +34,30 @@ TrancriptOMe Total Evaluation (TOMTE):
 7. Choice to downsample number of reads ([`Samtools`](https://github.com/samtools/samtools/))
 8. Detection of aberrant expression ([`DROP`](https://github.com/gagneurlab/drop/))
 9. Detection of aberrant splicing ([`DROP`](https://github.com/gagneurlab/drop/))
-10. Filter aberrant expression and aberrant splicing results
-11. Guided transcript assembly ([`StringTie`](https://ccb.jhu.edu/software/stringtie/))
-12. Filtering results of guided transcript assembly ([`GffCompare`](https://github.com/gpertea/gffcompare))
-13. To Call SNVs either path a or b can be followed. Path A will run by default
+10. Detection of monoallelic expression ([`DROP`](https://github.com/gagneurlab/drop/))
+11. Filter aberrant expression, aberrant splicing, and monoallelic expression results
+12. Guided transcript assembly ([`StringTie`](https://ccb.jhu.edu/software/stringtie/))
+13. Filtering results of guided transcript assembly ([`GffCompare`](https://github.com/gpertea/gffcompare))
+14. To Call SNVs either path a or b can be followed. Path A will run by default
     a. Call SNVs
     1. ([`BCFtools Mpileups`](https://samtools.github.io/bcftools/bcftools.html#mpileup))
-14. b. Call SNVs
+15. b. Call SNVs
     1. Split cigar reads ([`SplitN Cigar Reads`](https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads))
     2. Haplotype caller ([`Haplotype Caller`](https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller))
     3. Variant filtration ([`Variant Filtration`](https://gatk.broadinstitute.org/hc/en-us/articles/360037434691-VariantFiltration))
     4. BCFtools statistics ([`BCFtools stats`](https://samtools.github.io/bcftools/bcftools.html#stats))
-15. Allele Specific Read Counter ([`ASEReadCounter`](https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter))
-16. Assess allelic imbalance ([`BootstrapAnn`](https://github.com/J35P312/BootstrapAnn#bootstrapann))
-17. Annotation ([`VEP`](https://github.com/Ensembl/ensembl-vep))
-18. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
-19. Present QCs ([`MultiQC`](http://multiqc.info/))
+16. Allele Specific Read Counter ([`ASEReadCounter`](https://gatk.broadinstitute.org/hc/en-us/articles/360037428291-ASEReadCounter))
+17. Assess allelic imbalance ([`BootstrapAnn`](https://github.com/J35P312/BootstrapAnn#bootstrapann))
+18. Annotation ([`VEP`](https://github.com/Ensembl/ensembl-vep))
+19. Alignment QC ([`Picard CollectRnaSeqMetrics`](https://broadinstitute.github.io/picard/))
+20. Present QCs ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-First, prepare a samplesheet with your input data that looks as follows:
+First, prepare a samplesheet with your input data. It should at least contain the information that follows (for further information read [usage documentation](https://github.com/genomic-medicine-sweden/tomte/blob/master/docs/usage.md) ):
 
 `samplesheet.csv`:
 

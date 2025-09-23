@@ -2,87 +2,23 @@
     "bam_alignment": {
         "content": [
             [
-                
+                "versions.yml:md5,bd1f6a0d8ee30d9ad14843e2abfcf9e3",
+                "versions.yml:md5,dfceb537e9f88daf19c9a65824de4fed"
             ],
-            [
-                [
-                    {
-                        "case": "finequagga",
-                        "id": "ACC5963A1",
-                        "sample": "ACC5963A1",
-                        "strandedness": "reverse",
-                        "sex": "NA",
-                        "single_end": false,
-                        "fq_pairs": 1,
-                        "is_fastq": false
-                    },
-                    "ACC5963A1.bam:md5,0f3e153a88d96c4ad6a59898d2bea037",
-                    "ACC5963A1.bam.bai:md5,4d81fe5964abc373dab11ca8eb098faa"
-                ]
-            ],
-            [
-                [
-                    {
-                        "case": "finequagga",
-                        "id": "ACC5963A1",
-                        "sample": "ACC5963A1",
-                        "strandedness": "reverse",
-                        "sex": "NA",
-                        "single_end": false,
-                        "fq_pairs": 1,
-                        "is_fastq": false
-                    },
-                    "ACC5963A1.bam:md5,0f3e153a88d96c4ad6a59898d2bea037",
-                    "ACC5963A1.bam.bai:md5,4d81fe5964abc373dab11ca8eb098faa"
-                ]
-            ]
+            "ACC5963A1.bam",
+            "ACC5963A1.bam",
+            "ACC5963A1"
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.5"
+            "nextflow": "25.04.5"
         },
-        "timestamp": "2025-04-28T07:41:43.754107"
+        "timestamp": "2025-09-18T16:24:29.006982491"
     },
     "fastq_alignment": {
         "content": [
-            [
-                [
-                    {
-                        "groupSize": 1,
-                        "groupTarget": {
-                            "case": "finequagga",
-                            "id": "ACC5963A2",
-                            "sample": "ACC5963A2",
-                            "strandedness": "reverse",
-                            "sex": "NA",
-                            "single_end": false,
-                            "fq_pairs": 1,
-                            "is_fastq": true
-                        }
-                    },
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
-                ]
-            ],
-            [
-                [
-                    {
-                        "groupSize": 1,
-                        "groupTarget": {
-                            "case": "finequagga",
-                            "id": "ACC5963A2",
-                            "sample": "ACC5963A2",
-                            "strandedness": "reverse",
-                            "sex": "NA",
-                            "single_end": false,
-                            "fq_pairs": 1,
-                            "is_fastq": true
-                        }
-                    },
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam:md5,4d54d92054e87da392b4418daed05fe4",
-                    "ACC5963A2.Aligned.sortedByCoord.out.bam.bai:md5,a5d4a2a3b7226aa89d8790c15be9c7e2"
-                ]
-            ],
+            "ACC5963A2.Aligned.sortedByCoord.out.bam",
+            "ACC5963A2.Aligned.sortedByCoord.out.bam",
             "ACC5963A2.cram.crai",
             "ACC5963A2.cram",
             {
@@ -92,20 +28,23 @@
                 "maxQuality": 255,
                 "minQuality": 0,
                 "meanQuality": 253,
-                "readCount": 209253
+                "readCount": 209253,
+                "duplicateReadCount": 0,
+                "sorted": true
             },
+            "ACC5963A2",
             [
-                "versions.yml:md5,26e766c12c867bec19ce7936855c9506",
+                "versions.yml:md5,2958216f79cf83738af222312e531cd5",
+                "versions.yml:md5,4189cb9d9d8149e358b20432dd9ba724",
                 "versions.yml:md5,7c11e9e9e5618299c34aca60c92450a6",
-                "versions.yml:md5,bd1f6a0d8ee30d9ad14843e2abfcf9e3",
-                "versions.yml:md5,c6359df28f45236797d408fb562cef4d",
-                "versions.yml:md5,fc3cdfeb9650e6068242aa84be1e3db1"
+                "versions.yml:md5,9fbe66fa4460cbb247312fc54415aaad",
+                "versions.yml:md5,bd1f6a0d8ee30d9ad14843e2abfcf9e3"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-07-29T15:01:03.375944904"
+        "timestamp": "2025-09-19T11:07:18.628622747"
     }
 }

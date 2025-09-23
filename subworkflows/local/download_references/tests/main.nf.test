@@ -1,7 +1,7 @@
 nextflow_workflow {
 
     name "Test Workflow DOWNLOAD_REFERENCES"
-    script "subworkflows/local/download_references/main.nf"
+    script "../main.nf"
     workflow "DOWNLOAD_REFERENCES"
     tag "subworkflow"
     tag "download_references"
@@ -19,7 +19,7 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = Channel.of('GRCh37')
+                input[0] = 'GRCh37'
                 input[1] = Channel.of(46)
                 input[2] = Channel.of([file("${projectDir}/test_data/vep_to_download_37.csv", checkIfExists: true)])
                 input[3] = Channel.of(112)
@@ -27,14 +27,23 @@ nextflow_workflow {
                 input[5] = true
                 input[6] = true
                 input[7] = true
+                input[8] = true
                 """
             }
         }
 
         then {
-            assert workflow.success
-            assert snapshot(workflow.out).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.fasta,
+                    workflow.out.vep_cache,
+                    workflow.out.vep_plugin,
+                    file(workflow.out.high_q_vcf_tbi[0]).name,
+                    file(workflow.out.high_q_vcf_tbi[1]).name,
+                    workflow.out.versions,
+                ).match()}
+            )
         }
-
     }
 }

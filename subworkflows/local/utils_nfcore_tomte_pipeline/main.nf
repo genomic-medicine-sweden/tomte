@@ -314,3 +314,12 @@ def methodsDescriptionText(mqc_methods_yaml) {
 
     return description_html.toString()
 }
+
+def VcfInSamplesheet(String path) {
+    def samplesheet = samplesheetToList(path, "${projectDir}/assets/schema_input.json")
+    def hasVcf = samplesheet.any { sample ->
+        def vcf = sample[0].vcf
+        vcf && vcf != ''
+    }
+    return hasVcf
+}

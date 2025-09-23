@@ -17,21 +17,21 @@
                         "fq_pairs": 1,
                         "is_fastq": false
                     },
-                    "ACC5963A1.bcftools_stats.txt:md5,89b548a77c54f7b06ffd8c6b44ed12b6"
+                    "ACC5963A1.bcftools_stats.txt:md5,5d70ab5ce31d94d911c8a991b5f1e506"
                 ]
             ],
             [
-                "versions.yml:md5,15502981716765d46e39283b9f9d8eb0",
-                "versions.yml:md5,3625fcc3c1900a0db9df0dcbba7dab0e",
-                "versions.yml:md5,9e668b3b575a8890ac633706fbabd0bf",
-                "versions.yml:md5,ca18eaf0ba5dfed37cd58ee8368be488",
-                "versions.yml:md5,fb46afad3bb4295b01a01f1915321d9c"
+                "versions.yml:md5,98f1dfbaef43ae02274fd555db481c84",
+                "versions.yml:md5,b1d7d5fa749ee25ab13ef08027db0f89",
+                "versions.yml:md5,bdd1b38209d42995d968eb4e57221fd0",
+                "versions.yml:md5,e578f5284bc3cfc1bd477dad382b05e7",
+                "versions.yml:md5,fe58a0101a4160d15c31ae3c0efca7e4"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-07-29T17:01:52.50626209"
+        "timestamp": "2025-09-19T11:29:13.706719582"
     }
 }

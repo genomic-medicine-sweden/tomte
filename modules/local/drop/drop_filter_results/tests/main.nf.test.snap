@@ -8,14 +8,14 @@
                 "finequagga_fraser_top_hits_research.tsv"
             ],
             [
-                "versions.yml:md5,9053b392802520d69bb81b7300ecff6d"
+                "versions.yml:md5,1c377afea6896740ff3d37642c9c1608"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-08-13T08:16:58.358815042"
+        "timestamp": "2025-09-10T16:49:17.300088668"
     },
     "With only AE": {
         "content": [
@@ -26,16 +26,16 @@
                 "finequagga_outrider_top_hits_research.tsv"
             ],
             [
-                "versions.yml:md5,9053b392802520d69bb81b7300ecff6d"
+                "versions.yml:md5,1c377afea6896740ff3d37642c9c1608"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-08-13T08:09:52.472086619"
+        "timestamp": "2025-09-10T16:41:13.393007585"
     },
-    "With AS and AE": {
+    "With AS, AE, and MAE": {
         "content": [
             [
                 "finequagga_fraser_top_hits_clinical.tsv"
@@ -50,13 +50,19 @@
                 "finequagga_outrider_top_hits_research.tsv"
             ],
             [
-                "versions.yml:md5,9053b392802520d69bb81b7300ecff6d"
+                "finequagga_mae_top_hits_clinical.tsv"
+            ],
+            [
+                "finequagga_mae_top_hits_research.tsv"
+            ],
+            [
+                "versions.yml:md5,1c377afea6896740ff3d37642c9c1608"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-08-13T08:02:55.343797165"
+        "timestamp": "2025-09-10T19:05:25.487309998"
     }
 }

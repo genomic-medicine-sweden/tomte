@@ -3,6 +3,7 @@ nextflow_workflow {
     name "Test Workflow ANALYSE_TRANSCRIPTS"
     script "../main.nf"
     workflow "ANALYSE_TRANSCRIPTS"
+    config "./nextflow.config"
     tag "analyse_transcripts"
     tag "subworkflow"
 
@@ -47,7 +48,7 @@ nextflow_workflow {
             process {
                 """
                 input[0] = Channel.of([
-                    [ case:'finequagga', id:'ACC5963A3', sample:'ACC5963A3', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                    [ case:'finequagga', id:'ACC5963A3', sample:'ACC5963A3', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false, dna_id:'NA' ],
                     file("${projectDir}/test_data/ACC5963A3.cram", checkIfExists: true),
                     file("${projectDir}/test_data/ACC5963A3.cram.crai", checkIfExists: true)
                     ])
@@ -55,6 +56,15 @@ nextflow_workflow {
                 input[2] = SAMTOOLS_FAIDX.out.fai
                 """
                 }
+        }
+
+        run("GATK4_CREATESEQUENCEDICTIONARY", alias: "BUILD_DICT") {
+        script "../../../../modules/nf-core/gatk4/createsequencedictionary/main.nf"
+        process {
+            """
+            input[0] = GUNZIP_FASTA.out.gunzip
+            """
+            }
         }
 
     }
@@ -69,7 +79,7 @@ nextflow_workflow {
                 ch_cram_converted = CRAM_TO_BAM.out.bam.collect().join(CRAM_TO_BAM.out.bai.collect())
                 // Channel for the BAM sample
                 ch_bam = Channel.of([
-                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                        [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false, dna_vcf:"${projectDir}/test_data/test_ACC5963A1.vcf.gz", dna_vcf_tbi:"${projectDir}/test_data/test_ACC5963A1.vcf.gz.tbi", dna_id:'ACC5963A1' ],
                         file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
                         file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
                     ])
@@ -78,21 +88,27 @@ nextflow_workflow {
                 input[1]  = input[0]
                 input[2]  = GUNZIP_GTF.out.gunzip.collect()
                 input[3]  = GUNZIP_FASTA.out.gunzip.join(SAMTOOLS_FAIDX.out.fai).collect()
-                input[4]  = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true).collect()
-                input[5]  = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true).collect()
-                input[6]  = channel.fromPath("${projectDir}/test_data/drop_data", checkIfExists: true).collect()
-                input[7]  = 'GRCh37'
-                input[8]  = 'outrider'
-                input[9]  = 'fraser'
-                input[10] = 1
+                input[4] = BUILD_DICT.out.dict.collect()
+                input[5]  = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true).collect()
+                input[6]  = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true).collect()
+                input[7]  = channel.fromPath("${projectDir}/test_data/drop_data", checkIfExists: true).collect()
+                input[8]  = 'GRCh37'
+                input[9]  = 'outrider'
+                input[10]  = 'fraser'
                 input[11] = 1
-                input[12] = 2.5
-                input[13] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
-                input[14] = Channel.of([probands:['ACC5963A1','ACC5963A3'], id:'finequagga']).collect()
-                input[15] = false
+                input[12] = 1
+                input[13] = 2.5
+                input[14] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
+                input[15] = Channel.of([probands:['ACC5963A1','ACC5963A3'], id:'finequagga']).collect()
                 input[16] = false
                 input[17] = false
                 input[18] = false
+                input[19] = false
+                input[20] = Channel.of([
+                        file("${projectDir}/test_data/qc_vcf_1000G_hg19_chr21.vcf.gz", checkIfExists: true),
+                        file("${projectDir}/test_data/qc_vcf_1000G_hg19_chr21.vcf.gz.tbi", checkIfExists: true)
+                        ])
+                input[21] = false
                 """
             }
         }
@@ -125,28 +141,31 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = Channel.of([
-                    [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false ],
+                    [ case:'finequagga', id:'ACC5963A1', sample:'ACC5963A1', strandedness:'reverse', sex:'NA', single_end:false, fq_pairs:1, is_fastq:false, dna_id:'NA'],
                     file("${projectDir}/test_data/ACC5963A1.bam", checkIfExists: true),
                     file("${projectDir}/test_data/ACC5963A1.bam.bai", checkIfExists: true)
                     ])
                 input[1]  = input[0]
                 input[2]  = GUNZIP_GTF.out.gunzip.collect()
                 input[3]  = GUNZIP_FASTA.out.gunzip.join(SAMTOOLS_FAIDX.out.fai).collect()
-                input[4]  = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true).collect()
-                input[5]  = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true).collect()
-                input[6]  = channel.fromPath("${projectDir}/test_data/drop_data", checkIfExists: true).collect()
-                input[7]  = 'GRCh37'
-                input[8]  = 'outrider'
-                input[9]  = 'fraser'
-                input[10] = 1
+                input[4] = BUILD_DICT.out.dict.collect()
+                input[5]  = channel.fromPath("${projectDir}/test_data/drop_data/geneCounts.tsv.gz", checkIfExists: true).collect()
+                input[6]  = channel.fromPath("${projectDir}/test_data/drop_data/sampleAnnotation.tsv", checkIfExists: true).collect()
+                input[7]  = channel.fromPath("${projectDir}/test_data/drop_data", checkIfExists: true).collect()
+                input[8]  = 'GRCh37'
+                input[9]  = 'outrider'
+                input[10]  = 'fraser'
                 input[11] = 1
-                input[12] = 2.5
-                input[13] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
-                input[14] = Channel.of([probands:['ACC5963A1'], id:'finequagga']).collect()
-                input[15] = false
-                input[16] = true
+                input[12] = 1
+                input[13] = 2.5
+                input[14] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
+                input[15] = Channel.of([probands:['ACC5963A1'], id:'finequagga']).collect()
+                input[16] = false
                 input[17] = true
                 input[18] = true
+                input[19] = true
+                input[20] = [[],[]]
+                input[21] = true
                 """
             }
         }

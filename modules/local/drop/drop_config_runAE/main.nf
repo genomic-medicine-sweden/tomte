@@ -2,8 +2,6 @@ process DROP_CONFIG_RUN_AE {
     tag "DROP_CONFIG_RUN_AE"
     label 'process_drop'
 
-    container "docker.io/clinicalgenomics/drop:1.4.0"
-
     input:
     tuple val(meta), path(fasta), path(fai)
     tuple val(meta2), path(gtf)

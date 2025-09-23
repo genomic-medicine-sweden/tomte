@@ -98,11 +98,12 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.bam_bai,
-                    workflow.out.bam_ds_bai,
+                    file(workflow.out.bam_bai.get(0).get(1)).name,
+                    file(workflow.out.bam_ds_bai.get(0).get(1)).name,
                     file(workflow.out.cram_crai.get(0).get(2)).name,
                     file(workflow.out.cram_crai.get(0).get(1)).name,
                     cram( cram_file, fasta ).getStatistics(),
+                    file(workflow.out.salmon_result.get(0).get(1)).name,
                     workflow.out.versions
                 ).match() }
             )
@@ -140,8 +141,9 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                     workflow.out.versions,
-                    workflow.out.bam_bai,
-                    workflow.out.bam_ds_bai
+                    file(workflow.out.bam_bai.get(0).get(1)).name,
+                    file(workflow.out.bam_ds_bai.get(0).get(1)).name,
+                    file(workflow.out.salmon_result.get(0).get(1)).name
                 ).match() }
             )
         }
