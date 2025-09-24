@@ -273,8 +273,8 @@ nextflow_process {
             assertAll(
                 { assert process.success },
                 { assert snapshot(
-                    process.out.as_out_clinical.collect{ file(it).name },
-                    process.out.as_out_research.collect{ file(it).name },
+                    process.out.mae_out_clinical.collect{ file(it).name },
+                    process.out.mae_out_research.collect{ file(it).name },
                     process.out.versions,
                 ).match()}
             )
