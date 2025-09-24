@@ -77,7 +77,7 @@
     "Should run with one sample": {
         "content": [
             [
-                "sample_annotation.tsv:md5,8602646eee775b14ef6e3cb1dde2f5e2"
+                "sample_annotation.tsv:md5,92bb1dda07622ff293f8b3152257b4c2"
             ],
             [
                 "config.yaml"
@@ -98,6 +98,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.5"
         },
-        "timestamp": "2025-09-17T09:43:21.846394897"
+        "timestamp": "2025-09-24T10:51:00.960338234"
     }
 }
