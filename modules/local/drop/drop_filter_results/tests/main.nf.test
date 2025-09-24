@@ -119,7 +119,7 @@ nextflow_process {
                     """
                 }
             }
-        
+
             run("DROP_CONFIG_RUN_MAE") {
                 script "../../../../../modules/local/drop/drop_config_runMAE/main.nf"
                 process {
