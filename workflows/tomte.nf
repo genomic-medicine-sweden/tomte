@@ -255,7 +255,8 @@ workflow TOMTE {
         }
 
         ch_multiqc_files = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
-        ch_multiqc_files = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
+        // FIXME: This should not need to be deactivated, fix before merge
+        // ch_multiqc_files = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
     } else {
         ch_vcf_tbi = Channel.empty()
     }
