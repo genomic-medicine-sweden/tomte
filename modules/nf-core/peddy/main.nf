@@ -10,7 +10,7 @@ process PEDDY {
     input:
     tuple val(meta), path(vcf), path(vcf_tbi)
     tuple val(meta2), path(ped)
-    // tuple val(meta3), path(sites)
+    tuple val(meta3), path(sites)
 
     output:
     tuple val(meta), path("${prefix}.vs.html")              , emit: vs_html
