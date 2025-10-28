@@ -96,8 +96,6 @@ workflow ANALYSE_TRANSCRIPTS {
         // Generates config file and runs Aberrant expression module
         if ( !skip_drop_ae ) {
 
-            log.info "[MAE-DEBUG] Entering MAE block: invoking DROP_CONFIG_RUN_MAE"
-
             DROP_CONFIG_RUN_AE(
                 ch_fasta_fai,
                 ch_gtf,
@@ -135,6 +133,9 @@ workflow ANALYSE_TRANSCRIPTS {
 
         // Generates config file and runs monoallelic expression module
         if ( !skip_drop_mae ) {
+
+            log.info "[MAE-DEBUG] Entering MAE block: invoking DROP_CONFIG_RUN_MAE"
+
             DROP_CONFIG_RUN_MAE(
                 ch_fasta_fai,
                 ch_gtf,
