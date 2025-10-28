@@ -1,7 +1,7 @@
 {
     "-profile test": {
         "content": [
-            89,
+            93,
             {
                 "ADD_FOUND_IN_TAG": {
                     "bcftools": 1.2,
@@ -32,6 +32,10 @@
                     "star": "2.7.11b",
                     "samtools": 1.21,
                     "gawk": "5.1.0"
+                },
+                "CREATE_PEDIGREE_FILE": {
+                    "create_pedigree_file": "v1.1",
+                    "python": "3.8.3"
                 },
                 "DROP_CONFIG_RUN_AE": {
                     "drop_config": 2.2,
@@ -91,6 +95,9 @@
                 },
                 "JUNCTION_TRACK": {
                     "sj2bed": "v1.0"
+                },
+                "PEDDY": {
+                    "peddy": "0.4.8"
                 },
                 "PICARD_COLLECTINSERTSIZEMETRICS": {
                     "picard": "3.4.0"
@@ -427,6 +434,24 @@
                 "multiqc/multiqc_report.html",
                 "pipeline_info",
                 "pipeline_info/tomte_pipeline_software_mqc_versions.yml",
+                "qc",
+                "qc/peddy",
+                "qc/peddy/ACC5963A1.het_check.csv",
+                "qc/peddy/ACC5963A1.html",
+                "qc/peddy/ACC5963A1.ped_check.csv",
+                "qc/peddy/ACC5963A1.peddy.ped",
+                "qc/peddy/ACC5963A1.vs.html",
+                "qc/peddy/ACC5963A2.het_check.csv",
+                "qc/peddy/ACC5963A2.html",
+                "qc/peddy/ACC5963A2.ped_check.csv",
+                "qc/peddy/ACC5963A2.peddy.ped",
+                "qc/peddy/ACC5963A2.vs.html",
+                "qc/peddy/ACC5963A3.het_check.csv",
+                "qc/peddy/ACC5963A3.html",
+                "qc/peddy/ACC5963A3.ped_check.csv",
+                "qc/peddy/ACC5963A3.peddy.ped",
+                "qc/peddy/ACC5963A3.vs.html",
+                "qc/peddy/finequagga.ped",
                 "references",
                 "references/GRCh37_gffread_output.fasta",
                 "references/grch37_chr21.dict",
@@ -505,6 +530,22 @@
                 "t_data.ctab:md5,adea5cce0d453ca8108143842b21157c",
                 "hgnc.tsv:md5,bbf07f9733fbd7e4666f039b5c4be128",
                 "ACC5963A2_junction.bed:md5,7b66db28a4b006d798a96fbc81f345e5",
+                "ACC5963A1.het_check.csv:md5,4638299930df5822ea7c7535e6b49f7c",
+                "ACC5963A1.html:md5,2edd3faa77d5d8ac19f0d0ca15f38e84",
+                "ACC5963A1.ped_check.csv:md5,21dded6c03dab39859d2936d4820c426",
+                "ACC5963A1.peddy.ped:md5,cfe950925e077e674b0ef4064349f9d2",
+                "ACC5963A1.vs.html:md5,a749380edef4653dade663534ddcfbd6",
+                "ACC5963A2.het_check.csv:md5,e478e566c4f859cffbf0ca3887d9ddfe",
+                "ACC5963A2.html:md5,11e672202b5bb512979ce6251e95c155",
+                "ACC5963A2.ped_check.csv:md5,21dded6c03dab39859d2936d4820c426",
+                "ACC5963A2.peddy.ped:md5,004c754a756f586a58d3c2d2dcc0c298",
+                "ACC5963A2.vs.html:md5,a749380edef4653dade663534ddcfbd6",
+                "ACC5963A3.het_check.csv:md5,e4ffd061e70d1554f34defe7b9283f8b",
+                "ACC5963A3.html:md5,422f8cc4fcda5f83354754604b7a6622",
+                "ACC5963A3.ped_check.csv:md5,21dded6c03dab39859d2936d4820c426",
+                "ACC5963A3.peddy.ped:md5,2dc8c41e761817c92a0b08ec7193bd10",
+                "ACC5963A3.vs.html:md5,a749380edef4653dade663534ddcfbd6",
+                "finequagga.ped:md5,bd5029b95f86b7e64aacb9b744285207",
                 "GRCh37_gffread_output.fasta:md5,7dbf3195d06f480fa5b2421004580bdd",
                 "grch37_chr21.dict:md5,53d95c36db0422d29db02c8a8da56e43",
                 "grch37_chr21.fa:md5,e9ce36e75cd57d255ad64eb2ecca4dd0",
@@ -681,8 +722,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.5"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-24T10:31:54.62373267"
+        "timestamp": "2025-10-28T14:44:48.674538481"
     }
 }
