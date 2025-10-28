@@ -11,8 +11,8 @@ process CREATE_PEDIGREE_FILE {
     val(samples)
 
     output:
-    path("*.ped"),       emit: ped
-    path "versions.yml", emit: versions
+    path("*.ped"),                     emit: ped
+    path "versions.yml",               emit: versions
 
     when:
     task.ext.when == null || task.ext.when
