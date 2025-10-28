@@ -280,7 +280,8 @@ workflow TOMTE {
         ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
         PEDDY (
             ch_vcf_tbi,
-            ch_pedfile
+            ch_pedfile,
+            [ [], [] ]
         )
         ch_versions = ch_versions.mix(PEDDY.out.versions)
     } else {
