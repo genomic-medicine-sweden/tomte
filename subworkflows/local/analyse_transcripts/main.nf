@@ -43,6 +43,8 @@ workflow ANALYSE_TRANSCRIPTS {
     log.info "[MAE-DEBUG] skip_drop_ae=${skip_drop_ae}  skip_drop_as=${skip_drop_as}  skip_drop_mae=${skip_drop_mae}"
     log.info "[MAE-DEBUG] genome=${genome}"
 
+    ch_bam_ds_bai.view()
+
     ch_bam_ds_bai
         .map { meta, bam, bai ->
         [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.vcf, meta.vcf_tbi, meta.dna_id, bam, bai ]
