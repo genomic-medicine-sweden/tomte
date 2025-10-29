@@ -20,11 +20,14 @@ workflow BAM_QC {
 
     // FIXME: Insert pre-processing here using samtools
 
+    ch_bam.view { it -> "[bamqc] ch_bam ${it}" }
     SAMTOOLS_INDEX(ch_bam)
+
+    SAMTOOLS_INDEX.out.bai.view { it -> "[bamqc] SAMTOOLS_INDEX.out.bai.view ${it}" }
 
     ch_bam_bai = ch_bam.mix(SAMTOOLS_INDEX.out.bai)
 
-    ch_bam_bai.view { it -> "ch_bam_bai ${it}" }
+    ch_bam_bai.view { it -> "[bamqc] ch_bam_bai ${it}" }
 
     SAMTOOLS_VIEW(ch_bam_bai, [], [], 'bai')
 
