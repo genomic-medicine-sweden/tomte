@@ -24,6 +24,8 @@ workflow BAM_QC {
 
     ch_bam_bai = ch_bam.mix(SAMTOOLS_INDEX.out.bai)
 
+    ch_bam_bai.view { it -> "ch_bam_bai ${it}" }
+
     SAMTOOLS_VIEW(ch_bam_bai, [], [], 'bai')
 
     PICARD_COLLECTRNASEQMETRICS(
