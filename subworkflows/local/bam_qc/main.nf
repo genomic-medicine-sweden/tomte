@@ -5,8 +5,7 @@
 include { PICARD_COLLECTRNASEQMETRICS     } from '../../../modules/nf-core/picard/collectrnaseqmetrics/main'
 include { PICARD_COLLECTINSERTSIZEMETRICS } from '../../../modules/nf-core/picard/collectinsertsizemetrics/main'
 include { SAMTOOLS_VIEW                   } from '../../../modules/nf-core/samtools/view/main.nf'
-include { SAMTOOLS_CONVERT } from '../../../modules/nf-core/samtools/convert/main.nf'
-include { SAMTOOLS_INDEX } from '../../../modules/nf-core/samtools/index/main.nf'
+include { SAMTOOLS_INDEX                  } from '../../../modules/nf-core/samtools/index/main.nf'
 
 workflow BAM_QC {
     take:
@@ -18,17 +17,10 @@ workflow BAM_QC {
     main:
     ch_versions = Channel.empty()
 
-    // FIXME: Insert pre-processing here using samtools
-
-    ch_bam.view { it -> "[bamqc] ch_bam ${it}" }
+    // Remove read pairs mapping to different chromosomes
+    // Remove non-primary mappings
     SAMTOOLS_INDEX(ch_bam)
-
-    SAMTOOLS_INDEX.out.bai.view { it -> "[bamqc] SAMTOOLS_INDEX.out.bai.view ${it}" }
-
     ch_bam_bai = ch_bam.join(SAMTOOLS_INDEX.out.bai)
-
-    ch_bam_bai.view { it -> "[bamqc] ch_bam_bai ${it}" }
-
     SAMTOOLS_VIEW(ch_bam_bai, ch_fasta, [], 'bai')
 
     PICARD_COLLECTRNASEQMETRICS(
@@ -39,7 +31,7 @@ workflow BAM_QC {
     )
 
     PICARD_COLLECTINSERTSIZEMETRICS(
-        ch_bam
+        SAMTOOLS_VIEW.out.bam
     )
 
     ch_versions = ch_versions.mix(PICARD_COLLECTRNASEQMETRICS.out.versions.first())

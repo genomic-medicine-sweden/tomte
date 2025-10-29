@@ -39,16 +39,9 @@ workflow ANALYSE_TRANSCRIPTS {
     main:
     ch_versions = Channel.empty()
 
-    log.info("[MAE-DEBUG] Hello world")
-    log.info "[MAE-DEBUG] skip_drop_ae=${skip_drop_ae}  skip_drop_as=${skip_drop_as}  skip_drop_mae=${skip_drop_mae}"
-    log.info "[MAE-DEBUG] genome=${genome}"
-
-    ch_bam_ds_bai.view()
-
     ch_bam_ds_bai
         .map { meta, bam, bai ->
             [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.dna_vcf, meta.dna_vcf_tbi, meta.id, bam, bai ]
-            // [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.vcf, meta.vcf_tbi, meta.dna_id, bam, bai ]
         }
         .collect(flat:false)
         .map { it.sort { a, b -> a[0] <=> b[0] } } // Sort on ID
@@ -73,9 +66,6 @@ workflow ANALYSE_TRANSCRIPTS {
 
     // DROP
     if ( !skip_drop_ae | !skip_drop_as | !skip_drop_mae ) {
-
-        ch_bam_files_annot.view()
-
         // Generates count files for samples and merges them with reference count file
         DROP_SAMPLE_ANNOT(
             ch_bam_files_annot,
@@ -85,23 +75,8 @@ workflow ANALYSE_TRANSCRIPTS {
             drop_group_samples_as
         )
 
-        // ch_bam_files_annot.view { x -> "[MAE-DEBUG] ch_bam_files_annot item: ${x[0]} (ids)  -> bam files: ${x[7]?.size() ?: 'NA'}" }
-        // ch_bam_bai_files.view   { x -> "[MAE-DEBUG] ch_bam_bai_files item: ${x.collect()}" }
-        // ch_bam_ds_bai.view      { meta, _bam, _bai ->
-        //     "[MAE-DEBUG] sample=${meta.id}  vcf=${meta.vcf ?: 'null'}  tbi=${meta.vcf_tbi ?: 'null'}"
-        // }
-        // ch_vcf_tbi_files.view   { vcf, tbi -> "[MAE-DEBUG] ch_vcf_tbi_files: vcf=${vcf}  tbi=${tbi}" }
-        // ch_fasta_fai.view       { _meta, fasta, fai -> "[MAE-DEBUG] ch_fasta_fai: fasta=${fasta} fai=${fai}" }
-        // ch_gtf.view             { _meta, gtf -> "[MAE-DEBUG] ch_gtf: gtf=${gtf}" }
-        // ch_dict.view            { _meta, dict -> "[MAE-DEBUG] ch_dict: dict=${dict}" }
-        // ch_drop_mae_high_q_vcf_tbi.view { v, t ->
-        //     "[MAE-DEBUG] ch_drop_mae_high_q_vcf_tbi: vcf=${v} tbi=${t}"
-        // }
-
-
         // Generates config file and runs Aberrant expression module
         if ( !skip_drop_ae ) {
-
             DROP_CONFIG_RUN_AE(
                 ch_fasta_fai,
                 ch_gtf,
@@ -139,12 +114,6 @@ workflow ANALYSE_TRANSCRIPTS {
 
         // Generates config file and runs monoallelic expression module
         if ( !skip_drop_mae ) {
-
-            log.info "[MAE-DEBUG] Entering MAE block: invoking DROP_CONFIG_RUN_MAE"
-
-            ch_vcf_tbi_files.view { it -> "ch_vcf_tbi_files ${it}" }
-            ch_drop_mae_high_q_vcf_tbi.view { it -> "ch_drop_mae_high_q_vcf_tbi ${it}" }
-
             DROP_CONFIG_RUN_MAE(
                 ch_fasta_fai,
                 ch_gtf,
