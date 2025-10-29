@@ -25,7 +25,7 @@ workflow BAM_QC {
 
     SAMTOOLS_INDEX.out.bai.view { it -> "[bamqc] SAMTOOLS_INDEX.out.bai.view ${it}" }
 
-    ch_bam_bai = ch_bam.mix(SAMTOOLS_INDEX.out.bai)
+    ch_bam_bai = ch_bam.join(SAMTOOLS_INDEX.out.bai)
 
     ch_bam_bai.view { it -> "[bamqc] ch_bam_bai ${it}" }
 
