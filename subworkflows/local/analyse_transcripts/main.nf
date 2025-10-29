@@ -70,6 +70,9 @@ workflow ANALYSE_TRANSCRIPTS {
 
     // DROP
     if ( !skip_drop_ae | !skip_drop_as | !skip_drop_mae ) {
+
+        ch_bam_files_annot.view()
+
         // Generates count files for samples and merges them with reference count file
         DROP_SAMPLE_ANNOT(
             ch_bam_files_annot,
@@ -79,18 +82,18 @@ workflow ANALYSE_TRANSCRIPTS {
             drop_group_samples_as
         )
 
-        ch_bam_files_annot.view { x -> "[MAE-DEBUG] ch_bam_files_annot item: ${x[0]} (ids)  -> bam files: ${x[7]?.size() ?: 'NA'}" }
-        ch_bam_bai_files.view   { x -> "[MAE-DEBUG] ch_bam_bai_files item: ${x.collect()}" }
-        ch_bam_ds_bai.view      { meta, _bam, _bai ->
-            "[MAE-DEBUG] sample=${meta.id}  vcf=${meta.vcf ?: 'null'}  tbi=${meta.vcf_tbi ?: 'null'}"
-        }
-        ch_vcf_tbi_files.view   { vcf, tbi -> "[MAE-DEBUG] ch_vcf_tbi_files: vcf=${vcf}  tbi=${tbi}" }
-        ch_fasta_fai.view       { _meta, fasta, fai -> "[MAE-DEBUG] ch_fasta_fai: fasta=${fasta} fai=${fai}" }
-        ch_gtf.view             { _meta, gtf -> "[MAE-DEBUG] ch_gtf: gtf=${gtf}" }
-        ch_dict.view            { _meta, dict -> "[MAE-DEBUG] ch_dict: dict=${dict}" }
-        ch_drop_mae_high_q_vcf_tbi.view { v, t ->
-            "[MAE-DEBUG] ch_drop_mae_high_q_vcf_tbi: vcf=${v} tbi=${t}"
-        }
+        // ch_bam_files_annot.view { x -> "[MAE-DEBUG] ch_bam_files_annot item: ${x[0]} (ids)  -> bam files: ${x[7]?.size() ?: 'NA'}" }
+        // ch_bam_bai_files.view   { x -> "[MAE-DEBUG] ch_bam_bai_files item: ${x.collect()}" }
+        // ch_bam_ds_bai.view      { meta, _bam, _bai ->
+        //     "[MAE-DEBUG] sample=${meta.id}  vcf=${meta.vcf ?: 'null'}  tbi=${meta.vcf_tbi ?: 'null'}"
+        // }
+        // ch_vcf_tbi_files.view   { vcf, tbi -> "[MAE-DEBUG] ch_vcf_tbi_files: vcf=${vcf}  tbi=${tbi}" }
+        // ch_fasta_fai.view       { _meta, fasta, fai -> "[MAE-DEBUG] ch_fasta_fai: fasta=${fasta} fai=${fai}" }
+        // ch_gtf.view             { _meta, gtf -> "[MAE-DEBUG] ch_gtf: gtf=${gtf}" }
+        // ch_dict.view            { _meta, dict -> "[MAE-DEBUG] ch_dict: dict=${dict}" }
+        // ch_drop_mae_high_q_vcf_tbi.view { v, t ->
+        //     "[MAE-DEBUG] ch_drop_mae_high_q_vcf_tbi: vcf=${v} tbi=${t}"
+        // }
 
 
         // Generates config file and runs Aberrant expression module
