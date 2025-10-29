@@ -142,6 +142,9 @@ workflow ANALYSE_TRANSCRIPTS {
 
             log.info "[MAE-DEBUG] Entering MAE block: invoking DROP_CONFIG_RUN_MAE"
 
+            ch_vcf_tbi_files.view { it -> "ch_vcf_tbi_files ${it}" }
+            ch_drop_mae_high_q_vcf_tbi.view { it -> "ch_drop_mae_high_q_vcf_tbi ${it}" }
+
             DROP_CONFIG_RUN_MAE(
                 ch_fasta_fai,
                 ch_gtf,
