@@ -53,7 +53,7 @@ CONFIG_YAML = {
         "gatkIgnoreHeaderCheck": True,
         "padjCutoff": 0.2,
         "allelicRatioCutoff": 0.8,
-        "addAF": True,
+        "addAF": False,
         "maxAF": 0.001,
         "maxVarFreqCohort": 0.05,
         "qcVcf": None,
