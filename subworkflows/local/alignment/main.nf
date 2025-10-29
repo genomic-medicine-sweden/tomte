@@ -31,27 +31,23 @@ workflow ALIGNMENT {
     main:
     ch_versions = Channel.empty()
 
-    // Branch inputs based on meta.is_fastq flag
-    ch_all_inputs = ch_fastq_input_reads.mix(ch_bam_bai_input_reads)
-
-    ch_inputs_branched = ch_all_inputs.branch { meta, files ->
-        fastq: meta.is_fastq == true
-        bam: meta.is_fastq == false
-    }
-
+    // TMP: Branches into single_fq and multiple_fq
     // Process FASTQ inputs
-    ch_fastq = branchFastqToSingleAndMulti(ch_inputs_branched.fastq)
+    ch_fastq = branchFastqToSingleAndMulti(ch_fastq_input_reads)
 
-    CAT_FASTQ(ch_fastq.multiple_fq)
+    // TMP: Only those with multiple fastq files need to be concatenated, add together with single_fq and process with FASTP
+    CAT_FASTQ (ch_fastq.multiple_fq)
+
     ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_fastq.single_fq)
 
     FASTP(ch_cat_fastq, [], false, false, false)
 
+    // TMP: Align only fastqs
     STAR_ALIGN(FASTP.out.reads, star_index, ch_gtf, false, ch_platform, false)
 
     // Process BAM inputs - extract BAM files and convert to FASTQ
-    ch_bam_input_reads = ch_inputs_branched.bam.map { meta, bambai -> [ meta, bambai[0] ] }
-    ch_bai_input_reads = ch_inputs_branched.bam.map { meta, bambai -> [ meta, bambai[1] ] }
+    ch_bam_input_reads = ch_bam_bai_input_reads.map { meta, bambai -> [ meta, bambai[0] ] }
+    ch_bai_input_reads = ch_bam_bai_input_reads.map { meta, bambai -> [ meta, bambai[1] ] }
 
     SAMTOOLS_FASTQ(ch_bam_input_reads, false)
 
@@ -61,16 +57,18 @@ workflow ALIGNMENT {
     // Run SALMON_QUANT
     SALMON_QUANT(ch_salmon_input, salmon_index, ch_gtf.map{ _meta, gtf -> gtf }, [], false, 'A')
 
+    // TMP: Combine BAM inputs and aligned BAMS
     // Continue with BAM processing
-    ch_bam_from_star = STAR_ALIGN.out.bam_sorted_aligned
-    ch_bam_2_process = ch_bam_input_reads.mix(ch_bam_from_star)
+    ch_aligned_bams = ch_bam_input_reads.mix(STAR_ALIGN.out.bam_sorted_aligned)
 
-    SAMTOOLS_INDEX(ch_bam_from_star)
+    SAMTOOLS_INDEX(STAR_ALIGN.out.bam_sorted_aligned)
+
     ch_bai = ch_bai_input_reads.mix(SAMTOOLS_INDEX.out.bai)
-
     // Subsampling and downsampling logic
+    ch_aligned_bams.view()
+    //TODO: Continue here
     if (!skip_subsample_region) {
-        RNA_SUBSAMPLE_REGION(ch_bam_2_process, subsample_bed, seed_frac)
+        RNA_SUBSAMPLE_REGION(ch_aligned_bams, subsample_bed, seed_frac)
         ch_bam_bai_not_downsamp = RNA_SUBSAMPLE_REGION.out.bam_bai
         ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
         if (skip_downsample) {
@@ -81,24 +79,22 @@ workflow ALIGNMENT {
             ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
         }
     } else {
-        ch_bam_bai_not_downsamp = ch_bam_2_process.join(ch_bai)
+        ch_bam_bai_not_downsamp = ch_aligned_bams.join(ch_bai)
         if (skip_downsample) {
-            ch_bam_bai_input_drop = ch_bam_2_process.join(ch_bai)
+            ch_bam_bai_input_drop = ch_aligned_bams.join(ch_bai)
         } else {
             RNA_DOWNSAMPLE(ch_bam_bai_not_downsamp, num_reads)
             ch_bam_bai_input_drop = RNA_DOWNSAMPLE.out.bam_bai
             ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
         }
     }
-
     if (save_mapped_as_cram) {
-        SAMTOOLS_VIEW(ch_bam_2_process.join(ch_bai), ch_genome_fasta, [], 'crai')
+        SAMTOOLS_VIEW(ch_aligned_bams.join(ch_bai), ch_genome_fasta, [], 'crai')
         ch_versions = ch_versions.mix(SAMTOOLS_VIEW.out.versions.first())
         ch_cram_crai = SAMTOOLS_VIEW.out.cram.join(SAMTOOLS_VIEW.out.crai)
     } else {
         ch_cram_crai = Channel.empty()
     }
-
     // Collect versions
     ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first())
     ch_versions = ch_versions.mix(FASTP.out.versions.first())
@@ -106,11 +102,10 @@ workflow ALIGNMENT {
     ch_versions = ch_versions.mix(SAMTOOLS_FASTQ.out.versions.first())
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
     ch_versions = ch_versions.mix(SALMON_QUANT.out.versions.first())
-
     emit:
     merged_reads    = CAT_FASTQ.out.reads              // channel: [ val(meta), path(fastq) ]
     fastp_report    = FASTP.out.json                   // channel: [ val(meta), path(json) ]
-    bam             = ch_bam_2_process                 // channel: [ val(meta), path(bam) ]
+    bam             = ch_aligned_bams                 // channel: [ val(meta), path(bam) ]
     bam_bai         = ch_bam_bai_not_downsamp          // channel: [ val(meta), path(bam), path(bai) ]
     bam_ds_bai      = ch_bam_bai_input_drop            // channel: [ val(meta), path(bam), path(bai) ]
     gene_counts     = STAR_ALIGN.out.read_per_gene_tab // channel: [ val(meta), path(tsv) ]
