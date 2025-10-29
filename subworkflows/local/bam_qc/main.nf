@@ -6,6 +6,7 @@ include { PICARD_COLLECTRNASEQMETRICS     } from '../../../modules/nf-core/picar
 include { PICARD_COLLECTINSERTSIZEMETRICS } from '../../../modules/nf-core/picard/collectinsertsizemetrics/main'
 include { SAMTOOLS_VIEW                   } from '../../../modules/nf-core/samtools/view/main.nf'
 include { SAMTOOLS_CONVERT } from '../../../modules/nf-core/samtools/convert/main.nf'
+include { SAMTOOLS_INDEX } from '../../../modules/nf-core/samtools/index/main.nf'
 
 workflow BAM_QC {
     take:
@@ -19,7 +20,11 @@ workflow BAM_QC {
 
     // FIXME: Insert pre-processing here using samtools
 
-    SAMTOOLS_VIEW(ch_bam, [], [], 'bai')
+    SAMTOOLS_INDEX(ch_bam)
+
+    ch_bam_bai = ch_bam.mix(SAMTOOLS_INDEX.out.bai)
+
+    SAMTOOLS_VIEW(ch_bam_bai, [], [], 'bai')
 
     PICARD_COLLECTRNASEQMETRICS(
         SAMTOOLS_VIEW.out.bam,
