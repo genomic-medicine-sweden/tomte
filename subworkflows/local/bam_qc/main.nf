@@ -29,7 +29,7 @@ workflow BAM_QC {
 
     ch_bam_bai.view { it -> "[bamqc] ch_bam_bai ${it}" }
 
-    SAMTOOLS_VIEW(ch_bam_bai, [[]], [], 'bai')
+    SAMTOOLS_VIEW(ch_bam_bai, ch_fasta, [], 'bai')
 
     PICARD_COLLECTRNASEQMETRICS(
         SAMTOOLS_VIEW.out.bam,
