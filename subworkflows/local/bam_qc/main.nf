@@ -4,6 +4,8 @@
 
 include { PICARD_COLLECTRNASEQMETRICS     } from '../../../modules/nf-core/picard/collectrnaseqmetrics/main'
 include { PICARD_COLLECTINSERTSIZEMETRICS } from '../../../modules/nf-core/picard/collectinsertsizemetrics/main'
+include { SAMTOOLS_VIEW                   } from '../../../modules/nf-core/samtools/view/main.nf'
+include { SAMTOOLS_CONVERT } from '../../../modules/nf-core/samtools/convert/main.nf'
 
 workflow BAM_QC {
     take:
@@ -15,8 +17,12 @@ workflow BAM_QC {
     main:
     ch_versions = Channel.empty()
 
+    // FIXME: Insert pre-processing here using samtools
+
+    SAMTOOLS_VIEW(ch_bam, [], [], 'bai')
+
     PICARD_COLLECTRNASEQMETRICS(
-        ch_bam,
+        SAMTOOLS_VIEW.out.bam,
         ch_refflat,
         ch_fasta.map{ _meta, fasta -> fasta },
         ch_rrna_intervals
