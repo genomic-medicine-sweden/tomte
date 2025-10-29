@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 4.1.1 - [2025-10-29]
+
+### `Changed`
+
+- Increased number of nf-test shards for faster CI tests [#278](https://github.com/genomic-medicine-sweden/tomte/pull/278)
+- Removed the singularity profile from nf-test due to space issues when pulling the drop container [#278](https://github.com/genomic-medicine-sweden/tomte/pull/278)
+
+### `Fixed`
+
+- Fixed input declaration mismatch causing the pipeline to crash when trying to run peddy [#278](https://github.com/genomic-medicine-sweden/tomte/pull/278)
+
 ## 4.1.0 - [2025-09-22]
 
 ### `Added`
