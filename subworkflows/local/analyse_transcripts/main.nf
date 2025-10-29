@@ -47,7 +47,8 @@ workflow ANALYSE_TRANSCRIPTS {
 
     ch_bam_ds_bai
         .map { meta, bam, bai ->
-        [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.vcf, meta.vcf_tbi, meta.dna_id, bam, bai ]
+            [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.dna_vcf, meta.dna_vcf_tbi, meta.id, bam, bai ]
+            // [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.vcf, meta.vcf_tbi, meta.dna_id, bam, bai ]
         }
         .collect(flat:false)
         .map { it.sort { a, b -> a[0] <=> b[0] } } // Sort on ID
@@ -63,10 +64,10 @@ workflow ANALYSE_TRANSCRIPTS {
     // Make channel containing only vcf and its index, removing NAs in case those files are present only for some samples
     ch_bam_ds_bai
         .filter { meta, bam, bai ->
-            meta.vcf && meta.vcf != "NA" && meta.vcf.toString() != "" && meta.vcf.toString().trim() != ""
+            meta.dna_vcf && meta.dna_vcf != "NA" && meta.dna_vcf.toString() != "" && meta.dna_vcf.toString().trim() != ""
         }
         .map { meta, bam, bai ->
-            [ meta.vcf, meta.vcf_tbi ]
+            [ meta.dna_vcf, meta.dna_vcf_tbi ]
         }
         .set { ch_vcf_tbi_files }
 
@@ -140,6 +141,9 @@ workflow ANALYSE_TRANSCRIPTS {
         if ( !skip_drop_mae ) {
 
             log.info "[MAE-DEBUG] Entering MAE block: invoking DROP_CONFIG_RUN_MAE"
+
+            ch_vcf_tbi_files.view { it -> "ch_vcf_tbi_files ${it}" }
+            ch_drop_mae_high_q_vcf_tbi.view { it -> "ch_drop_mae_high_q_vcf_tbi ${it}" }
 
             DROP_CONFIG_RUN_MAE(
                 ch_fasta_fai,
