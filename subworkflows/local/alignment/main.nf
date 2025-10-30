@@ -109,22 +109,20 @@ workflow ALIGNMENT {
         )
         ch_versions = ch_versions.mix(RNA_SUBSAMPLE_REGION.out.versions.first())
 
-        ch_bam_bai_not_downsampled = RNA_SUBSAMPLE_REGION.out.bam_bai
+        ch_bam_bai_final = RNA_SUBSAMPLE_REGION.out.bam_bai
     } else {
-        ch_bam_bai_not_downsampled = ch_aligned_bams
+        ch_bam_bai_final = ch_aligned_bams
             .join(ch_bai)
     }
 
-    if (skip_downsample) {
-        ch_bam_bai_input_drop = ch_bam_bai_not_downsampled
-    } else {
+    if (!skip_downsample) {
         RNA_DOWNSAMPLE(
-            ch_bam_bai_not_downsampled,
+            ch_bam_bai_final,
             num_reads
         )
         ch_versions = ch_versions.mix(RNA_DOWNSAMPLE.out.versions.first())
 
-        ch_bam_bai_input_drop = RNA_DOWNSAMPLE.out.bam_bai
+        ch_bam_bai_final = RNA_DOWNSAMPLE.out.bam_bai
     }
 
     if (save_mapped_as_cram) {
@@ -145,8 +143,8 @@ workflow ALIGNMENT {
     merged_reads    = CAT_FASTQ.out.reads              // channel: [ val(meta), path(fastq) ]
     fastp_report    = FASTP.out.json                   // channel: [ val(meta), path(json) ]
     bam             = ch_aligned_bams                  // channel: [ val(meta), path(bam) ]
-    bam_bai         = ch_bam_bai_not_downsampled       // channel: [ val(meta), path(bam), path(bai) ]
-    bam_ds_bai      = ch_bam_bai_input_drop            // channel: [ val(meta), path(bam), path(bai) ]
+    bam_bai         = ch_bam_bai_final                 // channel: [ val(meta), path(bam), path(bai) ]
+    bam_ds_bai      = ch_bam_bai_final                 // channel: [ val(meta), path(bam), path(bai) ]
     gene_counts     = STAR_ALIGN.out.read_per_gene_tab // channel: [ val(meta), path(tsv) ]
     spl_junc        = STAR_ALIGN.out.spl_junc_tab      // channel: [ val(meta), path(tsv) ]
     star_log_final  = STAR_ALIGN.out.log_final         // channel: [ val(meta), path(log) ]
