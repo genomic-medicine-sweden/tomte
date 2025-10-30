@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Reduced the number of samples in DROP test_data to speed up tests [#268](https://github.com/genomic-medicine-sweden/tomte/pull/268)
-- Automatically skip subsampling if no subsample bed is provided [#](https://github.com/genomic-medicine-sweden/tomte/pull/)
+- Automatically skip subsampling if no subsample bed is provided [#284](https://github.com/genomic-medicine-sweden/tomte/pull/284)
+- Removed automatic formatting for the auto-generated parameters.md document [#284](https://github.com/genomic-medicine-sweden/tomte/pull/284)
 
 ### `Fixed`
 
