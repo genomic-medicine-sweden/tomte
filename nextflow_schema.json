@@ -379,7 +379,7 @@
                 },
                 "drop_zscorecutoff": {
                     "type": "number",
-                    "default": 0.0,
+                    "default": 0,
                     "description": "Z-score cut-off for DROP Aberrant Expression module",
                     "fa_icon": "fas fa-greater-than-equal"
                 },
