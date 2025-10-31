@@ -203,7 +203,7 @@ The mandatory and optional parameters for each category are tabulated below.
 | subsample_bed | skip_subsample_region<sup>1</sup> |
 |               | seed_frac<sup>2</sup>             |
 
-<sup>1</sup> If it is not provided by the user, the default value is false
+<sup>1</sup> If it is not provided by the user, the default value is false if providing `subsample_bed`, true if not.
 <sup>2</sup> If it is not provided by the user, the default value is 0.001
 
 ##### 4. Variant calling - SNV

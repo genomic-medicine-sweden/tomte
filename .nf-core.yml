@@ -16,6 +16,7 @@ lint:
     - .github/workflows/linting.yml
     - .github/workflows/branch.yml
     - .github/ISSUE_TEMPLATE/feature_request.yml
+    - .prettierignore
     - assets/email_template.html
     - assets/email_template.txt
     - lib/NfcoreTemplate.groovy
