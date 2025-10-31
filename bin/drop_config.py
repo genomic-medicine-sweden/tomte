@@ -53,7 +53,8 @@ CONFIG_YAML = {
         "gatkIgnoreHeaderCheck": True,
         "padjCutoff": 0.2,
         "allelicRatioCutoff": 0.8,
-        "addAF": True,
+        # FIXME: Let's start here, but ask if Stockholm prefer this to be a parameter
+        "addAF": False,
         "maxAF": 0.001,
         "maxVarFreqCohort": 0.05,
         "qcVcf": None,

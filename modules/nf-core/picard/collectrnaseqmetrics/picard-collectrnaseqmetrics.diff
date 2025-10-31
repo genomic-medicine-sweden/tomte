@@ -1,0 +1,33 @@
+Changes in component 'nf-core/picard/collectrnaseqmetrics'
+'modules/nf-core/picard/collectrnaseqmetrics/meta.yml' is unchanged
+Changes in 'picard/collectrnaseqmetrics/main.nf':
+--- modules/nf-core/picard/collectrnaseqmetrics/main.nf
++++ modules/nf-core/picard/collectrnaseqmetrics/main.nf
+@@ -4,9 +4,9 @@
+ 
+     conda "${moduleDir}/environment.yml"
+     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/08/0861295baa7c01fc593a9da94e82b44a729dcaf8da92be8e565da109aa549b25/data' :
+-        'community.wave.seqera.io/library/picard:3.4.0--e9963040df0a9bf6' }"
+-
++        'https://depot.galaxyproject.org/singularity/picard:3.3.0--hdfd78af_0' :
++        'biocontainers/picard:3.3.0--hdfd78af_0' }"
++        
+     input:
+     tuple val(meta), path(bam)
+     path ref_flat
+
+Changes in 'picard/collectrnaseqmetrics/environment.yml':
+--- modules/nf-core/picard/collectrnaseqmetrics/environment.yml
++++ modules/nf-core/picard/collectrnaseqmetrics/environment.yml
+@@ -5,4 +5,4 @@
+   - bioconda
+ dependencies:
+   # renovate: datasource=conda depName=bioconda/picard
+-  - bioconda::picard=3.4.0
++  - bioconda::picard=3.3.0
+
+'modules/nf-core/picard/collectrnaseqmetrics/tests/main.nf.test' is unchanged
+'modules/nf-core/picard/collectrnaseqmetrics/tests/nextflow.config' is unchanged
+'modules/nf-core/picard/collectrnaseqmetrics/tests/main.nf.test.snap' is unchanged
+************************************************************
