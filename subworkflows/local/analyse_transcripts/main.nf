@@ -41,7 +41,7 @@ workflow ANALYSE_TRANSCRIPTS {
 
     ch_bam_ds_bai
         .map { meta, bam, bai ->
-            [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.dna_vcf, meta.dna_vcf_tbi, meta.id, bam, bai ]
+            [ meta.id, meta.single_end, meta.strandedness, meta.sex, meta.dna_vcf, meta.dna_vcf_tbi, meta.dna_id_mae, bam, bai ]
         }
         .collect(flat:false)
         .map { it.sort { a, b -> a[0] <=> b[0] } } // Sort on ID
