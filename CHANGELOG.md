@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Remove duplicate report channel, avoiding crash when skipping VEP [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
+- Revert Picard version to not crash CollectRNASeqMetrics when reads map to different chromosomes [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
+
 ## 4.1.1 - [2025-10-29]
 
 ### `Changed`
