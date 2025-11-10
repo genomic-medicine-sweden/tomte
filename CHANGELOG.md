@@ -11,9 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `drop_add_af` parameter is provided with default true parameter. If true, DROP will access the internet to retrieve Gnomad frequencies and include in MAE output. [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
 
-| Old parameter | New parameter             |
-| ------------- | ------------------------- |
-|               | drop_add_af               |
+| Old parameter | New parameter |
+| ------------- | ------------- |
+|               | drop_add_af   |
 
 > [!NOTE]
 > Parameter has been updated if both old and new parameter information is present.
@@ -27,9 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed automatic formatting for the auto-generated parameters.md document [#284](https://github.com/genomic-medicine-sweden/tomte/pull/284)
 - Reverted Picard version to not crash CollectRNASeqMetrics when reads map to different chromosomes [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
 
-| Tool                            | Old version | New version |
-| ------------------------------- | ----------- | ----------- |
-| picard                          | 3.4.0       | 3.3.0       |
+| Tool   | Old version | New version |
+| ------ | ----------- | ----------- |
+| picard | 3.4.0       | 3.3.0       |
 
 > [!NOTE]
 > Version has been updated if both old and new version information is present.
