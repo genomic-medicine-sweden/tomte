@@ -29,7 +29,7 @@ process DROP_CONFIG_RUN_MAE {
     def args = task.ext.args ?: ''
     def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
     def gtf_basename = gtf.getName().replaceAll(/\.(gtf|gff3?|GTF|GFF3?)$/, '')
-    def addAF = drop_add_af ? "--drop_ad_af" : ''
+    def addAF = drop_add_af ? "--drop_add_af" : ''
 
     """
     TMPDIR=\$PWD
