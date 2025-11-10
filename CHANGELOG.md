@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ------------- | ------------------------- |
 |               | drop_add_af               |
 
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
+
 ### `Changed`
 
 - Reduced the number of samples in DROP test_data to speed up tests [#268](https://github.com/genomic-medicine-sweden/tomte/pull/268)
@@ -25,6 +30,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool                            | Old version | New version |
 | ------------------------------- | ----------- | ----------- |
 | picard                          | 3.4.0       | 3.3.0       |
+
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
 
 ### `Fixed`
 
