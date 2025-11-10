@@ -14,13 +14,13 @@
                 "MAE_results_grch37_chr21.tsv"
             ],
             [
-                "versions.yml:md5,c4ab4dc08b37699c8675a94f2c9fce94"
+                "versions.yml:md5,33637b34396dc4e53024a92dfc20cb5a"
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.5"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2025-09-17T09:53:16.567081068"
+        "timestamp": "2025-11-10T11:55:09.034731965"
     }
 }
