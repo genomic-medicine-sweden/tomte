@@ -15,7 +15,7 @@
                     "gawk": "5.1.0"
                 },
                 "DROP_CONFIG_RUN_MAE": {
-                    "drop_config": 2.2,
+                    "drop_config": 2.3,
                     "drop": "1.4.0"
                 },
                 "DROP_FILTER_RESULTS": {
