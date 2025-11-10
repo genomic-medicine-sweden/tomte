@@ -6,7 +6,7 @@ import yaml
 from typing import Dict, Any
 from copy import deepcopy
 
-SCRIPT_VERSION = "2.2"
+SCRIPT_VERSION = "2.3"
 CONFIG_YAML = {
     "projectTitle": "DROP: Detection of RNA Outliers Pipeline",
     "root": None,
@@ -53,8 +53,7 @@ CONFIG_YAML = {
         "gatkIgnoreHeaderCheck": True,
         "padjCutoff": 0.2,
         "allelicRatioCutoff": 0.8,
-        # FIXME: Let's start here, but ask if Stockholm prefer this to be a parameter
-        "addAF": False,
+        "addAF": True,
         "maxAF": 0.001,
         "maxVarFreqCohort": 0.05,
         "qcVcf": None,
@@ -92,6 +91,7 @@ def update_config(
     zscorecutoff: float,
     drop_module: str,
     drop_mae_high_q_vcf: str,
+    drop_add_af: bool,
 ) -> Dict:
     """
     Updates config file to add correct genome, gtf,
@@ -111,7 +111,6 @@ def update_config(
     config_copy["genomeAssembly"] = genome_assembly
     config_copy["exportCounts"]["excludeGroups"] = [drop_other_group_samples]
 
-    # Export counts
     if drop_module == "AE":
         config_copy["aberrantExpression"]["run"] = ["true"]
         config_copy["aberrantExpression"]["groups"] = [drop_group_samples]
@@ -124,6 +123,8 @@ def update_config(
     elif drop_module == "MAE":
         config_copy["mae"]["run"] = ["true"]
         config_copy["mae"]["qcVcf"] = [drop_mae_high_q_vcf]
+        config_copy["mae"]["addAF"] = drop_add_af
+
     return config_copy
 
 
@@ -202,6 +203,11 @@ def parse_args(argv=None):
         required=False,
     )
     parser.add_argument(
+        "--drop_add_af",
+        action="store_true",
+        help="Should DROP access internet to add Gnomad frequencies in RNA-seq and MAE modules"
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=SCRIPT_VERSION,
@@ -222,6 +228,7 @@ def main():
         zscorecutoff=args.zscorecutoff,
         drop_module=args.drop_module,
         drop_mae_high_q_vcf=args.drop_mae_high_q_vcf,
+        drop_add_af=args.drop_add_af,
     )
     write_yaml(out_path=args.output, yaml_object=master_config)
 

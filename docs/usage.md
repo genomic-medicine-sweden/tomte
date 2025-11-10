@@ -260,6 +260,7 @@ DROP - aberrant expression
 |                                       | num_reads<sup>7</sup>               |
 |                                       | genome<sup>8</sup>                  |
 |                                       | skip_export_counts_drop<sup>9</sup> |
+|                                       | drop_add_af<sup>10</sup>            |
 
 <sup>1</sup> To get more information on how to format it, see below<br />
 <sup>2</sup> If it is not provided by the user, the default value is false<br />
@@ -270,6 +271,7 @@ DROP - aberrant expression
 <sup>7</sup> If it is not provided by the user, the default value is 120000000<br />
 <sup>8</sup> If it is not provided by the user, the default value is GRCh38
 <sup>9</sup> If it is not provided by the user, the default value is true<br />
+<sup>10</sup> If it is not provided by the user, the default value is true<br />
 
 DROP - aberrant splicing
 

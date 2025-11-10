@@ -11,6 +11,7 @@ process DROP_CONFIG_RUN_MAE {
     tuple path(bam), path(bai)
     tuple path(vcf), path(vcf_tbi)
     tuple path(drop_mae_high_q_vcf), path(drop_mae_high_q_vcf_tbi)
+    val(drop_add_af)
 
     output:
     path('config.yaml')       , emit: config_drop
@@ -28,6 +29,7 @@ process DROP_CONFIG_RUN_MAE {
     def args = task.ext.args ?: ''
     def genome_assembly = "${genome}".contains("h37") ? "hg19" : "${genome}"
     def gtf_basename = gtf.getName().replaceAll(/\.(gtf|gff3?|GTF|GFF3?)$/, '')
+    def addAF = drop_add_af ? "--drop_ad_af" : ''
 
     """
     TMPDIR=\$PWD
@@ -48,6 +50,7 @@ process DROP_CONFIG_RUN_MAE {
         --drop_module MAE \\
         --genome_assembly $genome_assembly \\
         --drop_mae_high_q_vcf $drop_mae_high_q_vcf \\
+        $addAF \\
         --output config.yaml
 
     snakemake mae --cores ${task.cpus} --rerun-triggers mtime $args

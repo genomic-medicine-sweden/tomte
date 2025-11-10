@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- `drop_add_af` parameter is provided as a optional and default true parameter. If true, DROP will access the internet to retrieve Gnomad frequencies and include in MAE output. [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
+
 ### `Parameters`
 
 ### `Changed`
