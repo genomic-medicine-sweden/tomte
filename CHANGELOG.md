@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Parameters`
 
-- `drop_add_af` parameter is provided as a optional and default true parameter. If true, DROP will access the internet to retrieve Gnomad frequencies and include in MAE output. [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
+- `drop_add_af` parameter is provided with default true parameter. If true, DROP will access the internet to retrieve Gnomad frequencies and include in MAE output. [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
 
 | Old parameter | New parameter             |
 | ------------- | ------------------------- |
@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reduced the number of samples in DROP test_data to speed up tests [#268](https://github.com/genomic-medicine-sweden/tomte/pull/268)
 - Automatically skip subsampling if no subsample bed is provided [#284](https://github.com/genomic-medicine-sweden/tomte/pull/284)
 - Removed automatic formatting for the auto-generated parameters.md document [#284](https://github.com/genomic-medicine-sweden/tomte/pull/284)
-- Backed Picard version to 3.3.0 from 3.4.0 to not crash CollectRNASeqMetrics when reads map to different chromosomes [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
+- Reverted Picard version to not crash CollectRNASeqMetrics when reads map to different chromosomes [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
 
 | Tool                            | Old version | New version |
 | ------------------------------- | ----------- | ----------- |
