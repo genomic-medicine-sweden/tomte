@@ -160,15 +160,14 @@ nextflow_workflow {
                 input[12] = 1
                 input[13] = 2.5
                 input[14] = true
-                input[15] = true
-                input[16] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
-                input[17] = Channel.of([probands:['ACC5963A1'], id:'finequagga']).collect()
-                input[18] = false
+                input[15] = channel.fromPath("${projectDir}/test_data/drop_data/mock_gene_panel.tsv", checkIfExists: true).collect()
+                input[16] = Channel.of([probands:['ACC5963A1'], id:'finequagga']).collect()
+                input[17] = false
+                input[18] = true
                 input[19] = true
                 input[20] = true
-                input[21] = true
-                input[22] = [[],[]]
-                input[23] = true
+                input[21] = [[],[]]
+                input[22] = true
                 """
             }
         }
