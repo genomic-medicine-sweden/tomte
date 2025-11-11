@@ -39,4 +39,4 @@ template:
   name: tomte
   org: genomic-medicine-sweden
   outdir: .
-  version: 4.2.0dev
+  version: 4.2.0
