@@ -383,6 +383,12 @@
                     "description": "Z-score cut-off for DROP Aberrant Expression module",
                     "fa_icon": "fas fa-greater-than-equal"
                 },
+                "drop_add_af": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Toggle whether DROP adds allele frequency annotations when running DROP MAE module. Requires internet access.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "reference_drop_annot_file": {
                     "type": "string",
                     "description": "Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP.",

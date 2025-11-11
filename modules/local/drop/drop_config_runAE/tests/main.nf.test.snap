@@ -14,13 +14,13 @@
                 "output"
             ],
             [
-                "versions.yml:md5,9083ddef048725b882c5e14c05e12fcd"
+                "versions.yml:md5,6e46638f15770c07821afba1f2bed8ad"
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.5"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2025-09-17T09:50:57.278601396"
+        "timestamp": "2025-11-10T11:45:01.483926231"
     }
 }

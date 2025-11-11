@@ -20,14 +20,14 @@
                 "insert_size\tAll_Reads.fr_count"
             ],
             [
-                "versions.yml:md5,525ff00c2ac6befe143f16b1d4b0bba6",
-                "versions.yml:md5,f2ccf683968d7657ac00eaf5cfaf4b7a"
+                "versions.yml:md5,05c28410db2da889c4c244fd2d01161f",
+                "versions.yml:md5,5d2ce8e71f24ac4d6da4df6278d2a255"
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.5"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2025-09-19T11:25:28.312288194"
+        "timestamp": "2025-11-06T12:24:14.470897469"
     }
 }

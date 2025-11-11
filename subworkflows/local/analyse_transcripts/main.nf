@@ -27,6 +27,7 @@ workflow ANALYSE_TRANSCRIPTS {
     drop_padjcutoff_ae            // parameter: [optional]  default: 0.05
     drop_padjcutoff_as            // parameter: [optional]  default: 0.1
     drop_zscorecutoff             // parameter: [optional]  default: 0
+    drop_add_af                   // parameter: [optional]  default: true
     ch_gene_panel_clinical_filter //   channel: [optional]  [ path(tsv) ]
     case_info                     //   channel: [optional]  [ val(case_id) ]
     skip_drop_ae                  // parameter: [mandatory] default: false
@@ -122,7 +123,8 @@ workflow ANALYSE_TRANSCRIPTS {
                 genome,
                 ch_bam_bai_files,
                 ch_vcf_tbi_files,
-                ch_drop_mae_high_q_vcf_tbi
+                ch_drop_mae_high_q_vcf_tbi,
+                drop_add_af
             )
             ch_versions = ch_versions.mix( DROP_CONFIG_RUN_MAE.out.versions )
         }

@@ -141,6 +141,7 @@ nextflow_process {
                             file("${projectDir}/test_data/qc_vcf_1000G_hg19_chr21.vcf.gz", checkIfExists: true),
                             file("${projectDir}/test_data/qc_vcf_1000G_hg19_chr21.vcf.gz.tbi", checkIfExists: true)
                         ])
+                    input[8] = true
                     """
                 }
             }
@@ -251,6 +252,7 @@ nextflow_process {
                             file("${projectDir}/test_data/qc_vcf_1000G_hg19_chr21.vcf.gz", checkIfExists: true),
                             file("${projectDir}/test_data/qc_vcf_1000G_hg19_chr21.vcf.gz.tbi", checkIfExists: true)
                         ])
+                    input[8] = true
                     """
                 }
             }

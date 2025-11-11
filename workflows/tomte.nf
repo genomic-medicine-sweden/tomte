@@ -207,6 +207,7 @@ workflow TOMTE {
         params.drop_padjcutoff_ae,
         params.drop_padjcutoff_as,
         params.drop_zscorecutoff,
+        params.drop_add_af,
         ch_gene_panel_clinical_filter,
         ch_case_info,
         params.skip_drop_ae,
@@ -255,7 +256,6 @@ workflow TOMTE {
         }
 
         ch_multiqc_files = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
-        ch_multiqc_files = ch_multiqc_files.mix(ANNOTATE_SNV.out.report.collect{it[1]}.ifEmpty([]))
     } else {
         ch_vcf_tbi = Channel.empty()
     }

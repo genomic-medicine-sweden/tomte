@@ -15,7 +15,7 @@
                     "gawk": "5.1.0"
                 },
                 "DROP_CONFIG_RUN_MAE": {
-                    "drop_config": 2.2,
+                    "drop_config": 2.3,
                     "drop": "1.4.0"
                 },
                 "DROP_FILTER_RESULTS": {
@@ -47,10 +47,10 @@
                     "gunzip": 1.13
                 },
                 "PICARD_COLLECTINSERTSIZEMETRICS": {
-                    "picard": "3.4.0"
+                    "picard": "3.3.0"
                 },
                 "PICARD_COLLECTRNASEQMETRICS": {
-                    "picard": "3.4.0"
+                    "picard": "3.3.0"
                 },
                 "SALMON_INDEX": {
                     "salmon": "1.10.3"
@@ -372,9 +372,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2025-09-24T10:39:14.018610698"
+        "timestamp": "2025-11-06T12:54:28.130253491"
     }
 }
