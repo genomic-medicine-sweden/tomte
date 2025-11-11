@@ -84,7 +84,7 @@ Options related to variant calling
 | `drop_padjcutoff_ae` | Adjusted p-value cut-off for DROP Aberrant Expression module | `number` | 0.05 |  |  |
 | `drop_padjcutoff_as` | Adjusted p-value cut-off for DROP Aberrant Splicing module | `number` | 0.1 |  |  |
 | `drop_zscorecutoff` | Z-score cut-off for DROP Aberrant Expression module | `number` | 0 |  |  |
-| `drop_add_af` | Toggle whether DROP should add allele frequencies to output in MAE module. Requires internet access. | `boolean` | True |  |  |
+| `drop_add_af` | Toggle whether DROP adds allele frequency annotations when running DROP MAE module. Requires internet access. | `boolean` | True |  |  |
 | `reference_drop_annot_file` | Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP. | `string` |  |  |  |
 | `reference_drop_count_file` | If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to use as controls | `string` |  |  |  |
 | `reference_drop_splice_folder` | If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside folder must be tsv.gz | `string` |  |  |  |

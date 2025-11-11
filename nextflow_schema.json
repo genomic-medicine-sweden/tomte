@@ -386,7 +386,7 @@
                 "drop_add_af": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Toggle whether DROP adds allele frequency annotations when running DROP MAE module",
+                    "description": "Toggle whether DROP adds allele frequency annotations when running DROP MAE module. Requires internet access.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "reference_drop_annot_file": {
