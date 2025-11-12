@@ -258,9 +258,9 @@
                 },
                 "skip_subsample_region": {
                     "type": "boolean",
-                    "default": false,
-                    "description": "Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac",
-                    "fa_icon": "fas fa-toggle-off"
+                    "description": "Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac. By default true if no subsample_bed is provided.",
+                    "fa_icon": "fas fa-toggle-off",
+                    "default": true
                 },
                 "skip_downsample": {
                     "type": "boolean",
@@ -382,6 +382,12 @@
                     "default": 0,
                     "description": "Z-score cut-off for DROP Aberrant Expression module",
                     "fa_icon": "fas fa-greater-than-equal"
+                },
+                "drop_add_af": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Toggle whether DROP adds allele frequency annotations when running DROP MAE module. Requires internet access.",
+                    "fa_icon": "fas fa-toggle-on"
                 },
                 "reference_drop_annot_file": {
                     "type": "string",

@@ -120,12 +120,14 @@
                     "picard/collectinsertsizemetrics": {
                         "branch": "master",
                         "git_sha": "df124e87c74d8b40285199f8cc20151f5aa57255",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/picard/collectinsertsizemetrics/picard-collectinsertsizemetrics.diff"
                     },
                     "picard/collectrnaseqmetrics": {
                         "branch": "master",
                         "git_sha": "df124e87c74d8b40285199f8cc20151f5aa57255",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/picard/collectrnaseqmetrics/picard-collectrnaseqmetrics.diff"
                     },
                     "salmon/index": {
                         "branch": "master",

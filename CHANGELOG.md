@@ -3,6 +3,43 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 4.2.0 - [2025-11-12]
+
+### `Added`
+
+### `Parameters`
+
+- `drop_add_af` parameter is provided with default true parameter. If true, DROP will access the internet to retrieve Gnomad frequencies and include in MAE output. [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+|               | drop_add_af   |
+
+> [!NOTE]
+> Parameter has been updated if both old and new parameter information is present.
+> Parameter has been added if just thenew parameter information is present.
+> Parameter has been removed if new parameter information isn't present.
+
+### `Changed`
+
+- Reduced the number of samples in DROP test_data to speed up tests [#268](https://github.com/genomic-medicine-sweden/tomte/pull/268)
+- Automatically skip subsampling if no subsample bed is provided [#284](https://github.com/genomic-medicine-sweden/tomte/pull/284)
+- Removed automatic formatting for the auto-generated parameters.md document [#284](https://github.com/genomic-medicine-sweden/tomte/pull/284)
+- Reverted Picard version to not crash CollectRNASeqMetrics when reads map to different chromosomes [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
+
+| Tool   | Old version | New version |
+| ------ | ----------- | ----------- |
+| picard | 3.4.0       | 3.3.0       |
+
+> [!NOTE]
+> Version has been updated if both old and new version information is present.
+> Version has been added if just the new version information is present.
+> Version has been removed if new version information isn't present.
+
+### `Fixed`
+
+- Remove duplicate report channel, avoiding crash when skipping VEP [#281](https://github.com/genomic-medicine-sweden/tomte/pull/281)
+
 ## 4.1.1 - [2025-10-29]
 
 ### `Changed`

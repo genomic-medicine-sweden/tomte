@@ -6,835 +6,129 @@ Pipeline to analyse germline RNAseq data
 
 Define where the pipeline should find input data and save output data.
 
-| Parameter             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Type      | Default | Required | Hidden |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ------- | -------- | ------ |
-| `input`               | Path to comma-separated file containing information about the samples in the experiment. <details><summary>Help</summary><small>You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with three mandatory columns (case, sample, strandedness), followed by fastq_1 (mandatory unless bam_cram and bai_crai are filled in), fastq_2 (optional), bam_cram (mandatory if fastq_1 is not given), bai_crai columns (mandatory if bam_cram is given), one optional (sex), and a header row.</small></details> | `string`  |         | True     |        |
-| `outdir`              | The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | `string`  | results | True     |        |
-| `email`               | Email address for completion summary. <details><summary>Help</summary><small>Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.</small></details>                                                                                                                                                                                                                                                                                                  | `string`  |         |          |        |
-| `multiqc_title`       | MultiQC report title. Printed as page header, used for filename if not otherwise specified.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `string`  |         |          |        |
-| `save_mapped_as_cram` | Do you want to save bam as cram                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | `boolean` | True    |          |        |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `input` | Path to comma-separated file containing information about the samples in the experiment. <details><summary>Help</summary><small>You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with three mandatory columns (case, sample, strandedness), followed by fastq_1 (mandatory unless bam_cram and bai_crai are filled in), fastq_2 (optional), bam_cram (mandatory if fastq_1 is not given), bai_crai columns (mandatory if bam_cram is given), several more optional (paternal, maternal, sex, dna_vcf, dna_vcf_tbi, dna_id_mae) and a header row.</small></details>| `string` |  | True |  |
+| `outdir` | The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure. | `string` | results | True |  |
+| `email` | Email address for completion summary. <details><summary>Help</summary><small>Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.</small></details>| `string` |  |  |  |
+| `multiqc_title` | MultiQC report title. Printed as page header, used for filename if not otherwise specified. | `string` |  |  |  |
+| `save_mapped_as_cram` | Do you want to save bam as cram | `boolean` | True |  |  |
 
 ## Reference genome options
 
 Reference genome related files and options required for the workflow.
 
-| Parameter                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Type      | Default                     | Required | Hidden |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------------------------- | -------- | ------ |
-| `genome`                     | Name of genome reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive. <details><summary>Help</summary><small>If using a reference genome configured in the pipeline using iGenomes, use `--igenomes_base` to provide a path, or you want to automatically download all required files, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. <br><br>See the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.</small></details> | `string`  | GRCh38                      |          |        |
-| `fasta`                      | Path to FASTA genome file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome` and `--gencode_annotation_version`.</small></details>                                                                                                                                                                                                                                                                                                                                                                                       | `string`  |                             |          |        |
-| `fai`                        | Path to FASTA genome index file. <details><summary>Help</summary><small>If none provided, will be generated automatically from the FASTA reference</small></details>                                                                                                                                                                                                                                                                                                                                                                                                                    | `string`  |                             |          | True   |
-| `gtf`                        | Path to GTF annotation file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome` and `--gencode_annotation_version`.</small></details>                                                                                                                                                                                                                                                                                                                                                                                     | `string`  |                             |          |        |
-| `gencode_annotation_version` | Name of Genomes gencode reference version to download if fasta or gtf is not provided. <details><summary>Help</summary><small>If fasta or gtf is not provided the gencode version specified will be downloaded. Combine with `--save_reference` to save gtf and/or fasta for future runs.</small></details>                                                                                                                                                                                                                                                                             | `integer` | 46                          |          |        |
-| `igenomes_ignore`            | Do not load the iGenomes reference config. <details><summary>Help</summary><small>Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`.</small></details>                                                                                                                                                                                                                                                                                                       | `boolean` |                             |          | True   |
-| `igenomes_base`              | The base path to the igenomes reference files                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `string`  | s3://ngi-igenomes/igenomes/ |          | True   |
-| `platform`                   | Specifies which platform was used for sequencing.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | `string`  | illumina                    |          |        |
-| `save_reference`             | If generated by the pipeline save the required indices/references in the results directory. <details><summary>Help</summary><small>The saved references can be used for future pipeline runs, reducing processing times.</small></details>                                                                                                                                                                                                                                                                                                                                              | `boolean` | True                        |          |        |
-| `sequence_dict`              | Genome dictionary file                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `string`  |                             |          | True   |
-| `star_index`                 | Path to directory or tar.gz archive for pre-built STAR index. <details><summary>Help</summary><small>Path to directory or tar.gz archive with pre-built STAR index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option "--save_reference".</small></details>                                                                                                                                                                                                                                                                    | `string`  |                             |          |        |
-| `salmon_index`               | Path to directory or tar.gz archive for pre-built Salmon index. <details><summary>Help</summary><small>Path to directory or tar.gz archive with pre-built Salmon index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option "--save_reference".</small></details>                                                                                                                                                                                                                                                                | `string`  |                             |          |        |
-| `transcript_fasta`           | Path to transcript FASTA file. <details><summary>Help</summary><small>Path to transcript FASTA file. If not given one will be created from the given fasta and gtf file.</small></details>                                                                                                                                                                                                                                                                                                                                                                                              | `string`  |                             |          |        |
-| `vep_cache`                  | Path to vep's cache directory. <details><summary>Help</summary><small>If no directory path is passed, vcf files will not be annotated by vep.</small></details>                                                                                                                                                                                                                                                                                                                                                                                                                         | `string`  |                             |          |        |
-| `vep_cache_version`          | Specifies version of vep cache to use.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `integer` | 112                         |          |        |
-| `vep_plugin_files`           | Databases used by both named and custom plugins to annotate variants. <details><summary>Help</summary><small>Path to a file containing the absolute paths to databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.</small></details>                                                                                                                                                                                                                                                                | `string`  |                             |          |        |
-| `skip_download_vep`          | Skip vep cache download.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | `boolean` | True                        |          |        |
-| `skip_download_gnomad`       | Skip gnomad reference download for vep.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `boolean` | True                        |          |        |
-| `vep_refs_download`          | Path to comma separated csv with paths to vep references to download, see example in test_data/vep_to_download.csv                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `string`  |                             |          |        |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `genome` | Name of genome reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive. (accepted: `hg19`\|`GRCh37`\|`hg38`\|`GRCh38`) <details><summary>Help</summary><small>If using a reference genome configured in the pipeline using iGenomes, use `--igenomes_base` to provide a path, or you want to automatically download all required files, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. <br><br>See the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.</small></details>| `string` | GRCh38 |  |  |
+| `fasta` | Path to FASTA genome file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome` and `--gencode_annotation_version`.</small></details>| `string` |  |  |  |
+| `fai` | Path to FASTA genome index file. <details><summary>Help</summary><small>If none provided, will be generated automatically from the FASTA reference</small></details>| `string` |  |  | True |
+| `gtf` | Path to GTF annotation file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome` and `--gencode_annotation_version`.</small></details>| `string` |  |  |  |
+| `gencode_annotation_version` | Name of Genomes gencode reference version to download if fasta or gtf is not provided. <details><summary>Help</summary><small>If fasta or gtf is not provided the gencode version specified will be downloaded. Combine with `--save_reference` to save gtf and/or fasta for future runs.</small></details>| `integer` | 46 |  |  |
+| `igenomes_ignore` | Do not load the iGenomes reference config. <details><summary>Help</summary><small>Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`.</small></details>| `boolean` |  |  | True |
+| `igenomes_base` | The base path to the igenomes reference files | `string` | s3://ngi-igenomes/igenomes/ |  | True |
+| `platform` | Specifies which platform was used for sequencing. (accepted: `illumina`) | `string` | illumina |  |  |
+| `save_reference` | If generated by the pipeline save the required indices/references in the results directory. <details><summary>Help</summary><small>The saved references can be used for future pipeline runs, reducing processing times.</small></details>| `boolean` | True |  |  |
+| `sequence_dict` | Genome dictionary file | `string` |  |  | True |
+| `star_index` | Path to directory or tar.gz archive for pre-built STAR index. <details><summary>Help</summary><small>Path to directory or tar.gz archive with pre-built STAR index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option "--save_reference".</small></details>| `string` |  |  |  |
+| `salmon_index` | Path to directory or tar.gz archive for pre-built Salmon index. <details><summary>Help</summary><small>Path to directory or tar.gz archive with pre-built Salmon index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option "--save_reference".</small></details>| `string` |  |  |  |
+| `transcript_fasta` | Path to transcript FASTA file. <details><summary>Help</summary><small>Path to transcript FASTA file.  If not given one will be created from the given fasta and gtf file.</small></details>| `string` |  |  |  |
+| `vep_cache` | Path to vep's cache directory. <details><summary>Help</summary><small>If no directory path is passed, vcf files will not be annotated by vep.</small></details>| `string` |  |  |  |
+| `vep_cache_version` | Specifies version of vep cache to use. (accepted: `107`\|`110`\|`112`) | `integer` | 112 |  |  |
+| `vep_plugin_files` | Databases used by both named and custom plugins to annotate variants. <details><summary>Help</summary><small>Path to a file containing the absolute paths to databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.</small></details>| `string` |  |  |  |
+| `skip_download_vep` | Skip vep cache download. | `boolean` | True |  |  |
+| `skip_download_gnomad` | Skip gnomad reference download for vep. | `boolean` | True |  |  |
+| `skip_download_drop_mae_high_q_vcf` | Skip download of reference VCF containing positions of SNPs that are usually called with high quality. Used in DROP MAE. | `boolean` | True |  |  |
+| `vep_refs_download` | Path to comma separated csv with paths to vep references to download, see example in test_data/vep_to_download.csv | `string` |  |  |  |
+| `drop_mae_high_q_vcf` | Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual <details><summary>Help</summary><small>Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual. The file is mandatory when running DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.</small></details>| `string` |  |  |  |
+| `drop_mae_high_q_vcf_tbi` | Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual <details><summary>Help</summary><small>Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual. The file is mandatory when running DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.</small></details>| `string` |  |  |  |
 
 ## Trimming options
 
 Options related to trimming of fastq files
 
-| Parameter            | Description                                                                                                                                                                                                  | Type      | Default | Required | Hidden |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ------- | -------- | ------ |
-| `min_trimmed_length` | Discard trimmed reads shorter than this <details><summary>Help</summary><small>Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp. </small></details> | `integer` | 40      |          |        |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `min_trimmed_length` | Discard trimmed reads shorter than this <details><summary>Help</summary><small>Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp.  </small></details>| `integer` | 40 |  |  |
 
 ## Alignment options
 
 Options related to alignment
 
-| Parameter               | Description                                                                                                                                                                                 | Type      | Default   | Required | Hidden |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------- | ------ |
-| `star_two_pass_mode`    | Set two pass mode for STAR <details><summary>Help</summary><small>Two pass mode for alignment with STAR. Default is 'Basic' but 'None' can be used to speed up alignment </small></details> | `string`  | Basic     |          |        |
-| `skip_subsample_region` | Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac                                                             | `boolean` | False     |          |        |
-| `skip_downsample`       | Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.                                                                              | `boolean` | False     |          |        |
-| `subsample_bed`         | Bed with regions to subsample                                                                                                                                                               | `string`  |           |          |        |
-| `seed_frac`             | -s INT.FRAC is equivalent to --subsample-seed INT --subsample 0.FRAC in samtools view                                                                                                       | `number`  | 0.001     |          |        |
-| `num_reads`             | Number of reads to downsample RNAseq sample to                                                                                                                                              | `integer` | 120000000 |          |        |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `star_two_pass_mode` | Set two pass mode for STAR (accepted: `Basic`\|`None`) <details><summary>Help</summary><small>Two pass mode for alignment with STAR. Default is 'Basic' but 'None' can be used to speed up alignment </small></details>| `string` | Basic |  |  |
+| `skip_subsample_region` | Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac. By default true if no subsample_bed is provided. | `boolean` | True |  |  |
+| `skip_downsample` | Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads. | `boolean` | False |  |  |
+| `subsample_bed` | Bed with regions to subsample | `string` |  |  |  |
+| `seed_frac` | -s INT.FRAC is equivalent to --subsample-seed INT --subsample 0.FRAC in samtools view | `number` | 0.001 |  |  |
+| `num_reads` | Number of reads to downsample RNAseq sample to | `integer` | 120000000 |  |  |
 
 ## Variant calling
 
 Options related to variant calling
 
-| Parameter                      | Description                                                                                                                                                                                                                                             | Type      | Default      | Required | Hidden |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------ | -------- | ------ |
-| `variant_caller`               | Program to use for variant calling <details><summary>Help</summary><small>The pipeline can use either bcftools mpileup/call or GATK haplotypecaller for calling SNV/INDELS on the RNAseq data.</small></details>                                        | `string`  | bcftools     |          |        |
-| `bcftools_caller_mode`         | Run bcftools call in either consensus or multiallelic mode <details><summary>Help</summary><small>Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied.</small></details> | `string`  | multiallelic |          |        |
-| `skip_variant_calling`         | Skip variant calling for all samples.                                                                                                                                                                                                                   | `boolean` | False        |          |        |
-| `skip_build_tracks`            | Skip building splice junction tracks for IGV.                                                                                                                                                                                                           | `boolean` | False        |          |        |
-| `skip_stringtie`               | Skip analysis with StringTie                                                                                                                                                                                                                            | `boolean` | False        |          |        |
-| `skip_vep`                     | Skip Ensembl Variant Effect Predictor                                                                                                                                                                                                                   | `boolean` | False        |          |        |
-| `skip_drop_ae`                 | Skip DROP Aberrant Expression module                                                                                                                                                                                                                    | `boolean` | False        |          |        |
-| `skip_drop_as`                 | Skip DROP Aberrant Splicing module                                                                                                                                                                                                                      | `boolean` | False        |          |        |
-| `skip_export_counts_drop`      | Skip export counts for DROP. It will export information from those modules run. Read usage for further information.                                                                                                                                     | `boolean` | True         |          |        |
-| `drop_group_samples_ae`        | DROP group to run when AE only one allowed. Make sure it matches your reference annotation file.                                                                                                                                                        | `string`  | outrider     |          |        |
-| `drop_group_samples_as`        | DROP group to run when AS only one allowed. Make sure it matches your reference annotation file.                                                                                                                                                        | `string`  | fraser       |          |        |
-| `drop_padjcutoff_ae`           | Adjusted p-value cut-off for DROP Aberrant Expression module                                                                                                                                                                                            | `number`  | 0.05         |          |        |
-| `drop_padjcutoff_as`           | Adjusted p-value cut-off for DROP Aberrant Splicing module                                                                                                                                                                                              | `number`  | 0.1          |          |        |
-| `drop_zscorecutoff`            | Z-score cut-off for DROP Aberrant Expression module                                                                                                                                                                                                     | `number`  | 0            |          |        |
-| `reference_drop_annot_file`    | Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP.                                                                                                                                                                 | `string`  |              |          |        |
-| `reference_drop_count_file`    | If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to use as controls                                                                                                                | `string`  |              |          |        |
-| `reference_drop_splice_folder` | If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside folder must be tsv.gz                                                                              | `string`  |              |          |        |
-| `gene_panel_clinical_filter`   | tsv file containing genes on which results from drop and vep will be filtered to avoid incidental findings, columns should be chromosome, gene_start, gene_stop, hgnc_id, hgnc_symbol                                                                   | `string`  |              |          |        |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `variant_caller` | Program to use for variant calling (accepted: `bcftools`\|`gatk`) <details><summary>Help</summary><small>The pipeline can use either bcftools mpileup/call or GATK haplotypecaller for calling SNV/INDELS on the RNAseq data.</small></details>| `string` | bcftools |  |  |
+| `bcftools_caller_mode` | Run bcftools call in either consensus or multiallelic mode (accepted: `consensus`\|`multiallelic`) <details><summary>Help</summary><small>Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied.</small></details>| `string` | multiallelic |  |  |
+| `skip_variant_calling` | Skip variant calling for all samples. | `boolean` | False |  |  |
+| `skip_build_tracks` | Skip building splice junction tracks for IGV. | `boolean` | False |  |  |
+| `skip_stringtie` | Skip analysis with StringTie | `boolean` | False |  |  |
+| `skip_vep` | Skip Ensembl Variant Effect Predictor | `boolean` | False |  |  |
+| `skip_drop_ae` | Skip DROP Aberrant Expression module  | `boolean` | False |  |  |
+| `skip_drop_as` | Skip DROP Aberrant Splicing module | `boolean` | False |  |  |
+| `skip_export_counts_drop` | Skip export counts for DROP. It will export information from those modules run. Read usage for further information. | `boolean` | True |  |  |
+| `drop_group_samples_ae` | DROP group to run when AE only one allowed. Make sure it matches your reference annotation file. | `string` | outrider |  |  |
+| `drop_group_samples_as` | DROP group to run when AS only one allowed. Make sure it matches your reference annotation file. | `string` | fraser |  |  |
+| `drop_padjcutoff_ae` | Adjusted p-value cut-off for DROP Aberrant Expression module | `number` | 0.05 |  |  |
+| `drop_padjcutoff_as` | Adjusted p-value cut-off for DROP Aberrant Splicing module | `number` | 0.1 |  |  |
+| `drop_zscorecutoff` | Z-score cut-off for DROP Aberrant Expression module | `number` | 0 |  |  |
+| `drop_add_af` | Toggle whether DROP adds allele frequency annotations when running DROP MAE module. Requires internet access. | `boolean` | True |  |  |
+| `reference_drop_annot_file` | Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP. | `string` |  |  |  |
+| `reference_drop_count_file` | If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to use as controls | `string` |  |  |  |
+| `reference_drop_splice_folder` | If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside folder must be tsv.gz | `string` |  |  |  |
+| `gene_panel_clinical_filter` | tsv file containing genes on which results from drop and vep will be filtered to avoid incidental findings, columns should be chromosome, gene_start, gene_stop, hgnc_id, hgnc_symbol | `string` |  |  |  |
 
 ## QC options
 
 QC related options
 
-| Parameter                | Description                                                                                                                                                                                                       | Type      | Default | Required | Hidden |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `skip_peddy`             | Do not calculate sex check using Peddy.                                                                                                                                                                           | `boolean` | False   |          |        |
-| `skip_calculate_hb_frac` | Do not calculate hemoglobin fraction among reads.                                                                                                                                                                 | `boolean` | False   |          |        |
-| `hb_genes`               | Hemoglobin genes ensembl IDs <details><summary>Help</summary><small>TSV-file with one column with the header 'ensembl' containing the target genes for which to calculate fraction mapping for.</small></details> | `string`  |         |          |        |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `skip_peddy` | Do not calculate sex check using Peddy. | `boolean` | False |  |  |
+| `skip_calculate_hb_frac` | Do not calculate hemoglobin fraction among reads. | `boolean` | False |  |  |
+| `hb_genes` | Hemoglobin genes ensembl IDs <details><summary>Help</summary><small>TSV-file with one column with the header 'ensembl' containing the target genes for which to calculate fraction mapping for.</small></details>| `string` |  |  |  |
 
 ## Institutional config options
 
 Parameters used to describe centralised config profiles. These should not be edited.
 
-| Parameter                    | Description                                                                                                                                                                                                                                                                                                                                                                                       | Type     | Default                                                  | Required | Hidden |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------------------------------------------------------- | -------- | ------ |
-| `custom_config_version`      | Git commit id for Institutional configs.                                                                                                                                                                                                                                                                                                                                                          | `string` | master                                                   |          | True   |
-| `custom_config_base`         | Base directory for Institutional configs. <details><summary>Help</summary><small>If you're running offline, Nextflow will not be able to fetch the institutional config files from the internet. If you don't need them, then this is not a problem. If you do need them, you should download the files from the repo and tell Nextflow where to find them with this parameter.</small></details> | `string` | https://raw.githubusercontent.com/nf-core/configs/master |          | True   |
-| `config_profile_name`        | Institutional config name.                                                                                                                                                                                                                                                                                                                                                                        | `string` |                                                          |          | True   |
-| `config_profile_description` | Institutional config description.                                                                                                                                                                                                                                                                                                                                                                 | `string` |                                                          |          | True   |
-| `config_profile_contact`     | Institutional config contact information.                                                                                                                                                                                                                                                                                                                                                         | `string` |                                                          |          | True   |
-| `config_profile_url`         | Institutional config URL link.                                                                                                                                                                                                                                                                                                                                                                    | `string` |                                                          |          | True   |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `custom_config_version` | Git commit id for Institutional configs. | `string` | master |  | True |
+| `custom_config_base` | Base directory for Institutional configs. <details><summary>Help</summary><small>If you're running offline, Nextflow will not be able to fetch the institutional config files from the internet. If you don't need them, then this is not a problem. If you do need them, you should download the files from the repo and tell Nextflow where to find them with this parameter.</small></details>| `string` | https://raw.githubusercontent.com/nf-core/configs/master |  | True |
+| `config_profile_name` | Institutional config name. | `string` |  |  | True |
+| `config_profile_description` | Institutional config description. | `string` |  |  | True |
+| `config_profile_contact` | Institutional config contact information. | `string` |  |  | True |
+| `config_profile_url` | Institutional config URL link. | `string` |  |  | True |
 
 ## Generic options
 
 Less common options for the pipeline, typically set in a config file.
 
-| Parameter                      | Description                                                                                                                                                                                                                                                                                                                                                                                                  | Type      | Default                                                             | Required | Hidden |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ------------------------------------------------------------------- | -------- | ------ |
-| `version`                      | Display version and exit.                                                                                                                                                                                                                                                                                                                                                                                    | `boolean` |                                                                     |          | True   |
-| `publish_dir_mode`             | Method used to save pipeline results to output directory. <details><summary>Help</summary><small>The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.</small></details> | `string`  | copy                                                                |          | True   |
-| `email_on_fail`                | Email address for completion summary, only when pipeline fails. <details><summary>Help</summary><small>An email address to send a summary email to when the pipeline is completed - ONLY sent if the pipeline does not exit successfully.</small></details>                                                                                                                                                  | `string`  |                                                                     |          | True   |
-| `plaintext_email`              | Send plain-text email instead of HTML.                                                                                                                                                                                                                                                                                                                                                                       | `boolean` |                                                                     |          | True   |
-| `max_multiqc_email_size`       | File size limit when attaching MultiQC reports to summary emails.                                                                                                                                                                                                                                                                                                                                            | `string`  | 25.MB                                                               |          | True   |
-| `monochrome_logs`              | Do not use coloured log outputs.                                                                                                                                                                                                                                                                                                                                                                             | `boolean` |                                                                     |          | True   |
-| `hook_url`                     | Incoming hook URL for messaging service <details><summary>Help</summary><small>Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.</small></details>                                                                                                                                                                                                                       | `string`  |                                                                     |          | True   |
-| `multiqc_config`               | Custom config file to supply to MultiQC.                                                                                                                                                                                                                                                                                                                                                                     | `string`  |                                                                     |          | True   |
-| `multiqc_logo`                 | Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file                                                                                                                                                                                                                                                                                                                 | `string`  |                                                                     |          | True   |
-| `multiqc_methods_description`  | Custom MultiQC yaml file containing HTML including a methods description.                                                                                                                                                                                                                                                                                                                                    | `string`  |                                                                     |          |        |
-| `validate_params`              | Boolean whether to validate parameters against the schema at runtime                                                                                                                                                                                                                                                                                                                                         | `boolean` | True                                                                |          | True   |
-| `pipelines_testdata_base_path` | Base URL or local path to location of pipeline test dataset files                                                                                                                                                                                                                                                                                                                                            | `string`  | https://raw.githubusercontent.com/nf-core/test-datasets/raredisease |          | True   |
-| `trace_report_suffix`          | Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.                                                                                                                                                                                                                                                                                                  | `string`  |                                                                     |          | True   |
-
-# genomic-medicine-sweden/tomte pipeline parameters
-
-Pipeline to analyse germline RNAseq data
-
-## Input/output options
-
-Define where the pipeline should find input data and save output data.
-
-| Parameter | Description                                                                                                                                                                | Type | Default | Required | Hidden |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------- | -------- | ------ |
-| `input`   | Path to comma-separated file containing information about the samples in the experiment. <details><summary>Help</summary><small>You will need to create a design file with |
-
-information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with three mandatory columns  
-(case, sample, strandedness), followed by fastq_1 (mandatory unless bam_cram and bai_crai are filled in), fastq_2 (optional), bam_cram (mandatory if fastq_1 is not given), bai_crai columns  
-(mandatory if bam_cram is given), several more optional (paternal,maternal,sex,dna_vcf,dna_vcf_tbi) and a header row.</small></details>| `string` | | True | |  
-| `outdir` | The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure. | `string` | results | True | |  
-| `email` | Email address for completion summary. <details><summary>Help</summary><small>Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you
-when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.</small></details>| `string` | | | |  
-| `multiqc_title` | MultiQC report title. Printed as page header, used for filename if not otherwise specified. | `string` | | | |  
-| `save_mapped_as_cram` | Do you want to save bam as cram | `boolean` | True | | |
-
-## Reference genome options
-
-Reference genome related files and options required for the workflow.
-
-| Parameter | Description                                                                                                                                                                      | Type | Default | Required | Hidden |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------- | -------- | ------ |
-| `genome`  | Name of genome reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive. <details><summary>Help</summary><small>If using a reference genome configured in the pipeline |
-
-using iGenomes, use `--igenomes_base` to provide a path, or you want to automatically download all required files, use this parameter to give the ID for the reference. This is then used to  
-build the full paths for all required reference genome files e.g. `--genome GRCh38`. <br><br>See the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more  
-details.</small></details>| `string` | GRCh38 | | |  
-| `fasta` | Path to FASTA genome file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome` and  
-`--gencode_annotation_version`.</small></details>| `string` | | | |  
-| `fai` | Path to FASTA genome index file. <details><summary>Help</summary><small>If none provided, will be generated automatically from the FASTA reference</small></details>| `string` | |  
-| True |  
-| `gtf` | Path to GTF annotation file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome` and  
-`--gencode_annotation_version`.</small></details>| `string` | | | |  
-| `gencode_annotation_version` | Name of Genomes gencode reference version to download if fasta or gtf is not provided. <details><summary>Help</summary><small>If fasta or gtf is not provided
-the gencode version specified will be downloaded. Combine with `--save_reference` to save gtf and/or fasta for future runs.</small></details>| `integer` | 46 | | |  
-| `igenomes_ignore` | Do not load the iGenomes reference config. <details><summary>Help</summary><small>Do not load `igenomes.config` when running the pipeline. You may choose this option if
-you observe clashes between custom parameters and those supplied in `igenomes.config`.</small></details>| `boolean` | | | True |  
-| `igenomes_base` | The base path to the igenomes reference files | `string` | s3://ngi-igenomes/igenomes/ | | True |  
-| `platform` | Specifies which platform was used for sequencing. | `string` | illumina | | |  
-| `save_reference` | If generated by the pipeline save the required indices/references in the results directory. <details><summary>Help</summary><small>The saved references can be used for  
-future pipeline runs, reducing processing times.</small></details>| `boolean` | True | | |  
-| `sequence_dict` | Genome dictionary file | `string` | | | True |  
-| `star_index` | Path to directory or tar.gz archive for pre-built STAR index. <details><summary>Help</summary><small>Path to directory or tar.gz archive with pre-built STAR index. If not  
-given one will be created from the given fasta and gtf file. Save the index by supplying the option "--save_reference".</small></details>| `string` | | | |  
-| `salmon_index` | Path to directory or tar.gz archive for pre-built Salmon index. <details><summary>Help</summary><small>Path to directory or tar.gz archive with pre-built Salmon index. If  
-not given one will be created from the given fasta and gtf file. Save the index by supplying the option "--save_reference".</small></details>| `string` | | | |  
-| `transcript_fasta` | Path to transcript FASTA file. <details><summary>Help</summary><small>Path to transcript FASTA file. If not given one will be created from the given fasta and gtf  
-file.</small></details>| `string` | | | |  
-| `vep_cache` | Path to vep's cache directory. <details><summary>Help</summary><small>If no directory path is passed, vcf files will not be annotated by vep.</small></details>| `string` | |
-| |  
-| `vep_cache_version` | Specifies version of vep cache to use. | `integer` | 112 | | |  
-| `vep_plugin_files` | Databases used by both named and custom plugins to annotate variants. <details><summary>Help</summary><small>Path to a file containing the absolute paths to databases  
-and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.</small></details>| `string` | | | |  
-| `skip_download_vep` | Skip vep cache download. | `boolean` | True | | |  
-| `skip_download_gnomad` | Skip gnomad reference download for vep. | `boolean` | True | | |  
-| `skip_download_drop_mae_high_q_vcf` | Skip high quality VCF reference download for DROP MAE. | `boolean` | True | | |  
-| `vep_refs_download` | Path to comma separated csv with paths to vep references to download, see example in test_data/vep_to_download.csv | `string` | | | |  
-| `drop_mae_high_q_vcf` | Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual <details><summary>Help</summary><small>Path to vcf used by DROP MAE to make
-sure WGS vcf and bam file come from same individual. It is mandatory to run DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to  
-false.</small></details>| `string` | | | |  
-| `drop_mae_high_q_vcf_tbi` | Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual <details><summary>Help</summary><small>Path to vcf tbi used by DROP
-MAE to make sure WGS vcf and bam file come from same individual. It is mandatory to run DROP MAE but can be downloaded automatically by the pipeline by setting  
-skip_download_drop_mae_high_q_VCF to false.</small></details>| `string` | | | |
-
-## Trimming options
-
-Options related to trimming of fastq files
-
-| Parameter                                    | Description                                                                                                                                                     | Type | Default | Required | Hidden |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------- | -------- | ------ |
-| `min_trimmed_length`                         | Discard trimmed reads shorter than this <details><summary>Help</summary><small>Minimum length of reads after adapter trimming. Shorter reads are discarded. The |
-| program default is 15 bp. </small></details> | `integer`                                                                                                                                                       | 40   |         |          |
-
-## Alignment options
-
-Options related to alignment
-
-| Parameter                    | Description                                                                                                                                                    | Type      | Default   | Required | Hidden |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------- | ------ |
-| `star_two_pass_mode`         | Set two pass mode for STAR <details><summary>Help</summary><small>Two pass mode for alignment with STAR. Default is 'Basic' but 'None' can be used to speed up |
-| alignment </small></details> | `string`                                                                                                                                                       | Basic     |           |          |
-| `skip_subsample_region`      | Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac                                | `boolean` | False     |          |        |
-| `skip_downsample`            | Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.                                                 | `boolean` | False     |          |        |
-| `subsample_bed`              | Bed with regions to subsample                                                                                                                                  | `string`  |           |          |        |
-| `seed_frac`                  | -s INT.FRAC is equivalent to --subsample-seed INT --subsample 0.FRAC in samtools view                                                                          | `number`  | 0.001     |          |        |
-| `num_reads`                  | Number of reads to downsample RNAseq sample to                                                                                                                 | `integer` | 120000000 |          |        |
-
-## Variant calling
-
-Options related to variant calling
-
-| Parameter                                                                                   | Description                                                                                                                                                                | Type         | Default  | Required | Hidden |
-| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | -------- | -------- | ------ |
-| `variant_caller`                                                                            | Program to use for variant calling <details><summary>Help</summary><small>The pipeline can use either bcftools mpileup/call or GATK haplotypecaller for calling SNV/INDELS |
-| on the RNAseq data.</small></details>                                                       | `string`                                                                                                                                                                   | bcftools     |          |          |
-| `bcftools_caller_mode`                                                                      | Run bcftools call in either consensus or multiallelic mode <details><summary>Help</summary><small>Bcftools call can eitherbe run in multiallelic mode or in                |
-| consensus mode. In consensus mode a p-value threshold of 0.01 is applied.</small></details> | `string`                                                                                                                                                                   | multiallelic |          |          |
-| `skip_variant_calling`                                                                      | Skip variant calling for all samples.                                                                                                                                      | `boolean`    | False    |          |        |
-| `skip_build_tracks`                                                                         | Skip building splice junction tracks for IGV.                                                                                                                              | `boolean`    | False    |          |        |
-| `skip_stringtie`                                                                            | Skip analysis with StringTie                                                                                                                                               | `boolean`    | False    |          |        |
-| `skip_vep`                                                                                  | Skip Ensembl Variant Effect Predictor                                                                                                                                      | `boolean`    | False    |          |        |
-| `skip_drop_ae`                                                                              | Skip DROP Aberrant Expression module                                                                                                                                       | `boolean`    | False    |          |        |
-| `skip_drop_as`                                                                              | Skip DROP Aberrant Splicing module                                                                                                                                         | `boolean`    | False    |          |        |
-| `skip_export_counts_drop`                                                                   | Skip export counts for DROP. It will export information from those modules run. Read usage for further information.                                                        | `boolean`    | True     |          |        |
-| `drop_group_samples_ae`                                                                     | DROP group to run when AE only one allowed. Make sure it matches your reference annotation file.                                                                           | `string`     | outrider |          |        |
-| `drop_group_samples_as`                                                                     | DROP group to run when AS only one allowed. Make sure it matches your reference annotation file.                                                                           | `string`     | fraser   |          |        |
-| `drop_padjcutoff_ae`                                                                        | Adjusted p-value cut-off for DROP Aberrant Expression module                                                                                                               | `number`     | 0.05     |          |        |
-| `drop_padjcutoff_as`                                                                        | Adjusted p-value cut-off for DROP Aberrant Splicing module                                                                                                                 | `number`     | 0.1      |          |        |
-| `drop_zscorecutoff`                                                                         | Z-score cut-off for DROP Aberrant Expression module                                                                                                                        | `number`     | 0        |          |        |
-| `reference_drop_annot_file`                                                                 | Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP.                                                                                    | `string`     |          |          |        |
-| `reference_drop_count_file`                                                                 | If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to use as controls                                   | `string`     |          |          |        |
-| `reference_drop_splice_folder`                                                              | If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside folder                |
-| must be tsv.gz                                                                              | `string`                                                                                                                                                                   |              |          |          |
-| `gene_panel_clinical_filter`                                                                | tsv file containing genes on which results from drop and vep will be filtered to avoid incidental findings, columns should be chromosome, gene_start,                      |
-| gene_stop, hgnc_id, hgnc_symbol                                                             | `string`                                                                                                                                                                   |              |          |          |
-
-## QC options
-
-QC related options
-
-| Parameter                               | Description                                                                                                                                                               | Type      | Default | Required | Hidden |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `skip_peddy`                            | Do not calculate sex check using Peddy.                                                                                                                                   | `boolean` | False   |          |        |
-| `skip_calculate_hb_frac`                | Do not calculate hemoglobin fraction among reads.                                                                                                                         | `boolean` | False   |          |        |
-| `hb_genes`                              | Hemoglobin genes ensembl IDs <details><summary>Help</summary><small>TSV-file with one column with the header 'ensembl' containing the target genes for which to calculate |
-| fraction mapping for.</small></details> | `string`                                                                                                                                                                  |           |         |          |
-
-## Institutional config options
-
-Parameters used to describe centralised config profiles. These should not be edited.
-
-| Parameter               | Description                                                                                                                                                      | Type     | Default | Required | Hidden |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | -------- | ------ |
-| `custom_config_version` | Git commit id for Institutional configs.                                                                                                                         | `string` | master  |          | True   |
-| `custom_config_base`    | Base directory for Institutional configs. <details><summary>Help</summary><small>If you're running offline, Nextflow will not be able to fetch the institutional |
-
-config files from the internet. If you don't need them, then this is not a problem. If you do need them, you should download the files from the repo and tell Nextflow where to find them with
-this parameter.</small></details>| `string` | https://raw.githubusercontent.com/nf-core/configs/master | | True |  
-| `config_profile_name` | Institutional config name. | `string` | | | True |  
-| `config_profile_description` | Institutional config description. | `string` | | | True |  
-| `config_profile_contact` | Institutional config contact information. | `string` | | | True |  
-| `config_profile_url` | Institutional config URL link. | `string` | | | True |
-
-## Generic options
-
-Less common options for the pipeline, typically set in a config file.
-
-| Parameter          | Description                                                                                                                                                          | Type      | Default | Required | Hidden |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `version`          | Display version and exit.                                                                                                                                            | `boolean` |         |          | True   |
-| `publish_dir_mode` | Method used to save pipeline results to output directory. <details><summary>Help</summary><small>The Nextflow `publishDir` option specifies which intermediate files |
-
-should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow  
-docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.</small></details>| `string` | copy | | True |  
-| `email_on_fail` | Email address for completion summary, only when pipeline fails. <details><summary>Help</summary><small>An email address to send a summary email to when the pipeline is  
-completed - ONLY sent if the pipeline does not exit successfully.</small></details>| `string` | | | True |  
-| `plaintext_email` | Send plain-text email instead of HTML. | `boolean` | | | True |  
-| `max_multiqc_email_size` | File size limit when attaching MultiQC reports to summary emails. | `string` | 25.MB | | True |  
-| `monochrome_logs` | Do not use coloured log outputs. | `boolean` | | | True |  
-| `hook_url` | Incoming hook URL for messaging service <details><summary>Help</summary><small>Incoming hook URL for messaging service. Currently, MS Teams and Slack are  
-supported.</small></details>| `string` | | | True |  
-| `multiqc_config` | Custom config file to supply to MultiQC. | `string` | | | True |  
-| `multiqc_logo` | Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file | `string` | | | True |  
-| `multiqc_methods_description` | Custom MultiQC yaml file containing HTML including a methods description. | `string` | | | |  
-| `validate_params` | Boolean whether to validate parameters against the schema at runtime | `boolean` | True | | True |  
-| `pipelines_testdata_base_path` | Base URL or local path to location of pipeline test dataset files | `string` | https://raw.githubusercontent.com/nf-core/test-datasets/raredisease | | True
-|  
-| `trace_report_suffix` | Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss. | `string` | | | True |
-
-# genomic-medicine-sweden/tomte pipeline parameters
-
-Pipeline to analyse germline RNAseq data
-
-## Input/output options
-
-Define where the pipeline should find input data and save output data.
-
-| Parameter | Description                                                                                                                                   | Type | Default | Required | Hidden |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------- | -------- | ------ |
-| `input`   | Path to comma-separated file containing information about the samples in the experiment. <details><summary>Help</summary><small>You will need |
-
-to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It
-has to be a comma-separated file with three mandatory columns (case, sample, strandedness), followed by fastq_1 (mandatory unless bam_cram and bai_crai  
-are filled in), fastq_2 (optional), bam_cram (mandatory if fastq_1 is not given), bai_crai columns (mandatory if bam_cram is given), several more  
-optional (paternal, maternal, sex, dna_vcf, dna_vcf_tbi, dna_id_mae) and a header row.</small></details>| `string` | | True | |  
-| `outdir` | The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure. | `string` |  
-results | True | |  
-| `email` | Email address for completion summary. <details><summary>Help</summary><small>Set this parameter to your e-mail address to get a summary  
-e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify
-this on the command line for every run.</small></details>| `string` | | | |  
-| `multiqc_title` | MultiQC report title. Printed as page header, used for filename if not otherwise specified. | `string` | | | |  
-| `save_mapped_as_cram` | Do you want to save bam as cram | `boolean` | True | | |
-
-## Reference genome options
-
-Reference genome related files and options required for the workflow.
-
-| Parameter | Description                                                                                                                          | Type | Default | Required | Hidden |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------ | ---- | ------- | -------- | ------ |
-| `genome`  | Name of genome reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive. <details><summary>Help</summary><small>If using a |
-
-reference genome configured in the pipeline using iGenomes, use `--igenomes_base` to provide a path, or you want to automatically download all required  
-files, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g.  
-`--genome GRCh38`. <br><br>See the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.</small></details>| `string` |  
-GRCh38 | | |  
-| `fasta` | Path to FASTA genome file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome`  
-and `--gencode_annotation_version`.</small></details>| `string` | | | |  
-| `fai` | Path to FASTA genome index file. <details><summary>Help</summary><small>If none provided, will be generated automatically from the FASTA  
-reference</small></details>| `string` | | | True |  
-| `gtf` | Path to GTF annotation file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome`  
-and `--gencode_annotation_version`.</small></details>| `string` | | | |  
-| `gencode_annotation_version` | Name of Genomes gencode reference version to download if fasta or gtf is not provided.
-
-<details><summary>Help</summary><small>If fasta or gtf is not provided the gencode version specified will be downloaded. Combine with `--save_reference`
-to save gtf and/or fasta for future runs.</small></details>| `integer` | 46 |  |  |  
-| `igenomes_ignore` | Do not load the iGenomes reference config. <details><summary>Help</summary><small>Do not load `igenomes.config` when running the  
-pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`.</small></details>|  
-`boolean` |  |  | True |  
-| `igenomes_base` | The base path to the igenomes reference files | `string` | s3://ngi-igenomes/igenomes/ |  | True |  
-| `platform` | Specifies which platform was used for sequencing. | `string` | illumina |  |  |  
-| `save_reference` | If generated by the pipeline save the required indices/references in the results directory.  
-<details><summary>Help</summary><small>The saved references can be used for future pipeline runs, reducing processing times.</small></details>| `boolean`
-| True |  |  |  
-| `sequence_dict` | Genome dictionary file | `string` |  |  | True |  
-| `star_index` | Path to directory or tar.gz archive for pre-built STAR index. <details><summary>Help</summary><small>Path to directory or tar.gz archive
-with pre-built STAR index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option  
-"--save_reference".</small></details>| `string` |  |  |  |  
-| `salmon_index` | Path to directory or tar.gz archive for pre-built Salmon index. <details><summary>Help</summary><small>Path to directory or tar.gz  
-archive with pre-built Salmon index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option  
-"--save_reference".</small></details>| `string` |  |  |  |  
-| `transcript_fasta` | Path to transcript FASTA file. <details><summary>Help</summary><small>Path to transcript FASTA file.  If not given one will be  
-created from the given fasta and gtf file.</small></details>| `string` |  |  |  |  
-| `vep_cache` | Path to vep's cache directory. <details><summary>Help</summary><small>If no directory path is passed, vcf files will not be annotated by
-vep.</small></details>| `string` |  |  |  |  
-| `vep_cache_version` | Specifies version of vep cache to use. | `integer` | 112 |  |  |  
-| `vep_plugin_files` | Databases used by both named and custom plugins to annotate variants. <details><summary>Help</summary><small>Path to a file  
-containing the absolute paths to databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One  
-line per resource.</small></details>| `string` |  |  |  |  
-| `skip_download_vep` | Skip vep cache download. | `boolean` | True |  |  |  
-| `skip_download_gnomad` | Skip gnomad reference download for vep. | `boolean` | True |  |  |  
-| `skip_download_drop_mae_high_q_vcf` | Skip download of reference VCF containing positions of SNPs that are usually called with high quality. Used in  
-DROP MAE. | `boolean` | True |  |  |  
-| `vep_refs_download` | Path to comma separated csv with paths to vep references to download, see example in test_data/vep_to_download.csv | `string` |  
-|  |  |  
-| `drop_mae_high_q_vcf` | Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual  
-<details><summary>Help</summary><small>Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual. It is mandatory to run  
-DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.</small></details>| `string` |  |  |  
-|  
-| `drop_mae_high_q_vcf_tbi` | Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual  
-<details><summary>Help</summary><small>Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual. It is mandatory to  
-run DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.</small></details>| `string` |  |
-|  |
-
-## Trimming options
-
-Options related to trimming of fastq files
-
-| Parameter                                                                     | Description                                                                                                                    | Type | Default | Required | Hidden |
-| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ---- | ------- | -------- | ------ |
-| `min_trimmed_length`                                                          | Discard trimmed reads shorter than this <details><summary>Help</summary><small>Minimum length of reads after adapter trimming. |
-| Shorter reads are discarded. The program default is 15 bp. </small></details> | `integer`                                                                                                                      | 40   |         |          |
-
-## Alignment options
-
-Options related to alignment
-
-| Parameter                                                   | Description                                                                                                                     | Type      | Default   | Required | Hidden |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------- | ------ |
-| `star_two_pass_mode`                                        | Set two pass mode for STAR <details><summary>Help</summary><small>Two pass mode for alignment with STAR. Default is 'Basic' but |
-| 'None' can be used to speed up alignment </small></details> | `string`                                                                                                                        | Basic     |           |          |
-| `skip_subsample_region`                                     | Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by           |
-| seed_frac                                                   | `boolean`                                                                                                                       | False     |           |          |
-| `skip_downsample`                                           | Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.                  | `boolean` | False     |
-|                                                             |                                                                                                                                 |
-| `subsample_bed`                                             | Bed with regions to subsample                                                                                                   | `string`  |           |          |        |
-| `seed_frac`                                                 | -s INT.FRAC is equivalent to --subsample-seed INT --subsample 0.FRAC in samtools view                                           | `number`  | 0.001     |          |        |
-| `num_reads`                                                 | Number of reads to downsample RNAseq sample to                                                                                  | `integer` | 120000000 |          |        |
-
-## Variant calling
-
-Options related to variant calling
-
-| Parameter                                                                                                                  | Description                                                                                                                         | Type         | Default | Required | Hidden |
-| -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------- | -------- | ------ |
-| `variant_caller`                                                                                                           | Program to use for variant calling <details><summary>Help</summary><small>The pipeline can use either bcftools mpileup/call or GATK |
-| haplotypecaller for calling SNV/INDELS on the RNAseq data.</small></details>                                               | `string`                                                                                                                            | bcftools     |         |          |
-| `bcftools_caller_mode`                                                                                                     | Run bcftools call in either consensus or multiallelic mode <details><summary>Help</summary><small>Bcftools call can eitherbe        |
-| run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied.</small></details> | `string`                                                                                                                            | multiallelic |         |
-
-|  
-| `skip_variant_calling` | Skip variant calling for all samples. | `boolean` | False | | |  
-| `skip_build_tracks` | Skip building splice junction tracks for IGV. | `boolean` | False | | |  
-| `skip_stringtie` | Skip analysis with StringTie | `boolean` | False | | |  
-| `skip_vep` | Skip Ensembl Variant Effect Predictor | `boolean` | False | | |  
-| `skip_drop_ae` | Skip DROP Aberrant Expression module | `boolean` | False | | |  
-| `skip_drop_as` | Skip DROP Aberrant Splicing module | `boolean` | False | | |  
-| `skip_export_counts_drop` | Skip export counts for DROP. It will export information from those modules run. Read usage for further information. |  
-`boolean` | True | | |  
-| `drop_group_samples_ae` | DROP group to run when AE only one allowed. Make sure it matches your reference annotation file. | `string` | outrider | |  
-|  
-| `drop_group_samples_as` | DROP group to run when AS only one allowed. Make sure it matches your reference annotation file. | `string` | fraser | | |
-| `drop_padjcutoff_ae` | Adjusted p-value cut-off for DROP Aberrant Expression module | `number` | 0.05 | | |  
-| `drop_padjcutoff_as` | Adjusted p-value cut-off for DROP Aberrant Splicing module | `number` | 0.1 | | |  
-| `drop_zscorecutoff` | Z-score cut-off for DROP Aberrant Expression module | `number` | 0 | | |  
-| `reference_drop_annot_file` | Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP. | `string` | | | |  
-| `reference_drop_count_file` | If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to
-use as controls | `string` | | | |  
-| `reference_drop_splice_folder` | If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to
-use as controls, files inside folder must be tsv.gz | `string` | | | |  
-| `gene_panel_clinical_filter` | tsv file containing genes on which results from drop and vep will be filtered to avoid incidental findings, columns  
-should be chromosome, gene_start, gene_stop, hgnc_id, hgnc_symbol | `string` | | | |
-
-## QC options
-
-QC related options
-
-| Parameter                                                                   | Description                                                                                                                           | Type      | Default | Required | Hidden |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `skip_peddy`                                                                | Do not calculate sex check using Peddy.                                                                                               | `boolean` | False   |          |        |
-| `skip_calculate_hb_frac`                                                    | Do not calculate hemoglobin fraction among reads.                                                                                     | `boolean` | False   |          |        |
-| `hb_genes`                                                                  | Hemoglobin genes ensembl IDs <details><summary>Help</summary><small>TSV-file with one column with the header 'ensembl' containing the |
-| target genes for which to calculate fraction mapping for.</small></details> | `string`                                                                                                                              |           |         |          |
-
-## Institutional config options
-
-Parameters used to describe centralised config profiles. These should not be edited.
-
-| Parameter               | Description                                                                                                                      | Type     | Default | Required | Hidden |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | -------- | ------ |
-| `custom_config_version` | Git commit id for Institutional configs.                                                                                         | `string` | master  |          | True   |
-| `custom_config_base`    | Base directory for Institutional configs. <details><summary>Help</summary><small>If you're running offline, Nextflow will not be |
-
-able to fetch the institutional config files from the internet. If you don't need them, then this is not a problem. If you do need them, you should  
-download the files from the repo and tell Nextflow where to find them with this parameter.</small></details>| `string` |  
-https://raw.githubusercontent.com/nf-core/configs/master | | True |  
-| `config_profile_name` | Institutional config name. | `string` | | | True |  
-| `config_profile_description` | Institutional config description. | `string` | | | True |  
-| `config_profile_contact` | Institutional config contact information. | `string` | | | True |  
-| `config_profile_url` | Institutional config URL link. | `string` | | | True |
-
-## Generic options
-
-Less common options for the pipeline, typically set in a config file.
-
-| Parameter          | Description                                                                                                                       | Type      | Default | Required | Hidden |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `version`          | Display version and exit.                                                                                                         | `boolean` |         |          | True   |
-| `publish_dir_mode` | Method used to save pipeline results to output directory. <details><summary>Help</summary><small>The Nextflow `publishDir` option |
-
-specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these  
-files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.</small></details>| `string` | copy | | True |  
-| `email_on_fail` | Email address for completion summary, only when pipeline fails. <details><summary>Help</summary><small>An email address to send a  
-summary email to when the pipeline is completed - ONLY sent if the pipeline does not exit successfully.</small></details>| `string` | | | True |  
-| `plaintext_email` | Send plain-text email instead of HTML. | `boolean` | | | True |  
-| `max_multiqc_email_size` | File size limit when attaching MultiQC reports to summary emails. | `string` | 25.MB | | True |  
-| `monochrome_logs` | Do not use coloured log outputs. | `boolean` | | | True |  
-| `hook_url` | Incoming hook URL for messaging service <details><summary>Help</summary><small>Incoming hook URL for messaging service. Currently, MS  
-Teams and Slack are supported.</small></details>| `string` | | | True |  
-| `multiqc_config` | Custom config file to supply to MultiQC. | `string` | | | True |  
-| `multiqc_logo` | Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file | `string` | | | True |  
-| `multiqc_methods_description` | Custom MultiQC yaml file containing HTML including a methods description. | `string` | | | |  
-| `validate_params` | Boolean whether to validate parameters against the schema at runtime | `boolean` | True | | True |  
-| `pipelines_testdata_base_path` | Base URL or local path to location of pipeline test dataset files | `string` |  
-https://raw.githubusercontent.com/nf-core/test-datasets/raredisease | | True |  
-| `trace_report_suffix` | Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss. | `string` | | |
-True |
-
-# genomic-medicine-sweden/tomte pipeline parameters
-
-Pipeline to analyse germline RNAseq data
-
-## Input/output options
-
-Define where the pipeline should find input data and save output data.
-
-| Parameter | Description                                                                                                                                                                | Type | Default | Required | Hidden |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------- | -------- | ------ |
-| `input`   | Path to comma-separated file containing information about the samples in the experiment. <details><summary>Help</summary><small>You will need to create a design file with |
-
-information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with three mandatory  
-columns (case, sample, strandedness), followed by fastq_1 (mandatory unless bam_cram and bai_crai are filled in), fastq_2 (optional), bam_cram (mandatory if fastq_1 is not given),  
-bai_crai columns (mandatory if bam_cram is given), several more optional (paternal, maternal, sex, dna_vcf, dna_vcf_tbi, dna_id_mae) and a header row.</small></details>| `string` | |
-True | |  
-| `outdir` | The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure. | `string` | results | True | |  
-| `email` | Email address for completion summary. <details><summary>Help</summary><small>Set this parameter to your e-mail address to get a summary e-mail with details of the run sent
-to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.</small></details>|  
-`string` | | | |  
-| `multiqc_title` | MultiQC report title. Printed as page header, used for filename if not otherwise specified. | `string` | | | |  
-| `save_mapped_as_cram` | Do you want to save bam as cram | `boolean` | True | | |
-
-## Reference genome options
-
-Reference genome related files and options required for the workflow.
-
-| Parameter | Description                                                                                                                                                             | Type | Default | Required | Hidden |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------- | -------- | ------ |
-| `genome`  | Name of genome reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive. <details><summary>Help</summary><small>If using a reference genome configured in the |
-
-pipeline using iGenomes, use `--igenomes_base` to provide a path, or you want to automatically download all required files, use this parameter to give the ID for the reference. This  
-is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. <br><br>See the [nf-core website docs](https://nf-co.re/usage/reference_genomes)  
-for more details.</small></details>| `string` | GRCh38 | | |  
-| `fasta` | Path to FASTA genome file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome` and  
-`--gencode_annotation_version`.</small></details>| `string` | | | |  
-| `fai` | Path to FASTA genome index file. <details><summary>Help</summary><small>If none provided, will be generated automatically from the FASTA reference</small></details>|  
-`string` | | | True |  
-| `gtf` | Path to GTF annotation file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome` and  
-`--gencode_annotation_version`.</small></details>| `string` | | | |  
-| `gencode_annotation_version` | Name of Genomes gencode reference version to download if fasta or gtf is not provided. <details><summary>Help</summary><small>If fasta or gtf is not  
-provided the gencode version specified will be downloaded. Combine with `--save_reference` to save gtf and/or fasta for future runs.</small></details>| `integer` | 46 | | |  
-| `igenomes_ignore` | Do not load the iGenomes reference config. <details><summary>Help</summary><small>Do not load `igenomes.config` when running the pipeline. You may choose this  
-option if you observe clashes between custom parameters and those supplied in `igenomes.config`.</small></details>| `boolean` | | | True |  
-| `igenomes_base` | The base path to the igenomes reference files | `string` | s3://ngi-igenomes/igenomes/ | | True |  
-| `platform` | Specifies which platform was used for sequencing. | `string` | illumina | | |  
-| `save_reference` | If generated by the pipeline save the required indices/references in the results directory. <details><summary>Help</summary><small>The saved references can be  
-used for future pipeline runs, reducing processing times.</small></details>| `boolean` | True | | |  
-| `sequence_dict` | Genome dictionary file | `string` | | | True |  
-| `star_index` | Path to directory or tar.gz archive for pre-built STAR index. <details><summary>Help</summary><small>Path to directory or tar.gz archive with pre-built STAR index. If
-not given one will be created from the given fasta and gtf file. Save the index by supplying the option "--save_reference".</small></details>| `string` | | | |  
-| `salmon_index` | Path to directory or tar.gz archive for pre-built Salmon index. <details><summary>Help</summary><small>Path to directory or tar.gz archive with pre-built Salmon  
-index. If not given one will be created from the given fasta and gtf file. Save the index by supplying the option "--save_reference".</small></details>| `string` | | | |  
-| `transcript_fasta` | Path to transcript FASTA file. <details><summary>Help</summary><small>Path to transcript FASTA file. If not given one will be created from the given fasta and
-gtf file.</small></details>| `string` | | | |  
-| `vep_cache` | Path to vep's cache directory. <details><summary>Help</summary><small>If no directory path is passed, vcf files will not be annotated by vep.</small></details>|  
-`string` | | | |  
-| `vep_cache_version` | Specifies version of vep cache to use. | `integer` | 112 | | |  
-| `vep_plugin_files` | Databases used by both named and custom plugins to annotate variants. <details><summary>Help</summary><small>Path to a file containing the absolute paths to  
-databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.</small></details>| `string` | | | |  
-| `skip_download_vep` | Skip vep cache download. | `boolean` | True | | |  
-| `skip_download_gnomad` | Skip gnomad reference download for vep. | `boolean` | True | | |  
-| `skip_download_drop_mae_high_q_vcf` | Skip download of reference VCF containing positions of SNPs that are usually called with high quality. Used in DROP MAE. | `boolean` | True |  
-| |  
-| `vep_refs_download` | Path to comma separated csv with paths to vep references to download, see example in test_data/vep_to_download.csv | `string` | | | |  
-| `drop_mae_high_q_vcf` | Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual <details><summary>Help</summary><small>Path to vcf used by DROP MAE
-to make sure WGS vcf and bam file come from same individual. It is mandatory to run DROP MAE but can be downloaded automatically by the pipeline by setting  
-skip_download_drop_mae_high_q_VCF to false.</small></details>| `string` | | | |  
-| `drop_mae_high_q_vcf_tbi` | Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual <details><summary>Help</summary><small>Path to vcf tbi used
-by DROP MAE to make sure WGS vcf and bam file come from same individual. It is mandatory to run DROP MAE but can be downloaded automatically by the pipeline by setting  
-skip_download_drop_mae_high_q_VCF to false.</small></details>| `string` | | | |
-
-## Trimming options
-
-Options related to trimming of fastq files
-
-| Parameter                                        | Description                                                                                                                                                 | Type | Default | Required | Hidden |
-| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------- | -------- | ------ |
-| `min_trimmed_length`                             | Discard trimmed reads shorter than this <details><summary>Help</summary><small>Minimum length of reads after adapter trimming. Shorter reads are discarded. |
-| The program default is 15 bp. </small></details> | `integer`                                                                                                                                                   | 40   |         |          |
-
-## Alignment options
-
-Options related to alignment
-
-| Parameter                    | Description                                                                                                                                                    | Type      | Default   | Required | Hidden |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------- | ------ |
-| `star_two_pass_mode`         | Set two pass mode for STAR <details><summary>Help</summary><small>Two pass mode for alignment with STAR. Default is 'Basic' but 'None' can be used to speed up |
-| alignment </small></details> | `string`                                                                                                                                                       | Basic     |           |          |
-| `skip_subsample_region`      | Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac                                | `boolean` | False     |          |        |
-| `skip_downsample`            | Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.                                                 | `boolean` | False     |          |        |
-| `subsample_bed`              | Bed with regions to subsample                                                                                                                                  | `string`  |           |          |        |
-| `seed_frac`                  | -s INT.FRAC is equivalent to --subsample-seed INT --subsample 0.FRAC in samtools view                                                                          | `number`  | 0.001     |          |        |
-| `num_reads`                  | Number of reads to downsample RNAseq sample to                                                                                                                 | `integer` | 120000000 |          |        |
-
-## Variant calling
-
-Options related to variant calling
-
-| Parameter                                                                                   | Description                                                                                                                                                     | Type         | Default  | Required | Hidden |
-| ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | -------- | -------- | ------ |
-| `variant_caller`                                                                            | Program to use for variant calling <details><summary>Help</summary><small>The pipeline can use either bcftools mpileup/call or GATK haplotypecaller for calling |
-| SNV/INDELS on the RNAseq data.</small></details>                                            | `string`                                                                                                                                                        | bcftools     |          |          |
-| `bcftools_caller_mode`                                                                      | Run bcftools call in either consensus or multiallelic mode <details><summary>Help</summary><small>Bcftools call can eitherbe run in multiallelic mode or in     |
-| consensus mode. In consensus mode a p-value threshold of 0.01 is applied.</small></details> | `string`                                                                                                                                                        | multiallelic |          |          |
-| `skip_variant_calling`                                                                      | Skip variant calling for all samples.                                                                                                                           | `boolean`    | False    |          |        |
-| `skip_build_tracks`                                                                         | Skip building splice junction tracks for IGV.                                                                                                                   | `boolean`    | False    |          |        |
-| `skip_stringtie`                                                                            | Skip analysis with StringTie                                                                                                                                    | `boolean`    | False    |          |        |
-| `skip_vep`                                                                                  | Skip Ensembl Variant Effect Predictor                                                                                                                           | `boolean`    | False    |          |        |
-| `skip_drop_ae`                                                                              | Skip DROP Aberrant Expression module                                                                                                                            | `boolean`    | False    |          |        |
-| `skip_drop_as`                                                                              | Skip DROP Aberrant Splicing module                                                                                                                              | `boolean`    | False    |          |        |
-| `skip_export_counts_drop`                                                                   | Skip export counts for DROP. It will export information from those modules run. Read usage for further information.                                             | `boolean`    | True     |          |        |
-| `drop_group_samples_ae`                                                                     | DROP group to run when AE only one allowed. Make sure it matches your reference annotation file.                                                                | `string`     | outrider |          |        |
-| `drop_group_samples_as`                                                                     | DROP group to run when AS only one allowed. Make sure it matches your reference annotation file.                                                                | `string`     | fraser   |          |        |
-| `drop_padjcutoff_ae`                                                                        | Adjusted p-value cut-off for DROP Aberrant Expression module                                                                                                    | `number`     | 0.05     |          |        |
-| `drop_padjcutoff_as`                                                                        | Adjusted p-value cut-off for DROP Aberrant Splicing module                                                                                                      | `number`     | 0.1      |          |        |
-| `drop_zscorecutoff`                                                                         | Z-score cut-off for DROP Aberrant Expression module                                                                                                             | `number`     | 0        |          |        |
-| `reference_drop_annot_file`                                                                 | Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP.                                                                         | `string`     |          |          |        |
-| `reference_drop_count_file`                                                                 | If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to use as controls                        | `string`     |
-|                                                                                             |                                                                                                                                                                 |
-| `reference_drop_splice_folder`                                                              | If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside            |
-| folder must be tsv.gz                                                                       | `string`                                                                                                                                                        |              |          |          |
-| `gene_panel_clinical_filter`                                                                | tsv file containing genes on which results from drop and vep will be filtered to avoid incidental findings, columns should be chromosome, gene_start,           |
-| gene_stop, hgnc_id, hgnc_symbol                                                             | `string`                                                                                                                                                        |              |          |          |
-
-## QC options
-
-QC related options
-
-| Parameter                                         | Description                                                                                                                                                     | Type      | Default | Required | Hidden |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `skip_peddy`                                      | Do not calculate sex check using Peddy.                                                                                                                         | `boolean` | False   |          |        |
-| `skip_calculate_hb_frac`                          | Do not calculate hemoglobin fraction among reads.                                                                                                               | `boolean` | False   |          |        |
-| `hb_genes`                                        | Hemoglobin genes ensembl IDs <details><summary>Help</summary><small>TSV-file with one column with the header 'ensembl' containing the target genes for which to |
-| calculate fraction mapping for.</small></details> | `string`                                                                                                                                                        |           |         |          |
-
-## Institutional config options
-
-Parameters used to describe centralised config profiles. These should not be edited.
-
-| Parameter               | Description                                                                                                                                        | Type     | Default | Required | Hidden |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | -------- | ------ |
-| `custom_config_version` | Git commit id for Institutional configs.                                                                                                           | `string` | master  |          | True   |
-| `custom_config_base`    | Base directory for Institutional configs. <details><summary>Help</summary><small>If you're running offline, Nextflow will not be able to fetch the |
-
-institutional config files from the internet. If you don't need them, then this is not a problem. If you do need them, you should download the files from the repo and tell Nextflow  
-where to find them with this parameter.</small></details>| `string` | https://raw.githubusercontent.com/nf-core/configs/master | | True |  
-| `config_profile_name` | Institutional config name. | `string` | | | True |  
-| `config_profile_description` | Institutional config description. | `string` | | | True |  
-| `config_profile_contact` | Institutional config contact information. | `string` | | | True |  
-| `config_profile_url` | Institutional config URL link. | `string` | | | True |
-
-## Generic options
-
-Less common options for the pipeline, typically set in a config file.
-
-| Parameter          | Description                                                                                                                                                    | Type      | Default | Required | Hidden |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `version`          | Display version and exit.                                                                                                                                      | `boolean` |         |          | True   |
-| `publish_dir_mode` | Method used to save pipeline results to output directory. <details><summary>Help</summary><small>The Nextflow `publishDir` option specifies which intermediate |
-
-files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow  
-docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.</small></details>| `string` | copy | | True |  
-| `email_on_fail` | Email address for completion summary, only when pipeline fails. <details><summary>Help</summary><small>An email address to send a summary email to when the  
-pipeline is completed - ONLY sent if the pipeline does not exit successfully.</small></details>| `string` | | | True |  
-| `plaintext_email` | Send plain-text email instead of HTML. | `boolean` | | | True |  
-| `max_multiqc_email_size` | File size limit when attaching MultiQC reports to summary emails. | `string` | 25.MB | | True |  
-| `monochrome_logs` | Do not use coloured log outputs. | `boolean` | | | True |  
-| `hook_url` | Incoming hook URL for messaging service <details><summary>Help</summary><small>Incoming hook URL for messaging service. Currently, MS Teams and Slack are  
-supported.</small></details>| `string` | | | True |  
-| `multiqc_config` | Custom config file to supply to MultiQC. | `string` | | | True |  
-| `multiqc_logo` | Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file | `string` | | | True |  
-| `multiqc_methods_description` | Custom MultiQC yaml file containing HTML including a methods description. | `string` | | | |  
-| `validate_params` | Boolean whether to validate parameters against the schema at runtime | `boolean` | True | | True |  
-| `pipelines_testdata_base_path` | Base URL or local path to location of pipeline test dataset files | `string` | https://raw.githubusercontent.com/nf-core/test-datasets/raredisease |
-| True |  
-| `trace_report_suffix` | Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss. | `string` | | | True |
-
-# genomic-medicine-sweden/tomte pipeline parameters
-
-Pipeline to analyse germline RNAseq data
-
-## Input/output options
-
-Define where the pipeline should find input data and save output data.
-
-| Parameter | Description                                                                                                                                                                                                                 | Type | Default | Required | Hidden |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------- | -------- | ------ |
-| `input`   | Path to comma-separated file containing information about the samples in the experiment. <details><summary>Help</summary><small>You will need to create a design file with information about the samples in your experiment |
-
-before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with three mandatory columns (case, sample, strandedness), followed by fastq_1 (mandatory unless bam_cram and bai_crai are
-filled in), fastq_2 (optional), bam_cram (mandatory if fastq_1 is not given), bai_crai columns (mandatory if bam_cram is given), several more optional (paternal, maternal, sex, dna_vcf, dna_vcf_tbi, dna_id_mae) and a header  
-row.</small></details>| `string` | | True | |  
-| `outdir` | The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure. | `string` | results | True | |  
-| `email` | Email address for completion summary. <details><summary>Help</summary><small>Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your
-user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.</small></details>| `string` | | | |  
-| `multiqc_title` | MultiQC report title. Printed as page header, used for filename if not otherwise specified. | `string` | | | |  
-| `save_mapped_as_cram` | Do you want to save bam as cram | `boolean` | True | | |
-
-## Reference genome options
-
-Reference genome related files and options required for the workflow.
-
-| Parameter | Description                                                                                                                                                                                                               | Type | Default | Required | Hidden |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------- | -------- | ------ |
-| `genome`  | Name of genome reference, etiher hg19/GRCh37 or hg38/GRCh38, it is case sensitive. <details><summary>Help</summary><small>If using a reference genome configured in the pipeline using iGenomes, use `--igenomes_base` to |
-
-provide a path, or you want to automatically download all required files, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome  
-GRCh38`. <br><br>See the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.</small></details>| `string` | GRCh38 | | |  
-| `fasta` | Path to FASTA genome file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome` and `--gencode_annotation_version`.</small></details>| `string` | | | |  
-| `fai` | Path to FASTA genome index file. <details><summary>Help</summary><small>If none provided, will be generated automatically from the FASTA reference</small></details>| `string` | | | True |  
-| `gtf` | Path to GTF annotation file. <details><summary>Help</summary><small>If none provided, will be downloaded from gencode according to `--genome` and `--gencode_annotation_version`.</small></details>| `string` | | | |  
-| `gencode_annotation_version` | Name of Genomes gencode reference version to download if fasta or gtf is not provided. <details><summary>Help</summary><small>If fasta or gtf is not provided the gencode version specified will be  
-downloaded. Combine with `--save_reference` to save gtf and/or fasta for future runs.</small></details>| `integer` | 46 | | |  
-| `igenomes_ignore` | Do not load the iGenomes reference config. <details><summary>Help</summary><small>Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom  
-parameters and those supplied in `igenomes.config`.</small></details>| `boolean` | | | True |  
-| `igenomes_base` | The base path to the igenomes reference files | `string` | s3://ngi-igenomes/igenomes/ | | True |  
-| `platform` | Specifies which platform was used for sequencing. | `string` | illumina | | |  
-| `save_reference` | If generated by the pipeline save the required indices/references in the results directory. <details><summary>Help</summary><small>The saved references can be used for future pipeline runs, reducing processing
-times.</small></details>| `boolean` | True | | |  
-| `sequence_dict` | Genome dictionary file | `string` | | | True |  
-| `star_index` | Path to directory or tar.gz archive for pre-built STAR index. <details><summary>Help</summary><small>Path to directory or tar.gz archive with pre-built STAR index. If not given one will be created from the given  
-fasta and gtf file. Save the index by supplying the option "--save_reference".</small></details>| `string` | | | |  
-| `salmon_index` | Path to directory or tar.gz archive for pre-built Salmon index. <details><summary>Help</summary><small>Path to directory or tar.gz archive with pre-built Salmon index. If not given one will be created from the  
-given fasta and gtf file. Save the index by supplying the option "--save_reference".</small></details>| `string` | | | |  
-| `transcript_fasta` | Path to transcript FASTA file. <details><summary>Help</summary><small>Path to transcript FASTA file. If not given one will be created from the given fasta and gtf file.</small></details>| `string` | | | |
-| `vep_cache` | Path to vep's cache directory. <details><summary>Help</summary><small>If no directory path is passed, vcf files will not be annotated by vep.</small></details>| `string` | | | |  
-| `vep_cache_version` | Specifies version of vep cache to use. | `integer` | 112 | | |  
-| `vep_plugin_files` | Databases used by both named and custom plugins to annotate variants. <details><summary>Help</summary><small>Path to a file containing the absolute paths to databases and their indices used by VEP's custom  
-and named plugins resources defined within the vcfanno toml file. One line per resource.</small></details>| `string` | | | |  
-| `skip_download_vep` | Skip vep cache download. | `boolean` | True | | |  
-| `skip_download_gnomad` | Skip gnomad reference download for vep. | `boolean` | True | | |  
-| `skip_download_drop_mae_high_q_vcf` | Skip download of reference VCF containing positions of SNPs that are usually called with high quality. Used in DROP MAE. | `boolean` | True | | |  
-| `vep_refs_download` | Path to comma separated csv with paths to vep references to download, see example in test_data/vep_to_download.csv | `string` | | | |  
-| `drop_mae_high_q_vcf` | Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same individual <details><summary>Help</summary><small>Path to vcf used by DROP MAE to make sure WGS vcf and bam file come from same
-individual. It is mandatory to run DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.</small></details>| `string` | | | |  
-| `drop_mae_high_q_vcf_tbi` | Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file come from same individual <details><summary>Help</summary><small>Path to vcf tbi used by DROP MAE to make sure WGS vcf and bam file  
-come from same individual. It is mandatory to run DROP MAE but can be downloaded automatically by the pipeline by setting skip_download_drop_mae_high_q_VCF to false.</small></details>| `string` | | | |
-
-## Trimming options
-
-Options related to trimming of fastq files
-
-| Parameter            | Description                                                                                                                                                                                                  | Type | Default | Required | Hidden |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---- | ------- | -------- | ------ |
-| `min_trimmed_length` | Discard trimmed reads shorter than this <details><summary>Help</summary><small>Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp. </small></details> |
-| `integer`            | 40                                                                                                                                                                                                           |      |         |
-
-## Alignment options
-
-Options related to alignment
-
-| Parameter               | Description                                                                                                                                                                                 | Type      | Default   | Required | Hidden |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------- | ------ |
-| `star_two_pass_mode`    | Set two pass mode for STAR <details><summary>Help</summary><small>Two pass mode for alignment with STAR. Default is 'Basic' but 'None' can be used to speed up alignment </small></details> | `string`  | Basic     |
-|                         |                                                                                                                                                                                             |
-| `skip_subsample_region` | Turn off subsampling of the region. The region is defined by the subsample_bed parameter and the fraction is given by seed_frac                                                             | `boolean` | False     |          |        |
-| `skip_downsample`       | Skip downsampling before expression/splicing analysis. The number of reads to be used is defined by num_reads.                                                                              | `boolean` | False     |          |        |
-| `subsample_bed`         | Bed with regions to subsample                                                                                                                                                               | `string`  |           |          |        |
-| `seed_frac`             | -s INT.FRAC is equivalent to --subsample-seed INT --subsample 0.FRAC in samtools view                                                                                                       | `number`  | 0.001     |          |        |
-| `num_reads`             | Number of reads to downsample RNAseq sample to                                                                                                                                              | `integer` | 120000000 |          |        |
-
-## Variant calling
-
-Options related to variant calling
-
-| Parameter                                       | Description                                                                                                                                                                                                      | Type         | Default  | Required | Hidden |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | -------- | -------- | ------ |
-| `variant_caller`                                | Program to use for variant calling <details><summary>Help</summary><small>The pipeline can use either bcftools mpileup/call or GATK haplotypecaller for calling SNV/INDELS on the RNAseq data.</small></details> |
-| `string`                                        | bcftools                                                                                                                                                                                                         |              |          |
-| `bcftools_caller_mode`                          | Run bcftools call in either consensus or multiallelic mode <details><summary>Help</summary><small>Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value          |
-| threshold of 0.01 is applied.</small></details> | `string`                                                                                                                                                                                                         | multiallelic |          |          |
-| `skip_variant_calling`                          | Skip variant calling for all samples.                                                                                                                                                                            | `boolean`    | False    |          |        |
-| `skip_build_tracks`                             | Skip building splice junction tracks for IGV.                                                                                                                                                                    | `boolean`    | False    |          |        |
-| `skip_stringtie`                                | Skip analysis with StringTie                                                                                                                                                                                     | `boolean`    | False    |          |        |
-| `skip_vep`                                      | Skip Ensembl Variant Effect Predictor                                                                                                                                                                            | `boolean`    | False    |          |        |
-| `skip_drop_ae`                                  | Skip DROP Aberrant Expression module                                                                                                                                                                             | `boolean`    | False    |          |        |
-| `skip_drop_as`                                  | Skip DROP Aberrant Splicing module                                                                                                                                                                               | `boolean`    | False    |          |        |
-| `skip_export_counts_drop`                       | Skip export counts for DROP. It will export information from those modules run. Read usage for further information.                                                                                              | `boolean`    | True     |          |        |
-| `drop_group_samples_ae`                         | DROP group to run when AE only one allowed. Make sure it matches your reference annotation file.                                                                                                                 | `string`     | outrider |          |        |
-| `drop_group_samples_as`                         | DROP group to run when AS only one allowed. Make sure it matches your reference annotation file.                                                                                                                 | `string`     | fraser   |          |        |
-| `drop_padjcutoff_ae`                            | Adjusted p-value cut-off for DROP Aberrant Expression module                                                                                                                                                     | `number`     | 0.05     |          |        |
-| `drop_padjcutoff_as`                            | Adjusted p-value cut-off for DROP Aberrant Splicing module                                                                                                                                                       | `number`     | 0.1      |          |        |
-| `drop_zscorecutoff`                             | Z-score cut-off for DROP Aberrant Expression module                                                                                                                                                              | `number`     | 0        |          |        |
-| `reference_drop_annot_file`                     | Path to a tsv file containing sample annotation for DROP. Must be provided to run DROP.                                                                                                                          | `string`     |          |          |        |
-| `reference_drop_count_file`                     | If you are running DROP Aberrant Expression, provide the path to a tsv or tsv.gz with counts from at least 50 samples to use as controls                                                                         | `string`     |          |          |        |
-| `reference_drop_splice_folder`                  | If you are running DROP Aberrant Splicing, provide the path to a folder with splice counts from at least 30 samples to use as controls, files inside folder must be tsv.gz                                       | `string`     |          |          |        |
-| `gene_panel_clinical_filter`                    | tsv file containing genes on which results from drop and vep will be filtered to avoid incidental findings, columns should be chromosome, gene_start, gene_stop, hgnc_id, hgnc_symbol                            | `string`     |          |
-|                                                 |
-
-## QC options
-
-QC related options
-
-| Parameter                | Description                                                                                                                                                                                                       | Type      | Default | Required | Hidden |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- | -------- | ------ |
-| `skip_peddy`             | Do not calculate sex check using Peddy.                                                                                                                                                                           | `boolean` | False   |          |        |
-| `skip_calculate_hb_frac` | Do not calculate hemoglobin fraction among reads.                                                                                                                                                                 | `boolean` | False   |          |        |
-| `hb_genes`               | Hemoglobin genes ensembl IDs <details><summary>Help</summary><small>TSV-file with one column with the header 'ensembl' containing the target genes for which to calculate fraction mapping for.</small></details> |
-| `string`                 |                                                                                                                                                                                                                   |           |         |
-
-## Institutional config options
-
-Parameters used to describe centralised config profiles. These should not be edited.
-
-| Parameter                                                                                                                                                                           | Description                                                                                                                                                                                                   | Type     | Default | Required | Hidden |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | -------- | ------ |
-| `custom_config_version`                                                                                                                                                             | Git commit id for Institutional configs.                                                                                                                                                                      | `string` | master  |          | True   |
-| `custom_config_base`                                                                                                                                                                | Base directory for Institutional configs. <details><summary>Help</summary><small>If you're running offline, Nextflow will not be able to fetch the institutional config files from the internet. If you don't |
-| need them, then this is not a problem. If you do need them, you should download the files from the repo and tell Nextflow where to find them with this parameter.</small></details> | `string`                                                                                                                                                                                                      |
-| https://raw.githubusercontent.com/nf-core/configs/master                                                                                                                            |                                                                                                                                                                                                               | True     |
-| `config_profile_name`                                                                                                                                                               | Institutional config name.                                                                                                                                                                                    | `string` |         |          | True   |
-| `config_profile_description`                                                                                                                                                        | Institutional config description.                                                                                                                                                                             | `string` |         |          | True   |
-| `config_profile_contact`                                                                                                                                                            | Institutional config contact information.                                                                                                                                                                     | `string` |         |          | True   |
-| `config_profile_url`                                                                                                                                                                | Institutional config URL link.                                                                                                                                                                                | `string` |         |          | True   |
-
-## Generic options
-
-Less common options for the pipeline, typically set in a config file.
-
-| Parameter                                                                                                                                                                                      | Description                                                                                                                                                                                                        | Type      | Default                                                             | Required | Hidden |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ------------------------------------------------------------------- | -------- | ------ |
-| `version`                                                                                                                                                                                      | Display version and exit.                                                                                                                                                                                          | `boolean` |                                                                     |          | True   |
-| `publish_dir_mode`                                                                                                                                                                             | Method used to save pipeline results to output directory. <details><summary>Help</summary><small>The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory.      |
-| This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.</small></details> | `string`                                                                                                                                                                                                           | copy      |                                                                     | True     |
-| `email_on_fail`                                                                                                                                                                                | Email address for completion summary, only when pipeline fails. <details><summary>Help</summary><small>An email address to send a summary email to when the pipeline is completed - ONLY sent if the pipeline does |
-| not exit successfully.</small></details>                                                                                                                                                       | `string`                                                                                                                                                                                                           |           |                                                                     | True     |
-| `plaintext_email`                                                                                                                                                                              | Send plain-text email instead of HTML.                                                                                                                                                                             | `boolean` |                                                                     |          | True   |
-| `max_multiqc_email_size`                                                                                                                                                                       | File size limit when attaching MultiQC reports to summary emails.                                                                                                                                                  | `string`  | 25.MB                                                               |          | True   |
-| `monochrome_logs`                                                                                                                                                                              | Do not use coloured log outputs.                                                                                                                                                                                   | `boolean` |                                                                     |          | True   |
-| `hook_url`                                                                                                                                                                                     | Incoming hook URL for messaging service <details><summary>Help</summary><small>Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.</small></details>                             | `string`  |                                                                     |          | True   |
-| `multiqc_config`                                                                                                                                                                               | Custom config file to supply to MultiQC.                                                                                                                                                                           | `string`  |                                                                     |          | True   |
-| `multiqc_logo`                                                                                                                                                                                 | Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file                                                                                                                       | `string`  |                                                                     |          | True   |
-| `multiqc_methods_description`                                                                                                                                                                  | Custom MultiQC yaml file containing HTML including a methods description.                                                                                                                                          | `string`  |                                                                     |          |        |
-| `validate_params`                                                                                                                                                                              | Boolean whether to validate parameters against the schema at runtime                                                                                                                                               | `boolean` | True                                                                |          | True   |
-| `pipelines_testdata_base_path`                                                                                                                                                                 | Base URL or local path to location of pipeline test dataset files                                                                                                                                                  | `string`  | https://raw.githubusercontent.com/nf-core/test-datasets/raredisease |          | True   |
-| `trace_report_suffix`                                                                                                                                                                          | Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.                                                                                                        | `string`  |                                                                     |          | True   |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `version` | Display version and exit. | `boolean` |  |  | True |
+| `publish_dir_mode` | Method used to save pipeline results to output directory. (accepted: `symlink`\|`rellink`\|`link`\|`copy`\|`copyNoFollow`\|`move`) <details><summary>Help</summary><small>The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.</small></details>| `string` | copy |  | True |
+| `email_on_fail` | Email address for completion summary, only when pipeline fails. <details><summary>Help</summary><small>An email address to send a summary email to when the pipeline is completed - ONLY sent if the pipeline does not exit successfully.</small></details>| `string` |  |  | True |
+| `plaintext_email` | Send plain-text email instead of HTML. | `boolean` |  |  | True |
+| `max_multiqc_email_size` | File size limit when attaching MultiQC reports to summary emails. | `string` | 25.MB |  | True |
+| `monochrome_logs` | Do not use coloured log outputs. | `boolean` |  |  | True |
+| `hook_url` | Incoming hook URL for messaging service <details><summary>Help</summary><small>Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.</small></details>| `string` |  |  | True |
+| `multiqc_config` | Custom config file to supply to MultiQC. | `string` |  |  | True |
+| `multiqc_logo` | Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file | `string` |  |  | True |
+| `multiqc_methods_description` | Custom MultiQC yaml file containing HTML including a methods description. | `string` |  |  |  |
+| `validate_params` | Boolean whether to validate parameters against the schema at runtime | `boolean` | True |  | True |
+| `pipelines_testdata_base_path` | Base URL or local path to location of pipeline test dataset files | `string` | https://raw.githubusercontent.com/nf-core/test-datasets/raredisease |  | True |
+| `trace_report_suffix` | Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss. | `string` |  |  | True |
