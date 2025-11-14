@@ -155,7 +155,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "genomic-medicine-sweden/tomte": "v4.2.0"
+                    "genomic-medicine-sweden/tomte": "v4.3.0dev"
                 }
             },
             [
@@ -683,6 +683,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-11-11T15:37:52.591066075"
+        "timestamp": "2025-11-12T15:06:36.55447099"
     }
 }
