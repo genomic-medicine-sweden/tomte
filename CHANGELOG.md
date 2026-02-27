@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated version to 4.3.0dev [#288](https://github.com/genomic-medicine-sweden/tomte/pull/288)
 
 ### `Fixed`
-- [#291](https://github.com/genomic-medicine-sweden/tomte/pull/291): Fixed naming of files in DROP_FILTER_RESULTS when running with `-stub` flag. 
+
+- [#291](https://github.com/genomic-medicine-sweden/tomte/pull/291): Fixed naming of files in DROP_FILTER_RESULTS when running with `-stub` flag.
 
 ### `Parameters`
 
