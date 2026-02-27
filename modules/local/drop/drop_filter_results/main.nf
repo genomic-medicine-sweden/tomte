@@ -50,13 +50,15 @@ process DROP_FILTER_RESULTS {
     """
 
     stub:
+    def case_id = "${case_info.id}".replace("[","").replace("]","").replace(",","")
+
     """
-    touch ${case_info.id}_outrider_top_hits_research.tsv
-    touch ${case_info.id}_outrider_top_hits_clinical.tsv
-    touch ${case_info.id}_fraser_top_hits_research.tsv
-    touch ${case_info.id}_fraser_top_hits_clinical.tsv
-    touch ${case_info.id}_mae_top_hits_research.tsv
-    touch ${case_info.id}_mae_top_hits_clinical.tsv
+    touch ${case_id}_outrider_top_hits_research.tsv
+    touch ${case_id}_outrider_top_hits_clinical.tsv
+    touch ${case_id}_fraser_top_hits_research.tsv
+    touch ${case_id}_fraser_top_hits_clinical.tsv
+    touch ${case_id}_mae_top_hits_research.tsv
+    touch ${case_id}_mae_top_hits_clinical.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

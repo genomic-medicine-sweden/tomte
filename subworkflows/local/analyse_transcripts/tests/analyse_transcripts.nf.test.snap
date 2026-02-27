@@ -47,32 +47,32 @@
                 "config.yaml"
             ],
             [
-                "outrider_top_hits_clinical.tsv"
+                "finequagga_outrider_top_hits_clinical.tsv"
             ],
             [
-                "outrider_top_hits_research.tsv"
+                "finequagga_outrider_top_hits_research.tsv"
             ],
             [
-                "fraser_top_hits_clinical.tsv"
+                "finequagga_fraser_top_hits_clinical.tsv"
             ],
             [
-                "fraser_top_hits_research.tsv"
+                "finequagga_fraser_top_hits_research.tsv"
             ],
             [
-                "versions.yml:md5,205c586a4c68fb4299b3bac50b12d80a",
+                "versions.yml:md5,3f7c51e926c1c6699c5b2209f6462225",
                 "versions.yml:md5,4a8ef69b45dec5c4a3022e258e6b9b7f",
-                "versions.yml:md5,4be0342d9b24a9f0082899b1ef7728f2",
-                "versions.yml:md5,aca2e86282fdb7add4f109b4f108f742",
-                "versions.yml:md5,af99797f66dd8e19bde4746d8b5867fb",
-                "versions.yml:md5,b37834f2443251644f9c4618ef14a2da",
-                "versions.yml:md5,d0db2ae9cd9907e53e164eb5dd290eed"
+                "versions.yml:md5,71c390aaf9ee202559c7495396ef4013",
+                "versions.yml:md5,78c1021cc8c41669b9a9901b476b6df7",
+                "versions.yml:md5,8738346c0ae9d6c40b8171491d121894",
+                "versions.yml:md5,a1830cf675fb8c1f1223f00322c91a5d",
+                "versions.yml:md5,f1b0a27c76d1c7b8d93f07e76b887868"
             ]
         ],
+        "timestamp": "2026-02-27T16:02:09.49696",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.0"
-        },
-        "timestamp": "2025-11-10T12:39:48.379042811"
+        }
     },
     "Should run with one sample": {
         "content": [
