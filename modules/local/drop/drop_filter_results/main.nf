@@ -51,12 +51,12 @@ process DROP_FILTER_RESULTS {
 
     stub:
     """
-    touch outrider_top_hits_research.tsv
-    touch outrider_top_hits_clinical.tsv
-    touch fraser_top_hits_research.tsv
-    touch fraser_top_hits_clinical.tsv
-    touch mae_top_hits_research.tsv
-    touch mae_top_hits_clinical.tsv
+    touch ${case_info.id}_outrider_top_hits_research.tsv
+    touch ${case_info.id}_outrider_top_hits_clinical.tsv
+    touch ${case_info.id}_fraser_top_hits_research.tsv
+    touch ${case_info.id}_fraser_top_hits_clinical.tsv
+    touch ${case_info.id}_mae_top_hits_research.tsv
+    touch ${case_info.id}_mae_top_hits_clinical.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
