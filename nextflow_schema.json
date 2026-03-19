@@ -311,6 +311,14 @@
                     "enum": ["consensus", "multiallelic"],
                     "help_text": "Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied."
                 },
+                "ase_intervals": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.bed$",
+                    "description": "BED file of regions to restrict GATK4 ASEReadCounter to (e.g. exons). When provided, the BED is split by chromosome and each job runs on one chromosome's regions in parallel.",
+                    "fa_icon": "fas fa-sliders-h"
+                },
                 "skip_variant_calling": {
                     "type": "boolean",
                     "default": false,

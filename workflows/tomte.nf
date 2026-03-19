@@ -230,13 +230,18 @@ workflow TOMTE {
         ch_vcf_tbi = CALL_VARIANTS.out.vcf_tbi
         ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
 
+        ch_ase_intervals = params.ase_intervals
+            ? Channel.fromPath(params.ase_intervals).map { f -> [[id: 'ase_intervals'], f] }
+            : Channel.empty()
+
         ALLELE_SPECIFIC_CALLING(
             ch_vcf_tbi,
             ch_alignment.bam_bai,
             ch_references.fasta,
             ch_references.fai,
             ch_references.sequence_dict,
-            ch_case_info
+            ch_case_info,
+            ch_ase_intervals
         )
         ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
 
