@@ -11,6 +11,8 @@ include { RENAME_FILES                         } from '../../../modules/local/re
 include { TABIX_TABIX                          } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES   } from '../../../modules/nf-core/bcftools/norm/main'
+include { SPLIT_FAI_INTERVALS                  } from '../../../modules/local/split_fai_intervals/main'
+include { MERGE_ASE_CSVS                       } from '../../../modules/local/merge_ase_csvs/main'
 
 
 workflow ALLELE_SPECIFIC_CALLING {
@@ -41,16 +43,45 @@ workflow ALLELE_SPECIFIC_CALLING {
 
     ch_vcf_tbi_sample = BCFTOOLS_VIEW.out.vcf.join(BCFTOOLS_VIEW.out.tbi)
     ch_bam_bai_vcf_tbi = ch_bam_bai.join(ch_vcf_tbi_sample)
+
+    // Create per-chromosome interval BED files from FAI (run once on reference)
+    SPLIT_FAI_INTERVALS(ch_fai)
+
+    // Flatten list of BED files into individual channel items (one per chromosome)
+    ch_intervals = SPLIT_FAI_INTERVALS.out.intervals.flatten()
+
+    // Scatter: combine each sample with each interval → one job per sample per chromosome
+    ch_scattered = ch_bam_bai_vcf_tbi
+        .combine(ch_intervals)
+        .map { meta, bam, bai, vcf, tbi, interval ->
+            def new_meta = meta + [interval: interval.baseName]
+            [[new_meta, bam, bai, vcf, tbi], interval]
+        }
+        .multiMap { bam_vcf_input, interval ->
+            bam_vcf:   bam_vcf_input
+            intervals: interval
+        }
+
     GATK4_ASEREADCOUNTER(
-        ch_bam_bai_vcf_tbi,
+        ch_scattered.bam_vcf,
         ch_fasta,
         ch_fai,
         ch_dict,
-        []
+        ch_scattered.intervals
     )
 
+    // Gather: group per-interval CSVs back by original sample ID, then merge
+    ch_ase_csvs = GATK4_ASEREADCOUNTER.out.csv
+        .map { meta, csv -> [meta.id, meta, csv] }
+        .groupTuple()
+        .map { id, metas, csvs ->
+            [metas[0].findAll { k, v -> k != 'interval' }, csvs]
+        }
+
+    MERGE_ASE_CSVS(ch_ase_csvs)
+
     BOOTSTRAPANN(
-        ch_ind_vcf_tbi.join(GATK4_ASEREADCOUNTER.out.csv),
+        ch_ind_vcf_tbi.join(MERGE_ASE_CSVS.out.csv),
     )
 
     TABIX_BGZIPTABIX(BOOTSTRAPANN.out.vcf)
@@ -102,7 +133,9 @@ workflow ALLELE_SPECIFIC_CALLING {
 
     ch_versions = ch_versions.mix( BCFTOOLS_NORM.out.versions.first() )
     ch_versions = ch_versions.mix( BCFTOOLS_VIEW.out.versions.first() )
+    ch_versions = ch_versions.mix( SPLIT_FAI_INTERVALS.out.versions )
     ch_versions = ch_versions.mix( GATK4_ASEREADCOUNTER.out.versions.first() )
+    ch_versions = ch_versions.mix( MERGE_ASE_CSVS.out.versions.first() )
     ch_versions = ch_versions.mix( BOOTSTRAPANN.out.versions.first() )
     ch_versions = ch_versions.mix( TABIX_BGZIPTABIX.out.versions.first() )
     ch_versions = ch_versions.mix( BCFTOOLS_MERGE.out.versions.first() )
