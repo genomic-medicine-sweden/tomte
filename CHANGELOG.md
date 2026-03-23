@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Scatter-gather parallelisation of GATK4 ASEReadCounter: each sample is now processed per chromosome in parallel and results merged, reducing runtime and peak memory usage.
+- New local modules: `split_fai_intervals`, `split_bed_by_chrom`, `merge_ase_csvs`.
+
 ### `Changed`
 
 - Updated version to 4.3.0dev [#288](https://github.com/genomic-medicine-sweden/tomte/pull/288)
@@ -19,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Old parameter | New parameter |
 | ------------- | ------------- |
+|               | ase_intervals |
+|               | ase_max_depth |
 
 > [!NOTE]
 > Parameter has been updated if both old and new parameter information is present.
