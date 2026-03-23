@@ -319,6 +319,12 @@
                     "description": "BED file of regions to restrict GATK4 ASEReadCounter to (e.g. exons). When provided, the BED is split by chromosome and each job runs on one chromosome's regions in parallel.",
                     "fa_icon": "fas fa-sliders-h"
                 },
+                "ase_max_depth": {
+                    "type": "integer",
+                    "default": 1000,
+                    "description": "Maximum read depth per locus for GATK4 ASEReadCounter (--max-depth-per-sample). Lower values reduce memory usage on high-coverage regions.",
+                    "fa_icon": "fas fa-sliders-h"
+                },
                 "skip_variant_calling": {
                     "type": "boolean",
                     "default": false,

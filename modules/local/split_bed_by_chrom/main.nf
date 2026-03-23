@@ -20,11 +20,11 @@ process SPLIT_BED_BY_CHROM {
     script:
     """
     # Split BED file into per-chromosome files, keeping only standard chromosomes
-    awk '\$1 ~ /^(chr[0-9]+|chr[XYM]|chrMT|[1-9][0-9]?|X|Y|MT?)$/ {print > \$1".bed"}' ${bed}
+    awk '\$1 ~ "^(chr[0-9]+|chr[XYM]|chrMT|[1-9][0-9]?|X|Y|MT?)\$" {print > \$1".bed"}' ${bed}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        awk: \$(awk --version 2>&1 | head -1 | sed 's/[^0-9.]//g; s/^\\.//; s/\\.$//; s/\\.\\.*/./g')
+        awk: \$(awk --version 2>&1 | awk 'NR==1{print \$3}' | tr -d ',')
     END_VERSIONS
     """
 

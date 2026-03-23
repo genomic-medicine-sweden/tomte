@@ -1,0 +1,25 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    "chr22.bed:md5,87a15eb9c2ff20ccd5cd8735a28708f7"
+                ],
+                "1": [
+                    "versions.yml:md5,6f8c48c08ec16a049629802f5b37c8db"
+                ],
+                "intervals": [
+                    "chr22.bed:md5,87a15eb9c2ff20ccd5cd8735a28708f7"
+                ],
+                "versions": [
+                    "versions.yml:md5,6f8c48c08ec16a049629802f5b37c8db"
+                ]
+            }
+        ],
+        "timestamp": "2026-03-22T09:54:07.758490358",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.04.5"
+        }
+    }
+}

@@ -20,11 +20,11 @@ process SPLIT_FAI_INTERVALS {
     script:
     """
     # Create one BED file per standard chromosome (handles both GRCh37 and GRCh38 naming)
-    awk 'BEGIN{OFS="\\t"} \$1 ~ /^(chr[0-9]+|chr[XYM]|chrMT|[0-9]+|X|Y|MT?)$/ {print \$1, 0, \$2 > \$1".bed"}' ${fai}
+    awk 'BEGIN{OFS="\\t"} \$1 ~ "^(chr[0-9]+|chr[XYM]|chrMT|[0-9]+|X|Y|MT?)\$" {print \$1, 0, \$2 > \$1".bed"}' ${fai}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        awk: \$(awk --version 2>&1 | head -1 | sed 's/[^0-9.]//g; s/^\\.//; s/\\.$//; s/\\.\\.*/./g')
+        awk: \$(awk --version 2>&1 | awk 'NR==1{print \$3}' | tr -d ',')
     END_VERSIONS
     """
 

@@ -91,7 +91,10 @@ workflow ALLELE_SPECIFIC_CALLING {
     MERGE_ASE_CSVS(ch_ase_csvs)
 
     BOOTSTRAPANN(
-        ch_ind_vcf_tbi.join(MERGE_ASE_CSVS.out.csv),
+        ch_ind_vcf_tbi
+            .map { meta, vcf, tbi -> [meta.id, meta, vcf, tbi] }
+            .join(MERGE_ASE_CSVS.out.csv.map { meta, csv -> [meta.id, csv] })
+            .map { id, meta, vcf, tbi, csv -> [meta, vcf, tbi, csv] }
     )
 
     TABIX_BGZIPTABIX(BOOTSTRAPANN.out.vcf)
