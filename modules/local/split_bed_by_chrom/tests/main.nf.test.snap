@@ -6,17 +6,17 @@
                     "chr22.bed:md5,87a15eb9c2ff20ccd5cd8735a28708f7"
                 ],
                 "1": [
-                    "versions.yml:md5,4b4468e7d489cd525c0a04c2b6108f7d"
+                    "versions.yml:md5,cf114805fa4ead7ebdb7f875fced8b61"
                 ],
                 "intervals": [
                     "chr22.bed:md5,87a15eb9c2ff20ccd5cd8735a28708f7"
                 ],
                 "versions": [
-                    "versions.yml:md5,4b4468e7d489cd525c0a04c2b6108f7d"
+                    "versions.yml:md5,cf114805fa4ead7ebdb7f875fced8b61"
                 ]
             }
         ],
-        "timestamp": "2026-03-22T09:55:07.690905883",
+        "timestamp": "2026-03-24T09:36:36.575625952",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.04.5"
