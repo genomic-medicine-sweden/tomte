@@ -1,0 +1,33 @@
+nextflow_process {
+
+    name "Test Process SPLIT_FAI_INTERVALS"
+    script "../main.nf"
+    process "SPLIT_FAI_INTERVALS"
+    tag "modules_local"
+    tag "modules"
+    tag "split_fai_intervals"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                modules_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+            }
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}
