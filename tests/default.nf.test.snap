@@ -72,7 +72,7 @@
                     "gawk": "5.3.0"
                 },
                 "GET_CHROM_SIZES": {
-                    "samtools": "1.22.1"
+                    "gawk": "5.3.0"
                 },
                 "GET_RRNA_TRANSCRIPTS": {
                     "get_rrna_transcripts": "v1.0"
@@ -341,6 +341,8 @@
                 "fastqc/ACC5963A2_id1_2_fastqc.zip",
                 "gawk",
                 "gawk/hgnc.tsv",
+                "get",
+                "get/grch37_chr21.sizes",
                 "junction",
                 "junction/ACC5963A2_junction.bed",
                 "multiqc",
@@ -432,7 +434,6 @@
                 "references/grch37_chr21.dict",
                 "references/grch37_chr21.fa",
                 "references/grch37_chr21.fa.fai",
-                "references/grch37_chr21.fa.sizes",
                 "references/grch37_chr21.gtf",
                 "references/grch37_chr21.refflat",
                 "references/rrna.bed",
@@ -504,12 +505,12 @@
                 "i_data.ctab:md5,a64ec517859ed296146a5497ec5cf645",
                 "t_data.ctab:md5,adea5cce0d453ca8108143842b21157c",
                 "hgnc.tsv:md5,bbf07f9733fbd7e4666f039b5c4be128",
+                "grch37_chr21.sizes:md5,ffd90da532db7928daa1591d45dc26c4",
                 "ACC5963A2_junction.bed:md5,7b66db28a4b006d798a96fbc81f345e5",
                 "GRCh37_gffread_output.fasta:md5,7dbf3195d06f480fa5b2421004580bdd",
                 "grch37_chr21.dict:md5,53d95c36db0422d29db02c8a8da56e43",
                 "grch37_chr21.fa:md5,e9ce36e75cd57d255ad64eb2ecca4dd0",
                 "grch37_chr21.fa.fai:md5,93c052a6e351d5db0d7a0156816f51fb",
-                "grch37_chr21.fa.sizes:md5,ffd90da532db7928daa1591d45dc26c4",
                 "grch37_chr21.gtf:md5,01924b6ce7016e41d5e2b22e478ca12f",
                 "grch37_chr21.refflat:md5,9c34a780a2505949c4c613dfc79f8d2d",
                 "rrna.bed:md5,1c99687a18201c904edc40fb03088787",
@@ -679,10 +680,10 @@
                 ]
             ]
         ],
+        "timestamp": "2026-04-01T09:41:16.417148123",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.04.6"
-        },
-        "timestamp": "2025-11-12T15:06:36.55447099"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.1"
+        }
     }
 }
