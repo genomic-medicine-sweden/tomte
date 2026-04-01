@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - Fixed naming of files in DROP_FILTER_RESULTS when running with `-stub` flag. [#291](https://github.com/genomic-medicine-sweden/tomte/pull/291)
-- Fixed processes not being able to be cached properly on resume [#294](https://github.com/genomic-medicine-sweden/tomte/pull/291)
+- Fixed processes not being able to be cached properly on resume [#294](https://github.com/genomic-medicine-sweden/tomte/pull/294)
 
 ### `Parameters`
 

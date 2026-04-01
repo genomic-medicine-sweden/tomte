@@ -11,7 +11,7 @@
             ],
             [
                 [
-                    "fasta.sizes:md5,ffd90da532db7928daa1591d45dc26c4"
+                    "fasta.fa.sizes:md5,ffd90da532db7928daa1591d45dc26c4"
                 ]
             ],
             [
@@ -286,7 +286,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-04-01T09:30:57.456875996",
+        "timestamp": "2026-04-01T13:20:38.397959005",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.1"
@@ -310,7 +310,7 @@
             ],
             [
                 [
-                    "grch37_chr21.sizes:md5,ffd90da532db7928daa1591d45dc26c4"
+                    "grch37_chr21.fa.sizes:md5,ffd90da532db7928daa1591d45dc26c4"
                 ]
             ],
             [
@@ -585,7 +585,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-04-01T09:30:15.591085169",
+        "timestamp": "2026-04-01T13:20:01.145862272",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.1"
