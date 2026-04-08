@@ -99,6 +99,8 @@ workflow TOMTE {
                                                                         : Channel.empty()
     ch_hb_genes                   = params.hb_genes                     ? Channel.fromPath(params.hb_genes).collect()
                                                                         : Channel.empty()
+    ch_ase_intervals              = params.ase_intervals                ? Channel.fromPath(params.ase_intervals).map { it -> [[id:it.getSimpleName()], it] }.collect()
+                                                                        : Channel.empty()
 
     // Read and store paths in the vep_plugin_files file
     ch_vep_extra_files_unsplit.splitCsv(header: true)
@@ -229,10 +231,6 @@ workflow TOMTE {
         )
         ch_vcf_tbi = CALL_VARIANTS.out.vcf_tbi
         ch_versions = ch_versions.mix(CALL_VARIANTS.out.versions)
-
-        ch_ase_intervals = params.ase_intervals
-            ? Channel.fromPath(params.ase_intervals).map { f -> [[id: 'ase_intervals'], f] }
-            : Channel.empty()
 
         ALLELE_SPECIFIC_CALLING(
             ch_vcf_tbi,

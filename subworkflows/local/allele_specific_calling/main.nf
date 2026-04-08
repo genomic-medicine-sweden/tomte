@@ -25,7 +25,7 @@ workflow ALLELE_SPECIFIC_CALLING {
     ch_dict            // channel: [mandatory] [ val(meta), path(dict) ]
     ch_case_info       // channel: [mandatory] [ val(case_info) ]
     ch_ase_intervals   // channel: [optional]  [ val(meta), path(bed) ] or empty channel
-    use_intervals  // boolean: true if ase_intervals param is provided
+    use_intervals      // boolean: true if ase_intervals param is provided
 
     main:
     ch_versions = Channel.empty()
@@ -83,11 +83,8 @@ workflow ALLELE_SPECIFIC_CALLING {
 
     // Gather: group per-interval CSVs back by original sample ID, then merge into one
     ch_ase_csvs = GATK4_ASEREADCOUNTER.out.csv
-        .map { meta, csv -> [meta.id, meta, csv] }
+        .map { meta, csv -> [meta - meta.subMap('interval'), csv] }
         .groupTuple()
-        .map { id, metas, csvs ->
-            [metas[0].findAll { k, v -> k != 'interval' }, csvs]
-        }
 
     MERGE_ASE_CSVS(ch_ase_csvs)
 
