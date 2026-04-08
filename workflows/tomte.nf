@@ -241,7 +241,8 @@ workflow TOMTE {
             ch_references.fai,
             ch_references.sequence_dict,
             ch_case_info,
-            ch_ase_intervals
+            ch_ase_intervals,
+            params.ase_intervals ? true : false
         )
         ch_versions = ch_versions.mix(ALLELE_SPECIFIC_CALLING.out.versions)
 

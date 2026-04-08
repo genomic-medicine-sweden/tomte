@@ -25,6 +25,7 @@ workflow ALLELE_SPECIFIC_CALLING {
     ch_dict            // channel: [mandatory] [ val(meta), path(dict) ]
     ch_case_info       // channel: [mandatory] [ val(case_info) ]
     ch_ase_intervals   // channel: [optional]  [ val(meta), path(bed) ] or empty channel
+    use_intervals  // boolean: true if ase_intervals param is provided
 
     main:
     ch_versions = Channel.empty()
@@ -50,7 +51,7 @@ workflow ALLELE_SPECIFIC_CALLING {
     // If ase_intervals is provided: split that BED by chromosome — each job sees only
     // exonic variants on one chromosome, reducing memory and runtime per job.
     // Otherwise: derive whole-chromosome BEDs from the FAI as fallback.
-    if (params.ase_intervals) {
+    if (use_intervals) {
         SPLIT_BED_BY_CHROM(ch_ase_intervals)
         ch_interval_files = SPLIT_BED_BY_CHROM.out.intervals.flatten()
         ch_versions = ch_versions.mix( SPLIT_BED_BY_CHROM.out.versions )
