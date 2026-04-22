@@ -1,7 +1,7 @@
 {
     "-profile test": {
         "content": [
-            89,
+            93,
             {
                 "ADD_FOUND_IN_TAG": {
                     "bcftools": 1.2,
@@ -91,6 +91,9 @@
                 },
                 "JUNCTION_TRACK": {
                     "sj2bed": "v1.0"
+                },
+                "MERGE_ASE_CSVS": {
+                    "awk": "5.3.0"
                 },
                 "PICARD_COLLECTINSERTSIZEMETRICS": {
                     "picard": "3.3.0"
