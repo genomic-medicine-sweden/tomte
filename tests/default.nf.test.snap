@@ -131,6 +131,9 @@
                 "SAMTOOLS_VIEW": {
                     "samtools": "1.22.1"
                 },
+                "SPLIT_FAI_INTERVALS": {
+                    "awk": "5.3.0"
+                },
                 "SPLIT_MULTIALLELICS": {
                     "bcftools": 1.22
                 },
