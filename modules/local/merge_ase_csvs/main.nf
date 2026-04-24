@@ -25,7 +25,7 @@ process MERGE_ASE_CSVS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        awk: \$(awk --version 2>&1 | awk 'NR==1{print \$3}' | tr -d ',')
+        awk: \$( { awk --version; awk -Wversion; } 2>&1 | grep -oE '[0-9]+[.][0-9]+[.][0-9]+' | head -1 )
     END_VERSIONS
     """
 
