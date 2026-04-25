@@ -1,7 +1,7 @@
 {
     "-profile test": {
         "content": [
-            89,
+            93,
             {
                 "ADD_FOUND_IN_TAG": {
                     "bcftools": 1.2,
@@ -92,6 +92,9 @@
                 "JUNCTION_TRACK": {
                     "sj2bed": "v1.0"
                 },
+                "MERGE_ASE_CSVS": {
+                    "awk": "1.3.4"
+                },
                 "PICARD_COLLECTINSERTSIZEMETRICS": {
                     "picard": "3.3.0"
                 },
@@ -127,6 +130,9 @@
                 },
                 "SAMTOOLS_VIEW": {
                     "samtools": "1.22.1"
+                },
+                "SPLIT_FAI_INTERVALS": {
+                    "awk": "1.3.4"
                 },
                 "SPLIT_MULTIALLELICS": {
                     "bcftools": 1.22
