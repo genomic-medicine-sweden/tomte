@@ -8,7 +8,7 @@ include { GATK4_CREATESEQUENCEDICTIONARY as BUILD_DICT } from '../../../modules/
 include { GUNZIP as GUNZIP_GTF                         } from '../../../modules/nf-core/gunzip'
 include { GET_RRNA_TRANSCRIPTS                         } from '../../../modules/local/get_rrna_transcripts'
 include { UCSC_GTFTOGENEPRED                           } from '../../../modules/nf-core/ucsc/gtftogenepred'
-include { SAMTOOLS_FAIDX as GET_CHROM_SIZES            } from '../../../modules/nf-core/samtools/faidx'
+include { GAWK as GET_CHROM_SIZES                      } from '../../../modules/nf-core/gawk'
 include { GUNZIP as GUNZIP_TRFASTA                     } from '../../../modules/nf-core/gunzip'
 include { GFFREAD                                      } from '../../../modules/nf-core/gffread'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME      } from '../../../modules/nf-core/samtools/faidx'
@@ -42,7 +42,7 @@ workflow PREPARE_REFERENCES {
 
 
     main:
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // Gunzip fasta if necessary
     if ( gunzip_fasta ) {
@@ -54,7 +54,11 @@ workflow PREPARE_REFERENCES {
     }
     // If no genome indices, create it
     if ( build_fai ) {
-        SAMTOOLS_FAIDX_GENOME( ch_fasta_final,[[],[]], [] )
+        SAMTOOLS_FAIDX_GENOME(
+            ch_fasta_final,
+            [[],[]],
+            false,
+        )
         ch_fai = SAMTOOLS_FAIDX_GENOME.out.fai.collect()
         ch_versions = ch_versions.mix( SAMTOOLS_FAIDX_GENOME.out.versions )
     } else {
@@ -70,12 +74,13 @@ workflow PREPARE_REFERENCES {
         ch_dict_final = ch_sequence_dict_input.collect()
     }
 
-    // Get chrom sizes
+    // If we wanted to use SAMTOOLS_FAIDX to get the sizes, we would always have to make a fai
+    // This is because in the current state of this module, if you input a fai, it always gets overwritten and nextflow therefore can't cache it.
     GET_CHROM_SIZES(
-        ch_fasta_final,
         ch_fai,
-        true
-        )
+        [],
+        false
+    )
 
     // Gunzip gtf if necessary
     if ( gunzip_gtf ) {
@@ -161,7 +166,7 @@ workflow PREPARE_REFERENCES {
     ch_versions = ch_versions.mix(BEDTOINTERVALLIST.out.versions)
 
     emit:
-    chrom_sizes   = GET_CHROM_SIZES.out.sizes
+    chrom_sizes   = GET_CHROM_SIZES.out.output
         .map{ _meta, sizes -> sizes }.collect()            // channel: [ path(sizes) ]
     fasta         = ch_fasta_final                         // channel: [ val(meta), path(fasta) ]
     fai           = ch_fai                                 // channel: [ val(meta), path(fai) ]
