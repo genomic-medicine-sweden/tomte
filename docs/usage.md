@@ -213,10 +213,14 @@ The mandatory and optional parameters for each category are tabulated below.
 |           | variant_caller<sup>1</sup>       |
 |           | bcftools_caller_mode<sup>2</sup> |
 |           | skip_variant_calling<sup>3</sup> |
+|           | ase_intervals<sup>4</sup>        |
+|           | ase_max_depth<sup>5</sup>        |
 
 <sup>1</sup> If it is not provided by the user, the default value is bcftools<br />
 <sup>2</sup> If it is not provided by the user, the default value is multiallelic<br />
-<sup>3</sup> If it is not provided by the user, the default value is false
+<sup>3</sup> If it is not provided by the user, the default value is false<br />
+<sup>4</sup> Optional BED file with regions (e.g. exons) to restrict ASEReadCounter to. If not provided, ASEReadCounter runs per whole chromosome. Providing an exon BED file reduces runtime and memory usage significantly.<br />
+<sup>5</sup> If it is not provided by the user, the default value is 1000. Sets the maximum read depth per sample for GATK4 ASEReadCounter (`--max-depth-per-sample`).
 
 #### 5. SNV annotation (ensembl VEP)
 

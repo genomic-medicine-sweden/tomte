@@ -72,6 +72,8 @@ Options related to variant calling
 |-----------|-----------|-----------|-----------|-----------|-----------|
 | `variant_caller` | Program to use for variant calling (accepted: `bcftools`\|`gatk`) <details><summary>Help</summary><small>The pipeline can use either bcftools mpileup/call or GATK haplotypecaller for calling SNV/INDELS on the RNAseq data.</small></details>| `string` | bcftools |  |  |
 | `bcftools_caller_mode` | Run bcftools call in either consensus or multiallelic mode (accepted: `consensus`\|`multiallelic`) <details><summary>Help</summary><small>Bcftools call can eitherbe run in multiallelic mode or in consensus mode. In consensus mode a p-value threshold of 0.01 is applied.</small></details>| `string` | multiallelic |  |  |
+| `ase_intervals` | BED file of regions to restrict GATK4 ASEReadCounter to (e.g. exons). When provided, the BED is split by chromosome and each job runs on one chromosome's regions in parallel. | `string` |  |  |  |
+| `ase_max_depth` | Maximum read depth per locus for GATK4 ASEReadCounter (--max-depth-per-sample). Lower values reduce memory usage on high-coverage regions. Set to 0 to disable the cap (GATK default). | `integer` | 1000 |  |  |
 | `skip_variant_calling` | Skip variant calling for all samples. | `boolean` | False |  |  |
 | `skip_build_tracks` | Skip building splice junction tracks for IGV. | `boolean` | False |  |  |
 | `skip_stringtie` | Skip analysis with StringTie | `boolean` | False |  |  |
