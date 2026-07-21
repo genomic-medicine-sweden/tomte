@@ -5,7 +5,7 @@ process DROP_CONFIG_RUN_MAE {
     input:
     tuple val(meta), path(fasta), path(fai)
     tuple val(meta2), path(gtf)
-    tuple val(meta), path(dict)
+    tuple val(meta3), path(dict)
     path sample_annotation
     val(genome)
     tuple path(bam), path(bai)

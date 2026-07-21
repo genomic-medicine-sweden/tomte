@@ -249,7 +249,6 @@
                 "multiqc/multiqc_data/star_gene_counts_Same_Stranded.txt",
                 "multiqc/multiqc_data/star_gene_counts_Unstranded.txt",
                 "multiqc/multiqc_data/star_summary_table.txt",
-                "multiqc/multiqc_plots",
                 "multiqc/multiqc_report.html",
                 "pipeline_info",
                 "pipeline_info/tomte_pipeline_software_mqc_versions.yml",
@@ -333,7 +332,7 @@
                 "exonGeTrInfo.tab:md5,e3e21c4b1c77b4f1ce33736e8ebef046",
                 "exonInfo.tab:md5,89755beceea3b8b8a1d5adbf55e04c4f",
                 "geneInfo.tab:md5,81d62ce506b1ac6154b8eb91d0f1633c",
-                "genomeParameters.txt:md5,df7a71db5babe1e413fcb56892feae38",
+                "genomeParameters.txt:md5,b07f1b27ee3fd1a4c26d58c0b696828f",
                 "sjdbInfo.txt:md5,68190fbde2fae7bd6e7afd97faa71c98",
                 "sjdbList.fromGTF.out.tab:md5,e394912ab5667171a27e8897d116f8f0",
                 "sjdbList.out.tab:md5,12efd0795aa3db892113dcc09c5843f1",
@@ -371,10 +370,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-04-01T13:55:57.356513887",
+        "timestamp": "2026-07-21T15:37:55.416033",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.1"
+            "nextflow": "26.04.3"
         }
     }
 }

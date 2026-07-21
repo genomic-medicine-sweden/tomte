@@ -168,7 +168,6 @@ workflow TOMTE {
         ch_fastq_reads
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions)
 
     ALIGNMENT(
         ch_fastq_reads,
@@ -327,7 +326,7 @@ workflow TOMTE {
         .mix(topic_versions_string)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name: 'genomic_medicine_sweden_'  +  'tomte_software_'  + 'mqc_'  + 'versions.yml',
+            name: 'tomte_pipeline_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
