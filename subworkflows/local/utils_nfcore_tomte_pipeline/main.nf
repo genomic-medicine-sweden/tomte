@@ -56,6 +56,25 @@ workflow PIPELINE_INITIALISATION {
 
     def before_text = ""
     def after_text = ""
+    before_text = """
+\033[0;34m
+\033[0;34m----------------------------------------------------
+\033[0;34m   _____ __  __  _____            _                  _
+\033[0;34m  / ____|  \\/  |/ ____|          | |                | |
+\033[0;34m | |  __| \\  / | (___    ______  | |_ ___  _ __ ___ | |_ ___
+\033[0;34m | | |_ | |\\/| |\\___ \\  |______| | __/ _ \\| '_ ` _ \\| __/ _ \
+\033[0;34m | |__| | |  | |____) |          | || (_) | | | | | | ||  __/
+\033[0;34m  \\_____|_|  |_|_____/            \\__\\___/|_| |_| |_|\\__\\___|
+\033[0;34m----------------------------------------------------
+\033[0;34m
+"""
+        after_text = """${workflow.manifest.doi ? "* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { " https://doi.org/${it.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+* The nf-core framework
+    https://doi.org/10.1038/s41587-020-0439-x
+* Software dependencies
+    https://github.com/${workflow.manifest.name}/blob/master/CITATIONS.md
+"""    
+
     if (monochrome_logs) {
         before_text = before_text.replaceAll(/\033\[[0-9;]*m/, '')
     }
