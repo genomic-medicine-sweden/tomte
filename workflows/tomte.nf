@@ -39,19 +39,24 @@ workflow TOMTE {
 
     take:
     ch_samplesheet // channel: samplesheet read in from --input
+    multiqc_config
+    multiqc_logo
+    multiqc_methods_description
+    outdir
+
     main:
 
-    ch_versions      = Channel.empty()
-    ch_multiqc_files = Channel.empty()
+    def ch_versions      = channel.empty()
+    def ch_multiqc_files = channel.empty()
 
     // Mandatory
     ch_samples        = ch_samplesheet.map { meta, _fastqs -> meta }
     ch_case_info      = ch_samples.toList().map { create_case_channel(it) }
-    ch_platform       = Channel.from(params.platform).collect()
+    ch_platform       = channel.from(params.platform).collect()
 
     // Optional
-    ch_vep_refs_download_unprocessed = params.vep_refs_download         ? Channel.fromPath(params.vep_refs_download)
-                                                                        : Channel.empty()
+    ch_vep_refs_download_unprocessed = params.vep_refs_download         ? channel.fromPath(params.vep_refs_download)
+                                                                        : channel.empty()
 
     DOWNLOAD_REFERENCES(
         params.genome,
@@ -67,38 +72,38 @@ workflow TOMTE {
     ch_versions = ch_versions.mix(DOWNLOAD_REFERENCES.out.versions)
 
     // Optional
-    ch_fasta                      = params.fasta                        ? Channel.fromPath(params.fasta).map {it -> [[id:it.getSimpleName()], it]}.collect()
+    ch_fasta                      = params.fasta                        ? channel.fromPath(params.fasta).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : downloads.fasta.map {it -> [[id:it.getSimpleName()], it]}.collect()
-    ch_gtf                        = params.gtf                          ? Channel.fromPath(params.gtf).map {it -> [[id:it.getSimpleName()], it]}.collect()
+    ch_gtf                        = params.gtf                          ? channel.fromPath(params.gtf).map {it -> [[id:it.getSimpleName()], it]}.collect()
                                                                         : downloads.gtf.map {it -> [[id:it.getSimpleName()], it]}.collect()
-    ch_drop_mae_high_q_vcf_tbi    = params.drop_mae_high_q_vcf          ? Channel.fromPath(params.drop_mae_high_q_vcf).concat(Channel.fromPath(params.drop_mae_high_q_vcf_tbi)).collect()
+    ch_drop_mae_high_q_vcf_tbi    = params.drop_mae_high_q_vcf          ? channel.fromPath(params.drop_mae_high_q_vcf).concat(channel.fromPath(params.drop_mae_high_q_vcf_tbi)).collect()
                                                                         : downloads.high_q_vcf_tbi.collect()
-    ch_vep_cache_unprocessed      = params.vep_cache                    ? Channel.fromPath(params.vep_cache)
-                                                                        : Channel.empty().mix(downloads.vep_cache)
-    ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? Channel.fromPath(params.vep_plugin_files)
-                                                                        : Channel.empty().mix(downloads.vep_plugin)
-    ch_fai                        = params.fai                          ? Channel.fromPath(params.fai).map {it -> [[id:it.getSimpleName()], it]}.collect()
-                                                                        : Channel.empty()
-    ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? Channel.fromPath(params.gene_panel_clinical_filter).collect()
-                                                                        : Channel.empty()
-    ch_ref_drop_annot_file        = params.reference_drop_annot_file    ? Channel.fromPath(params.reference_drop_annot_file).collect()
-                                                                        : Channel.empty()
-    ch_ref_drop_count_file        = params.reference_drop_count_file    ? Channel.fromPath(params.reference_drop_count_file).collect()
-                                                                        : Channel.empty()
-    ch_ref_drop_splice_folder     = params.reference_drop_splice_folder ? Channel.fromPath(params.reference_drop_splice_folder).collect()
-                                                                        : Channel.empty()
-    ch_salmon_index               = params.salmon_index                 ? Channel.fromPath(params.salmon_index)
-                                                                        : Channel.empty()
-    ch_star_index                 = params.star_index                   ? Channel.fromPath(params.star_index).map {it -> [[id:it.getSimpleName()], it]}.collect()
-                                                                        : Channel.empty()
-    ch_transcript_fasta           = params.transcript_fasta             ? Channel.fromPath(params.transcript_fasta)
-                                                                        : Channel.empty()
-    ch_sequence_dict              = params.sequence_dict                ? Channel.fromPath(params.sequence_dict).map{ it -> [[id:it.getSimpleName()], it] }.collect()
-                                                                        : Channel.empty()
-    ch_subsample_bed              = params.subsample_bed                ? Channel.fromPath(params.subsample_bed).collect()
-                                                                        : Channel.empty()
-    ch_hb_genes                   = params.hb_genes                     ? Channel.fromPath(params.hb_genes).collect()
-                                                                        : Channel.empty()
+    ch_vep_cache_unprocessed      = params.vep_cache                    ? channel.fromPath(params.vep_cache)
+                                                                        : channel.empty().mix(downloads.vep_cache)
+    ch_vep_extra_files_unsplit    = params.vep_plugin_files             ? channel.fromPath(params.vep_plugin_files)
+                                                                        : channel.empty().mix(downloads.vep_plugin)
+    ch_fai                        = params.fai                          ? channel.fromPath(params.fai).map {it -> [[id:it.getSimpleName()], it]}.collect()
+                                                                        : channel.empty()
+    ch_gene_panel_clinical_filter = params.gene_panel_clinical_filter   ? channel.fromPath(params.gene_panel_clinical_filter).collect()
+                                                                        : channel.empty()
+    ch_ref_drop_annot_file        = params.reference_drop_annot_file    ? channel.fromPath(params.reference_drop_annot_file).collect()
+                                                                        : channel.empty()
+    ch_ref_drop_count_file        = params.reference_drop_count_file    ? channel.fromPath(params.reference_drop_count_file).collect()
+                                                                        : channel.empty()
+    ch_ref_drop_splice_folder     = params.reference_drop_splice_folder ? channel.fromPath(params.reference_drop_splice_folder).collect()
+                                                                        : channel.empty()
+    ch_salmon_index               = params.salmon_index                 ? channel.fromPath(params.salmon_index)
+                                                                        : channel.empty()
+    ch_star_index                 = params.star_index                   ? channel.fromPath(params.star_index).map {it -> [[id:it.getSimpleName()], it]}.collect()
+                                                                        : channel.empty()
+    ch_transcript_fasta           = params.transcript_fasta             ? channel.fromPath(params.transcript_fasta)
+                                                                        : channel.empty()
+    ch_sequence_dict              = params.sequence_dict                ? channel.fromPath(params.sequence_dict).map{ it -> [[id:it.getSimpleName()], it] }.collect()
+                                                                        : channel.empty()
+    ch_subsample_bed              = params.subsample_bed                ? channel.fromPath(params.subsample_bed).collect()
+                                                                        : channel.empty()
+    ch_hb_genes                   = params.hb_genes                     ? channel.fromPath(params.hb_genes).collect()
+                                                                        : channel.empty()
 
     // Read and store paths in the vep_plugin_files file
     ch_vep_extra_files_unsplit.splitCsv(header: true)
@@ -163,7 +168,6 @@ workflow TOMTE {
         ch_fastq_reads
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions)
 
     ALIGNMENT(
         ch_fastq_reads,
@@ -257,7 +261,7 @@ workflow TOMTE {
 
         ch_multiqc_files = ch_multiqc_files.mix(CALL_VARIANTS.out.stats.collect{it[1]}.ifEmpty([]))
     } else {
-        ch_vcf_tbi = Channel.empty()
+        ch_vcf_tbi = channel.empty()
     }
 
     if ( !params.skip_build_tracks ) {
@@ -270,8 +274,8 @@ workflow TOMTE {
         ch_bigwig = IGV_TRACKS.out.bw
         ch_versions = ch_versions.mix(IGV_TRACKS.out.versions)
     } else {
-        ch_junction_bed = Channel.empty()
-        ch_bigwig = Channel.empty()
+        ch_junction_bed = channel.empty()
+        ch_bigwig = channel.empty()
     }
 
     if ( !params.skip_peddy ) {
@@ -284,7 +288,7 @@ workflow TOMTE {
         )
         ch_versions = ch_versions.mix(PEDDY.out.versions)
     } else {
-        ch_pedfile = Channel.empty()
+        ch_pedfile = channel.empty()
     }
 
     if ( !params.skip_calculate_hb_frac ) {
@@ -292,7 +296,7 @@ workflow TOMTE {
         ch_hb_estimates = ESTIMATE_HB_PERC.out.json
         ch_versions = ch_versions.mix(ESTIMATE_HB_PERC.out.versions)
     } else {
-        ch_hb_estimates = Channel.empty()
+        ch_hb_estimates = channel.empty()
     }
 
     /*
@@ -301,29 +305,35 @@ workflow TOMTE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    softwareVersionsToYAML(ch_versions)
+    def topic_versions = channel.topic("versions")
+        .distinct()
+        .branch { entry ->
+            versions_file: entry instanceof Path
+            versions_tuple: true
+        }
+
+    def topic_versions_string = topic_versions.versions_tuple
+        .map { process, tool, version ->
+            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: ${version}" ]
+        }
+        .groupTuple(by:0)
+        .map { process, tool_versions ->
+            tool_versions.unique().sort()
+            "${process}:\n${tool_versions.join('\n')}"
+        }
+
+    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+        .mix(topic_versions_string)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name:  'tomte_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
+            name: 'tomte_pipeline_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
 
-
     //
     // MODULE: MultiQC
     //
-
-    summary_params                        = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
-    ch_workflow_summary                   = Channel.value(paramsSummaryMultiqc(summary_params))
-    ch_multiqc_config                     = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-    ch_multiqc_custom_config              = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
-    ch_multiqc_logo                       = params.multiqc_logo ? Channel.fromPath(params.multiqc_logo, checkIfExists: true) : Channel.empty()
-    ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
-    ch_methods_description                = Channel.value(methodsDescriptionText(ch_multiqc_custom_methods_description))
-    ch_multiqc_files                      = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_files                      = ch_multiqc_files.mix(ch_collated_versions)
-    ch_multiqc_files                      = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: false))
     ch_multiqc_files                      = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files                      = ch_multiqc_files.mix(ALIGNMENT.out.fastp_report.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files                      = ch_multiqc_files.mix(ALIGNMENT.out.star_log_final.collect{it[1]}.ifEmpty([]))
@@ -333,29 +343,44 @@ workflow TOMTE {
     ch_multiqc_files                      = ch_multiqc_files.mix(BAM_QC.out.metrics_insert_size.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files                      = ch_multiqc_files.mix(ANALYSE_TRANSCRIPTS.out.stats_gtf.collect{it[1]}.ifEmpty([]))
 
-    MULTIQC (
-        ch_multiqc_files.collect(),
-        ch_multiqc_config.toList(),
-        ch_multiqc_custom_config.toList(),
-        ch_multiqc_logo.toList(),
-        [],
-        []
+    ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
+    def ch_summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    def ch_workflow_summary = channel.value(paramsSummaryMultiqc(ch_summary_params))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+    def ch_multiqc_custom_methods_description = multiqc_methods_description
+        ? file(multiqc_methods_description, checkIfExists: true)
+        : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
+    def ch_methods_description = channel.value(methodsDescriptionText(ch_multiqc_custom_methods_description))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
+    MULTIQC(
+        ch_multiqc_files.flatten().collect().map { files ->
+            [
+                [id: 'tomte'],
+                files,
+                multiqc_config
+                    ? file(multiqc_config, checkIfExists: true)
+                    : file("${projectDir}/assets/multiqc_config.yml", checkIfExists: true),
+                multiqc_logo ? file(multiqc_logo, checkIfExists: true) : [],
+                [],
+                [],
+            ]
+        }
     )
 
     emit:
-    vcf_tbi              = ch_vcf_tbi                                   // channel: [ val(meta), path(vcf), path(tbi) ]
-    junction_bed         = ch_junction_bed                              // channel: [ val(meta), path(bed.gz), path(tbi) ]
-    bigwig               = ch_bigwig                                    // channel: [ val(meta), path(bw) ]
-    hb_estimates         = ch_hb_estimates                              // channel: [ val(meta), path(json) ]
-    drop_ae_out_clinical = ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical // channel: [ path(drop_AE_clinical.tsv) ]
-    drop_ae_out_research = ANALYSE_TRANSCRIPTS.out.drop_ae_out_research // channel: [ path(drop_AE_research.tsv) ]
-    drop_as_out_clinical = ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical // channel: [ path(drop_AS_clinical.tsv) ]
-    drop_as_out_research = ANALYSE_TRANSCRIPTS.out.drop_as_out_research // channel: [ path(drop_AS_research.tsv) ]
-    ped                  = ch_pedfile                                   // channel: [ path(ped_file) ]
-    multiqc_report       = MULTIQC.out.report.toList()                  // channel: /path/to/multiqc_report.html
-    multiqc_data         = MULTIQC.out.data                             // channel: [ path(multiqc_data) ]
-    bam_bai              = ALIGNMENT.out.bam_bai                        // channel: [ val(meta), path(bam), path(bai) ]
-    versions             = ch_versions                                  // channel: [ path(versions.yml) ]
+    vcf_tbi              = ch_vcf_tbi                                                    // channel: [ val(meta), path(vcf), path(tbi) ]
+    junction_bed         = ch_junction_bed                                               // channel: [ val(meta), path(bed.gz), path(tbi) ]
+    bigwig               = ch_bigwig                                                     // channel: [ val(meta), path(bw) ]
+    hb_estimates         = ch_hb_estimates                                               // channel: [ val(meta), path(json) ]
+    drop_ae_out_clinical = ANALYSE_TRANSCRIPTS.out.drop_ae_out_clinical                  // channel: [ path(drop_AE_clinical.tsv) ]
+    drop_ae_out_research = ANALYSE_TRANSCRIPTS.out.drop_ae_out_research                  // channel: [ path(drop_AE_research.tsv) ]
+    drop_as_out_clinical = ANALYSE_TRANSCRIPTS.out.drop_as_out_clinical                  // channel: [ path(drop_AS_clinical.tsv) ]
+    drop_as_out_research = ANALYSE_TRANSCRIPTS.out.drop_as_out_research                  // channel: [ path(drop_AS_research.tsv) ]
+    ped                  = ch_pedfile                                                    // channel: [ path(ped_file) ]
+    multiqc_report       = MULTIQC.out.report.map { _meta, report -> [report] }.toList() // channel: /path/to/multiqc_report.html
+    multiqc_data         = MULTIQC.out.data                                              // channel: [ path(multiqc_data) ]
+    bam_bai              = ALIGNMENT.out.bam_bai                                         // channel: [ val(meta), path(bam), path(bai) ]
+    versions             = ch_versions                                                   // channel: [ path(versions.yml) ]
 }
 
 /*
