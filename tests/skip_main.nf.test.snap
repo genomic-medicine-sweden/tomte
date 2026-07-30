@@ -32,7 +32,7 @@
                     "fastqc": "0.12.1"
                 },
                 "GET_CHROM_SIZES": {
-                    "samtools": "1.22.1"
+                    "gawk": "5.3.0"
                 },
                 "GET_RRNA_TRANSCRIPTS": {
                     "get_rrna_transcripts": "v1.0"
@@ -82,7 +82,7 @@
                     "untar": 1.34
                 },
                 "Workflow": {
-                    "genomic-medicine-sweden/tomte": "v4.2.0"
+                    "genomic-medicine-sweden/tomte": "v4.3.0dev"
                 }
             },
             [
@@ -249,7 +249,6 @@
                 "multiqc/multiqc_data/star_gene_counts_Same_Stranded.txt",
                 "multiqc/multiqc_data/star_gene_counts_Unstranded.txt",
                 "multiqc/multiqc_data/star_summary_table.txt",
-                "multiqc/multiqc_plots",
                 "multiqc/multiqc_report.html",
                 "pipeline_info",
                 "pipeline_info/tomte_pipeline_software_mqc_versions.yml",
@@ -326,15 +325,9 @@
                 "Genome:md5,cf4eda2b72a9a7ceb59dc366b4ee13d2",
                 "SA:md5,bb44c8606c1e749ddc18c4208d6e483c",
                 "SAindex:md5,f7a1d0d53bccdc1d847443483e3ebb6c",
-                "chrLength.txt:md5,a1b0ccf6afa82bf333df2267b40b10bb",
-                "chrName.txt:md5,e99d7d1051eee43ceab5563c2d09fcee",
-                "chrNameLength.txt:md5,ffd90da532db7928daa1591d45dc26c4",
-                "chrStart.txt:md5,dfbc86e8955846707703b0c0dbc99e3b",
                 "exonGeTrInfo.tab:md5,e3e21c4b1c77b4f1ce33736e8ebef046",
                 "exonInfo.tab:md5,89755beceea3b8b8a1d5adbf55e04c4f",
                 "geneInfo.tab:md5,81d62ce506b1ac6154b8eb91d0f1633c",
-                "genomeParameters.txt:md5,df7a71db5babe1e413fcb56892feae38",
-                "sjdbInfo.txt:md5,68190fbde2fae7bd6e7afd97faa71c98",
                 "sjdbList.fromGTF.out.tab:md5,e394912ab5667171a27e8897d116f8f0",
                 "sjdbList.out.tab:md5,12efd0795aa3db892113dcc09c5843f1",
                 "transcriptInfo.tab:md5,b2726efcc116cb22abd4479168dba574",
@@ -371,10 +364,10 @@
                 ]
             ]
         ],
+        "timestamp": "2026-07-23T11:43:22.244967",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.04.6"
-        },
-        "timestamp": "2025-11-11T15:42:01.566761489"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
     }
 }
