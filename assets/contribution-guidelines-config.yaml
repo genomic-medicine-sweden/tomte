@@ -1,0 +1,17 @@
+title: |
+  `genomic-medicine-sweden/tomte`: Contributing Guidelines
+
+sections:
+  - introduction
+  - general
+  - coding_conventions
+  - updating_contribution_guidelines
+
+vars:
+  repo_name: genomic-medicine-sweden/tomte
+  repo_url: https://github.com/genomic-medicine-sweden/tomte
+  codespaces_url: https://github.com/genomic-medicine-sweden/tomte/codespaces
+  pre_commit_note: "This repository includes the nf-core pipelines schema docs hook."
+  workflow_file: workflows/tomte.nf
+  reuse_note: "Follow the DRY (Don't Repeat Yourself) principle."
+  modules_note: "Always prefer a module from nf-core or genomic-medicine-sweden over writing a local one. Only add to modules/local/ as a last resort when the use case is too pipeline-specific."

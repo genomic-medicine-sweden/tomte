@@ -1,0 +1,11 @@
+name: Sync guidelines
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * *" # daily
+
+jobs:
+  sync:
+    uses: genomic-medicine-sweden/nf-dev-guidelines/.github/workflows/sync.yml@main
+    secrets: inherit
