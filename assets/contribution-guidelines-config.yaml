@@ -15,4 +15,3 @@ vars:
   workflow_file: workflows/tomte.nf
   reuse_note: "Follow the DRY (Don't Repeat Yourself) principle."
   modules_note: "Always prefer a module from nf-core or genomic-medicine-sweden over writing a local one. Only add to modules/local/ as a last resort when the use case is too pipeline-specific."
-  
