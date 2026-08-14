@@ -47,16 +47,16 @@
                 "config.yaml"
             ],
             [
-                "outrider_top_hits_clinical.tsv"
+                "finequagga_outrider_top_hits_clinical.tsv"
             ],
             [
-                "outrider_top_hits_research.tsv"
+                "finequagga_outrider_top_hits_research.tsv"
             ],
             [
-                "fraser_top_hits_clinical.tsv"
+                "finequagga_fraser_top_hits_clinical.tsv"
             ],
             [
-                "fraser_top_hits_research.tsv"
+                "finequagga_fraser_top_hits_research.tsv"
             ],
             [
                 "versions.yml:md5,205c586a4c68fb4299b3bac50b12d80a",
@@ -68,11 +68,11 @@
                 "versions.yml:md5,d0db2ae9cd9907e53e164eb5dd290eed"
             ]
         ],
+        "timestamp": "2026-02-27T16:02:09.49696",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.0"
-        },
-        "timestamp": "2025-11-10T12:39:48.379042811"
+        }
     },
     "Should run with one sample": {
         "content": [
