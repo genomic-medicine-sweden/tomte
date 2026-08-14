@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Added missing dockerfiles for drop container [#305](https://github.com/genomic-medicine-sweden/tomte/pull/305)
+
 ### `Parameters`
 
 | Old parameter | New parameter |
