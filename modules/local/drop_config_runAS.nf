@@ -57,6 +57,7 @@ process DROP_CONFIG_RUN_AS {
 
     snakemake aberrantSplicing --cores ${task.cpus} --rerun-triggers mtime $args
 
+    # Fix exportCounts.R script to use the path for raw-{dataset} instead of raw-local-{dataset} to include all samples
     sed 's#raw-local-{dataset}#raw-{dataset}#g' Scripts/AberrantSplicing/pipeline/Counting/exportCounts.R > Scripts/AberrantSplicing/pipeline/Counting/exportCounts-tmp.R
     mv Scripts/AberrantSplicing/pipeline/Counting/exportCounts-tmp.R Scripts/AberrantSplicing/pipeline/Counting/exportCounts.R
 
